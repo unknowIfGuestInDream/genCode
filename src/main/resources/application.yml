@@ -1,0 +1,75 @@
+server:
+  port: 8669
+spring:
+  application:
+    name: gen
+  jackson:
+    date-format: yyyy/MM/dd HH:mm:ss
+    time-zone: GMT+8
+  thymeleaf:
+    mode: HTML
+    encoding: UTF-8
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      url: jdbc:mysql://42.192.10.174:3306/gen?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true
+      username: gen
+      password: gen
+      #      url: jdbc:oracle:thin:@10.18.26.86:1521:pmnew
+      #      username: pmnew
+      #      password: pmnew
+      initialSize: 5
+      maxActive: 20
+      ## 配置获取连接等待超时的时间
+      maxWait: 60000
+      ## 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      ## 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      ## 校验SQL，Oracle配置 spring.datasource.validationQuery=SELECT 1 FROM DUAL，如果不配validationQuery项，则下面三项配置无用
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      ## 打开PSCache，并且指定每个连接上PSCache的大小
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      filters: stat,wall,slf4j
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      useGlobalDataSourceStat: true
+      aop-patterns: com.newangels.gen.*
+      # 配置StatFilter
+      web-stat-filter:
+        #默认为false，设置为true启动
+        enabled: true
+        url-pattern: "/*"
+        exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
+        #配置StatViewServlet
+      stat-view-servlet:
+        enable: true
+        url-pattern: "/druid/*"
+        #允许那些ip
+        allow:
+        login-username: admin
+        login-password: admin
+        #禁止那些ip
+        deny:
+        #是否可以重置
+        reset-enable: true
+      filter:
+        slf4j:
+          enabled: true
+          statement-create-after-log-enabled: false
+          statement-log-enabled: false
+          statement-executable-sql-log-enable: true
+          statement-log-error-enabled: true
+          result-set-log-enabled: false
+logging:
+  level:
+    root: info
+    druid:
+      sql:
+        Statement: DEBUG

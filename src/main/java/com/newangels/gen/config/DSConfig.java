@@ -1,0 +1,36 @@
+package com.newangels.gen.config;
+
+import com.alibaba.druid.pool.DruidDataSource;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import javax.sql.DataSource;
+
+/**
+ * @author: TangLiang
+ * @date: 2021/6/18 23:18
+ * @since: 1.0
+ */
+@Configuration
+@EnableCaching
+public class DSConfig {
+
+    @Primary
+    @Bean(name = "genDataSource")
+    @Qualifier("genDataSource")
+    @ConfigurationProperties(prefix = "spring.datasource.druid")
+    public DataSource mpDefault() {
+        return new DruidDataSource();
+    }
+
+    @Bean(name = "genJdbcTemplate")
+    public JdbcTemplate safeJdbcTemplate(@Qualifier("genDataSource") DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
+    }
+
+}
