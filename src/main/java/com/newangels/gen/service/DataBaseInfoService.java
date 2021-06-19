@@ -14,8 +14,6 @@ public interface DataBaseInfoService {
 
     /**
      * 查询数据源
-     *
-     * @return
      */
     List<Map<String, Object>> selectDataBaseInfo();
 
@@ -27,7 +25,6 @@ public interface DataBaseInfoService {
      * @param DRIVER   驱动名
      * @param USERNAME 用户
      * @param PASSWORD 密码
-     * @return
      */
     int insertDataBaseInfo(String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD);
 
@@ -40,7 +37,6 @@ public interface DataBaseInfoService {
      * @param DRIVER   驱动名
      * @param USERNAME 用户
      * @param PASSWORD 密码
-     * @return
      */
     int updateDataBaseInfo(String ID, String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD);
 
@@ -48,7 +44,6 @@ public interface DataBaseInfoService {
      * 删除数据源
      *
      * @param ID id
-     * @return
      */
     int deleteDataBaseInfo(String ID);
 }
