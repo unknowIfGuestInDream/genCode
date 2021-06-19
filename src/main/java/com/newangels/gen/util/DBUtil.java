@@ -21,9 +21,8 @@ import java.util.logging.Logger;
 public class DBUtil implements Cloneable {
     private static Logger logger = Logger.getLogger(DBUtil.class.getName());
     private static DruidDataSource dataSource = new DruidDataSource();
-    //oracle.jdbc.driver.OracleDriver
+
     private String driverClass;
-    //jdbc:oracle:thin:@61.189.20.58:1251:orcl
     private String url;
     private String userName;
     private String password;
@@ -39,11 +38,18 @@ public class DBUtil implements Cloneable {
     private DBUtil() {
     }
 
-    public void init() {
+    private void init() {
         dataSource.setUrl(url);//设置url
         dataSource.setDriverClassName(driverClass);//设置驱动
         dataSource.setUsername(userName);//账号
         dataSource.setPassword(password);//密码
+    }
+
+    public void init(String driverClass, String url, String userName, String password) {
+        this.driverClass = driverClass;
+        this.url = url;
+        this.userName = userName;
+        this.password = password;
     }
 
     /**

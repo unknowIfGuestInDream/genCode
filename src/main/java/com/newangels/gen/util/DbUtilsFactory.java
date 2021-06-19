@@ -3,7 +3,7 @@ package com.newangels.gen.util;
 import com.alibaba.druid.util.StringUtils;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.WeakHashMap;
 
 /**
  * DBUtil工厂
@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since: 1.0
  */
 public class DbUtilsFactory {
-    private static Map<String, DBUtil> strategyMap = new ConcurrentHashMap<>();
+    private static Map<String, DBUtil> strategyMap = new WeakHashMap<>();
 
     public static DBUtil getDbUtil(String name) {
         return strategyMap.get(name);

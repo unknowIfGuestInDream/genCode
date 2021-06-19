@@ -7,9 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * mysql过程信息
  *
@@ -21,12 +18,12 @@ import java.util.Map;
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class MysqlProcedureServiceImpl implements DataBaseProcedureService {
     @Override
-    public List<Map<String, Object>> selectProcedure(String NAME) {
+    public String selectProcedure(String NAME) {
         return null;
     }
 
     @Override
-    public List<Map<String, Object>> selectArguments(String OWNER, String OBJECT_NAME) {
+    public String selectArguments(String OWNER, String OBJECT_NAME) {
         return null;
     }
 

@@ -2,9 +2,6 @@ package com.newangels.gen.service;
 
 import org.springframework.beans.factory.InitializingBean;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * oracle存储过程
  *
@@ -20,7 +17,7 @@ public interface DataBaseProcedureService extends InitializingBean {
      * @param NAME 过程名
      * @return 过程信息
      */
-    List<Map<String, Object>> selectProcedure(String NAME);
+    String selectProcedure(String NAME);
 
     /**
      * 查询过程参数
@@ -29,6 +26,6 @@ public interface DataBaseProcedureService extends InitializingBean {
      * @param OBJECT_NAME 过程名
      * @return 过程参数
      */
-    List<Map<String, Object>> selectArguments(String OWNER, String OBJECT_NAME);
+    String selectArguments(String OWNER, String OBJECT_NAME);
 
 }

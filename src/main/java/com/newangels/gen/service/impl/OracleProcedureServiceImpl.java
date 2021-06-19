@@ -4,13 +4,10 @@ import com.newangels.gen.service.DataBaseProcedureService;
 import com.newangels.gen.util.DataBaseFactory;
 import com.newangels.gen.util.DataBaseType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * oracle过程信息
@@ -23,16 +20,19 @@ import java.util.Map;
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 @RequiredArgsConstructor
 public class OracleProcedureServiceImpl implements DataBaseProcedureService {
-    private final JdbcTemplate genJdbcTemplate;
 
     @Override
-    public List<Map<String, Object>> selectProcedure(String NAME) {
-        return genJdbcTemplate.queryForList("SELECT * FROM USER_SOURCE WHERE NAME = ?", NAME);
+    public String selectProcedure(String NAME) {
+        String sql = "SELECT * FROM USER_SOURCE";
+        if (StringUtils.isNotEmpty(NAME)) {
+            sql += " WHERE NAME = " + NAME;
+        }
+        return sql;
     }
 
     @Override
-    public List<Map<String, Object>> selectArguments(String OWNER, String OBJECT_NAME) {
-        return genJdbcTemplate.queryForList("select * from SYS.ALL_ARGUMENTS t where t.OWNER = ? and t.OBJECT_NAME = ?", OWNER, OBJECT_NAME);
+    public String selectArguments(String OWNER, String OBJECT_NAME) {
+        return "select * from SYS.ALL_ARGUMENTS t where t.OWNER = " + OWNER + " and t.OBJECT_NAME = " + OBJECT_NAME;
     }
 
     @Override

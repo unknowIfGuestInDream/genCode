@@ -8,9 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author: TangLiang
  * @date: 2021/6/19 9:07
@@ -21,12 +18,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UnKnowDataBaseProcedureImpl implements DataBaseProcedureService {
     @Override
-    public List<Map<String, Object>> selectProcedure(String NAME) {
+    public String selectProcedure(String NAME) {
         return null;
     }
 
     @Override
-    public List<Map<String, Object>> selectArguments(String OWNER, String OBJECT_NAME) {
+    public String selectArguments(String OWNER, String OBJECT_NAME) {
         return null;
     }
 
