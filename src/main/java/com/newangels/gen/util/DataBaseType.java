@@ -1,0 +1,36 @@
+package com.newangels.gen.util;
+
+import org.apache.commons.lang3.StringUtils;
+
+/**
+ * @author: TangLiang
+ * @date: 2021/6/19 8:46
+ * @since: 1.0
+ */
+public enum DataBaseType {
+    ORACLE("oracle.jdbc.driver.OracleDriver"),
+    MYSQL("com.mysql.jdbc.Driver"),
+    MYSQL8("com.mysql.cj.jdbc.Driver"),
+    MARIADB("org.mariadb.jdbc.Driver"),
+    UNKNOW("UNKNOW");
+
+    private String typeName;
+
+    DataBaseType(String typeName) {
+        this.typeName = typeName;
+    }
+
+    //跟据后缀获取文件类型枚举变量
+    public static DataBaseType fromTypeName(String typeName) {
+        for (DataBaseType type : DataBaseType.values()) {
+            if (StringUtils.isNotEmpty(typeName) && type.getTypeName().equals(typeName)) {
+                return type;
+            }
+        }
+        return UNKNOW;
+    }
+
+    public String getTypeName() {
+        return this.typeName;
+    }
+}
