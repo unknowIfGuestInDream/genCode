@@ -1,6 +1,7 @@
-package com.newangels.gen.util;
+package com.newangels.gen.factory;
 
 import com.alibaba.druid.util.StringUtils;
+import com.newangels.gen.util.DBUtil;
 
 import java.util.Map;
 import java.util.WeakHashMap;
