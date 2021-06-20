@@ -10,7 +10,10 @@ import org.apache.commons.lang3.StringUtils;
  * @since: 1.0
  */
 public enum GenProcedureModelType {
-    微服务模板("1"),
+    /**
+     * 常用模板
+     */
+    RESTFUL("1"),
     UNKNOW("UNKNOW");
 
     private String typeName;

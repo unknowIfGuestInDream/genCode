@@ -4,8 +4,6 @@ import com.newangels.gen.factory.DataBaseFactory;
 import com.newangels.gen.service.DataBaseProcedureService;
 import com.newangels.gen.util.DataBaseType;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * mysql过程信息
@@ -15,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @since: 1.0
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class MysqlProcedureServiceImpl implements DataBaseProcedureService {
     @Override
     public String selectProcedure(String NAME) {

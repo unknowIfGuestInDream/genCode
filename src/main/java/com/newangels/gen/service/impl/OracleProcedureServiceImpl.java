@@ -3,11 +3,8 @@ package com.newangels.gen.service.impl;
 import com.newangels.gen.factory.DataBaseFactory;
 import com.newangels.gen.service.DataBaseProcedureService;
 import com.newangels.gen.util.DataBaseType;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * oracle过程信息
@@ -17,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @since: 1.0
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-@RequiredArgsConstructor
 public class OracleProcedureServiceImpl implements DataBaseProcedureService {
 
     @Override
