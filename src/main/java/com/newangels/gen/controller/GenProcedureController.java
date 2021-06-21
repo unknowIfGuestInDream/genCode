@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,14 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 public class GenProcedureController {
+
+    /**
+     * 代码生成页面
+     */
+    @GetMapping("/manageGenerate")
+    public ModelAndView manageGenerate() {
+        return new ModelAndView("pages/manageGenerate");
+    }
 
     /**
      * 查询数据库中的过程信息
