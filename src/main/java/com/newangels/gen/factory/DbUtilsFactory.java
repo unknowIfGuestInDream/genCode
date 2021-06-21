@@ -26,4 +26,12 @@ public class DbUtilsFactory {
         }
         strategyMap.put(name, handler);
     }
+
+    public static void remove(String name) {
+        if (StringUtils.isEmpty(name) || !strategyMap.containsKey("name")) {
+            return;
+        }
+        strategyMap.remove(name);
+    }
+
 }
