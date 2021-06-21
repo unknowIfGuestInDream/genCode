@@ -1,0 +1,123 @@
+body {
+    margin: 0;
+}
+
+.loginbody {
+    margin: 0px;
+    padding: 0px;
+    background: url(login_new.png) no-repeat center top;
+}
+
+.login_div {
+    width: 1000px;
+    height: 540px;
+    margin: 0px auto;
+}
+
+.loing_div_con {
+    float: right;
+    width: 290px;
+    height: 254px;
+    display: inline-block;
+    margin: 210px 51px 0px 0px;
+}
+
+.login_yhm2017 {
+    width: 248px;
+    height: 38px;
+    margin: 21px 0px 0px 21px;
+    background: url(yhm_login.png) no-repeat 7px 10px #fff;
+}
+
+.login_yhm2017 span {
+    display: inline-block;
+    width: 57px;
+    height: 38px;
+    float: left;
+    line-height: 38px;
+    font-size: 14px;
+    color: #ababab;
+    text-align: right;
+    margin-left: 30px;
+}
+
+.text_yhm {
+    display: inline-block;
+    float: left;
+    border: 0px;
+    background: none;
+    height: 38px;
+    width: 150px;
+}
+
+.login_mm2017 {
+    width: 248px;
+    height: 38px;
+    margin: 21px 0px 0px 21px;
+    background: url(pas_login.png) no-repeat 7px 10px #fff;
+}
+
+.login_mm2017 span {
+    display: inline-block;
+    width: 57px;
+    height: 38px;
+    float: left;
+    line-height: 38px;
+    font-size: 14px;
+    color: #ababab;
+    text-align: right;
+    margin-left: 30px;
+}
+
+.text_yhm {
+    display: inline-block;
+    float: left;
+    border: 0px;
+    background: none;
+    height: 38px;
+    width: 150px;
+}
+
+.login_btn {
+    width: 84px;
+    height: 34px;
+    background: #538adc;
+    font-size: 14px;
+    color: #fff;
+    border: 0px;
+    border-radius: 4px;
+    font-weight: bold;
+    margin: 20px 0px 0px 21px;
+}
+
+.a_td {
+    height: 30px;
+    line-height: 30px;
+    padding-left: 10px;
+}
+
+.a_td a {
+    text-decoration: none;
+    display: inline-block;
+    width: auto;
+    font-size: 12px;
+    color: #06c;
+    margin-left: 10px;
+}
+
+.login_btm {
+    width: 1000px;
+    height: auto;
+    margin: 0px auto;
+    text-align: center;
+    line-height: 24px;
+    font-size: 12px;
+}
+
+.x-border-layout-ct {
+    background: #eaeff3 !important;
+}
+
+.x-panel-body-default {
+    border-bottom: 1px solid #fff !important;
+}

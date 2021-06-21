@@ -1,0 +1,7 @@
+/**
+下拉框宽度不够时增加滚动条
+@author TangLiang
+ */
+.x-boundlist-item {
+    white-space: nowrap !important;
+}

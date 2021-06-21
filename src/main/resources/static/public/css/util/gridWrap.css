@@ -1,0 +1,7 @@
+/**
+gridPanel 表头跟内容自动换行
+ */
+.x-grid-cell-inner {
+    white-space: normal;
+    word-break: break-all;
+}

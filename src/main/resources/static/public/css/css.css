@@ -1,0 +1,74 @@
+
+.table_z {
+    font-size: 12px;
+    border-collapse: collapse;
+    width: 98%;
+    margin-top: 5px;
+}
+
+.table_z td {
+    border: 1px solid #d4d4d4;
+}
+
+.table_s {
+    font-size: 12px;
+    border-collapse: collapse;
+    width: 98%;
+    margin-top: 5px;
+}
+
+.table_s td {
+    border: 1px solid #a6a6a6;
+}
+
+.table_c {
+    font-size: 12px;
+    border-collapse: collapse;
+    margin-top: 5px;
+}
+
+.table_c td {
+    border: 1px solid #ccc;
+}
+
+.table_d {
+    font-size: 13px;
+    border-collapse: collapse;
+    margin: 0px;
+}
+
+.table_d td {
+    text-align: center;
+    padding: 5px;
+    border: 1px solid #000;
+}
+
+.font11 {
+    font-weight: 900;
+    font-size: 13px;
+}
+
+.font12 {
+    font-size: 6px;
+}
+
+.font10 {
+    font-weight: 900;
+    font-size: 15px;
+}
+
+.h2_top {
+    margin: 10px 0 5px 12px;
+    width: 97%;
+    border-left: 10px solid #507dd8;
+    border-bottom: 1px solid #507dd8;
+    padding-left: 7px;
+    padding-top: 5px;
+    float: left;
+    clear: both;
+}
+
+.h2_top span {
+    float: right;
+    margin-right: 5%;
+}

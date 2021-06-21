@@ -1,0 +1,27 @@
+/**
+ * grid背景色
+ * @author TangLiang
+ */
+tr.x-grid-record-red .x-grid-td {
+    background: rgba(255, 132, 0, 0.84) !important;
+}
+
+tr.x-grid-record-yellow .x-grid-td {
+    background: lightyellow !important;
+}
+
+tr.x-grid-record-blue .x-grid-td {
+    background: deepskyblue !important;
+}
+
+tr.x-grid-record-green .x-grid-td {
+    background: rgba(173, 255, 47, 0.82) !important;
+}
+
+tr.x-grid-record-gray .x-grid-td {
+    background: gray !important;
+}
+
+tr.x-grid-record-white .x-grid-td {
+    background: white !important;
+}

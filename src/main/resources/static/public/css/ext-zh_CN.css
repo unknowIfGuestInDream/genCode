@@ -1,0 +1,35 @@
+* {
+    font: 12px Microsoft YaHei;
+}
+
+.x-boundlist-item {
+    height: 22px;
+}
+
+.x-boundlist-selected {
+    height: 22px;
+}
+
+.x-boundlist-item-over {
+    height: 22px;
+}
+
+.x-grid-row-changed .x-grid-cell {
+    background-color: PapayaWhip;
+}
+
+.gantt-bar {
+    border: 1px solid steelblue;
+    background: lightskyblue repeat-x left top;
+    position: absolute;
+    overflow: hidden;
+    z-index: 1;
+    box-shadow: 1px 1px 1px rgba(150, 150, 150, 0.8);
+    border-radius: 5px;
+    margin-top: -4px;
+    text-align: center;
+    height: 25px;
+    line-height: 25px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+}
