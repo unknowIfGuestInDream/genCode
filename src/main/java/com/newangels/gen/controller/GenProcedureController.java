@@ -157,16 +157,18 @@ public class GenProcedureController {
         StringBuffer repositoryCode = new StringBuffer();
         for (String procedureName : procedureNameList) {
             List<Map<String, Object>> list = dbUtil.executeQuery(dbProcedure.selectArguments(userName.toUpperCase(), procedureName.toUpperCase()));
-            StringBuffer params = new StringBuffer();
-            StringBuffer allParams = new StringBuffer();
+            StringBuffer inParams = new StringBuffer();
+            StringBuffer outParams = new StringBuffer();
+            StringBuffer procedureParams = new StringBuffer();
             for (Map<String, Object> map : list) {
+                //TODO StringJoiner类
                 if ("IN".equals(map.get("IN_OUT"))) {
                     //存储过程中传参去掉V_
                     String value = map.get("ARGUMENT_NAME").toString().replaceFirst("V_", "");
                     //TODO 数组或者map?
-                    params.append("String ").append(value).append(",");
+                    inParams.append("String ").append(value).append(",");
                 } else {
-
+                    outParams.append(":").append(map.get("ARGUMENT_NAME").toString());
                 }
             }
 
