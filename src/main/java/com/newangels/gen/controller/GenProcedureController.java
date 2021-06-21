@@ -147,7 +147,7 @@ public class GenProcedureController {
         StringBuffer serviceImplCode = new StringBuffer();
         for (String procedureName : procedureNameList) {
             List<Map<String, Object>> list = dbUtil.executeQuery(dbProcedure.selectArguments(userName.toUpperCase(), procedureName.toUpperCase()));
-
+            //TODO 获取传参等
             String preName = nameConvent.getName(procedureName);
             String mappingType = nameConvent.getMappingType(procedureName);
             controllerCode.append("\n" +
