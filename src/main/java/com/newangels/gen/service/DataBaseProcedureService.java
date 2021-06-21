@@ -12,12 +12,18 @@ import org.springframework.beans.factory.InitializingBean;
 public interface DataBaseProcedureService extends InitializingBean {
 
     /**
+     * 查询所有过程
+     * @param NAME
+     */
+    String selectProcedures(String NAME);
+
+    /**
      * 查询过程信息
      *
      * @param NAME 过程名
      * @return 过程信息
      */
-    String selectProcedure(String NAME);
+    String loadProcedure(String NAME);
 
     /**
      * 查询过程参数

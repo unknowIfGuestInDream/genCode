@@ -8,10 +8,25 @@ import org.apache.commons.lang3.StringUtils;
  * @since: 1.0
  */
 public enum DataBaseType {
+    /**
+     * oracle驱动
+     */
     ORACLE("oracle.jdbc.driver.OracleDriver"),
+    /**
+     * mysql5驱动
+     */
     MYSQL("com.mysql.jdbc.Driver"),
+    /**
+     * mysql8驱动
+     */
     MYSQL8("com.mysql.cj.jdbc.Driver"),
+    /**
+     * mariadb驱动
+     */
     MARIADB("org.mariadb.jdbc.Driver"),
+    /**
+     * 未知驱动
+     */
     UNKNOW("UNKNOW");
 
     private String typeName;

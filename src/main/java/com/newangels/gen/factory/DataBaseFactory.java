@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DataBaseFactory {
     private static Map<DataBaseType, DataBaseProcedureService> strategyMap = new ConcurrentHashMap<>();
 
-    public static DataBaseProcedureService getDataBaseProcedureService(DataBaseType name) {
+    public static DataBaseProcedureService getDataBaseProcedure(DataBaseType name) {
         return strategyMap.get(name);
     }
 

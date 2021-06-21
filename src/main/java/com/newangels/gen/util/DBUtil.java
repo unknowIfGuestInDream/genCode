@@ -2,6 +2,7 @@ package com.newangels.gen.util;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- * 用于C3po连接池的配置和连接释放以及增删改差的封装 饿汉式
+ * 连接池的配置和连接释放以及增删改差的封装 饿汉式
  *
  * @author: TangLiang
  * @date: 2020/4/14 10:04
@@ -39,6 +40,10 @@ public class DBUtil implements Cloneable {
     }
 
     private void init() {
+        if (StringUtils.isEmpty(url) || StringUtils.isEmpty(driverClass) || StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {
+            throw new RuntimeException("数据库配置不能为空");
+        }
+
         dataSource.setUrl(url);//设置url
         dataSource.setDriverClassName(driverClass);//设置驱动
         dataSource.setUsername(userName);//账号
@@ -46,6 +51,9 @@ public class DBUtil implements Cloneable {
     }
 
     public void init(String driverClass, String url, String userName, String password) {
+        if (StringUtils.isEmpty(url) || StringUtils.isEmpty(driverClass) || StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {
+            throw new RuntimeException("数据库配置不能为空");
+        }
         this.driverClass = driverClass;
         this.url = url;
         this.userName = userName;

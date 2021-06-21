@@ -15,7 +15,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class MariaDbProcedureServiceImpl implements DataBaseProcedureService {
     @Override
-    public String selectProcedure(String NAME) {
+    public String selectProcedures(String NAME) {
+        return null;
+    }
+
+    @Override
+    public String loadProcedure(String NAME) {
         return null;
     }
 

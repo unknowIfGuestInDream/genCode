@@ -14,6 +14,9 @@ public enum GenProcedureModelType {
      * 常用模板
      */
     RESTFUL("1"),
+    /**
+     * 未知模版
+     */
     UNKNOW("UNKNOW");
 
     private String typeName;

@@ -17,17 +17,27 @@ import org.springframework.stereotype.Service;
 public class OracleProcedureServiceImpl implements DataBaseProcedureService {
 
     @Override
-    public String selectProcedure(String NAME) {
-        String sql = "SELECT * FROM USER_SOURCE";
+    public String selectProcedures(String NAME) {
+        String sql = "select distinct name From user_source where type = 'PROCEDURE'";
         if (StringUtils.isNotEmpty(NAME)) {
-            sql += " WHERE NAME = " + NAME;
+            sql += " and NAME like '%" + NAME + "%'";
         }
         return sql;
     }
 
     @Override
+    public String loadProcedure(String NAME) {
+        String sql = "SELECT * FROM USER_SOURCE where type = 'PROCEDURE'";
+        if (StringUtils.isNotEmpty(NAME)) {
+            sql += " and NAME = '" + NAME + "'";
+        }
+        sql += " ORDER BY LINE";
+        return sql;
+    }
+
+    @Override
     public String selectArguments(String OWNER, String OBJECT_NAME) {
-        return "select * from SYS.ALL_ARGUMENTS t where t.OWNER = " + OWNER + " and t.OBJECT_NAME = " + OBJECT_NAME;
+        return "select * from SYS.ALL_ARGUMENTS t where t.OWNER = '" + OWNER + "' and t.OBJECT_NAME = '" + OBJECT_NAME + "'";
     }
 
     @Override

@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GenProcedureModelFactory {
     private static Map<GenProcedureModelType, GenProcedureModelService> strategyMap = new ConcurrentHashMap<>();
 
-    public static GenProcedureModelService getGenProcedureModelService(GenProcedureModelType name) {
+    public static GenProcedureModelService getGenProcedureModel(GenProcedureModelType name) {
         return strategyMap.get(name);
     }
 

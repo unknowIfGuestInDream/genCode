@@ -26,7 +26,7 @@ public class DataBaseProcedureTest {
         dbUtil.setDriverClass("com.mysql.jdbc.Driver");
         dbUtil.setUserName("tangliang");
         dbUtil.setPassword("tangliang");
-        DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedureService(DataBaseType.fromTypeName(V_TYPE));
+        DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(V_TYPE));
         List<Map<String, Object>> list = dbUtil.executeQuery("select * from database_info");
         System.out.println(list);
     }
