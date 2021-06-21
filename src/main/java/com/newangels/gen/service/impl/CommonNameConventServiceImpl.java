@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service
 public class CommonNameConventServiceImpl implements NameConventService {
+
     Map<String, String> map = new ConcurrentHashMap<>(32);
 
     @Override
@@ -27,7 +28,7 @@ public class CommonNameConventServiceImpl implements NameConventService {
 
     @Override
     public String getMappingType(String procedureName) {
-        if ("select".equals(getName(procedureName))) {
+        if ("select".equals(getName(procedureName)) || "load".equals(getName(procedureName))) {
             return "GetMapping";
         }
         return "PostMapping";
