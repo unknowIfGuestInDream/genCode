@@ -52,12 +52,49 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
 
     @Override
     public String getServiceCode(String moduleName, String packageName) {
-        return "";
+        return "package " + packageName + ".service;\n" +
+                "\n" +
+                "import java.util.List;\n" +
+                "import java.util.Map;\n" +
+                "\n" +
+                "/**\n" +
+                " * \n" +
+                " *\n" +
+                " * @author: \n" +
+                " * @date: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")) + "\n" +
+                " * @since: 1.0\n" +
+                " */\n" +
+                "public interface " + moduleName + "Service {\n" +
+                "{}" +
+                "\n" +
+                "}";
     }
 
     @Override
     public String getServiceImplCode(String moduleName, String packageName) {
-        return "";
+        return "package " + packageName + ".service.impl;\n" +
+                "\n" +
+                "import " + packageName + ".repository." + moduleName + "Repository;\n" +
+                "import " + packageName + ".service." + moduleName + "Service;\n" +
+                "import lombok.RequiredArgsConstructor;\n" +
+                "import org.springframework.stereotype.Service;\n" +
+                "import org.springframework.transaction.annotation.Propagation;\n" +
+                "import org.springframework.transaction.annotation.Transactional;\n" +
+                "\n" +
+                "import java.util.Map;\n" +
+                "\n" +
+                "/**\n" +
+                " * @author:\n" +
+                " * @date: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")) + "\n" +
+                " * @since: 1.0\n" +
+                " */\n" +
+                "@Service\n" +
+                "@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)\n" +
+                "@RequiredArgsConstructor\n" +
+                "public class " + moduleName + "ServiceImpl implements " + moduleName + "Service {\n" +
+                "    private final " + moduleName + "Repository " + BaseUtils.toLowerCase4Index(moduleName) + "Repository;\n" +
+                "{}" +
+                "}";
     }
 
     @Override

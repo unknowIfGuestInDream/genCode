@@ -142,13 +142,15 @@ public class GenProcedureController {
         //获取数据库过程sql
         DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
 
-        StringBuffer sb = new StringBuffer();
+        StringBuffer controllerCode = new StringBuffer();
+        StringBuffer serviceCode = new StringBuffer();
+        StringBuffer serviceImplCode = new StringBuffer();
         for (String procedureName : procedureNameList) {
             List<Map<String, Object>> list = dbUtil.executeQuery(dbProcedure.selectArguments(userName.toUpperCase(), procedureName.toUpperCase()));
 
             String preName = nameConvent.getName(procedureName);
             String mappingType = nameConvent.getMappingType(procedureName);
-            sb.append("\n" +
+            controllerCode.append("\n" +
                     "    /**\n" +
                     "     * \n" +
                     "     */\n" +
@@ -156,9 +158,24 @@ public class GenProcedureController {
                     "    public Map<String, Object> " + preName + moduleName + "(String V_PERCODE, String V_GUID, HttpServletRequest request) {\n" +
                     "        return BaseUtils.success(" + BaseUtils.toLowerCase4Index(moduleName) + "Service." + preName + moduleName + "(BaseUtils.getIp(request), V_PERCODE, V_GUID));\n" +
                     "    }\n");
+            serviceCode.append("\n" +
+                    "    /**\n" +
+                    "     * \n" +
+                    "     *\n" +
+                    "     * @param V_IP\n" +
+                    "     * @param V_PERCODE\n" +
+                    "     * @param V_GUID\n" +
+                    "     * @return\n" +
+                    "     */\n" +
+                    "    Map<String, Object> " + preName + moduleName + "(String V_IP, String V_PERCODE, String V_GUID);\n");
+            serviceImplCode.append("\n" +
+                    "    @Override\n" +
+                    "    public Map<String, Object> " + preName + moduleName + "(String V_IP, String V_PERCODE, int I_YEAR, String V_DEPTCODE, String V_SAP_YWFW_CODE, String V_SAP_CBZX_CODE) {\n" +
+                    "        return " + BaseUtils.toLowerCase4Index(moduleName) + "Repository." + procedureName + "(V_IP, V_PERCODE, I_YEAR, V_DEPTCODE, V_SAP_YWFW_CODE, V_SAP_CBZX_CODE);\n" +
+                    "    }\n");
         }
         String conCode = genProcedureModel.getControllerCode(moduleName, packageName);
-        StrUtil.format(conCode, sb.toString());
+        StrUtil.format(conCode, controllerCode.toString());
         //将dbutil注册到工厂中
         if (isNotExist) {
             DbUtilsFactory.register(url, dbUtil);
