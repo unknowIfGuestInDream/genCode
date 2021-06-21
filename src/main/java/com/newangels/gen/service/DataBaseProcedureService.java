@@ -3,7 +3,7 @@ package com.newangels.gen.service;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
- * oracle存储过程
+ * 数据库存储过程
  *
  * @author: TangLiang
  * @date: 2021/6/19 8:42
@@ -35,4 +35,10 @@ public interface DataBaseProcedureService extends InitializingBean {
      */
     String selectArguments(String owner, String objectName);
 
+    /**
+     * 数据库对java类型映射
+     *
+     * @param type 数据库参数类型
+     */
+    String getJavaClass(String type);
 }

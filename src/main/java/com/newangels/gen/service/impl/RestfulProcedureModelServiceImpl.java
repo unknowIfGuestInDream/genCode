@@ -99,7 +99,35 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
 
     @Override
     public String getRepositoryCode(String moduleName, String packageName) {
-        return "";
+        return "package " + packageName + ".repository;\n" +
+                "\n" +
+                "import " + packageName + ".util.ProcedureUtils;\n" +
+                "import lombok.RequiredArgsConstructor;\n" +
+                "import oracle.jdbc.OracleTypes;\n" +
+                "import org.springframework.dao.DataAccessException;\n" +
+                "import org.springframework.jdbc.core.CallableStatementCallback;\n" +
+                "import org.springframework.jdbc.core.CallableStatementCreator;\n" +
+                "import org.springframework.jdbc.core.JdbcTemplate;\n" +
+                "import org.springframework.stereotype.Repository;\n" +
+                "\n" +
+                "import java.sql.CallableStatement;\n" +
+                "import java.sql.Connection;\n" +
+                "import java.sql.ResultSet;\n" +
+                "import java.sql.SQLException;\n" +
+                "import java.util.HashMap;\n" +
+                "import java.util.Map;\n" +
+                "\n" +
+                "/**\n" +
+                " * @author:\n" +
+                " * @date: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")) + "\n" +
+                " * @since: 1.0\n" +
+                " */\n" +
+                "@Repository\n" +
+                "@RequiredArgsConstructor\n" +
+                "public class " + moduleName + "Repository {\n" +
+                "    private final JdbcTemplate " + packageName.substring(packageName.lastIndexOf(".") + 1).toLowerCase() + "JdbcTemplate;\n" +
+                "{}" +
+                "}";
     }
 
     @Override

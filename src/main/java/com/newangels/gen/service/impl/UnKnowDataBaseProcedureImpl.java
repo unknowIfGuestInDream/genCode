@@ -30,6 +30,11 @@ public class UnKnowDataBaseProcedureImpl implements DataBaseProcedureService {
     }
 
     @Override
+    public String getJavaClass(String type) {
+        return null;
+    }
+
+    @Override
     public void afterPropertiesSet() throws Exception {
         DataBaseFactory.register(DataBaseType.UNKNOW, this);
     }

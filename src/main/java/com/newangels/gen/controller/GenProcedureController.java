@@ -154,8 +154,22 @@ public class GenProcedureController {
         StringBuffer controllerCode = new StringBuffer();
         StringBuffer serviceCode = new StringBuffer();
         StringBuffer serviceImplCode = new StringBuffer();
+        StringBuffer repositoryCode = new StringBuffer();
         for (String procedureName : procedureNameList) {
             List<Map<String, Object>> list = dbUtil.executeQuery(dbProcedure.selectArguments(userName.toUpperCase(), procedureName.toUpperCase()));
+            StringBuffer params = new StringBuffer();
+            StringBuffer allParams = new StringBuffer();
+            for (Map<String, Object> map : list) {
+                if ("IN".equals(map.get("IN_OUT"))) {
+                    //存储过程中传参去掉V_
+                    String value = map.get("ARGUMENT_NAME").toString().replaceFirst("V_", "");
+                    //TODO 数组或者map?
+                    params.append("String ").append(value).append(",");
+                } else {
+
+                }
+            }
+
             //TODO 获取传参等
             String preName = nameConvent.getName(procedureName);
             String mappingType = nameConvent.getMappingType(procedureName);
@@ -182,9 +196,44 @@ public class GenProcedureController {
                     "    public Map<String, Object> " + preName + moduleName + "(String V_IP, String V_PERCODE, int I_YEAR, String V_DEPTCODE, String V_SAP_YWFW_CODE, String V_SAP_CBZX_CODE) {\n" +
                     "        return " + BaseUtils.toLowerCase4Index(moduleName) + "Repository." + procedureName + "(V_IP, V_PERCODE, I_YEAR, V_DEPTCODE, V_SAP_YWFW_CODE, V_SAP_CBZX_CODE);\n" +
                     "    }\n");
+            repositoryCode.append("\n" +
+                    "    /**\n" +
+                    "     * \n" +
+                    "     */\n" +
+                    "    public Map<String, Object> " + procedureName + "(String V_IP, String V_PERCODE, String V_GUID) {\n" +
+                    "\n" +
+                    "        return budgetJdbcTemplate.execute(new CallableStatementCreator() {\n" +
+                    "            @Override\n" +
+                    "            public CallableStatement createCallableStatement(Connection con)\n" +
+                    "                    throws SQLException {\n" +
+                    "                String sql = \"{call " + procedureName + "(:V_IP, :V_PERCODE, :V_GUID, :V_INFO, :V_C_CURSOR)}\";\n" +
+                    "                CallableStatement statement = con.prepareCall(sql);\n" +
+                    "                statement.setString(\"V_IP\", V_IP);\n" +
+                    "                statement.setString(\"V_PERCODE\", V_PERCODE);\n" +
+                    "                statement.setString(\"V_GUID\", V_GUID);\n" +
+                    "                statement.registerOutParameter(\"V_INFO\", OracleTypes.VARCHAR);\n" +
+                    "                statement.registerOutParameter(\"V_C_CURSOR\", OracleTypes.CURSOR);\n" +
+                    "                return statement;\n" +
+                    "            }\n" +
+                    "        }, new CallableStatementCallback<Map<String, Object>>() {\n" +
+                    "            public Map<String, Object> doInCallableStatement(CallableStatement cs)\n" +
+                    "                    throws SQLException, DataAccessException {\n" +
+                    "                cs.execute();\n" +
+                    "                Map<String, Object> returnValue = new HashMap<>(8);\n" +
+                    "                returnValue.put(\"message\", cs.getString(\"V_INFO\"));\n" +
+                    "                returnValue.put(\"result\", ProcedureUtils.resultHash((ResultSet) cs.getObject(\"V_C_CURSOR\")));\n" +
+                    "                return returnValue;\n" +
+                    "            }\n" +
+                    "        });\n" +
+                    "    }\n");
         }
-        String conCode = genProcedureModel.getControllerCode(moduleName, packageName);
-        StrUtil.format(conCode, controllerCode.toString());
+
+        StrUtil.format(genProcedureModel.getControllerCode(moduleName, packageName), controllerCode.toString());
+        StrUtil.format(genProcedureModel.getServiceCode(moduleName, packageName), serviceCode.toString());
+        StrUtil.format(genProcedureModel.getServiceImplCode(moduleName, packageName), serviceImplCode.toString());
+        StrUtil.format(genProcedureModel.getRepositoryCode(moduleName, packageName), repositoryCode.toString());
+        genProcedureModel.getBaseUtils(packageName);
+        genProcedureModel.getProcedureUtils(packageName);
         //将dbutil注册到工厂中
         if (isNotExist) {
             DbUtilsFactory.register(url, dbUtil);

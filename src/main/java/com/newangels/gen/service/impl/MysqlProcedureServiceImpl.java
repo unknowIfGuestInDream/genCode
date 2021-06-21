@@ -30,6 +30,11 @@ public class MysqlProcedureServiceImpl implements DataBaseProcedureService {
     }
 
     @Override
+    public String getJavaClass(String type) {
+        return null;
+    }
+
+    @Override
     public void afterPropertiesSet() throws Exception {
         DataBaseFactory.register(DataBaseType.MYSQL, this);
         DataBaseFactory.register(DataBaseType.MYSQL8, this);

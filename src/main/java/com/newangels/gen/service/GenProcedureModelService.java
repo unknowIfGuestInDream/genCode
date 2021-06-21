@@ -426,4 +426,135 @@ public interface GenProcedureModelService extends InitializingBean {
                 "    }\n" +
                 "}\n";
     }
+
+    /**
+     * 存储过程返回结果工具类
+     *
+     * @param packageName 包名
+     */
+    default String getProcedureUtils(String packageName) {
+        return "package " + packageName + ".util;\n" +
+                "\n" +
+                "import org.springframework.data.domain.Page;\n" +
+                "import org.springframework.data.domain.PageImpl;\n" +
+                "import org.springframework.data.domain.Pageable;\n" +
+                "\n" +
+                "import java.sql.ResultSet;\n" +
+                "import java.sql.ResultSetMetaData;\n" +
+                "import java.sql.SQLException;\n" +
+                "import java.sql.Types;\n" +
+                "import java.util.*;\n" +
+                "\n" +
+                "/**\n" +
+                " * 存储过程返回结果工具类\n" +
+                " *\n" +
+                " * @author: TangLiang\n" +
+                " * @date: 2021/4/14 14:24\n" +
+                " * @since: 1.0\n" +
+                " */\n" +
+                "public class ProcedureUtils {\n" +
+                "\n" +
+                "    public static List<Map> resultHash(ResultSet rs) throws SQLException {\n" +
+                "\n" +
+                "        List<Map> result = new ArrayList<Map>();\n" +
+                "\n" +
+                "        ResultSetMetaData rsm = rs.getMetaData();\n" +
+                "\n" +
+                "        while (rs.next()) {\n" +
+                "            Map model = new HashMap(16);\n" +
+                "            for (int i = 1; i <= rsm.getColumnCount(); i++) {\n" +
+                "                switch (rsm.getColumnType(i)) {\n" +
+                "                    case Types.ROWID:\n" +
+                "                        model.put(rsm.getColumnName(i),\n" +
+                "                                rs.getString(i) == null ? \"\" : rs.getString(i));\n" +
+                "                        break;\n" +
+                "                    case Types.DATE:\n" +
+                "                        model.put(rsm.getColumnName(i),\n" +
+                "                                rs.getString(i) == null ? \"\" : rs.getString(i)\n" +
+                "                                        .split(\"\\\\.\")[0]);\n" +
+                "                        break;\n" +
+                "                    case Types.TIMESTAMP:\n" +
+                "                        model.put(rsm.getColumnName(i),\n" +
+                "                                rs.getString(i) == null ? \"\" : rs.getString(i));\n" +
+                "                        break;\n" +
+                "                    case Types.DOUBLE:\n" +
+                "                        model.put(rsm.getColumnName(i),\n" +
+                "                                (rs.getString(i) == null ? \"\" : rs.getDouble(i)));\n" +
+                "                        break;\n" +
+                "                    case Types.BLOB:\n" +
+                "                        model.put(\n" +
+                "                                rsm.getColumnName(i),\n" +
+                "                                (rs.getObject(i) == null ? \"\" : new String(rs\n" +
+                "                                        .getBytes(i))));\n" +
+                "                        break;\n" +
+                "                    case Types.CLOB:\n" +
+                "                        model.put(\n" +
+                "                                rsm.getColumnName(i),\n" +
+                "                                (rs.getObject(i) == null ? \"\" : rs.getString(i)));\n" +
+                "                        break;\n" +
+                "                    default:\n" +
+                "                        model.put(rsm.getColumnName(i),\n" +
+                "                                rs.getObject(i) == null ? \"\" : rs.getObject(i));\n" +
+                "                }\n" +
+                "            }\n" +
+                "            result.add(model);\n" +
+                "        }\n" +
+                "        rs.close();\n" +
+                "\n" +
+                "        return result;\n" +
+                "    }\n" +
+                "\n" +
+                "    public static List<Map> resultLinkedHash(ResultSet rs) throws SQLException {\n" +
+                "\n" +
+                "        List<Map> result = new ArrayList<Map>();\n" +
+                "\n" +
+                "        ResultSetMetaData rsm = rs.getMetaData();\n" +
+                "\n" +
+                "        while (rs.next()) {\n" +
+                "            Map model = new LinkedHashMap();\n" +
+                "            for (int i = 1; i <= rsm.getColumnCount(); i++) {\n" +
+                "                switch (rsm.getColumnType(i)) {\n" +
+                "                    case Types.DATE:\n" +
+                "                        model.put(rsm.getColumnName(i),\n" +
+                "                                rs.getString(i) == null ? \"\" : rs.getString(i)\n" +
+                "                                        .split(\"\\\\.\")[0]);\n" +
+                "                        break;\n" +
+                "                    case Types.DOUBLE:\n" +
+                "                        model.put(rsm.getColumnName(i),\n" +
+                "                                (rs.getString(i) == null ? \"\" : rs.getDouble(i)));\n" +
+                "                        break;\n" +
+                "                    case Types.BLOB:\n" +
+                "                        model.put(\n" +
+                "                                rsm.getColumnName(i),\n" +
+                "                                (rs.getObject(i) == null ? \"\" : new String(rs\n" +
+                "                                        .getBytes(i))));\n" +
+                "                        break;\n" +
+                "                    default:\n" +
+                "                        model.put(rsm.getColumnName(i),\n" +
+                "                                rs.getObject(i) == null ? \"\" : rs.getObject(i));\n" +
+                "                }\n" +
+                "            }\n" +
+                "            result.add(model);\n" +
+                "        }\n" +
+                "        rs.close();\n" +
+                "\n" +
+                "        return result;\n" +
+                "    }\n" +
+                "\n" +
+                "    public static Page<Map> pageList(Pageable pageable, List<Map> list) {\n" +
+                "        if (list == null) {\n" +
+                "            return new PageImpl<Map>(new ArrayList<Map>(), pageable, 0);\n" +
+                "        }\n" +
+                "        Integer total = list.size();\n" +
+                "        Integer fromIndex = pageable.getPageSize() * pageable.getPageNumber();\n" +
+                "        List<Map> result = null;\n" +
+                "        if (total > pageable.getPageSize() * (pageable.getPageNumber() + 1)) {\n" +
+                "            result = list.subList(fromIndex, pageable.getPageSize());\n" +
+                "        } else {\n" +
+                "            result = list.subList(fromIndex, total);\n" +
+                "        }\n" +
+                "        return new PageImpl<Map>(result, pageable, total);\n" +
+                "    }\n" +
+                "}";
+    }
 }

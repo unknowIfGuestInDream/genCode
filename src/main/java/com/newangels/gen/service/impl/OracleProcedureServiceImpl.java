@@ -6,6 +6,9 @@ import com.newangels.gen.util.DataBaseType;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * oracle过程信息
  *
@@ -15,6 +18,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class OracleProcedureServiceImpl implements DataBaseProcedureService {
+
+    Map<String, String> map = new ConcurrentHashMap<>(32);
 
     @Override
     public String selectProcedures(String name) {
@@ -41,7 +46,16 @@ public class OracleProcedureServiceImpl implements DataBaseProcedureService {
     }
 
     @Override
+    public String getJavaClass(String type) {
+        return map.getOrDefault(type.toUpperCase(), "String");
+    }
+
+    @Override
     public void afterPropertiesSet() throws Exception {
+        map.put("VARCHAR2", "String");
+        map.put("CLOB", "String");
+        map.put("NUMBER", "Double");
+        map.put("BLOB", "InputStream");
         DataBaseFactory.register(DataBaseType.ORACLE, this);
     }
 }
