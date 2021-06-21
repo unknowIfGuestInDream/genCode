@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,24 +57,17 @@ public class GenProcedureController {
     @Log
     public Map<String, Object> selectProcedures(String url, String driver, String userName, String password, String name) {
         //获取数据库连接
-        boolean isNotExist = false;
         DBUtil dbUtil = DbUtilsFactory.getDbUtil(url);
         if (dbUtil == null) {
-            isNotExist = true;
             dbUtil = (DBUtil) DBUtil.getDbUtil().clone();
             dbUtil.init(driver, url, userName, password);
+            DbUtilsFactory.register(url, dbUtil);
         }
-
         //获取数据库过程sql
         DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
         String allProceduresSql = dbProcedure.selectProcedures(name);
-
+        //执行sql
         List<Map<String, Object>> list = dbUtil.executeQuery(allProceduresSql);
-
-        //将dbutil注册到工厂中
-        if (isNotExist) {
-            DbUtilsFactory.register(url, dbUtil);
-        }
 
         return BaseUtils.success(list);
     }
@@ -91,25 +85,18 @@ public class GenProcedureController {
     @Log
     public Map<String, Object> loadProcedureInfo(String url, String driver, String userName, String password, String name) {
         //获取数据库连接
-        boolean isNotExist = false;
         DBUtil dbUtil = DbUtilsFactory.getDbUtil(url);
         if (dbUtil == null) {
-            isNotExist = true;
             dbUtil = (DBUtil) DBUtil.getDbUtil().clone();
             dbUtil.init(driver, url, userName, password);
+            DbUtilsFactory.register(url, dbUtil);
         }
-
         //获取数据库过程sql
         DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
         String allProceduresSql = dbProcedure.loadProcedure(name);
-
+        //执行sql
         List<Map<String, Object>> list = dbUtil.executeQuery(allProceduresSql);
-
-        //将dbutil注册到工厂中
-        if (isNotExist) {
-            DbUtilsFactory.register(url, dbUtil);
-        }
-
+        //获取结果集
         StringBuffer sb = new StringBuffer();
         list.forEach(l -> sb.append(l.get("TEXT")));
 
@@ -132,34 +119,34 @@ public class GenProcedureController {
     @PostMapping("genProcedure")
     @Log
     public Map<String, Object> genProcedure(String moduleName, String genProcedureModelType, String nameConventType, String packageName, String url, String driver, String userName, String password, @RequestParam("procedureNameList") List<String> procedureNameList) {
+        Map<String, Object> result = new HashMap<>(16);
         moduleName = BaseUtils.toUpperCase4Index(moduleName);
-        //获取数据库连接
-        boolean isNotExist = false;
+        //获取数据库连接，为空则创建
         DBUtil dbUtil = DbUtilsFactory.getDbUtil(url);
         if (dbUtil == null) {
-            isNotExist = true;
             dbUtil = (DBUtil) DBUtil.getDbUtil().clone();
             dbUtil.init(driver, url, userName, password);
+            DbUtilsFactory.register(url, dbUtil);
         }
-
-        //生成代码模版
+        //获取生成代码模版
         GenProcedureModelService genProcedureModel = GenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromTypeName(genProcedureModelType));
-
         //获取命名规范
         NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromTypeName(nameConventType));
-
         //获取数据库过程sql
         DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
-
+        //各层代码
         StringBuffer controllerCode = new StringBuffer();
         StringBuffer serviceCode = new StringBuffer();
         StringBuffer serviceImplCode = new StringBuffer();
         StringBuffer repositoryCode = new StringBuffer();
+        //循环存储过程
         for (String procedureName : procedureNameList) {
             List<Map<String, Object>> list = dbUtil.executeQuery(dbProcedure.selectArguments(userName.toUpperCase(), procedureName.toUpperCase()));
             StringBuffer inParams = new StringBuffer();
             StringBuffer outParams = new StringBuffer();
             StringBuffer procedureParams = new StringBuffer();
+            StringBuffer procedureParamss = new StringBuffer();
+            //获取存储过程所有参数
             for (Map<String, Object> map : list) {
                 //TODO StringJoiner类
                 if ("IN".equals(map.get("IN_OUT"))) {
@@ -171,7 +158,6 @@ public class GenProcedureController {
                     outParams.append(":").append(map.get("ARGUMENT_NAME").toString());
                 }
             }
-
             //TODO 获取传参等
             String preName = nameConvent.getName(procedureName);
             String mappingType = nameConvent.getMappingType(procedureName);
@@ -183,6 +169,7 @@ public class GenProcedureController {
                     "    public Map<String, Object> " + preName + moduleName + "(String V_PERCODE, String V_GUID, HttpServletRequest request) {\n" +
                     "        return BaseUtils.success(" + BaseUtils.toLowerCase4Index(moduleName) + "Service." + preName + moduleName + "(BaseUtils.getIp(request), V_PERCODE, V_GUID));\n" +
                     "    }\n");
+
             serviceCode.append("\n" +
                     "    /**\n" +
                     "     * \n" +
@@ -193,11 +180,13 @@ public class GenProcedureController {
                     "     * @return\n" +
                     "     */\n" +
                     "    Map<String, Object> " + preName + moduleName + "(String V_IP, String V_PERCODE, String V_GUID);\n");
+
             serviceImplCode.append("\n" +
                     "    @Override\n" +
                     "    public Map<String, Object> " + preName + moduleName + "(String V_IP, String V_PERCODE, int I_YEAR, String V_DEPTCODE, String V_SAP_YWFW_CODE, String V_SAP_CBZX_CODE) {\n" +
                     "        return " + BaseUtils.toLowerCase4Index(moduleName) + "Repository." + procedureName + "(V_IP, V_PERCODE, I_YEAR, V_DEPTCODE, V_SAP_YWFW_CODE, V_SAP_CBZX_CODE);\n" +
                     "    }\n");
+
             repositoryCode.append("\n" +
                     "    /**\n" +
                     "     * \n" +
@@ -229,17 +218,14 @@ public class GenProcedureController {
                     "        });\n" +
                     "    }\n");
         }
+        //结果集
+        result.put("controller", StrUtil.format(genProcedureModel.getControllerCode(moduleName, packageName), controllerCode.toString()));
+        result.put("service", StrUtil.format(genProcedureModel.getServiceCode(moduleName, packageName), serviceCode.toString()));
+        result.put("serviceImpl", StrUtil.format(genProcedureModel.getServiceImplCode(moduleName, packageName), serviceImplCode.toString()));
+        result.put("repository", StrUtil.format(genProcedureModel.getRepositoryCode(moduleName, packageName), repositoryCode.toString()));
+        result.put("BaseUtils", genProcedureModel.getBaseUtils(packageName));
+        result.put("ProcedureUtils", genProcedureModel.getProcedureUtils(packageName));
 
-        StrUtil.format(genProcedureModel.getControllerCode(moduleName, packageName), controllerCode.toString());
-        StrUtil.format(genProcedureModel.getServiceCode(moduleName, packageName), serviceCode.toString());
-        StrUtil.format(genProcedureModel.getServiceImplCode(moduleName, packageName), serviceImplCode.toString());
-        StrUtil.format(genProcedureModel.getRepositoryCode(moduleName, packageName), repositoryCode.toString());
-        genProcedureModel.getBaseUtils(packageName);
-        genProcedureModel.getProcedureUtils(packageName);
-        //将dbutil注册到工厂中
-        if (isNotExist) {
-            DbUtilsFactory.register(url, dbUtil);
-        }
-        return BaseUtils.success();
+        return BaseUtils.success(result);
     }
 }

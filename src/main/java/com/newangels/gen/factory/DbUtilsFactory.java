@@ -34,4 +34,8 @@ public class DbUtilsFactory {
         strategyMap.remove(name);
     }
 
+    public static void removeAll() {
+        strategyMap.clear();
+    }
+
 }

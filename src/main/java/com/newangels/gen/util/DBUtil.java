@@ -1,6 +1,7 @@
 package com.newangels.gen.util;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.newangels.gen.factory.DbUtilsFactory;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
@@ -69,6 +70,8 @@ public class DBUtil implements Cloneable {
             init();
             conn = dataSource.getConnection();
         } catch (SQLException e) {
+            //去除工厂中当前类
+            DbUtilsFactory.remove(url);
             logger.warning(DBUtil.class.getName() + "\n---------------数据库连接超时---------------\n" + e.getMessage());
             e.printStackTrace();
             conn = null;
