@@ -101,7 +101,10 @@ public class GenProcedureController {
             DbUtilsFactory.register(url, dbUtil);
         }
 
-        return BaseUtils.success(list);
+        StringBuffer sb = new StringBuffer();
+        list.forEach(l -> sb.append(l.get("TEXT")));
+
+        return BaseUtils.success(sb.toString());
     }
 
     /**
