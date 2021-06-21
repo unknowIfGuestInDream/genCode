@@ -15,17 +15,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class MysqlProcedureServiceImpl implements DataBaseProcedureService {
     @Override
-    public String selectProcedures(String NAME) {
+    public String selectProcedures(String name) {
         return null;
     }
 
     @Override
-    public String loadProcedure(String NAME) {
+    public String loadProcedure(String name) {
         return null;
     }
 
     @Override
-    public String selectArguments(String OWNER, String OBJECT_NAME) {
+    public String selectArguments(String owner, String objectName) {
         return null;
     }
 

@@ -15,22 +15,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class UnknowProcedureModelServiceImpl implements GenProcedureModelService {
     @Override
-    public String getControllerCode(String moduleName) {
+    public String getControllerCode(String moduleName, String packageName) {
         return "";
     }
 
     @Override
-    public String getServiceCode(String moduleName) {
+    public String getServiceCode(String moduleName, String packageName) {
         return "";
     }
 
     @Override
-    public String getServiceImplCode(String moduleName) {
+    public String getServiceImplCode(String moduleName, String packageName) {
         return "";
     }
 
     @Override
-    public String getRepositoryCode(String moduleName) {
+    public String getRepositoryCode(String moduleName, String packageName) {
         return "";
     }
 

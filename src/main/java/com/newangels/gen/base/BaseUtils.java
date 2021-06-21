@@ -303,15 +303,31 @@ public class BaseUtils {
     }
 
     /**
+     * 首字母小写
+     *
+     * @param string
+     * @return
+     */
+    public static String toLowerCase4Index(String string) {
+        if (Character.isLowerCase(string.charAt(0))) {
+            return string;
+        }
+
+        char[] chars = string.toCharArray();
+        chars[0] += 32;
+        return String.valueOf(chars);
+    }
+
+    /**
      * 首字母大写
      *
      * @param string
      * @return
      */
     public static String toUpperCase4Index(String string) {
-        char[] methodName = string.toCharArray();
-        methodName[0] = toUpperCase(methodName[0]);
-        return String.valueOf(methodName);
+        char[] chars = string.toCharArray();
+        chars[0] = toUpperCase(chars[0]);
+        return String.valueOf(chars);
     }
 
     /**

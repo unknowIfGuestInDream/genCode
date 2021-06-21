@@ -13,25 +13,26 @@ public interface DataBaseProcedureService extends InitializingBean {
 
     /**
      * 查询所有过程
-     * @param NAME
+     *
+     * @param name 过程名
      */
-    String selectProcedures(String NAME);
+    String selectProcedures(String name);
 
     /**
      * 查询过程信息
      *
-     * @param NAME 过程名
+     * @param name 过程名
      * @return 过程信息
      */
-    String loadProcedure(String NAME);
+    String loadProcedure(String name);
 
     /**
      * 查询过程参数
      *
-     * @param OWNER       账户名
-     * @param OBJECT_NAME 过程名
+     * @param owner      账户名
+     * @param objectName 过程名
      * @return 过程参数
      */
-    String selectArguments(String OWNER, String OBJECT_NAME);
+    String selectArguments(String owner, String objectName);
 
 }

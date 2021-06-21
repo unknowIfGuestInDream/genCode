@@ -27,17 +27,17 @@ public class DataBaseInfoServiceImpl implements DataBaseInfoService {
     }
 
     @Override
-    public int insertDataBaseInfo(String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) {
-        return genJdbcTemplate.update("insert into database_info(name, url, driver, userName, password, update_time, create_time) values(?, ?, ?, ?, ?, sysdate(), sysdate())", NAME, URL, DRIVER, USERNAME, PASSWORD);
+    public int insertDataBaseInfo(String name, String url, String driver, String userName, String password) {
+        return genJdbcTemplate.update("insert into database_info(name, url, driver, userName, password, update_time, create_time) values(?, ?, ?, ?, ?, sysdate(), sysdate())", name, url, driver, userName, password);
     }
 
     @Override
-    public int updateDataBaseInfo(String ID, String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) {
-        return genJdbcTemplate.update("update database_info set name = ?, url= ?, driver = ?, userName = ?, password = ?, update_time = sysdate() where id = ?", NAME, URL, DRIVER, USERNAME, PASSWORD, ID);
+    public int updateDataBaseInfo(String id, String name, String url, String driver, String userName, String password) {
+        return genJdbcTemplate.update("update database_info set name = ?, url= ?, driver = ?, userName = ?, password = ?, update_time = sysdate() where id = ?", name, url, driver, userName, password, id);
     }
 
     @Override
-    public int deleteDataBaseInfo(String ID) {
-        return genJdbcTemplate.update("delete from database_info  where id = ?", ID);
+    public int deleteDataBaseInfo(String id) {
+        return genJdbcTemplate.update("delete from database_info  where id = ?", id);
     }
 }

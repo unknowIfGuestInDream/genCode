@@ -26,6 +26,14 @@ public class CommonNameConventServiceImpl implements NameConventService {
     }
 
     @Override
+    public String getMappingType(String procedureName) {
+        if ("select".equals(getName(procedureName))) {
+            return "GetMapping";
+        }
+        return "PostMapping";
+    }
+
+    @Override
     public void afterPropertiesSet() throws Exception {
         map.put("get", "load");
         map.put("load", "load");

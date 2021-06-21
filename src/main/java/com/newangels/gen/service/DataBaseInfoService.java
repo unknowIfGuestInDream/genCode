@@ -20,30 +20,30 @@ public interface DataBaseInfoService {
     /**
      * 新增数据源
      *
-     * @param NAME     数据源名称
-     * @param URL      路径
-     * @param DRIVER   驱动名
-     * @param USERNAME 用户
-     * @param PASSWORD 密码
+     * @param name     数据源名称
+     * @param url      路径
+     * @param driver   驱动名
+     * @param userName 用户
+     * @param password 密码
      */
-    int insertDataBaseInfo(String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD);
+    int insertDataBaseInfo(String name, String url, String driver, String userName, String password);
 
     /**
      * 修改数据源
      *
-     * @param ID       id
-     * @param NAME     数据源名称
-     * @param URL      路径
-     * @param DRIVER   驱动名
-     * @param USERNAME 用户
-     * @param PASSWORD 密码
+     * @param id       id
+     * @param name     数据源名称
+     * @param url      路径
+     * @param driver   驱动名
+     * @param userName 用户
+     * @param password 密码
      */
-    int updateDataBaseInfo(String ID, String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD);
+    int updateDataBaseInfo(String id, String name, String url, String driver, String userName, String password);
 
     /**
      * 删除数据源
      *
-     * @param ID id
+     * @param id id
      */
-    int deleteDataBaseInfo(String ID);
+    int deleteDataBaseInfo(String id);
 }
