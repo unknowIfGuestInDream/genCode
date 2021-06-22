@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * 存储过程代码生成
@@ -142,20 +143,36 @@ public class GenProcedureController {
         //循环存储过程
         for (String procedureName : procedureNameList) {
             List<Map<String, Object>> list = dbUtil.executeQuery(dbProcedure.selectArguments(userName.toUpperCase(), procedureName.toUpperCase()));
-            StringBuffer inParams = new StringBuffer();
-            StringBuffer outParams = new StringBuffer();
-            StringBuffer procedureParams = new StringBuffer();
-            StringBuffer procedureParamss = new StringBuffer();
+            //方法传参
+            StringJoiner inParams = new StringJoiner(", ");
+            //入参
+            StringJoiner outParams = new StringJoiner(", ");
+            //repository存储过程中的参数
+            StringJoiner procedureParams = new StringJoiner(", ");
+            //service层注释
+            StringJoiner serviceNote = new StringJoiner("\n");
+            //存储过程赋值
+            StringJoiner repositoryParam = new StringJoiner("\n");
+            //存储过程结果集
+            StringJoiner repositoryResult = new StringJoiner("\n");
             //获取存储过程所有参数
             for (Map<String, Object> map : list) {
-                //TODO StringJoiner类
                 if ("IN".equals(map.get("IN_OUT"))) {
                     //存储过程中传参去掉V_
                     String value = map.get("ARGUMENT_NAME").toString().replaceFirst("V_", "");
-                    //TODO 数组或者map?
-                    inParams.append("String ").append(value).append(",");
+                    inParams.add(dbProcedure.getJavaClass(map.get("DATA_TYPE").toString()) + " " + value);
+                    outParams.add(value);
+                    procedureParams.add(":" + value + "");
+                    repositoryParam.add("                statement.setString(\"" + value + "\", " + value + ");");
+                    serviceNote.add("     * @param " + value);
                 } else {
-                    outParams.append(":").append(map.get("ARGUMENT_NAME").toString());
+                    //参数名
+                    String value = map.get("ARGUMENT_NAME").toString();
+                    //参数类型
+                    String dataType = map.get("DATA_TYPE").toString();
+                    procedureParams.add(":" + value + "");
+                    repositoryParam.add("                statement.registerOutParameter(\"" + value + "\", " + dbProcedure.getRepositoryOutType(dataType) + ");");
+                    repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\"));");
                 }
             }
             //TODO 获取传参等
@@ -166,44 +183,38 @@ public class GenProcedureController {
                     "     * \n" +
                     "     */\n" +
                     "    @" + mappingType + "(\"" + preName + moduleName + "\")\n" +
-                    "    public Map<String, Object> " + preName + moduleName + "(String V_PERCODE, String V_GUID, HttpServletRequest request) {\n" +
-                    "        return BaseUtils.success(" + BaseUtils.toLowerCase4Index(moduleName) + "Service." + preName + moduleName + "(BaseUtils.getIp(request), V_PERCODE, V_GUID));\n" +
+                    "    public Map<String, Object> " + preName + moduleName + "(" + inParams + ", HttpServletRequest request) {\n" +
+                    "        return BaseUtils.success(" + BaseUtils.toLowerCase4Index(moduleName) + "Service." + preName + moduleName + "(" + outParams + "));\n" +
                     "    }\n");
 
             serviceCode.append("\n" +
                     "    /**\n" +
                     "     * \n" +
                     "     *\n" +
-                    "     * @param V_IP\n" +
-                    "     * @param V_PERCODE\n" +
-                    "     * @param V_GUID\n" +
+                    serviceNote +
                     "     * @return\n" +
                     "     */\n" +
-                    "    Map<String, Object> " + preName + moduleName + "(String V_IP, String V_PERCODE, String V_GUID);\n");
+                    "    Map<String, Object> " + preName + moduleName + "(" + inParams + ");\n");
 
             serviceImplCode.append("\n" +
                     "    @Override\n" +
-                    "    public Map<String, Object> " + preName + moduleName + "(String V_IP, String V_PERCODE, int I_YEAR, String V_DEPTCODE, String V_SAP_YWFW_CODE, String V_SAP_CBZX_CODE) {\n" +
-                    "        return " + BaseUtils.toLowerCase4Index(moduleName) + "Repository." + procedureName + "(V_IP, V_PERCODE, I_YEAR, V_DEPTCODE, V_SAP_YWFW_CODE, V_SAP_CBZX_CODE);\n" +
+                    "    public Map<String, Object> " + preName + moduleName + "(" + inParams + ") {\n" +
+                    "        return " + BaseUtils.toLowerCase4Index(moduleName) + "Repository." + procedureName + "(" + outParams + ");\n" +
                     "    }\n");
 
             repositoryCode.append("\n" +
                     "    /**\n" +
                     "     * \n" +
                     "     */\n" +
-                    "    public Map<String, Object> " + procedureName + "(String V_IP, String V_PERCODE, String V_GUID) {\n" +
+                    "    public Map<String, Object> " + procedureName + "(" + inParams + ") {\n" +
                     "\n" +
                     "        return budgetJdbcTemplate.execute(new CallableStatementCreator() {\n" +
                     "            @Override\n" +
                     "            public CallableStatement createCallableStatement(Connection con)\n" +
                     "                    throws SQLException {\n" +
-                    "                String sql = \"{call " + procedureName + "(:V_IP, :V_PERCODE, :V_GUID, :V_INFO, :V_C_CURSOR)}\";\n" +
+                    "                String sql = \"{call " + procedureName + "(" + procedureParams + ")}\";\n" +
                     "                CallableStatement statement = con.prepareCall(sql);\n" +
-                    "                statement.setString(\"V_IP\", V_IP);\n" +
-                    "                statement.setString(\"V_PERCODE\", V_PERCODE);\n" +
-                    "                statement.setString(\"V_GUID\", V_GUID);\n" +
-                    "                statement.registerOutParameter(\"V_INFO\", OracleTypes.VARCHAR);\n" +
-                    "                statement.registerOutParameter(\"V_C_CURSOR\", OracleTypes.CURSOR);\n" +
+                    repositoryParam +
                     "                return statement;\n" +
                     "            }\n" +
                     "        }, new CallableStatementCallback<Map<String, Object>>() {\n" +
@@ -211,8 +222,7 @@ public class GenProcedureController {
                     "                    throws SQLException, DataAccessException {\n" +
                     "                cs.execute();\n" +
                     "                Map<String, Object> returnValue = new HashMap<>(8);\n" +
-                    "                returnValue.put(\"message\", cs.getString(\"V_INFO\"));\n" +
-                    "                returnValue.put(\"result\", ProcedureUtils.resultHash((ResultSet) cs.getObject(\"V_C_CURSOR\")));\n" +
+                    repositoryResult +
                     "                return returnValue;\n" +
                     "            }\n" +
                     "        });\n" +

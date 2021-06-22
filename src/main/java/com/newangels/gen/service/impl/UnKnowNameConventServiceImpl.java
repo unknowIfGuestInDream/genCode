@@ -26,6 +26,11 @@ public class UnKnowNameConventServiceImpl implements NameConventService {
     }
 
     @Override
+    public String getResultName(String name) {
+        return null;
+    }
+
+    @Override
     public void afterPropertiesSet() throws Exception {
         NameConventFactory.register(NameConventType.UNKNOW, this);
     }

@@ -41,4 +41,18 @@ public interface DataBaseProcedureService extends InitializingBean {
      * @param type 数据库参数类型
      */
     String getJavaClass(String type);
+
+    /**
+     * 返回存储过程出参信息
+     *
+     * @param type 数据库参数类型
+     */
+    String getRepositoryOutType(String type);
+
+    /**
+     * 返回存储过程结果集处理代码
+     *
+     * @param type 数据库参数类型
+     */
+    String getRepositoryOutTypeCode(String type);
 }

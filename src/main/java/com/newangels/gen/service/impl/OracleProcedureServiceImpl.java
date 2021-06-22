@@ -20,6 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class OracleProcedureServiceImpl implements DataBaseProcedureService {
 
     Map<String, String> map = new ConcurrentHashMap<>(32);
+    Map<String, String> dataTypeMap = new ConcurrentHashMap<>(8);
+    Map<String, String> dataTypeOutMap = new ConcurrentHashMap<>(8);
 
     @Override
     public String selectProcedures(String name) {
@@ -51,11 +53,31 @@ public class OracleProcedureServiceImpl implements DataBaseProcedureService {
     }
 
     @Override
+    public String getRepositoryOutType(String type) {
+        return dataTypeMap.getOrDefault(type.toUpperCase(), "OracleTypes.VARCHAR");
+    }
+
+    @Override
+    public String getRepositoryOutTypeCode(String type) {
+        return dataTypeOutMap.getOrDefault(type.toUpperCase(), "String");
+    }
+
+    @Override
     public void afterPropertiesSet() throws Exception {
         map.put("VARCHAR2", "String");
         map.put("CLOB", "String");
         map.put("NUMBER", "Double");
         map.put("BLOB", "InputStream");
+
+        dataTypeMap.put("VARCHAR2", "OracleTypes.VARCHAR");
+        dataTypeMap.put("REF CURSOR", "OracleTypes.CURSOR");
+        dataTypeMap.put("BLOB", "OracleTypes.BLOB");
+        dataTypeMap.put("NUMBER", "OracleTypes.NUMERIC");
+
+        dataTypeOutMap.put("VARCHAR2", "String");
+        dataTypeOutMap.put("REF CURSOR", "Object");
+        dataTypeOutMap.put("BLOB", "Blob");
+        dataTypeOutMap.put("NUMBER", "Double");
         DataBaseFactory.register(DataBaseType.ORACLE, this);
     }
 }

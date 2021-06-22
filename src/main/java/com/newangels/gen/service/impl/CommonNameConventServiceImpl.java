@@ -35,6 +35,21 @@ public class CommonNameConventServiceImpl implements NameConventService {
     }
 
     @Override
+    public String getResultName(String name) {
+        name = name.toUpperCase();
+        if (name.indexOf("V_INFO") > 0 || name.indexOf("MESSAGE") > 0) {
+            return "message";
+        }
+        if (name.indexOf("V_C_CURSOR") > 0 || name.indexOf("RET") > 0 || name.indexOf("V_CURSOR") > 0 || name.indexOf("RESULT") > 0) {
+            return "result";
+        }
+        if (name.indexOf("NUM") > 0 || name.indexOf("TOTAL") > 0) {
+            return "total";
+        }
+        return null;
+    }
+
+    @Override
     public void afterPropertiesSet() throws Exception {
         map.put("get", "load");
         map.put("load", "load");

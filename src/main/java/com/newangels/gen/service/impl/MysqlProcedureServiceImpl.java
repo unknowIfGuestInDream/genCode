@@ -35,6 +35,16 @@ public class MysqlProcedureServiceImpl implements DataBaseProcedureService {
     }
 
     @Override
+    public String getRepositoryOutType(String type) {
+        return null;
+    }
+
+    @Override
+    public String getRepositoryOutTypeCode(String type) {
+        return null;
+    }
+
+    @Override
     public void afterPropertiesSet() throws Exception {
         DataBaseFactory.register(DataBaseType.MYSQL, this);
         DataBaseFactory.register(DataBaseType.MYSQL8, this);
