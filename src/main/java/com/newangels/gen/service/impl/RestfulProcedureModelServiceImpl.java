@@ -159,7 +159,6 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
             //存储过程结果集
             StringJoiner repositoryResult = new StringJoiner("\n");
             //获取存储过程所有参数
-            //TODO 放置到genProcedureModel生成代码实现中
             for (Map<String, Object> map : list) {
                 if ("IN".equals(map.get("IN_OUT"))) {
                     //存储过程中传参去掉V_
