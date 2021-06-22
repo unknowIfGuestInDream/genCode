@@ -31,6 +31,7 @@ public class DbUtilsFactory {
         if (StringUtils.isEmpty(name) || !strategyMap.containsKey("name")) {
             return;
         }
+        strategyMap.get(name).close();
         strategyMap.remove(name);
     }
 
