@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -53,9 +54,9 @@ public class OracleProcedureServiceImpl implements DataBaseProcedureService {
         //执行sql
         List<Map<String, Object>> list = dbUtil.executeQuery(allProceduresSql);
         //获取结果集
-        StringBuffer sb = new StringBuffer();
-        list.forEach(l -> sb.append(l.get("TEXT")));
-        return sb.toString().replaceAll("\n", "</br>");
+        StringJoiner sj = new StringJoiner("</br>");
+        list.forEach(l -> sj.add(l.get("TEXT").toString()));
+        return sj.toString();
     }
 
     @Override

@@ -240,6 +240,7 @@ public class DBUtil implements Cloneable {
         if (dataSource != null) {
             dataSource.close();
         }
+        dataSource = null;
     }
 
 }

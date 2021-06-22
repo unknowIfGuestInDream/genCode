@@ -141,7 +141,9 @@
             }, {
                 xtype: 'textfield',
                 id: 'moduleName',
+                beforeLabelTextTpl: required,
                 fieldLabel: '模块名称',
+                emptyText: '如: code'
             }, {
                 xtype: 'combo',
                 queryMode: 'local',
@@ -166,7 +168,9 @@
                 xtype: 'textfield',
                 id: 'packageName',
                 fieldLabel: '包名',
-                value: 'com.newanagels.'
+                beforeLabelTextTpl: required,
+                value: 'com.newanagels.',
+                emptyText: '如: com.newanagels.gen'
             }]
         });
 
