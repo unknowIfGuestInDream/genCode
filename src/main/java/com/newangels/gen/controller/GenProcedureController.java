@@ -21,10 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 
 /**
  * 存储过程代码生成
@@ -104,6 +101,16 @@ public class GenProcedureController {
         return BaseUtils.success(sb.toString());
     }
 
+    @GetMapping("test")
+    @Log
+    public Map<String, Object> test() {
+        List<String> list = new ArrayList<>();
+        list.add("SE_OK_RESULT_FILE_GET");
+        list.add("SE_OK_RESULT_FILES_SET");
+
+        return BaseUtils.success(genProcedure("api", "1", "1", "com.newangels.gen", "jdbc:oracle:thin:@10.18.26.86:1521:pmnew", "oracle.jdbc.OracleDriver", "pmnew", "pmnew", list));
+    }
+
     /**
      * 生成代码
      *
@@ -160,6 +167,9 @@ public class GenProcedureController {
                 if ("IN".equals(map.get("IN_OUT"))) {
                     //存储过程中传参去掉V_
                     String value = map.get("ARGUMENT_NAME").toString().replaceFirst("V_", "");
+                    if (map.get("ARGUMENT_NAME").toString().startsWith("I_I_")) {
+                        value = map.get("ARGUMENT_NAME").toString().replaceFirst("I_", "");
+                    }
                     inParams.add(dbProcedure.getJavaClass(map.get("DATA_TYPE").toString()) + " " + value);
                     outParams.add(value);
                     procedureParams.add(":" + value + "");
@@ -192,7 +202,7 @@ public class GenProcedureController {
                     "     * \n" +
                     "     *\n" +
                     serviceNote +
-                    "     * @return\n" +
+                    "\n     * @return\n" +
                     "     */\n" +
                     "    Map<String, Object> " + preName + moduleName + "(" + inParams + ");\n");
 
@@ -215,7 +225,7 @@ public class GenProcedureController {
                     "                String sql = \"{call " + procedureName + "(" + procedureParams + ")}\";\n" +
                     "                CallableStatement statement = con.prepareCall(sql);\n" +
                     repositoryParam +
-                    "                return statement;\n" +
+                    "\n                return statement;\n" +
                     "            }\n" +
                     "        }, new CallableStatementCallback<Map<String, Object>>() {\n" +
                     "            public Map<String, Object> doInCallableStatement(CallableStatement cs)\n" +
@@ -223,7 +233,7 @@ public class GenProcedureController {
                     "                cs.execute();\n" +
                     "                Map<String, Object> returnValue = new HashMap<>(8);\n" +
                     repositoryResult +
-                    "                return returnValue;\n" +
+                    "\n                return returnValue;\n" +
                     "            }\n" +
                     "        });\n" +
                     "    }\n");
@@ -235,7 +245,6 @@ public class GenProcedureController {
         result.put("repository", StrUtil.format(genProcedureModel.getRepositoryCode(moduleName, packageName), repositoryCode.toString()));
         result.put("BaseUtils", genProcedureModel.getBaseUtils(packageName));
         result.put("ProcedureUtils", genProcedureModel.getProcedureUtils(packageName));
-
         return BaseUtils.success(result);
     }
 }

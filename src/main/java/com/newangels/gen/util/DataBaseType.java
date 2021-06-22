@@ -11,7 +11,7 @@ public enum DataBaseType {
     /**
      * oracle驱动
      */
-    ORACLE("oracle.jdbc.driver.OracleDriver"),
+    ORACLE("oracle.jdbc.OracleDriver"),
     /**
      * mysql5驱动
      */
