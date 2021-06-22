@@ -39,7 +39,7 @@ public class GenProcedureController {
      */
     @GetMapping("/manageGenerate")
     public ModelAndView manageGenerate() {
-        return new ModelAndView("pages/manageGenerate");
+        return new ModelAndView("pages/codeGenerate/manageGenerate");
     }
 
     /**
@@ -98,7 +98,7 @@ public class GenProcedureController {
         StringBuffer sb = new StringBuffer();
         list.forEach(l -> sb.append(l.get("TEXT")));
 
-        return BaseUtils.success(sb.toString());
+        return BaseUtils.success(sb.toString().replaceAll("\n","</br>"));
     }
 
     /**
