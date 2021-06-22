@@ -1,7 +1,7 @@
 package com.newangels.gen.factory;
 
+import com.newangels.gen.enums.DataBaseType;
 import com.newangels.gen.service.DataBaseProcedureService;
-import com.newangels.gen.util.DataBaseType;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;

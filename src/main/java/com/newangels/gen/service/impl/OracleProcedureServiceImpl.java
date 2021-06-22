@@ -1,8 +1,8 @@
 package com.newangels.gen.service.impl;
 
+import com.newangels.gen.enums.DataBaseType;
 import com.newangels.gen.factory.DataBaseFactory;
 import com.newangels.gen.service.DataBaseProcedureService;
-import com.newangels.gen.util.DataBaseType;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 

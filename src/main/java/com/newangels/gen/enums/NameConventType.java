@@ -1,4 +1,4 @@
-package com.newangels.gen.util;
+package com.newangels.gen.enums;
 
 import org.apache.commons.lang3.StringUtils;
 

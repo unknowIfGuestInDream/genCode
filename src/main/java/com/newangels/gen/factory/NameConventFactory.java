@@ -1,7 +1,7 @@
 package com.newangels.gen.factory;
 
+import com.newangels.gen.enums.NameConventType;
 import com.newangels.gen.service.NameConventService;
-import com.newangels.gen.util.NameConventType;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;

@@ -1,11 +1,11 @@
 package com.newangels.gen.service.impl;
 
+import com.newangels.gen.enums.GenProcedureModelType;
 import com.newangels.gen.factory.GenProcedureModelFactory;
 import com.newangels.gen.service.DataBaseProcedureService;
 import com.newangels.gen.service.GenProcedureModelService;
 import com.newangels.gen.service.NameConventService;
 import com.newangels.gen.util.DBUtil;
-import com.newangels.gen.util.GenProcedureModelType;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

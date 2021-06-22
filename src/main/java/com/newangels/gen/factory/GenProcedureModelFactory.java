@@ -1,7 +1,7 @@
 package com.newangels.gen.factory;
 
+import com.newangels.gen.enums.GenProcedureModelType;
 import com.newangels.gen.service.GenProcedureModelService;
-import com.newangels.gen.util.GenProcedureModelType;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;

@@ -1,8 +1,8 @@
 package com.newangels.gen.service.impl;
 
+import com.newangels.gen.enums.NameConventType;
 import com.newangels.gen.factory.NameConventFactory;
 import com.newangels.gen.service.NameConventService;
-import com.newangels.gen.util.NameConventType;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
