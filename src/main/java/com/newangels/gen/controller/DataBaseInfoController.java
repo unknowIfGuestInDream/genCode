@@ -2,6 +2,7 @@ package com.newangels.gen.controller;
 
 import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
+import com.newangels.gen.factory.DbUtilsFactory;
 import com.newangels.gen.service.DataBaseInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -81,6 +82,7 @@ public class DataBaseInfoController {
     @PostMapping("updateDataBaseInfo")
     @Log
     public Map<String, Object> updateDataBaseInfo(String ID, String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) {
+        DbUtilsFactory.remove(URL);
         return BaseUtils.success(dataBaseInfoService.updateDataBaseInfo(ID, NAME, URL, DRIVER, USERNAME, PASSWORD));
     }
 
@@ -89,7 +91,8 @@ public class DataBaseInfoController {
      */
     @PostMapping("deleteDataBaseInfo")
     @Log
-    public Map<String, Object> deleteDataBaseInfo(String ID) {
+    public Map<String, Object> deleteDataBaseInfo(String ID, String URL) {
+        DbUtilsFactory.remove(URL);
         return BaseUtils.success(dataBaseInfoService.deleteDataBaseInfo(ID));
     }
 }
