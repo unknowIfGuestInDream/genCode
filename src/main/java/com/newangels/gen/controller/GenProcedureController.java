@@ -212,7 +212,7 @@ public class GenProcedureController {
                     "     */\n" +
                     "    public Map<String, Object> " + procedureName + "(" + inParams + ") {\n" +
                     "\n" +
-                    "        return budgetJdbcTemplate.execute(new CallableStatementCreator() {\n" +
+                    "        return " + packageName.substring(packageName.lastIndexOf(".") + 1).toLowerCase() + "JdbcTemplate.execute(new CallableStatementCreator() {\n" +
                     "            @Override\n" +
                     "            public CallableStatement createCallableStatement(Connection con)\n" +
                     "                    throws SQLException {\n" +
