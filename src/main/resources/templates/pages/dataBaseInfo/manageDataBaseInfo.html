@@ -227,7 +227,8 @@
                         url: '/gen/deleteDataBaseInfo',
                         async: false,
                         params: {
-                            'ID': records[0].get('ID')
+                            'ID': records[0].get('ID'),
+                            'URL': records[0].get('URL')
                         },
                         callback: function (options, success, response) {
                             if (success) {
