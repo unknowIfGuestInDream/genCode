@@ -37,16 +37,16 @@ public class CommonNameConventServiceImpl implements NameConventService {
     @Override
     public String getResultName(String name) {
         name = name.toUpperCase();
-        if (name.indexOf("V_INFO") > 0 || name.indexOf("MESSAGE") > 0) {
+        if (name.contains("V_INFO") || name.contains("MESSAGE")) {
             return "message";
         }
-        if (name.indexOf("V_C_CURSOR") > 0 || name.indexOf("RET") > 0 || name.indexOf("V_CURSOR") > 0 || name.indexOf("RESULT") > 0) {
+        if (name.contains("V_C_CURSOR") || name.contains("RET") || name.contains("V_CURSOR") || name.contains("RESULT")) {
             return "result";
         }
-        if (name.indexOf("NUM") > 0 || name.indexOf("TOTAL") > 0) {
+        if (name.contains("NUM") || name.contains("TOTAL")) {
             return "total";
         }
-        return null;
+        return name;
     }
 
     @Override

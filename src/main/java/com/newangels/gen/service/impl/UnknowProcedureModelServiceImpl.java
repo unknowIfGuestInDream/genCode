@@ -1,9 +1,16 @@
 package com.newangels.gen.service.impl;
 
 import com.newangels.gen.factory.GenProcedureModelFactory;
+import com.newangels.gen.service.DataBaseProcedureService;
 import com.newangels.gen.service.GenProcedureModelService;
+import com.newangels.gen.service.NameConventService;
+import com.newangels.gen.util.DBUtil;
 import com.newangels.gen.util.GenProcedureModelType;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 未知风格代码
@@ -32,6 +39,11 @@ public class UnknowProcedureModelServiceImpl implements GenProcedureModelService
     @Override
     public String getRepositoryCode(String moduleName, String packageName) {
         return "";
+    }
+
+    @Override
+    public Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DBUtil dbUtil) {
+        return new HashMap<>();
     }
 
     @Override

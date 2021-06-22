@@ -1,6 +1,10 @@
 package com.newangels.gen.service;
 
+import com.newangels.gen.util.DBUtil;
 import org.springframework.beans.factory.InitializingBean;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 存储过程代码生成模板
@@ -42,6 +46,17 @@ public interface GenProcedureModelService extends InitializingBean {
      * @param packageName 包名
      */
     String getRepositoryCode(String moduleName, String packageName);
+
+    /**
+     * @param moduleName        模块名称
+     * @param packageName       包名
+     * @param userName          用户名
+     * @param procedureNameList 存储过程集合
+     * @param nameConvent       命名规范
+     * @param dbProcedure       代码规范
+     * @param dbUtil            数据库连接
+     */
+    Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DBUtil dbUtil);
 
     /**
      * BaseUtils工具类
