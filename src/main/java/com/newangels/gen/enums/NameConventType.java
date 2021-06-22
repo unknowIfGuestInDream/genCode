@@ -11,11 +11,11 @@ import org.apache.commons.lang3.StringUtils;
  */
 public enum NameConventType {
     /**
-     * 常用模板
+     * 常用规范
      */
     COMMON("1"),
     /**
-     * 未知模版
+     * 未知规范
      */
     UNKNOW("UNKNOW");
 
