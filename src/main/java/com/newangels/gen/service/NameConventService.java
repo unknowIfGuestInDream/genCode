@@ -12,7 +12,7 @@ import org.springframework.beans.factory.InitializingBean;
 public interface NameConventService extends InitializingBean {
 
     /**
-     * 根据存储过程名称获取过程类型
+     * 根据存储过程名称获取方法前缀名称
      *
      * @param procedureName 存储过程名称
      */
