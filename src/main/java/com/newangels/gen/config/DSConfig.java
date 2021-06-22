@@ -12,6 +12,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import javax.sql.DataSource;
 
 /**
+ * 数据库配置
+ *
  * @author: TangLiang
  * @date: 2021/6/18 23:18
  * @since: 1.0

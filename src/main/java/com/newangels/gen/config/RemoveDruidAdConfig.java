@@ -14,6 +14,8 @@ import javax.servlet.*;
 import java.io.IOException;
 
 /**
+ * 删除druid广告
+ *
  * @author: TangLiang
  * @date: 2021/6/18 23:19
  * @since: 1.0

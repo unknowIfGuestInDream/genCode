@@ -3,6 +3,8 @@ package com.newangels.gen.enums;
 import org.apache.commons.lang3.StringUtils;
 
 /**
+ * 根据传参驱动判断连接数据库
+ *
  * @author: TangLiang
  * @date: 2021/6/19 8:46
  * @since: 1.0
