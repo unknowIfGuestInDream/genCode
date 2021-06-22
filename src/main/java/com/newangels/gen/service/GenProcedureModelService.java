@@ -48,6 +48,8 @@ public interface GenProcedureModelService extends InitializingBean {
     String getRepositoryCode(String moduleName, String packageName);
 
     /**
+     * 根据代码规范和命名规范以及数据库连接生成对应代码
+     *
      * @param moduleName        模块名称
      * @param packageName       包名
      * @param userName          用户名
