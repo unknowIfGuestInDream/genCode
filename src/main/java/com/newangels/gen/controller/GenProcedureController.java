@@ -21,7 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * 存储过程代码生成
@@ -101,16 +104,6 @@ public class GenProcedureController {
         return BaseUtils.success(sb.toString());
     }
 
-    @GetMapping("test")
-    @Log
-    public Map<String, Object> test() {
-        List<String> list = new ArrayList<>();
-        list.add("SE_OK_RESULT_FILE_GET");
-        list.add("SE_OK_RESULT_FILES_SET");
-
-        return BaseUtils.success(genProcedure("api", "1", "1", "com.newangels.gen", "jdbc:oracle:thin:@10.18.26.86:1521:pmnew", "oracle.jdbc.OracleDriver", "pmnew", "pmnew", list));
-    }
-
     /**
      * 生成代码
      *
@@ -185,8 +178,9 @@ public class GenProcedureController {
                     repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\"));");
                 }
             }
-            //TODO 获取传参等
+            //方法名称前缀
             String preName = nameConvent.getName(procedureName);
+            //请求协议
             String mappingType = nameConvent.getMappingType(procedureName);
             controllerCode.append("\n" +
                     "    /**\n" +
