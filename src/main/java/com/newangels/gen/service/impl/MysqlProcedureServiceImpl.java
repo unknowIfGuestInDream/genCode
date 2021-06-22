@@ -3,6 +3,7 @@ package com.newangels.gen.service.impl;
 import com.newangels.gen.enums.DataBaseType;
 import com.newangels.gen.factory.DataBaseFactory;
 import com.newangels.gen.service.DataBaseProcedureService;
+import com.newangels.gen.util.DBUtil;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,6 +23,11 @@ public class MysqlProcedureServiceImpl implements DataBaseProcedureService {
     @Override
     public String loadProcedure(String name) {
         return null;
+    }
+
+    @Override
+    public String loadProcedure(String name, DBUtil dbUtil) {
+        return "";
     }
 
     @Override

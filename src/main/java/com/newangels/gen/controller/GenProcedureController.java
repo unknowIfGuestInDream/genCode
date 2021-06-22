@@ -91,14 +91,8 @@ public class GenProcedureController {
         }
         //获取数据库过程sql
         DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
-        String allProceduresSql = dbProcedure.loadProcedure(name);
-        //执行sql
-        List<Map<String, Object>> list = dbUtil.executeQuery(allProceduresSql);
-        //获取结果集
-        StringBuffer sb = new StringBuffer();
-        list.forEach(l -> sb.append(l.get("TEXT")));
 
-        return BaseUtils.success(sb.toString().replaceAll("\n","</br>"));
+        return BaseUtils.success(dbProcedure.loadProcedure(name, dbUtil));
     }
 
     /**

@@ -3,9 +3,11 @@ package com.newangels.gen.service.impl;
 import com.newangels.gen.enums.DataBaseType;
 import com.newangels.gen.factory.DataBaseFactory;
 import com.newangels.gen.service.DataBaseProcedureService;
+import com.newangels.gen.util.DBUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -43,6 +45,17 @@ public class OracleProcedureServiceImpl implements DataBaseProcedureService {
         }
         sql += " ORDER BY LINE";
         return sql;
+    }
+
+    @Override
+    public String loadProcedure(String name, DBUtil dbUtil) {
+        String allProceduresSql = loadProcedure(name);
+        //执行sql
+        List<Map<String, Object>> list = dbUtil.executeQuery(allProceduresSql);
+        //获取结果集
+        StringBuffer sb = new StringBuffer();
+        list.forEach(l -> sb.append(l.get("TEXT")));
+        return sb.toString().replaceAll("\n", "</br>");
     }
 
     @Override

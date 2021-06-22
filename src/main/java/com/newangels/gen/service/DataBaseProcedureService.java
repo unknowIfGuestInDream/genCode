@@ -1,5 +1,6 @@
 package com.newangels.gen.service;
 
+import com.newangels.gen.util.DBUtil;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
@@ -25,6 +26,14 @@ public interface DataBaseProcedureService extends InitializingBean {
      * @return 过程信息
      */
     String loadProcedure(String name);
+
+    /**
+     * 获取存储过程完整信息
+     *
+     * @param name   过程名
+     * @param dbUtil 数据库连接工具类
+     */
+    String loadProcedure(String name, DBUtil dbUtil);
 
     /**
      * 查询过程参数
