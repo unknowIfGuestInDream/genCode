@@ -341,6 +341,29 @@
 
     //生成代码
     function _genProcedure() {
+
+        //模块名称验证
+        if (Ext.getCmp('moduleName').getValue() !== "") {
+            if (Ext.getCmp('moduleName').getValue().length <= 1) {
+                Ext.MessageBox.alert('警告', '模块名称格式错误');
+                return;
+            }
+        } else if (Ext.getCmp('moduleName').getValue() === "") {
+            Ext.MessageBox.alert('警告', '模块名称不能为空');
+            return;
+        }
+
+        //包名验证
+        if (Ext.getCmp('packageName').getValue() !== "") {
+            if (Ext.getCmp('packageName').getValue().length < 17) {
+                Ext.MessageBox.alert('警告', '包名格式错误');
+                return;
+            }
+        } else if (Ext.getCmp('packageName').getValue() === "") {
+            Ext.MessageBox.alert('警告', '模块名称不能为空');
+            return;
+        }
+
         var records = Ext.getCmp('proceduresPanel').getSelectionModel().getSelection();
 
         if (records.length === 0) {
@@ -372,7 +395,6 @@
                 if (success) {
                     var data = Ext.decode(response.responseText);
                     if (data.success) {
-                        Ext.MessageBox.alert('提示信息', '成功');
                         var codeList = data.list;
 
                         var win = Ext.create('Ext.window.Window', {
