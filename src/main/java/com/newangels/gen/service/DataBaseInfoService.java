@@ -18,32 +18,39 @@ public interface DataBaseInfoService {
     List<Map<String, Object>> selectDataBaseInfo();
 
     /**
+     * 加载数据源
+     *
+     * @param ID ID
+     */
+    List<Map<String, Object>> loadDataBaseInfo(String ID);
+
+    /**
      * 新增数据源
      *
-     * @param name     数据源名称
-     * @param url      路径
-     * @param driver   驱动名
-     * @param userName 用户
-     * @param password 密码
+     * @param NAME     数据源名称
+     * @param URL      路径
+     * @param DRIVER   驱动名
+     * @param USERNAME 用户
+     * @param PASSWORD 密码
      */
-    int insertDataBaseInfo(String name, String url, String driver, String userName, String password);
+    int insertDataBaseInfo(String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD);
 
     /**
      * 修改数据源
      *
-     * @param id       id
-     * @param name     数据源名称
-     * @param url      路径
-     * @param driver   驱动名
-     * @param userName 用户
-     * @param password 密码
+     * @param ID       ID
+     * @param NAME     数据源名称
+     * @param URL      路径
+     * @param DRIVER   驱动名
+     * @param USERNAME 用户
+     * @param PASSWORD 密码
      */
-    int updateDataBaseInfo(String id, String name, String url, String driver, String userName, String password);
+    int updateDataBaseInfo(String ID, String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD);
 
     /**
      * 删除数据源
      *
-     * @param id id
+     * @param ID ID
      */
-    int deleteDataBaseInfo(String id);
+    int deleteDataBaseInfo(String ID);
 }

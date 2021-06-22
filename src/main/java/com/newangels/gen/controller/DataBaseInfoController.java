@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
 
@@ -23,6 +24,30 @@ public class DataBaseInfoController {
     private final DataBaseInfoService dataBaseInfoService;
 
     /**
+     * 管理数据源
+     */
+    @GetMapping(value = "manageDataBaseInfo")
+    public ModelAndView manageDataBaseInfo() {
+        return new ModelAndView("pages/dataBaseInfo/manageDataBaseInfo");
+    }
+
+    /**
+     * 新增数据源
+     */
+    @GetMapping(value = "preInsertDataBaseInfo")
+    public ModelAndView preInsertDataBaseInfo() {
+        return new ModelAndView("pages/dataBaseInfo/preInsertDataBaseInfo");
+    }
+
+    /**
+     * 修改数据源
+     */
+    @GetMapping(value = "preUpdateDataBaseInfo")
+    public ModelAndView preUpdateDataBaseInfo() {
+        return new ModelAndView("pages/dataBaseInfo/preUpdateDataBaseInfo");
+    }
+
+    /**
      * 查询数据源
      */
     @GetMapping("selectDataBaseInfo")
@@ -32,12 +57,22 @@ public class DataBaseInfoController {
     }
 
     /**
+     * 加载数据源
+     */
+    @GetMapping("loadDataBaseInfo")
+    @Log
+    public Map<String, Object> loadDataBaseInfo(String ID) {
+        return BaseUtils.success(dataBaseInfoService.loadDataBaseInfo(ID));
+    }
+
+
+    /**
      * 新增数据源
      */
     @PostMapping("insertDataBaseInfo")
     @Log
-    public Map<String, Object> insertDataBaseInfo(String name, String url, String driver, String userName, String password) {
-        return BaseUtils.success(dataBaseInfoService.insertDataBaseInfo(name, url, driver, userName, password));
+    public Map<String, Object> insertDataBaseInfo(String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) {
+        return BaseUtils.success(dataBaseInfoService.insertDataBaseInfo(NAME, URL, DRIVER, USERNAME, PASSWORD));
     }
 
     /**
@@ -45,8 +80,8 @@ public class DataBaseInfoController {
      */
     @PostMapping("updateDataBaseInfo")
     @Log
-    public Map<String, Object> updateDataBaseInfo(String id, String name, String url, String driver, String userName, String password) {
-        return BaseUtils.success(dataBaseInfoService.updateDataBaseInfo(id, name, url, driver, userName, password));
+    public Map<String, Object> updateDataBaseInfo(String ID, String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) {
+        return BaseUtils.success(dataBaseInfoService.updateDataBaseInfo(ID, NAME, URL, DRIVER, USERNAME, PASSWORD));
     }
 
     /**
@@ -54,7 +89,7 @@ public class DataBaseInfoController {
      */
     @PostMapping("deleteDataBaseInfo")
     @Log
-    public Map<String, Object> deleteDataBaseInfo(String id) {
-        return BaseUtils.success(dataBaseInfoService.deleteDataBaseInfo(id));
+    public Map<String, Object> deleteDataBaseInfo(String ID) {
+        return BaseUtils.success(dataBaseInfoService.deleteDataBaseInfo(ID));
     }
 }

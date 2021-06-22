@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新增数据源</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="public/css/ext-all.css"/>
+    <link rel="stylesheet" type="text/css" href="public/css/ext-zh_CN.css"/>
+    <script type="text/javascript" src="public/js/ext-all.js"></script>
+    <script type="text/javascript" src="public/js/ext-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="public/js/base.js"></script>
+    <script type="text/javascript" src="public/js/util/allowBlank.js"></script>
+    <script type="text/javascript" src="public/js/store/driver.js"></script>
+</head>
+<body>
+<script>
+    Ext.onReady(function () {
+        Ext.getBody().mask('加载中...');//加载时页面遮盖
+
+        //按钮栏
+        var buttonPanel = Ext.create('Ext.Panel', {
+            id: 'buttonPanel',
+            defaults: {
+                style: 'margin: 2px;'
+            },
+            items: [{
+                xtype: 'button',
+                text: '保存',
+                icon: 'public/image/btn/save.png',
+                handler: _insertDataBaseInfo
+            }, {
+                xtype: 'button',
+                text: '连接测试',
+                icon: 'public/image/btn/add.png',
+                handler: _insertConnectTest
+            }, {
+                xtype: 'button',
+                text: '关闭',
+                icon: 'public/image/btn/close.png',
+                handler: _close
+            }]
+        });
+
+        var formPanel = Ext.create('Ext.form.Panel', {//表单
+            id: 'formPanel',
+            layout: 'column',
+            frame: true,
+            autoScroll: true,
+            defaults: {
+                labelAlign: 'right',
+                labelWidth: 150,
+                inputWidth: 300,
+            },
+            items: [{
+                xtype: 'textfield',
+                name: 'NAME',
+                fieldLabel: '数据源名称',
+                allowBlank: false
+            }, {
+                xtype: 'combo',
+                queryMode: 'local',
+                store: oracleDriverStore,
+                valueField: 'CODE_',
+                displayField: 'NAME_',
+                id: 'DRIVER',
+                name: 'DRIVER',
+                fieldLabel: '驱动类名称',
+                allowBlank: false,
+                style: 'clear:both'
+            }, {
+                xtype: 'textfield',
+                name: 'URL',
+                fieldLabel: '链接',
+                allowBlank: false,
+                style: 'clear:both'
+            }, {
+                xtype: 'textfield',
+                name: 'USERNAME',
+                fieldLabel: '用户名',
+                allowBlank: false,
+                style: 'clear:both'
+            }, {
+                xtype: 'textfield',
+                name: 'PASSWORD',
+                fieldLabel: '密码',
+                allowBlank: false,
+                style: 'clear:both'
+            }]
+        });
+
+        Ext.create('Ext.container.Viewport', {//整体布局
+            layout: {
+                type: 'border',//border布局
+                regionWeights: {//四个角的归属
+                    west: -1,
+                    north: 1,
+                    south: 1,
+                    east: -1
+                }
+            },
+            defaults: {
+                border: false
+            },
+            items: [{
+                region: 'north',
+                items: [buttonPanel]
+            }, {
+                region: 'center',
+                layout: 'fit',//充满
+                items: [formPanel]
+            }]
+        });
+
+        _init();
+    });
+
+    function _init() {
+        for (var i = 0; i < Ext.data.StoreManager.getCount(); i++) {
+            if (Ext.data.StoreManager.getAt(i).isLoading()) {
+                return;
+            }
+        }
+
+        var oracleDriverStore = Ext.data.StoreManager.lookup('oracleDriverStore');
+        Ext.getCmp('DRIVER').select(oracleDriverStore.first());
+
+        Ext.getBody().unmask();
+    }
+
+    function _insertDataBaseInfo() {
+        Ext.getCmp('formPanel').getForm().submit({//提交表单
+            url: '/gen/insertDataBaseInfo',
+            submitEmptyText: false,
+            waitMsg: '进行中',
+            success: function (form, action) {
+                var data = action.result;
+                parent.returnValue = data.success;
+                _close();
+            },
+            failure: function (form, action) {
+                switch (action.failureType) {
+                    case Ext.form.action.Action.CLIENT_INVALID:
+                        Ext.MessageBox.alert('错误', '请填写必填项', Ext.MessageBox.ERROR);
+                        break;
+                    case Ext.form.action.Action.CONNECT_FAILURE:
+                        Ext.MessageBox.alert('错误', '服务器错误', Ext.MessageBox.ERROR);
+                }
+            }
+        });
+    }
+
+    function _insertConnectTest() {
+
+    }
+</script>
+</body>
+</html>
