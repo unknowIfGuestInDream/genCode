@@ -18,9 +18,6 @@ oracleDriver.push({
 }, {
     CODE_: 'org.mariadb.jdbc.Driver',
     NAME_: 'MARIADB'
-}, {
-    CODE_: 'UNKNOW',
-    NAME_: 'UNKNOW'
 });
 
 var oracleDriverStore = Ext.create("Ext.data.Store", {
