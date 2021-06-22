@@ -341,6 +341,7 @@
 
     //生成代码
     function _genProcedure() {
+        Ext.getCmp('').getValue()
         var records = Ext.getCmp('proceduresPanel').getSelectionModel().getSelection();
 
         if (records.length === 0) {
