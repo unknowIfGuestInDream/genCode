@@ -237,7 +237,9 @@ public class DBUtil implements Cloneable {
     }
 
     public void close() {
-        dataSource.close();
+        if (dataSource != null) {
+            dataSource.close();
+        }
     }
 
 }

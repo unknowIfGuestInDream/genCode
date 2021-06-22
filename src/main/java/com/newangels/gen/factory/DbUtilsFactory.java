@@ -31,11 +31,14 @@ public class DbUtilsFactory {
         if (StringUtils.isEmpty(name) || !strategyMap.containsKey("name")) {
             return;
         }
-        strategyMap.get(name).close();
-        strategyMap.remove(name);
+        DBUtil dbUtil = strategyMap.remove(name);
+        if (dbUtil != null) {
+            dbUtil.close();
+        }
     }
 
     public static void removeAll() {
+        strategyMap.values().forEach(DBUtil::close);
         strategyMap.clear();
     }
 
