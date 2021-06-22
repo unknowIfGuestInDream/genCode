@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 
 /**
  * RestFul风格代码
@@ -239,12 +236,16 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
                     "        });\n" +
                     "    }\n");
         }
-        result.put("controller", StrUtil.format(getControllerCode(moduleName, packageName), controllerCode.toString()).replaceAll("\n", "</br>"));
-        result.put("service", StrUtil.format(getServiceCode(moduleName, packageName), serviceCode.toString()).replaceAll("\n", "</br>"));
-        result.put("serviceImpl", StrUtil.format(getServiceImplCode(moduleName, packageName), serviceImplCode.toString()).replaceAll("\n", "</br>"));
-        result.put("repository", StrUtil.format(getRepositoryCode(moduleName, packageName), repositoryCode.toString()).replaceAll("\n", "</br>"));
-        result.put("BaseUtils", getBaseUtils(packageName).replaceAll("\n", "</br>"));
-        result.put("ProcedureUtils", getProcedureUtils(packageName).replaceAll("\n", "</br>"));
+
+        //tab页集合
+        List<String> list = new ArrayList<>(Arrays.asList("controller","service","serviceImpl","repository","BaseUtils","ProcedureUtils"));
+        result.put("controller", StrUtil.format(getControllerCode(moduleName, packageName), controllerCode.toString()));
+        result.put("service", StrUtil.format(getServiceCode(moduleName, packageName), serviceCode.toString()));
+        result.put("serviceImpl", StrUtil.format(getServiceImplCode(moduleName, packageName), serviceImplCode.toString()));
+        result.put("repository", StrUtil.format(getRepositoryCode(moduleName, packageName), repositoryCode.toString()));
+        result.put("BaseUtils", getBaseUtils(packageName));
+        result.put("ProcedureUtils", getProcedureUtils(packageName));
+        result.put("list",list);
         return result;
     }
 

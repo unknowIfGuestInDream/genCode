@@ -1,0 +1,424 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>代码生成</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="public/css/ext-all.css"/>
+    <link rel="stylesheet" type="text/css" href="public/css/ext-zh_CN.css"/>
+    <script type="text/javascript" src="public/js/ext-all.js"></script>
+    <script type="text/javascript" src="public/js/ext-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="public/js/base.js"></script>
+    <script type="text/javascript" src="public/js/store/genProcedureModelType.js"></script>
+    <script type="text/javascript" src="public/js/store/nameConventType.js"></script>
+</head>
+<body>
+<script>
+    var url;
+    var driver;
+    var password;
+    var userName;
+    var procedureName = "";
+
+    Ext.onReady(function () {
+        Ext.getBody().mask('加载中...');
+
+        //数据源名称
+        var dataSourceStore = Ext.create('Ext.data.Store', {
+            storeId: 'dataSourceStore',
+            autoLoad: false,//true为自动加载
+            loading: false,//自动加载时必须为true
+            pageSize: -1,
+            fields: ['URL', 'DRIVER', 'USERNAME', 'PASSWORD', 'NAME'],
+            proxy: {
+                url: '/gen/selectDataBaseInfo',
+                type: 'ajax',
+                async: false,
+                actionMethods: {
+                    read: 'GET'
+                },
+                extraParams: {},
+                reader: {
+                    type: 'json',
+                    root: 'result'
+                }
+            },
+            listeners: {
+                load: function (store, records, successful, eOpts) {
+                    Ext.getCmp('dataSource').select(store.first());
+                    url = records[0].data.URL;
+                    driver = records[0].data.DRIVER;
+                    password = records[0].data.USERNAME;
+                    userName = records[0].data.PASSWORD;
+                }
+            }
+        });
+
+        //存储过程名称Store
+        var proceduresStore = Ext.create('Ext.data.Store', {
+            storeId: 'proceduresStore',
+            autoLoad: false,//true为自动加载
+            loading: false,//自动加载时必须为true
+            pageSize: -1,
+            fields: ['NAME'],
+            proxy: {
+                url: '/gen/selectProcedures',
+                type: 'ajax',
+                async: false,
+                actionMethods: {
+                    read: 'GET'
+                },
+                extraParams: {},
+                reader: {
+                    type: 'json',
+                    root: 'result'
+                }
+            }
+        });
+
+        var westFormPanel = Ext.create('Ext.form.Panel', {
+            id: 'westFormPanel',
+            layout: 'column',
+            frame: true,
+            border: false,
+            defaults: {
+                labelAlign: 'right',
+                labelWidth: 100,
+                inputWidth: 140,
+                margin: '4,0,0,0'
+            },
+            items: [{
+                xtype: 'button',
+                text: '查询',
+                icon: 'public/image/btn/search.png',
+                handler: _selectProcedures
+            }, {
+                xtype: 'combo',
+                queryMode: 'local',
+                store: dataSourceStore,
+                id: 'dataSource',
+                valueField: 'NAME',
+                displayField: 'NAME',
+                fieldLabel: '数据源名称',
+                forceSelection: true,
+                listeners: {
+                    select: function (combo, records) {
+                        _selectProcedures();
+                    }
+                }
+            }, {
+                xtype: 'textfield',
+                id: 'procedure',
+                fieldLabel: '存储过程名称',
+                listeners: {
+                    specialKey: function (field, e) {
+                        if (e.getKey() === Ext.EventObject.ENTER) {
+                            _selectProcedures();
+                        }
+                    }
+                }
+            }]
+        });
+
+        var eastFormPanel = Ext.create('Ext.form.Panel', {
+            id: 'eastFormPanel',
+            layout: 'column',
+            frame: true,
+            border: false,
+            defaults: {
+                labelAlign: 'right',
+                labelWidth: 100,
+                inputWidth: 140,
+                margin: '4,0,0,0'
+            },
+            items: [{
+                xtype: 'button',
+                text: '生成',
+                icon: 'public/image/btn/add.png',
+                handler: _genProcedure,
+            }, {
+                xtype: 'textfield',
+                id: 'moduleName',
+                fieldLabel: '模块名称',
+            }, {
+                xtype: 'combo',
+                queryMode: 'local',
+                store: genProcedureModelTypeStore,
+                id: 'genProcedureModelType',
+                valueField: 'CODE_',
+                displayField: 'NAME_',
+                fieldLabel: '生成代码模版',
+                forceSelection: true,
+                value: '1'
+            }, {
+                xtype: 'combo',
+                queryMode: 'local',
+                store: nameConventTypeStore,
+                id: 'nameConventType',
+                valueField: 'CODE_',
+                displayField: 'NAME_',
+                fieldLabel: '规范名称',
+                forceSelection: true,
+                value: '1'
+            }, {
+                xtype: 'textfield',
+                id: 'packageName',
+                fieldLabel: '包名',
+                value: 'com.newanagels.'
+            }]
+        });
+
+        var procedureInfoFormPanel = Ext.create('Ext.form.Panel', {
+            id: 'procedureInfoFormPanel',
+            layout: 'column',
+            frame: true,
+            border: false,
+            items: [{
+                xtype: 'displayfield',
+                id: 'procedureInfo'
+            }]
+        });
+
+        //存储过程名称gird
+        var proceduresPanel = Ext.create('Ext.grid.Panel', {
+            id: 'proceduresPanel',
+            store: proceduresStore,
+            //title: '存储过程名称',
+            columnLines: true,
+            frame: true,
+            selModel: {
+                selType: 'checkboxmodel',
+                mode: 'SIMPLE'
+            },
+            columns: [{
+                xtype: 'rownumberer',
+                align: 'center',
+                width: 50
+            }, {
+                text: '存储过程名称',
+                flex: 1,
+                minWidth: 200,
+                dataIndex: 'NAME'
+            }],
+            listeners: {
+                itemclick: function (view, record, item, index, e, eOpts) {
+                    if (record.data.NAME === procedureName) {
+                        return
+                    } else {
+                        procedureName = record.data.NAME;
+                        _loadProcedureInfo();
+                    }
+                }
+            },
+            viewConfig: {
+                emptyText: '<div style="text-align: center; padding-top: 50px; font: italic bold 20px Microsoft YaHei;">没有数据</div>',
+                enableTextSelection: true
+            }
+        });
+
+        var westPanel = Ext.create('Ext.Panel', {
+            // title:'存储过程名称',
+            id: 'westPanel',
+            layout: 'border',
+            defaults: {
+                border: false
+            },
+            items: [{
+                region: 'north',
+                layout: 'fit',
+                items: [westFormPanel]
+            }, {
+                region: 'center',
+                layout: 'fit',
+                items: [proceduresPanel]
+            }]
+        });
+
+        var eastPanel = Ext.create('Ext.Panel', {
+            // title:'存储过程信息',
+            id: 'eastPanel',
+            layout: 'border',
+            defaults: {
+                border: false
+            },
+            items: [{
+                region: 'north',
+                layout: 'fit',
+                items: [eastFormPanel]
+            }, {
+                region: 'center',
+                layout: 'fit',
+                items: [procedureInfoFormPanel]
+            }]
+        });
+
+        Ext.create('Ext.container.Viewport', {
+            layout: {
+                type: 'border',
+                regionWeights: {
+                    west: 1,
+                    north: -1,
+                    south: -1,
+                    east: 1
+                }
+            },
+            defaults: {
+                border: false
+            },
+            items: [{
+                region: 'west',
+                width: '30%',
+                layout: 'fit',
+                items: [westPanel]
+            }, {
+                region: 'center',
+                layout: 'fit',
+                items: [eastPanel]
+            }]
+        });
+
+        _init();
+    });
+
+    function _init() {
+        for (var i = 0; i < Ext.data.StoreManager.getCount(); i++) {
+            if (Ext.data.StoreManager.getAt(i).isLoading()) {
+                return;
+            }
+        }
+
+        _selectdataSource();
+        _selectProcedures();
+        Ext.getBody().unmask();
+    }
+
+    //查询数据源
+    function _selectdataSource() {
+        var dataSourceStore = Ext.data.StoreManager.lookup('dataSourceStore');
+        dataSourceStore.proxy.extraParams = {};
+        dataSourceStore.load();
+    }
+
+    //查询存储过程名称
+    function _selectProcedures() {
+        var proceduresStore = Ext.data.StoreManager.lookup('proceduresStore');
+        proceduresStore.proxy.extraParams = {
+            'url': url,
+            'driver': driver,
+            'userName': userName,
+            'password': password,
+            'name': Ext.getCmp('procedure').getValue(),
+        };
+        proceduresStore.load();
+    }
+
+    //加载存储过程信息
+    function _loadProcedureInfo() {
+        Ext.Ajax.request({
+            url: '/gen/loadProcedureInfo',
+            async: false,
+            method: 'GET',
+            params: {
+                'url': url,
+                'driver': driver,
+                'userName': userName,
+                'password': password,
+                'name': procedureName
+            },
+            callback: function (options, success, response) {
+                if (success) {
+                    var data = Ext.decode(response.responseText);
+                    Ext.getCmp('procedureInfo').setValue(data.result);
+                } else {
+                    Ext.MessageBox.alert('错误', '服务器错误', Ext.MessageBox.ERROR);
+                }
+            }
+        });
+    }
+
+    //生成代码
+    function _genProcedure() {
+        var records = Ext.getCmp('proceduresPanel').getSelectionModel().getSelection();
+
+        if (records.length === 0) {
+            Ext.MessageBox.alert('警告', '请选择业务范围', Ext.MessageBox.WARNING);
+            return;
+        }
+        var procedureNameList = [];
+
+        for (var i = 0, length = records.length; i < length; i++) {
+            procedureNameList.push(records[i].data.NAME);
+        }
+
+        Ext.Ajax.request({
+            url: '/gen/genProcedure',
+            async: false,
+            method: 'POST',
+            params: {
+                'moduleName': Ext.getCmp('moduleName').getValue(),//模块名称
+                'genProcedureModelType': Ext.getCmp('nameConventType').getValue(),//生成代码模版类型
+                'nameConventType': Ext.getCmp('nameConventType').getValue(),//命名规范类型
+                'packageName': Ext.getCmp('packageName').getValue(),//包名
+                'url': url,//数据库url 用于获取数据库连接
+                'driver': driver,//数据库驱动 用于获取存储过程sql
+                'userName': userName,//数据库账户
+                'password': password,//数据库密码
+                'procedureNameList': procedureNameList //存储过程名称集合
+            },
+            callback: function (options, success, response) {
+                if (success) {
+                    var data = Ext.decode(response.responseText);
+                    if (data.success) {
+                        Ext.MessageBox.alert('提示信息', '成功');
+                        var codeList = data.list;
+
+                        var win = Ext.create('Ext.window.Window', {
+                            title: '代码',
+                            modal: true,
+                            autoShow: true,
+                            maximized: true,
+                            maximizable: true,
+                            width: 560,
+                            height: 420,
+                            items: [],
+                        });
+
+                        var codeTabPanel = Ext.create('Ext.tab.Panel', {
+                            id: 'codeTabPanel',
+                            header: false,
+                            items: [],
+                        });
+
+                        for (var i = 0; i < codeList.length; i++) {
+                            var codeMap = codeList[i];
+                            var codeTab = {
+                                title: codeList[i],
+                                layout: 'fit',
+                                readOnly: true,
+                                items: [{
+                                    xtype: 'textareafield',
+                                    name: 'PARAMETER_MAP_',
+                                    width: '100%',
+                                    height: document.documentElement.clientHeight - 80,
+                                    value: data[codeMap]
+                                }],
+                            };
+                            codeTabPanel.add(codeTab);
+                        }
+                        win.add(codeTabPanel);
+                    } else {
+                        Ext.MessageBox.alert('错误', data.message, Ext.MessageBox.ERROR);
+                    }
+                } else {
+                    Ext.MessageBox.alert('错误', '服务器错误', Ext.MessageBox.ERROR);
+                }
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

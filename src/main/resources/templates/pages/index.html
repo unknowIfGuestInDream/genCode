@@ -44,6 +44,7 @@
     <span>代码生成系统</span>
     <ul>
         <li><a onclick="_manageDataBaseInfo()">管理数据源</a></li>
+        <li><a onclick="_manageGenerate()">代码生成</a></li>
     </ul>
     <ul>
         <li><a onclick="_druid()">druid监控</a></li>
@@ -57,6 +58,10 @@
 
     function _manageDataBaseInfo() {
         window.open('/gen/manageDataBaseInfo');
+    }
+
+    function _manageGenerate() {
+        window.open('/gen/manageGenerate');
     }
 </script>
 </body>
