@@ -239,19 +239,12 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
                     "        });\n" +
                     "    }\n");
         }
-        result.put("controller", StrUtil.format(getControllerCode(moduleName, packageName), controllerCode.toString()));
-        result.put("service", StrUtil.format(getServiceCode(moduleName, packageName), serviceCode.toString()));
-        result.put("serviceImpl", StrUtil.format(getServiceImplCode(moduleName, packageName), serviceImplCode.toString()));
-        result.put("repository", StrUtil.format(getRepositoryCode(moduleName, packageName), repositoryCode.toString()));
-        result.put("BaseUtils", getBaseUtils(packageName));
-        result.put("ProcedureUtils", getProcedureUtils(packageName));
-        System.out.println(result.get("controller"));
-        System.out.println("==============================================");
-        System.out.println(result.get("service"));
-        System.out.println("==============================================");
-        System.out.println(result.get("serviceImpl"));
-        System.out.println("==============================================");
-        System.out.println(result.get("repository"));
+        result.put("controller", StrUtil.format(getControllerCode(moduleName, packageName), controllerCode.toString()).replaceAll("\n", "</br>"));
+        result.put("service", StrUtil.format(getServiceCode(moduleName, packageName), serviceCode.toString()).replaceAll("\n", "</br>"));
+        result.put("serviceImpl", StrUtil.format(getServiceImplCode(moduleName, packageName), serviceImplCode.toString()).replaceAll("\n", "</br>"));
+        result.put("repository", StrUtil.format(getRepositoryCode(moduleName, packageName), repositoryCode.toString()).replaceAll("\n", "</br>"));
+        result.put("BaseUtils", getBaseUtils(packageName).replaceAll("\n", "</br>"));
+        result.put("ProcedureUtils", getProcedureUtils(packageName).replaceAll("\n", "</br>"));
         return result;
     }
 
