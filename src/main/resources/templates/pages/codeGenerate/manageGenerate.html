@@ -410,7 +410,7 @@
                             listeners: {
                                 beforetabchange: function (tabs, newTab, oldTab) {
                                     if (newTab.id == 'download') {
-                                        // _downloadCode(procedureNameList);
+                                        _downloadCode(procedureNameList);
                                     }
                                     if (newTab.id == 'close') {
                                         win.close();
@@ -455,6 +455,53 @@
         });
     }
 
+    //下载
+    function _downloadCode(procedureNameList) {
+        var params = {
+            'moduleName': Ext.getCmp('moduleName').getValue(),//模块名称
+            'genProcedureModelType': Ext.getCmp('genProcedureModelType').getValue(),//生成代码模版类型
+            'nameConventType': Ext.getCmp('nameConventType').getValue(),//命名规范类型
+            'packageName': Ext.getCmp('packageName').getValue(),//包名
+            'url': Ext.getCmp('dataSource').valueModels[0].data.URL,
+            'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
+            'userName': Ext.getCmp('dataSource').valueModels[0].data.USERNAME,
+            'password': Ext.getCmp('dataSource').valueModels[0].data.PASSWORD,
+            'procedureNameList': procedureNameList //存储过程名称集合
+        };
+
+        var body = Ext.getBody();
+        var form = body.createChild({
+            tag: 'form',
+            cls: 'x-hidden',
+            action: "/gen/downloadCode",
+            method: "get",
+            target: '_blank'
+        });
+
+        for (var key in params) {
+            if (!Ext.isArray(params[key])) {
+                form.createChild({
+                    tag: 'input',
+                    type: 'text',
+                    cls: 'x-hidden',
+                    name: key,
+                    value: params[key]
+                });
+            } else {
+                for (var i = 0; i < params[key].length; i++) {
+                    form.createChild({
+                        tag: 'input',
+                        type: 'text',
+                        cls: 'x-hidden',
+                        name: key,
+                        value: params[key][i]
+                    });
+                }
+            }
+        }
+
+        form.dom.submit();
+    }
 </script>
 </body>
 </html>

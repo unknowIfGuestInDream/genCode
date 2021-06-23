@@ -156,11 +156,11 @@ public class GenProcedureController {
                 String name = list.get(i);
                 String fileName;
                 if ("BaseUtils".equals(name) || "ProcedureUtils".equals(name)) {
-                    fileName = name;
+                    fileName = name + ".java";
                 } else {
-                    fileName = moduleName + BaseUtils.toUpperCase4Index(name);
+                    fileName = moduleName + BaseUtils.toUpperCase4Index(name) + ".java";
                 }
-                @Cleanup InputStream inputStream = new ByteArrayInputStream(name.getBytes("UTF-8"));
+                @Cleanup InputStream inputStream = new ByteArrayInputStream(map.get(name).toString().getBytes("UTF-8"));
                 //创建输入流读取文件
                 @Cleanup BufferedInputStream bis = new BufferedInputStream(inputStream);
                 //将文件写入zip内，即将文件进行打包
