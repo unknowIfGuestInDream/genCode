@@ -16,12 +16,6 @@
 </head>
 <body>
 <script>
-    var url;
-    var driver;
-    var password;
-    var userName;
-    var procedureName = "";
-
     Ext.onReady(function () {
         Ext.getBody().mask('加载中...');
 
@@ -31,11 +25,11 @@
             autoLoad: false,//true为自动加载
             loading: false,//自动加载时必须为true
             pageSize: -1,
-            fields: ['URL', 'DRIVER', 'USERNAME', 'PASSWORD', 'NAME'],
+            fields: ['ID', 'URL', 'DRIVER', 'USERNAME', 'PASSWORD', 'NAME'],
             proxy: {
                 url: '/gen/selectDataBaseInfo',
                 type: 'ajax',
-                async: true,//异步
+                async: false,
                 actionMethods: {
                     read: 'GET'
                 },
@@ -101,10 +95,6 @@
                 forceSelection: true,
                 listeners: {
                     select: function (combo, records) {
-                        url = records[0].data.URL;
-                        driver = records[0].data.DRIVER;
-                        userName = records[0].data.USERNAME;
-                        password = records[0].data.PASSWORD;
                         _selectProcedures();
                     }
                 }
@@ -209,12 +199,7 @@
             }],
             listeners: {
                 itemclick: function (view, record, item, index, e, eOpts) {
-                    if (record.data.NAME === procedureName) {
-                        return
-                    } else {
-                        procedureName = record.data.NAME;
-                        _loadProcedureInfo();
-                    }
+                    _loadProcedureInfo(record.data.NAME);
                 }
             },
             viewConfig: {
@@ -309,34 +294,39 @@
     //查询存储过程名称
     function _selectProcedures() {
         var proceduresStore = Ext.data.StoreManager.lookup('proceduresStore');
-
         proceduresStore.proxy.extraParams = {
-            'url': url,
-            'driver': driver,
-            'userName': userName,
-            'password': password,
+            'url': Ext.getCmp('dataSource').valueModels[0].data.URL,
+            'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
+            'userName': Ext.getCmp('dataSource').valueModels[0].data.USERNAME,
+            'password': Ext.getCmp('dataSource').valueModels[0].data.PASSWORD,
             'name': Ext.getCmp('procedure').getValue(),
         };
         proceduresStore.load();
     }
 
     //加载存储过程信息
-    function _loadProcedureInfo() {
+    function _loadProcedureInfo(procedureName) {
+        var value = sessionStorage.getItem(Ext.getCmp('dataSource').valueModels[0].data.ID + procedureName);
+        if (value !== null) {
+            Ext.getCmp('procedureInfo').setValue(value);
+            return;
+        }
         Ext.Ajax.request({
             url: '/gen/loadProcedureInfo',
             async: false,
             method: 'GET',
             params: {
-                'url': url,
-                'driver': driver,
-                'userName': userName,
-                'password': password,
+                'url': Ext.getCmp('dataSource').valueModels[0].data.URL,
+                'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
+                'userName': Ext.getCmp('dataSource').valueModels[0].data.USERNAME,
+                'password': Ext.getCmp('dataSource').valueModels[0].data.PASSWORD,
                 'name': procedureName
             },
             callback: function (options, success, response) {
                 if (success) {
                     var data = Ext.decode(response.responseText);
                     Ext.getCmp('procedureInfo').setValue(data.result);
+                    sessionStorage.setItem(Ext.getCmp('dataSource').valueModels[0].data.ID + procedureName, data.result);
                 } else {
                     Ext.MessageBox.alert('错误', '服务器错误', Ext.MessageBox.ERROR);
                 }
@@ -359,7 +349,7 @@
         }
 
         //包名验证
-        if (Ext.getCmp('packageName').getValue() !== "") {
+        if (Ext.getCmp('packageName').getValue() === "") {
             Ext.MessageBox.alert('警告', '模块名称不能为空', Ext.MessageBox.WARNING);
             return;
         }
@@ -367,7 +357,7 @@
         var records = Ext.getCmp('proceduresPanel').getSelectionModel().getSelection();
 
         if (records.length === 0) {
-            Ext.MessageBox.alert('警告', '请选择业务范围', Ext.MessageBox.WARNING);
+            Ext.MessageBox.alert('警告', '请选择存储过程', Ext.MessageBox.WARNING);
             return;
         }
         var procedureNameList = [];
@@ -385,10 +375,10 @@
                 'genProcedureModelType': Ext.getCmp('nameConventType').getValue(),//生成代码模版类型
                 'nameConventType': Ext.getCmp('nameConventType').getValue(),//命名规范类型
                 'packageName': Ext.getCmp('packageName').getValue(),//包名
-                'url': url,//数据库url 用于获取数据库连接
-                'driver': driver,//数据库驱动 用于获取存储过程sql
-                'userName': userName,//数据库账户
-                'password': password,//数据库密码
+                'url': Ext.getCmp('dataSource').valueModels[0].data.URL,
+                'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
+                'userName': Ext.getCmp('dataSource').valueModels[0].data.USERNAME,
+                'password': Ext.getCmp('dataSource').valueModels[0].data.PASSWORD,
                 'procedureNameList': procedureNameList //存储过程名称集合
             },
             callback: function (options, success, response) {
