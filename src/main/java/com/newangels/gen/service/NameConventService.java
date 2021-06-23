@@ -19,13 +19,6 @@ public interface NameConventService extends InitializingBean {
     String getName(String procedureName);
 
     /**
-     * 获取请求协议
-     *
-     * @param procedureName 存储过程名称
-     */
-    String getMappingType(String procedureName);
-
-    /**
      * 结果集参数key值
      *
      * @param name 名称

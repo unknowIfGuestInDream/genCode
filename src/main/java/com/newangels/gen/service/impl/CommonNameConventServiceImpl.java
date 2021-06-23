@@ -27,14 +27,6 @@ public class CommonNameConventServiceImpl implements NameConventService {
     }
 
     @Override
-    public String getMappingType(String procedureName) {
-        if ("select".equals(getName(procedureName)) || "load".equals(getName(procedureName))) {
-            return "GetMapping";
-        }
-        return "PostMapping";
-    }
-
-    @Override
     public String getResultName(String name) {
         name = name.toUpperCase();
         if (name.contains("V_INFO") || name.contains("MESSAGE")) {

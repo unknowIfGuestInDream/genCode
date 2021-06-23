@@ -21,11 +21,6 @@ public class UnKnowNameConventServiceImpl implements NameConventService {
     }
 
     @Override
-    public String getMappingType(String procedureName) {
-        return null;
-    }
-
-    @Override
     public String getResultName(String name) {
         return null;
     }

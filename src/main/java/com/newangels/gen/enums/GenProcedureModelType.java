@@ -11,9 +11,13 @@ import org.apache.commons.lang3.StringUtils;
  */
 public enum GenProcedureModelType {
     /**
-     * 常用模板
+     * 大连常用模板restful风格向
      */
     RESTFUL("1"),
+    /**
+     * 大连常用模板demo模版
+     */
+    DEMO("2"),
     /**
      * 未知模版
      */

@@ -42,6 +42,11 @@ public class UnknowProcedureModelServiceImpl implements GenProcedureModelService
     }
 
     @Override
+    public String getMappingType(String procedureName, NameConventService nameConvent) {
+        return "";
+    }
+
+    @Override
     public Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DBUtil dbUtil) {
         return new HashMap<>();
     }
