@@ -4,12 +4,17 @@ import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
 import com.newangels.gen.factory.DbUtilsFactory;
 import com.newangels.gen.service.DataBaseInfoService;
+import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -74,6 +79,27 @@ public class DataBaseInfoController {
     @Log
     public Map<String, Object> insertDataBaseInfo(String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) {
         return BaseUtils.success(dataBaseInfoService.insertDataBaseInfo(NAME, URL, DRIVER, USERNAME, PASSWORD));
+    }
+
+    /**
+     * 数据源连接测试
+     */
+    @PostMapping("testConnect")
+    @Log
+    public Map<String, Object> testConnect(String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) throws SQLException, ClassNotFoundException {
+        @Cleanup Connection con = null;
+        Class.forName(DRIVER);
+        try {
+            con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (con != null) {
+            return BaseUtils.success();
+        } else {
+            String mes = "与数据库建立连接错误";
+            return BaseUtils.failed(mes);
+        }
     }
 
     /**
