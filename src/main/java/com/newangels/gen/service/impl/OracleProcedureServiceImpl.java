@@ -33,7 +33,7 @@ public class OracleProcedureServiceImpl implements DataBaseProcedureService {
     public String selectProcedures(String name) {
         String sql = "select distinct name From user_source where type = 'PROCEDURE'";
         if (StringUtils.isNotEmpty(name)) {
-            sql += " and NAME like '%" + name + "%'";
+            sql += " and NAME like '%" + name.toUpperCase() + "%'";
         }
         return sql;
     }
