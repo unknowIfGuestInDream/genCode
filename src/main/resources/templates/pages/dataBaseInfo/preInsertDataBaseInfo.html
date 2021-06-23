@@ -138,6 +138,7 @@
             success: function (form, action) {
                 var data = action.result;
                 parent.returnValue = data.success;
+                _close();
             },
             failure: function (form, action) {
                 switch (action.failureType) {
