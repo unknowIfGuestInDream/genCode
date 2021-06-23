@@ -6,7 +6,6 @@ import com.newangels.gen.enums.DataBaseType;
 import com.newangels.gen.enums.GenProcedureModelType;
 import com.newangels.gen.enums.NameConventType;
 import com.newangels.gen.factory.DataBaseFactory;
-import com.newangels.gen.factory.DbUtilsFactory;
 import com.newangels.gen.factory.GenProcedureModelFactory;
 import com.newangels.gen.factory.NameConventFactory;
 import com.newangels.gen.service.DataBaseProcedureService;
@@ -61,18 +60,15 @@ public class GenProcedureController {
     @Log
     public Map<String, Object> selectProcedures(String url, String driver, String userName, String password, String name) {
         //获取数据库连接
-        DBUtil dbUtil = DbUtilsFactory.getDbUtil(url);
-        if (dbUtil == null) {
-            dbUtil = (DBUtil) DBUtil.getDbUtil().clone();
-            dbUtil.init(driver, url, userName, password);
-            DbUtilsFactory.register(url, dbUtil);
-        }
+        DBUtil dbUtil = DBUtil.getDbUtil();
+        dbUtil.init(driver, url, userName, password);
+
         //获取数据库过程sql
         DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
         String allProceduresSql = dbProcedure.selectProcedures(name);
         //执行sql
         List<Map<String, Object>> list = dbUtil.executeQuery(allProceduresSql);
-
+        dbUtil.close();
         return BaseUtils.success(list);
     }
 
@@ -89,16 +85,13 @@ public class GenProcedureController {
     @Log
     public Map<String, Object> loadProcedureInfo(String url, String driver, String userName, String password, String name) {
         //获取数据库连接
-        DBUtil dbUtil = DbUtilsFactory.getDbUtil(url);
-        if (dbUtil == null) {
-            dbUtil = (DBUtil) DBUtil.getDbUtil().clone();
-            dbUtil.init(driver, url, userName, password);
-            DbUtilsFactory.register(url, dbUtil);
-        }
+        DBUtil dbUtil = DBUtil.getDbUtil();
+        dbUtil.init(driver, url, userName, password);
         //获取数据库过程sql
         DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
-
-        return BaseUtils.success(dbProcedure.loadProcedure(name, dbUtil));
+        String result = dbProcedure.loadProcedure(name, dbUtil);
+        dbUtil.close();
+        return BaseUtils.success(result);
     }
 
     /**
@@ -119,20 +112,17 @@ public class GenProcedureController {
     public Map<String, Object> genProcedure(String moduleName, String genProcedureModelType, String nameConventType, String packageName, String url, String driver, String userName, String password, @RequestParam("procedureNameList") List<String> procedureNameList) {
         moduleName = BaseUtils.toUpperCase4Index(moduleName);
         //获取数据库连接，为空则创建
-        DBUtil dbUtil = DbUtilsFactory.getDbUtil(url);
-        if (dbUtil == null) {
-            dbUtil = (DBUtil) DBUtil.getDbUtil().clone();
-            dbUtil.init(driver, url, userName, password);
-            DbUtilsFactory.register(url, dbUtil);
-        }
+        DBUtil dbUtil = DBUtil.getDbUtil();
+        dbUtil.init(driver, url, userName, password);
         //获取生成代码模版
         GenProcedureModelService genProcedureModel = GenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromTypeName(genProcedureModelType));
         //获取命名规范
         NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromTypeName(nameConventType));
         //获取数据库过程sql
         DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
-
-        return BaseUtils.success(genProcedureModel.genCode(moduleName, packageName, userName, procedureNameList, nameConvent, dbProcedure, dbUtil));
+        Map<String, Object> result = genProcedureModel.genCode(moduleName, packageName, userName, procedureNameList, nameConvent, dbProcedure, dbUtil);
+        dbUtil.close();
+        return BaseUtils.success(result);
     }
 
     /**
@@ -145,12 +135,8 @@ public class GenProcedureController {
             String zipName = moduleName + ".zip";
             moduleName = BaseUtils.toUpperCase4Index(moduleName);
             //获取数据库连接，为空则创建
-            DBUtil dbUtil = DbUtilsFactory.getDbUtil(url);
-            if (dbUtil == null) {
-                dbUtil = (DBUtil) DBUtil.getDbUtil().clone();
-                dbUtil.init(driver, url, userName, password);
-                DbUtilsFactory.register(url, dbUtil);
-            }
+            DBUtil dbUtil = DBUtil.getDbUtil();
+            dbUtil.init(driver, url, userName, password);
             response.reset();
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/x-msdownload");
@@ -190,6 +176,7 @@ public class GenProcedureController {
                 zos.closeEntry();
             }
             zos.close();
+            dbUtil.close();
         } catch (IOException e) {
             e.printStackTrace();
             response.setContentType("text/html;charset=utf-8");

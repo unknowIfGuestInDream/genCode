@@ -22,33 +22,41 @@ import java.util.logging.Logger;
 @Data
 public class DBUtil implements Cloneable {
     private static Logger logger = Logger.getLogger(DBUtil.class.getName());
-    private static DruidDataSource dataSource = new DruidDataSource();
+    private static DruidDataSource dataSource;
 
     private String driverClass;
     private String url;
     private String userName;
     private String password;
 
-    private static class SingletonHolder {
-        private static final DBUtil INSTANCE = new DBUtil();
-    }
-
+    //    private static class SingletonHolder {
+//        private static final DBUtil INSTANCE = new DBUtil();
+//    }
+//
+//    public static DBUtil getDbUtil() {
+//        return DBUtil.SingletonHolder.INSTANCE;
+//    }
+//
+//    private DBUtil() {
+//    }
     public static DBUtil getDbUtil() {
-        return DBUtil.SingletonHolder.INSTANCE;
+        return new DBUtil();
     }
 
-    private DBUtil() {
+    public DBUtil() {
+        dataSource = new DruidDataSource();
     }
 
     private void init() {
         if (StringUtils.isEmpty(url) || StringUtils.isEmpty(driverClass) || StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {
             throw new RuntimeException("数据库配置不能为空");
         }
-
-        dataSource.setUrl(url);//设置url
-        dataSource.setDriverClassName(driverClass);//设置驱动
-        dataSource.setUsername(userName);//账号
-        dataSource.setPassword(password);//密码
+        if (dataSource != null && !dataSource.isInited()) {
+            dataSource.setUrl(url);//设置url
+            dataSource.setDriverClassName(driverClass);//设置驱动
+            dataSource.setUsername(userName);//账号
+            dataSource.setPassword(password);//密码
+        }
     }
 
     public void init(String driverClass, String url, String userName, String password) {

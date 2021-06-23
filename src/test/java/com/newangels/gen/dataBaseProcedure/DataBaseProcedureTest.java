@@ -21,7 +21,7 @@ public class DataBaseProcedureTest {
     @Test
     public void test() {
         String V_TYPE = "oracle.jdbc.driver.OracleDriver";
-        DBUtil dbUtil = (DBUtil) DBUtil.getDbUtil().clone();
+        DBUtil dbUtil = DBUtil.getDbUtil();
         dbUtil.setUrl("jdbc:mysql://42.192.10.174:3306/gen?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true");
         dbUtil.setDriverClass("com.mysql.jdbc.Driver");
         dbUtil.setUserName("tangliang");
