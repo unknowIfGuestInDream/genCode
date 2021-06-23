@@ -22,7 +22,7 @@ public class UnKnowNameConventServiceImpl implements NameConventService {
 
     @Override
     public String getResultName(String name) {
-        return null;
+        return name;
     }
 
     @Override

@@ -17,37 +17,37 @@ import org.springframework.stereotype.Service;
 public class UnKnowDataBaseProcedureImpl implements DataBaseProcedureService {
     @Override
     public String selectProcedures(String name) {
-        return null;
+        throw new RuntimeException("未知数据源");
     }
 
     @Override
     public String loadProcedure(String name) {
-        return null;
+        throw new RuntimeException("未知数据源");
     }
 
     @Override
     public String loadProcedure(String name, DBUtil dbUtil) {
-        return "";
+        throw new RuntimeException("未知数据源");
     }
 
     @Override
     public String selectArguments(String owner, String objectName) {
-        return null;
+        throw new RuntimeException("未知数据源");
     }
 
     @Override
     public String getJavaClass(String type) {
-        return null;
+        throw new RuntimeException("未知数据源");
     }
 
     @Override
     public String getRepositoryOutType(String type) {
-        return null;
+        throw new RuntimeException("未知数据源");
     }
 
     @Override
     public String getRepositoryOutTypeCode(String type) {
-        return null;
+        throw new RuntimeException("未知数据源");
     }
 
     @Override

@@ -8,7 +8,6 @@ import com.newangels.gen.service.NameConventService;
 import com.newangels.gen.util.DBUtil;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,7 +47,7 @@ public class UnknowProcedureModelServiceImpl implements GenProcedureModelService
 
     @Override
     public Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DBUtil dbUtil) {
-        return new HashMap<>();
+        throw new RuntimeException("未知代码模板");
     }
 
     @Override
