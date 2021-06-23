@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * mysql过程信息
@@ -18,6 +19,14 @@ import java.util.Map;
  */
 @Service
 public class MysqlProcedureServiceImpl implements DataBaseProcedureService {
+
+    //数据库对java类型映射
+    Map<String, String> map = new ConcurrentHashMap<>(32);
+    //存储过程出参对应值
+    Map<String, String> dataTypeMap = new ConcurrentHashMap<>(8);
+    //存储过程出参结果集获取值
+    Map<String, String> dataTypeOutMap = new ConcurrentHashMap<>(8);
+
     @Override
     public String selectProcedures(String name) {
         return "select name from mysql.proc where type = 'PROCEDURE'";
@@ -44,21 +53,35 @@ public class MysqlProcedureServiceImpl implements DataBaseProcedureService {
 
     @Override
     public String getJavaClass(String type) {
-        return null;
+        return map.getOrDefault(type.toUpperCase(), "String");
     }
 
     @Override
     public String getRepositoryOutType(String type) {
-        return null;
+        return dataTypeMap.getOrDefault(type.toUpperCase(), "OracleTypes.VARCHAR");
     }
 
     @Override
     public String getRepositoryOutTypeCode(String type) {
-        return null;
+        return dataTypeOutMap.getOrDefault(type.toUpperCase(), "String");
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        map.put("VARCHAR", "String");
+        map.put("INT", "int");
+        map.put("BIGINT", "int");
+        map.put("timestamp", "Date");
+
+        dataTypeMap.put("VARCHAR2", "OracleTypes.VARCHAR");
+        dataTypeMap.put("REF CURSOR", "OracleTypes.CURSOR");
+        dataTypeMap.put("BLOB", "OracleTypes.BLOB");
+        dataTypeMap.put("NUMBER", "OracleTypes.NUMERIC");
+
+        dataTypeOutMap.put("VARCHAR2", "String");
+        dataTypeOutMap.put("REF CURSOR", "Object");
+        dataTypeOutMap.put("BLOB", "Blob");
+        dataTypeOutMap.put("NUMBER", "Double");
         DataBaseFactory.register(DataBaseType.MYSQL, this);
         DataBaseFactory.register(DataBaseType.MYSQL8, this);
     }

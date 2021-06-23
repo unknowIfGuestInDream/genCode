@@ -173,10 +173,16 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
                     if (map.get("ARGUMENT_NAME").toString().startsWith("I_I_")) {
                         value = map.get("ARGUMENT_NAME").toString().replaceFirst("I_", "");
                     }
+                    //参数类型
+                    String dataType = map.get("DATA_TYPE").toString();
                     inParams.add(dbProcedure.getJavaClass(map.get("DATA_TYPE").toString()) + " " + value);
                     outParams.add(value);
                     procedureParams.add(":" + value + "");
-                    repositoryParam.add("                statement.setString(\"" + value + "\", " + value + ");");
+                    if ("DATE".equals(dataType)) {
+                        repositoryParam.add("                statement.set" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\", new Timestamp(" + value + ".getTime()));");
+                    } else {
+                        repositoryParam.add("                statement.set" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\", " + value + ");");
+                    }
                     serviceNote.add("     * @param " + value);
                 } else if ("OUT".equals(map.get("IN_OUT"))) {
                     //参数名
@@ -192,13 +198,17 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
                     if (map.get("ARGUMENT_NAME").toString().startsWith("I_I_")) {
                         value = map.get("ARGUMENT_NAME").toString().replaceFirst("I_", "");
                     }
+                    //参数类型
+                    String dataType = map.get("DATA_TYPE").toString();
                     inParams.add(dbProcedure.getJavaClass(map.get("DATA_TYPE").toString()) + " " + value);
                     outParams.add(value);
                     procedureParams.add(":" + value + "");
-                    repositoryParam.add("                statement.setString(\"" + value + "\", " + value + ");");
+                    if ("DATE".equals(dataType)) {
+                        repositoryParam.add("                statement.set" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\", new Timestamp(" + value + ".getTime()));");
+                    } else {
+                        repositoryParam.add("                statement.set" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\", " + value + ");");
+                    }
                     serviceNote.add("     * @param " + value);
-                    //参数类型
-                    String dataType = map.get("DATA_TYPE").toString();
                     repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\"));");
                 }
             }

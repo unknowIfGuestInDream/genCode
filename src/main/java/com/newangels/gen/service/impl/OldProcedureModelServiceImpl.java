@@ -169,18 +169,42 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
                     if (map.get("ARGUMENT_NAME").toString().startsWith("I_I_")) {
                         value = map.get("ARGUMENT_NAME").toString().replaceFirst("I_", "");
                     }
+                    //参数类型
+                    String dataType = map.get("DATA_TYPE").toString();
                     inParams.add(dbProcedure.getJavaClass(map.get("DATA_TYPE").toString()) + " " + value);
                     outParams.add(value);
                     procedureParams.add(":" + value + "");
-                    repositoryParam.add("                statement.setString(\"" + value + "\", " + value + ");");
+                    if ("DATE".equals(dataType)) {
+                        repositoryParam.add("                statement.set" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\", new Timestamp(" + value + ".getTime()));");
+                    } else {
+                        repositoryParam.add("                statement.set" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\", " + value + ");");
+                    }
                     serviceNote.add("     * @param " + value);
-                } else {
+                } else if ("OUT".equals(map.get("IN_OUT"))) {
                     //参数名
                     String value = map.get("ARGUMENT_NAME").toString();
                     //参数类型
                     String dataType = map.get("DATA_TYPE").toString();
                     procedureParams.add(":" + value + "");
                     repositoryParam.add("                statement.registerOutParameter(\"" + value + "\", " + dbProcedure.getRepositoryOutType(dataType) + ");");
+                    repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\"));");
+                } else if ("IN/OUT".equals(map.get("IN_OUT"))) {
+                    //存储过程中传参去掉V_
+                    String value = map.get("ARGUMENT_NAME").toString().replaceFirst("V_", "");
+                    if (map.get("ARGUMENT_NAME").toString().startsWith("I_I_")) {
+                        value = map.get("ARGUMENT_NAME").toString().replaceFirst("I_", "");
+                    }
+                    //参数类型
+                    String dataType = map.get("DATA_TYPE").toString();
+                    inParams.add(dbProcedure.getJavaClass(map.get("DATA_TYPE").toString()) + " " + value);
+                    outParams.add(value);
+                    procedureParams.add(":" + value + "");
+                    if ("DATE".equals(dataType)) {
+                        repositoryParam.add("                statement.set" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\", new Timestamp(" + value + ".getTime()));");
+                    } else {
+                        repositoryParam.add("                statement.set" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\", " + value + ");");
+                    }
+                    serviceNote.add("     * @param " + value);
                     repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\"));");
                 }
             }

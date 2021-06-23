@@ -85,16 +85,19 @@ public class OracleProcedureServiceImpl implements DataBaseProcedureService {
         map.put("CLOB", "String");
         map.put("NUMBER", "Double");
         map.put("BLOB", "InputStream");
+        map.put("DATE", "Date");
 
         dataTypeMap.put("VARCHAR2", "OracleTypes.VARCHAR");
         dataTypeMap.put("REF CURSOR", "OracleTypes.CURSOR");
         dataTypeMap.put("BLOB", "OracleTypes.BLOB");
         dataTypeMap.put("NUMBER", "OracleTypes.NUMERIC");
+        dataTypeMap.put("DATE", "OracleTypes.DATE");
 
         dataTypeOutMap.put("VARCHAR2", "String");
         dataTypeOutMap.put("REF CURSOR", "Object");
         dataTypeOutMap.put("BLOB", "Blob");
         dataTypeOutMap.put("NUMBER", "Double");
+        dataTypeOutMap.put("DATE", "Timestamp");
         DataBaseFactory.register(DataBaseType.ORACLE, this);
     }
 }
