@@ -16,6 +16,8 @@
 </head>
 <body>
 <script>
+    var procedureNameList = [];
+
     Ext.onReady(function () {
         Ext.getBody().mask('加载中...');
 
@@ -365,7 +367,7 @@
             Ext.MessageBox.alert('警告', '请选择存储过程', Ext.MessageBox.WARNING);
             return;
         }
-        var procedureNameList = [];
+        procedureNameList = [];
 
         for (var i = 0, length = records.length; i < length; i++) {
             procedureNameList.push(records[i].data.NAME);
@@ -377,7 +379,7 @@
             method: 'POST',
             params: {
                 'moduleName': Ext.getCmp('moduleName').getValue(),//模块名称
-                'genProcedureModelType': Ext.getCmp('nameConventType').getValue(),//生成代码模版类型
+                'genProcedureModelType': Ext.getCmp('genProcedureModelType').getValue(),//生成代码模版类型
                 'nameConventType': Ext.getCmp('nameConventType').getValue(),//命名规范类型
                 'packageName': Ext.getCmp('packageName').getValue(),//包名
                 'url': Ext.getCmp('dataSource').valueModels[0].data.URL,
@@ -407,6 +409,16 @@
                             id: 'codeTabPanel',
                             header: false,
                             items: [],
+                            listeners: {
+                                beforetabchange: function (tabs, newTab, oldTab) {
+                                    if (newTab.id == 'download') {
+                                        // _downloadCode();
+                                    }
+                                    if (newTab.id == 'close') {
+                                        win.close();
+                                    }
+                                }
+                            }
                         });
 
                         for (var i = 0; i < codeList.length; i++) {
@@ -425,6 +437,15 @@
                             };
                             codeTabPanel.add(codeTab);
                         }
+                        codeTabPanel.add({
+                            id: 'download',
+                            title: '下载'
+                        });
+                        codeTabPanel.add({
+                            id: 'close',
+                            title: '关闭'
+                        });
+
                         win.add(codeTabPanel);
                     } else {
                         Ext.MessageBox.alert('错误', data.message, Ext.MessageBox.ERROR);
@@ -435,6 +456,8 @@
             }
         });
     }
+
+
 </script>
 </body>
 </html>
