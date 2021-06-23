@@ -189,7 +189,7 @@
             waitMsg: '进行中',
             success: function (form, action) {
                 if (action.result.success) {
-                    Toast.alert('信息', '测试成功', 2000);
+                    Ext.MessageBox.alert('信息', '连接成功', Ext.MessageBox.INFO);
                 }
             },
             failure: function (form, action) {
