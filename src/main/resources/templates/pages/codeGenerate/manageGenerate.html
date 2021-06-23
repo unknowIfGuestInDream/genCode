@@ -35,7 +35,7 @@
             proxy: {
                 url: '/gen/selectDataBaseInfo',
                 type: 'ajax',
-                async: false,
+                async: true,//异步
                 actionMethods: {
                     read: 'GET'
                 },
@@ -48,10 +48,6 @@
             listeners: {
                 load: function (store, records, successful, eOpts) {
                     Ext.getCmp('dataSource').select(store.first());
-                    url = records[0].data.URL;
-                    driver = records[0].data.DRIVER;
-                    password = records[0].data.USERNAME;
-                    userName = records[0].data.PASSWORD;
                 }
             }
         });
@@ -105,6 +101,10 @@
                 forceSelection: true,
                 listeners: {
                     select: function (combo, records) {
+                        url = records[0].data.URL;
+                        driver = records[0].data.DRIVER;
+                        userName = records[0].data.USERNAME;
+                        password = records[0].data.PASSWORD;
                         _selectProcedures();
                     }
                 }
@@ -309,6 +309,7 @@
     //查询存储过程名称
     function _selectProcedures() {
         var proceduresStore = Ext.data.StoreManager.lookup('proceduresStore');
+
         proceduresStore.proxy.extraParams = {
             'url': url,
             'driver': driver,
@@ -347,24 +348,19 @@
     function _genProcedure() {
 
         //模块名称验证
-        if (Ext.getCmp('moduleName').getValue() !== "") {
-            if (Ext.getCmp('moduleName').getValue().length <= 1) {
-                Ext.MessageBox.alert('警告', '模块名称格式错误');
-                return;
-            }
-        } else if (Ext.getCmp('moduleName').getValue() === "") {
-            Ext.MessageBox.alert('警告', '模块名称不能为空');
+        if (Ext.getCmp('moduleName').getValue() === "") {
+            Ext.MessageBox.alert('警告', '模块名称不能为空', Ext.MessageBox.WARNING);
+            return;
+        }
+
+        if (Ext.getCmp('moduleName').getValue().length <= 1) {
+            Ext.MessageBox.alert('警告', '模块名称格式错误', Ext.MessageBox.WARNING);
             return;
         }
 
         //包名验证
         if (Ext.getCmp('packageName').getValue() !== "") {
-            if (Ext.getCmp('packageName').getValue().length < 17) {
-                Ext.MessageBox.alert('警告', '包名格式错误');
-                return;
-            }
-        } else if (Ext.getCmp('packageName').getValue() === "") {
-            Ext.MessageBox.alert('警告', '模块名称不能为空');
+            Ext.MessageBox.alert('警告', '模块名称不能为空', Ext.MessageBox.WARNING);
             return;
         }
 
