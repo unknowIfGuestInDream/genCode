@@ -38,7 +38,7 @@ public class DataBaseInfoServiceImpl implements DataBaseInfoService {
 
     @Override
     public int updateDataBaseInfo(String ID, String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) {
-        return genJdbcTemplate.update("update database_info set NAME = ?, URL= ?, DRIVER = ?, USERNAME = ?, PASSWORD = ? where ID = ?", NAME, URL, DRIVER, USERNAME, PASSWORD, ID);
+        return genJdbcTemplate.update("update database_info set NAME = ?, URL= ?, DRIVER = ?, USERNAME = ?, PASSWORD = ?, UPDATE_TIME = sysdate() where ID = ?", NAME, URL, DRIVER, USERNAME, PASSWORD, ID);
     }
 
     @Override
