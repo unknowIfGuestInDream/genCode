@@ -55,6 +55,11 @@
                 handler: _updateDataBaseInfo
             }, {
                 xtype: 'button',
+                text: '连接测试',
+                icon: 'public/image/btn/association.png',
+                handler: _testConnect
+            }, {
+                xtype: 'button',
                 text: '关闭',
                 icon: 'public/image/btn/close.png',
                 handler: _close
@@ -169,6 +174,31 @@
                 switch (action.failureType) {
                     case Ext.form.action.Action.CLIENT_INVALID:
                         Ext.MessageBox.alert('错误', '请填写必填项', Ext.MessageBox.ERROR);
+                        break;
+                    case Ext.form.action.Action.CONNECT_FAILURE:
+                        Ext.MessageBox.alert('错误', '服务器错误', Ext.MessageBox.ERROR);
+                }
+            }
+        });
+    }
+
+    function _testConnect() {
+        Ext.getCmp('formPanel').getForm().submit({//提交表单
+            url: '/gen/testConnect',
+            submitEmptyText: false,
+            waitMsg: '进行中',
+            success: function (form, action) {
+                if (action.result.success) {
+                    Toast.alert('信息', '测试成功', 2000);
+                }
+            },
+            failure: function (form, action) {
+                switch (action.failureType) {
+                    case Ext.form.action.Action.CLIENT_INVALID:
+                        Ext.MessageBox.alert('错误', '请填写必填项', Ext.MessageBox.ERROR);
+                        break;
+                    case Ext.form.action.Action.SERVER_INVALID:
+                        Ext.MessageBox.alert('错误', action.result.message, Ext.MessageBox.ERROR);
                         break;
                     case Ext.form.action.Action.CONNECT_FAILURE:
                         Ext.MessageBox.alert('错误', '服务器错误', Ext.MessageBox.ERROR);
