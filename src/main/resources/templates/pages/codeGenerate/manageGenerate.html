@@ -16,8 +16,6 @@
 </head>
 <body>
 <script>
-    var procedureNameList = [];
-
     Ext.onReady(function () {
         Ext.getBody().mask('加载中...');
 
@@ -367,7 +365,7 @@
             Ext.MessageBox.alert('警告', '请选择存储过程', Ext.MessageBox.WARNING);
             return;
         }
-        procedureNameList = [];
+        var procedureNameList = [];
 
         for (var i = 0, length = records.length; i < length; i++) {
             procedureNameList.push(records[i].data.NAME);
@@ -412,7 +410,7 @@
                             listeners: {
                                 beforetabchange: function (tabs, newTab, oldTab) {
                                     if (newTab.id == 'download') {
-                                        // _downloadCode();
+                                        // _downloadCode(procedureNameList);
                                     }
                                     if (newTab.id == 'close') {
                                         win.close();
@@ -456,7 +454,6 @@
             }
         });
     }
-
 
 </script>
 </body>
