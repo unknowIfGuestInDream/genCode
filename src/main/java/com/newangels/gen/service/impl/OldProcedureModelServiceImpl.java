@@ -187,7 +187,11 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
                     String dataType = map.get("DATA_TYPE").toString();
                     procedureParams.add(":" + value + "");
                     repositoryParam.add("                statement.registerOutParameter(\"" + value + "\", " + dbProcedure.getRepositoryOutType(dataType) + ");");
-                    repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\"));");
+                    if ("REF CURSOR".equals(dataType)) {
+                        repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", ProcedureUtils.ResultHash((ResultSet) cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\")));");
+                    } else {
+                        repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\"));");
+                    }
                 } else if ("IN/OUT".equals(map.get("IN_OUT"))) {
                     //存储过程中传参去掉V_
                     String value = map.get("ARGUMENT_NAME").toString().replaceFirst("V_", "");
@@ -205,7 +209,11 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
                         repositoryParam.add("                statement.set" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\", " + value + ");");
                     }
                     serviceNote.add("     * @param " + value);
-                    repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\"));");
+                    if ("REF CURSOR".equals(dataType)) {
+                        repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", ProcedureUtils.ResultHash((ResultSet) cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\")));");
+                    } else {
+                        repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\"));");
+                    }
                 }
             }
             //方法名称前缀
@@ -253,6 +261,7 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
                     "\n                return statement;\n" +
                     "            }\n" +
                     "        }, new CallableStatementCallback<Map<String, Object>>() {\n" +
+                    "            @Override\n" +
                     "            public Map<String, Object> doInCallableStatement(CallableStatement cs)\n" +
                     "                    throws SQLException, DataAccessException {\n" +
                     "                cs.execute();\n" +

@@ -71,7 +71,7 @@ public class MysqlProcedureServiceImpl implements DataBaseProcedureService {
         map.put("VARCHAR", "String");
         map.put("INT", "int");
         map.put("BIGINT", "int");
-        map.put("timestamp", "Date");
+        map.put("TIMESTAMP", "Date");
 
         dataTypeMap.put("VARCHAR2", "OracleTypes.VARCHAR");
         dataTypeMap.put("REF CURSOR", "OracleTypes.CURSOR");
