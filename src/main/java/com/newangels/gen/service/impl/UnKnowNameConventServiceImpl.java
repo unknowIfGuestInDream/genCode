@@ -5,6 +5,8 @@ import com.newangels.gen.factory.NameConventFactory;
 import com.newangels.gen.service.NameConventService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 未知命名规范
  * 默认返回过程后缀名
@@ -23,6 +25,11 @@ public class UnKnowNameConventServiceImpl implements NameConventService {
     @Override
     public String getResultName(String name) {
         return name;
+    }
+
+    @Override
+    public void sortMethod(List<String> procedureNameList) {
+
     }
 
     @Override

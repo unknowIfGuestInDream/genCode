@@ -133,7 +133,7 @@
                 id: 'moduleName',
                 beforeLabelTextTpl: required,
                 fieldLabel: '模块名称',
-                emptyText: '如: code'
+                emptyText: '符合驼峰规范， 如: codeInfo'
             }, {
                 xtype: 'combo',
                 queryMode: 'local',
@@ -159,8 +159,8 @@
                 id: 'packageName',
                 fieldLabel: '包名',
                 beforeLabelTextTpl: required,
-                value: 'com.newanagels.',
-                emptyText: '如: com.newanagels.gen'
+                value: 'com.newangels.',
+                emptyText: '如: com.newangels.gen'
             }]
         });
 
@@ -170,9 +170,10 @@
             frame: true,
             border: false,
             items: [{
-                xtype: 'displayfield',
+                xtype: 'textareafield',
+                width: document.documentElement.clientWidth - 60,
+                height: document.documentElement.clientHeight - 60,
                 id: 'procedureInfo',
-                margin: '20 0 0 40'
             }]
         });
 
@@ -198,7 +199,7 @@
                 dataIndex: 'NAME'
             }],
             listeners: {
-                itemclick: function (view, record, item, index, e, eOpts) {
+                itemdblclick: function (view, record, item, index, e, eOpts) {
                     _loadProcedureInfo(record.data.NAME);
                 }
             },
@@ -355,7 +356,7 @@
         }
 
         if (Ext.getCmp('packageName').getValue().length - Ext.getCmp('packageName').getValue().lastIndexOf('.') <= 2) {
-            Ext.MessageBox.alert('警告', '包名格式错误\n格式如: com.newanagels.gen', Ext.MessageBox.WARNING);
+            Ext.MessageBox.alert('警告', '包名格式错误\n格式如: com.newangels.gen', Ext.MessageBox.WARNING);
             return;
         }
 

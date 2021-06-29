@@ -54,7 +54,7 @@ public class OracleProcedureServiceImpl implements DataBaseProcedureService {
         //执行sql
         List<Map<String, Object>> list = dbUtil.executeQuery(allProceduresSql);
         //获取结果集
-        StringJoiner sj = new StringJoiner("</br>");
+        StringJoiner sj = new StringJoiner("");
         list.forEach(l -> sj.add(l.get("TEXT").toString()));
         return sj.toString();
     }

@@ -31,8 +31,8 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
                 "import " + packageName + ".service." + moduleName + "Service;\n" +
                 "import org.springframework.beans.factory.annotation.Autowired;\n" +
                 "import org.springframework.web.bind.annotation.RequestMapping;\n" +
-                "import org.springframework.web.bind.annotation.ResponseBody;;\n" +
-                "import org.springframework.stereotype.Controller;;\n" +
+                "import org.springframework.web.bind.annotation.ResponseBody;\n" +
+                "import org.springframework.stereotype.Controller;\n" +
                 "\n" +
                 "import javax.servlet.http.HttpServletRequest;\n" +
                 "import java.util.HashMap;\n" +
@@ -146,6 +146,8 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
         StringBuffer serviceCode = new StringBuffer();
         StringBuffer serviceImplCode = new StringBuffer();
         StringBuffer repositoryCode = new StringBuffer();
+        //排序
+        nameConvent.sortMethod(procedureNameList);
         //循环存储过程
         for (String procedureName : procedureNameList) {
             List<Map<String, Object>> list = dbUtil.executeQuery(dbProcedure.selectArguments(userName.toUpperCase(), procedureName.toUpperCase()));

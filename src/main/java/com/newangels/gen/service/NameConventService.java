@@ -2,6 +2,8 @@ package com.newangels.gen.service;
 
 import org.springframework.beans.factory.InitializingBean;
 
+import java.util.List;
+
 /**
  * 命名规范
  *
@@ -24,4 +26,11 @@ public interface NameConventService extends InitializingBean {
      * @param name 名称
      */
     String getResultName(String name);
+
+    /**
+     * 排序方法
+     *
+     * @param procedureNameList 存储过程集合
+     */
+    void sortMethod(List<String> procedureNameList);
 }

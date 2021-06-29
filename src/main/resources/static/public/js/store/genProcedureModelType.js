@@ -13,6 +13,9 @@ genProcedureModelType.push(
     }, {
         CODE_: '2',
         NAME_: '大连模版demo风格'
+    }, {
+        CODE_: '3',
+        NAME_: '大连模版EAM风格'
     });
 
 var genProcedureModelTypeStore = Ext.create("Ext.data.Store", {
