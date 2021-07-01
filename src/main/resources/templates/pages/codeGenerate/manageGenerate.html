@@ -13,6 +13,7 @@
     <script type="text/javascript" src="public/js/base.js"></script>
     <script type="text/javascript" src="public/js/store/genProcedureModelType.js"></script>
     <script type="text/javascript" src="public/js/store/nameConventType.js"></script>
+    <script type="text/javascript" src="public/js/ajax/clearCaches.js"></script>
 </head>
 <body>
 <script>
@@ -56,7 +57,7 @@
             proxy: {
                 url: '/gen/selectProcedures',
                 type: 'ajax',
-                async: false,
+                async: true,
                 actionMethods: {
                     read: 'GET'
                 },
@@ -84,6 +85,11 @@
                 text: '查询',
                 icon: 'public/image/btn/search.png',
                 handler: _selectProcedures
+            }, {
+                xtype: 'button',
+                text: '清除缓存',
+                icon: 'public/image/btn/refresh.png',
+                handler: _clearProceduresCache
             }, {
                 xtype: 'combo',
                 queryMode: 'local',
@@ -174,6 +180,10 @@
                 width: document.documentElement.clientWidth - 60,
                 height: document.documentElement.clientHeight - 60,
                 id: 'procedureInfo',
+            }, {
+                xtype: 'displayfield',
+                margin: '0 0 0 40',
+                value: '存储过程全查询缓存时间为一天, 带条件的结果缓存1分钟, 如果需要清除缓存请点击清除缓存按钮, 存储过程详情信息属于前台缓存, 需要关闭页面重进, 如有问题请联系管理员或开发人员'
             }]
         });
 
@@ -260,7 +270,7 @@
             },
             items: [{
                 region: 'west',
-                width: '30%',
+                width: '35%',
                 layout: 'fit',
                 items: [westPanel]
             }, {
@@ -502,6 +512,11 @@
         }
 
         form.dom.submit();
+    }
+
+    //清除缓存
+    function _clearProceduresCache() {
+        _clearCaches('procedures');
     }
 </script>
 </body>

@@ -2,6 +2,7 @@ package com.newangels.gen.controller;
 
 import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
+import com.newangels.gen.base.CacheManage;
 import com.newangels.gen.enums.DataBaseType;
 import com.newangels.gen.enums.GenProcedureModelType;
 import com.newangels.gen.enums.NameConventType;
@@ -11,9 +12,11 @@ import com.newangels.gen.factory.NameConventFactory;
 import com.newangels.gen.service.DataBaseProcedureService;
 import com.newangels.gen.service.GenProcedureModelService;
 import com.newangels.gen.service.NameConventService;
+import com.newangels.gen.util.Cache;
 import com.newangels.gen.util.DBUtil;
 import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,16 +62,39 @@ public class GenProcedureController {
     @GetMapping("selectProcedures")
     @Log
     public Map<String, Object> selectProcedures(String url, String driver, String userName, String password, String name) {
-        //获取数据库连接
-        DBUtil dbUtil = DBUtil.getDbUtil();
-        dbUtil.init(driver, url, userName, password);
+        List<Map<String, Object>> list;
+        //缓存方案 url+用户名为主键
+        //存储过程名称条件为空代表全查询 缓存一天，否则缓存一分钟
+        if (StringUtils.isEmpty(name)) {
+            list = (List<Map<String, Object>>) CacheManage.PROCEDURES_CACHE.get(url + userName);
+            if (list == null) {
+                //获取数据库连接
+                DBUtil dbUtil = DBUtil.getDbUtil();
+                dbUtil.init(driver, url, userName, password);
+                //获取数据库过程sql
+                DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
+                String allProceduresSql = dbProcedure.selectProcedures(name);
+                //执行sql
+                list = dbUtil.executeQuery(allProceduresSql);
+                dbUtil.close();
+                CacheManage.PROCEDURES_CACHE.put(url + userName, list);
+            }
+        } else {
+            list = (List<Map<String, Object>>) CacheManage.PROCEDURES_CACHE.get(url + userName + name);
+            if (list == null) {
+                //获取数据库连接
+                DBUtil dbUtil = DBUtil.getDbUtil();
+                dbUtil.init(driver, url, userName, password);
+                //获取数据库过程sql
+                DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
+                String allProceduresSql = dbProcedure.selectProcedures(name);
+                //执行sql
+                list = dbUtil.executeQuery(allProceduresSql);
+                dbUtil.close();
+                CacheManage.PROCEDURES_CACHE.put(url + userName + name, list, Cache.CACHE_HOLD_1MINUTE);
+            }
+        }
 
-        //获取数据库过程sql
-        DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
-        String allProceduresSql = dbProcedure.selectProcedures(name);
-        //执行sql
-        List<Map<String, Object>> list = dbUtil.executeQuery(allProceduresSql);
-        dbUtil.close();
         return BaseUtils.success(list);
     }
 

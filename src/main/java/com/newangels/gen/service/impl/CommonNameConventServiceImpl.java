@@ -5,6 +5,7 @@ import com.newangels.gen.factory.NameConventFactory;
 import com.newangels.gen.service.NameConventService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,6 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CommonNameConventServiceImpl implements NameConventService {
 
     Map<String, String> map = new ConcurrentHashMap<>(32);
+    //排序规则
+    Map<String, Integer> sortMap = new ConcurrentHashMap<>(16);
 
     @Override
     public String getName(String procedureName) {
@@ -39,6 +42,15 @@ public class CommonNameConventServiceImpl implements NameConventService {
             return "total";
         }
         return name;
+    }
+
+    @Override
+    public void sortMethod(List<String> procedureNameList) {
+        procedureNameList.sort((procedureName1, procedureName2) -> {
+            String preName1 = getName(procedureName1);
+            String preName2 = getName(procedureName2);
+            return sortMap.getOrDefault(preName1, 999) - sortMap.getOrDefault(preName2, 999);
+        });
     }
 
     @Override
@@ -67,6 +79,14 @@ public class CommonNameConventServiceImpl implements NameConventService {
 
         map.put("del", "delete");
         map.put("delete", "delete");
+
+        sortMap.put("load", 1);
+        sortMap.put("select", 2);
+        sortMap.put("count", 3);
+        sortMap.put("insert", 4);
+        sortMap.put("update", 5);
+        sortMap.put("save", 6);
+        sortMap.put("delete", 7);
         NameConventFactory.register(NameConventType.COMMON, this);
     }
 }
