@@ -19,9 +19,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class CommonNameConventServiceImpl implements NameConventService {
 
-    Map<String, String> map = new ConcurrentHashMap<>(32);
+    private Map<String, String> map = new ConcurrentHashMap<>(32);
     //排序规则
-    Map<String, Integer> sortMap = new ConcurrentHashMap<>(16);
+    private Map<String, Integer> sortMap = new ConcurrentHashMap<>(16);
 
     @Override
     public String getName(String procedureName) {
@@ -46,6 +46,7 @@ public class CommonNameConventServiceImpl implements NameConventService {
 
     @Override
     public void sortMethod(List<String> procedureNameList) {
+        // 方法顺序 load select insert update save delete 其它
         procedureNameList.sort((procedureName1, procedureName2) -> {
             String preName1 = getName(procedureName1);
             String preName2 = getName(procedureName2);

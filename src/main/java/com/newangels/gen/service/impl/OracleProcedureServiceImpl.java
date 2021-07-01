@@ -23,11 +23,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class OracleProcedureServiceImpl implements DataBaseProcedureService {
 
     //数据库对java类型映射
-    Map<String, String> map = new ConcurrentHashMap<>(32);
+    private Map<String, String> map = new ConcurrentHashMap<>(32);
     //存储过程出参对应值
-    Map<String, String> dataTypeMap = new ConcurrentHashMap<>(8);
+    private Map<String, String> dataTypeMap = new ConcurrentHashMap<>(8);
     //存储过程出参结果集获取值
-    Map<String, String> dataTypeOutMap = new ConcurrentHashMap<>(8);
+    private Map<String, String> dataTypeOutMap = new ConcurrentHashMap<>(8);
 
     @Override
     public String selectProcedures(String name) {

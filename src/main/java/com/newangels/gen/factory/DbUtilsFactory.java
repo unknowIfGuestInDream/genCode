@@ -13,6 +13,7 @@ import java.util.WeakHashMap;
  * @date: 2021/6/19 8:36
  * @since: 1.0
  */
+@Deprecated
 public class DbUtilsFactory {
     private static Map<String, DBUtil> strategyMap = new WeakHashMap<>();
 
