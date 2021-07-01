@@ -77,7 +77,7 @@ public class GenProcedureController {
                 //执行sql
                 list = dbUtil.executeQuery(allProceduresSql);
                 dbUtil.close();
-                CacheManage.PROCEDURES_CACHE.put(url + userName, list);
+                CacheManage.PROCEDURES_CACHE.put(url + userName, list, Cache.CACHE_HOLD_FOREVER);
             }
         } else {
             list = (List<Map<String, Object>>) CacheManage.PROCEDURES_CACHE.get(url + userName + name);
@@ -91,7 +91,7 @@ public class GenProcedureController {
                 //执行sql
                 list = dbUtil.executeQuery(allProceduresSql);
                 dbUtil.close();
-                CacheManage.PROCEDURES_CACHE.put(url + userName + name, list, Cache.CACHE_HOLD_1MINUTE);
+                CacheManage.PROCEDURES_CACHE.put(url + userName + name, list, Cache.CACHE_HOLD_30MINUTE);
             }
         }
 

@@ -23,10 +23,12 @@ public class Cache<K, V> {
     public DelayQueue<DelayedItem<K>> queue = new DelayQueue<DelayedItem<K>>();
     //缓存30秒
     public static final long CACHE_HOLD_30SECOND = 30 * 1000 * 1000 * 1000L;
-    //缓存1分钟
-    public static final long CACHE_HOLD_1MINUTE = 60 * 1000 * 1000 * 1000L;
+    //缓存30分钟
+    public static final long CACHE_HOLD_30MINUTE = 30 * 60 * 1000 * 1000 * 1000L;
     //缓存1天
     public static final long CACHE_HOLD_1DAY = 24 * 60 * 60 * 1000 * 1000 * 1000L;
+    //永久保存
+    public static final long CACHE_HOLD_FOREVER = Long.MAX_VALUE;
 
     /**
      * 缓存值

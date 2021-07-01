@@ -183,7 +183,7 @@
             }, {
                 xtype: 'displayfield',
                 margin: '0 0 0 40',
-                value: '存储过程全查询缓存时间为一天, 带条件的结果缓存1分钟, 如果需要清除缓存请点击清除缓存按钮, 存储过程详情信息属于前台缓存, 需要关闭页面重进, 如有问题请联系管理员或开发人员'
+                value: '存储过程全查询缓存时间为永久, 带条件的结果缓存30分钟, 如果需要清除缓存请点击清除缓存按钮, 存储过程详情信息属于前台缓存, 需要关闭页面重进, 如有问题请联系管理员或开发人员'
             }]
         });
 
@@ -371,13 +371,11 @@
         }
 
         var records = Ext.getCmp('proceduresPanel').getSelectionModel().getSelection();
-
         if (records.length === 0) {
             Ext.MessageBox.alert('警告', '请选择存储过程', Ext.MessageBox.WARNING);
             return;
         }
         var procedureNameList = [];
-
         for (var i = 0, length = records.length; i < length; i++) {
             procedureNameList.push(records[i].data.NAME);
         }
@@ -420,10 +418,10 @@
                             items: [],
                             listeners: {
                                 beforetabchange: function (tabs, newTab, oldTab) {
-                                    if (newTab.id == 'download') {
+                                    if (newTab.id === 'download') {
                                         _downloadCode(procedureNameList);
                                     }
-                                    if (newTab.id == 'close') {
+                                    if (newTab.id === 'close') {
                                         win.close();
                                     }
                                 }
@@ -514,9 +512,10 @@
         form.dom.submit();
     }
 
-    //清除缓存
+    //清除缓存 清除后进行一次查询
     function _clearProceduresCache() {
         _clearCaches('procedures');
+        _selectProcedures();
     }
 </script>
 </body>
