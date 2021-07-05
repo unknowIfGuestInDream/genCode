@@ -6,6 +6,9 @@ import com.newangels.gen.service.DataBaseProcedureService;
 import com.newangels.gen.util.DBUtil;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 未知数据源
  *
@@ -17,6 +20,11 @@ import org.springframework.stereotype.Service;
 public class UnKnowDataBaseProcedureImpl implements DataBaseProcedureService {
     @Override
     public String selectProcedures(String name) {
+        throw new RuntimeException("未知数据源");
+    }
+
+    @Override
+    public List<Map<String, Object>> selectProcedures(String name, DBUtil dbUtil) {
         throw new RuntimeException("未知数据源");
     }
 

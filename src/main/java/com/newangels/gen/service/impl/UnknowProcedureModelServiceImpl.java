@@ -21,22 +21,22 @@ import java.util.Map;
 @Service
 public class UnknowProcedureModelServiceImpl implements GenProcedureModelService {
     @Override
-    public String getControllerCode(String moduleName, String packageName) {
+    public String getControllerCode(String moduleName, String packageName, String author) {
         return "";
     }
 
     @Override
-    public String getServiceCode(String moduleName, String packageName) {
+    public String getServiceCode(String moduleName, String packageName, String author) {
         return "";
     }
 
     @Override
-    public String getServiceImplCode(String moduleName, String packageName) {
+    public String getServiceImplCode(String moduleName, String packageName, String author) {
         return "";
     }
 
     @Override
-    public String getRepositoryCode(String moduleName, String packageName) {
+    public String getRepositoryCode(String moduleName, String packageName, String author) {
         return "";
     }
 
@@ -46,7 +46,7 @@ public class UnknowProcedureModelServiceImpl implements GenProcedureModelService
     }
 
     @Override
-    public Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DBUtil dbUtil) {
+    public Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DBUtil dbUtil, String author) {
         throw new RuntimeException("未知代码模板");
     }
 

@@ -3,6 +3,9 @@ package com.newangels.gen.service;
 import com.newangels.gen.util.DBUtil;
 import org.springframework.beans.factory.InitializingBean;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 数据库存储过程
  *
@@ -18,6 +21,14 @@ public interface DataBaseProcedureService extends InitializingBean {
      * @param name 过程名
      */
     String selectProcedures(String name);
+
+    /**
+     * 查询过程
+     *
+     * @param name   过程名
+     * @param dbUtil 数据库连接工具类
+     */
+    List<Map<String, Object>> selectProcedures(String name, DBUtil dbUtil);
 
     /**
      * 查询过程信息

@@ -20,32 +20,36 @@ public interface GenProcedureModelService extends InitializingBean {
      *
      * @param moduleName  模块名
      * @param packageName 包名
+     * @param author      作者
      */
-    String getControllerCode(String moduleName, String packageName);
+    String getControllerCode(String moduleName, String packageName, String author);
 
     /**
      * 控制层代码生成
      *
      * @param moduleName  模块名
      * @param packageName 包名
+     * @param author      作者
      */
-    String getServiceCode(String moduleName, String packageName);
+    String getServiceCode(String moduleName, String packageName, String author);
 
     /**
      * 控制层代码生成
      *
      * @param moduleName  模块名
      * @param packageName 包名
+     * @param author      作者
      */
-    String getServiceImplCode(String moduleName, String packageName);
+    String getServiceImplCode(String moduleName, String packageName, String author);
 
     /**
      * 控制层代码生成
      *
      * @param moduleName  模块名
      * @param packageName 包名
+     * @param author      作者
      */
-    String getRepositoryCode(String moduleName, String packageName);
+    String getRepositoryCode(String moduleName, String packageName, String author);
 
     /**
      * 获取请求协议
@@ -66,7 +70,7 @@ public interface GenProcedureModelService extends InitializingBean {
      * @param dbProcedure       代码规范
      * @param dbUtil            数据库连接
      */
-    Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DBUtil dbUtil);
+    Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DBUtil dbUtil, String author);
 
     /**
      * BaseUtils工具类

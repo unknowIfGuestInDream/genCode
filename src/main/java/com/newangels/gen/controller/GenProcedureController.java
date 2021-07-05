@@ -73,9 +73,7 @@ public class GenProcedureController {
                 dbUtil.init(driver, url, userName, password);
                 //获取数据库过程sql
                 DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
-                String allProceduresSql = dbProcedure.selectProcedures(name);
-                //执行sql
-                list = dbUtil.executeQuery(allProceduresSql);
+                list = dbProcedure.selectProcedures(name, dbUtil);
                 dbUtil.close();
                 CacheManage.PROCEDURES_CACHE.put(url + userName, list, Cache.CACHE_HOLD_FOREVER);
             }
@@ -87,9 +85,7 @@ public class GenProcedureController {
                 dbUtil.init(driver, url, userName, password);
                 //获取数据库过程sql
                 DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
-                String allProceduresSql = dbProcedure.selectProcedures(name);
-                //执行sql
-                list = dbUtil.executeQuery(allProceduresSql);
+                list = dbProcedure.selectProcedures(name, dbUtil);
                 dbUtil.close();
                 CacheManage.PROCEDURES_CACHE.put(url + userName + name, list, Cache.CACHE_HOLD_30MINUTE);
             }
@@ -135,7 +131,7 @@ public class GenProcedureController {
      */
     @PostMapping("genProcedure")
     @Log
-    public Map<String, Object> genProcedure(String moduleName, String genProcedureModelType, String nameConventType, String packageName, String url, String driver, String userName, String password, @RequestParam("procedureNameList") List<String> procedureNameList) {
+    public Map<String, Object> genProcedure(String moduleName, String genProcedureModelType, String nameConventType, String packageName, String url, String driver, String userName, String password, @RequestParam("procedureNameList") List<String> procedureNameList, @RequestParam(required = false, defaultValue = "admin") String author) {
         moduleName = BaseUtils.toUpperCase4Index(moduleName);
         //获取数据库连接，为空则创建
         DBUtil dbUtil = DBUtil.getDbUtil();
@@ -146,7 +142,7 @@ public class GenProcedureController {
         NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromTypeName(nameConventType));
         //获取数据库过程sql
         DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
-        Map<String, Object> result = genProcedureModel.genCode(moduleName, packageName, userName, procedureNameList, nameConvent, dbProcedure, dbUtil);
+        Map<String, Object> result = genProcedureModel.genCode(moduleName, packageName, userName, procedureNameList, nameConvent, dbProcedure, dbUtil, author);
         dbUtil.close();
         return BaseUtils.success(result);
     }
@@ -156,7 +152,7 @@ public class GenProcedureController {
      */
     @GetMapping(value = "downloadCode")
     @Log
-    public void downloadRiderList(String moduleName, String genProcedureModelType, String nameConventType, String packageName, String url, String driver, String userName, String password, @RequestParam("procedureNameList") List<String> procedureNameList, HttpServletRequest request, HttpServletResponse response) {
+    public void downloadRiderList(String moduleName, String genProcedureModelType, String nameConventType, String packageName, String url, String driver, String userName, String password, @RequestParam("procedureNameList") List<String> procedureNameList, String author, HttpServletRequest request, HttpServletResponse response) {
         try {
             String zipName = moduleName + ".zip";
             moduleName = BaseUtils.toUpperCase4Index(moduleName);
@@ -175,11 +171,10 @@ public class GenProcedureController {
             NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromTypeName(nameConventType));
             //获取数据库过程sql
             DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
-            Map<String, Object> map = genProcedureModel.genCode(moduleName, packageName, userName, procedureNameList, nameConvent, dbProcedure, dbUtil);
+            Map<String, Object> map = genProcedureModel.genCode(moduleName, packageName, userName, procedureNameList, nameConvent, dbProcedure, dbUtil, author);
             List<String> list = (List<String>) map.get("list");
 
-            for (int i = 0, length = list.size(); i < length; i++) {
-                String name = list.get(i);
+            for (String name : list) {
                 String fileName;
                 if ("BaseUtils".equals(name) || "ProcedureUtils".equals(name)) {
                     fileName = name + ".java";

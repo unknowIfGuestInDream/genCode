@@ -83,7 +83,7 @@ public class DataBaseInfoController {
      */
     @PostMapping("testConnect")
     @Log
-    public Map<String, Object> testConnect(String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) throws SQLException, ClassNotFoundException {
+    public Map<String, Object> testConnect(String URL, String DRIVER, String USERNAME, String PASSWORD) throws SQLException, ClassNotFoundException {
         @Cleanup Connection con = null;
         Class.forName(DRIVER);
         try {
@@ -113,7 +113,7 @@ public class DataBaseInfoController {
      */
     @PostMapping("deleteDataBaseInfo")
     @Log
-    public Map<String, Object> deleteDataBaseInfo(String ID, String URL) {
+    public Map<String, Object> deleteDataBaseInfo(String ID) {
         return BaseUtils.success(dataBaseInfoService.deleteDataBaseInfo(ID));
     }
 }

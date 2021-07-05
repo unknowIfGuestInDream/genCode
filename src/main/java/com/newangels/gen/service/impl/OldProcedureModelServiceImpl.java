@@ -24,7 +24,7 @@ import java.util.*;
 @Service
 public class OldProcedureModelServiceImpl implements GenProcedureModelService {
     @Override
-    public String getControllerCode(String moduleName, String packageName) {
+    public String getControllerCode(String moduleName, String packageName, String author) {
         return "package " + packageName + ".controller;\n" +
                 "\n" +
                 "import " + packageName + ".base.BaseUtils;\n" +
@@ -41,7 +41,7 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
                 "/**\n" +
                 " *\n" +
                 " *\n" +
-                " * @author: \n" +
+                " * @author: " + author + "\n" +
                 " * @date: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")) + "\n" +
                 " * @since: 1.0\n" +
                 " */\n" +
@@ -54,7 +54,7 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
     }
 
     @Override
-    public String getServiceCode(String moduleName, String packageName) {
+    public String getServiceCode(String moduleName, String packageName, String author) {
         return "package " + packageName + ".service;\n" +
                 "\n" +
                 "import java.util.List;\n" +
@@ -63,7 +63,7 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
                 "/**\n" +
                 " * \n" +
                 " *\n" +
-                " * @author: \n" +
+                " * @author: " + author + "\n" +
                 " * @date: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")) + "\n" +
                 " * @since: 1.0\n" +
                 " */\n" +
@@ -74,7 +74,7 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
     }
 
     @Override
-    public String getServiceImplCode(String moduleName, String packageName) {
+    public String getServiceImplCode(String moduleName, String packageName, String author) {
         return "package " + packageName + ".service.impl;\n" +
                 "\n" +
                 "import " + packageName + ".repository." + moduleName + "Repository;\n" +
@@ -87,7 +87,7 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
                 "import java.util.Map;\n" +
                 "\n" +
                 "/**\n" +
-                " * @author:\n" +
+                " * @author: " + author + "\n" +
                 " * @date: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")) + "\n" +
                 " * @since: 1.0\n" +
                 " */\n" +
@@ -101,7 +101,7 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
     }
 
     @Override
-    public String getRepositoryCode(String moduleName, String packageName) {
+    public String getRepositoryCode(String moduleName, String packageName, String author) {
         return "package " + packageName + ".repository;\n" +
                 "\n" +
                 "import " + packageName + ".util.ProcedureUtils;\n" +
@@ -121,7 +121,7 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
                 "import java.util.Map;\n" +
                 "\n" +
                 "/**\n" +
-                " * @author:\n" +
+                " * @author: " + author + "\n" +
                 " * @date: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")) + "\n" +
                 " * @since: 1.0\n" +
                 " */\n" +
@@ -139,7 +139,7 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
     }
 
     @Override
-    public Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DBUtil dbUtil) {
+    public Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DBUtil dbUtil, String author) {
         Map<String, Object> result = new HashMap<>(16);
         //各层代码
         StringBuffer controllerCode = new StringBuffer();
@@ -277,10 +277,10 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
 
         //tab页集合
         List<String> list = new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "repository", "BaseUtils", "ProcedureUtils"));
-        result.put("controller", StrUtil.format(getControllerCode(moduleName, packageName), controllerCode.toString()));
-        result.put("service", StrUtil.format(getServiceCode(moduleName, packageName), serviceCode.toString()));
-        result.put("serviceImpl", StrUtil.format(getServiceImplCode(moduleName, packageName), serviceImplCode.toString()));
-        result.put("repository", StrUtil.format(getRepositoryCode(moduleName, packageName), repositoryCode.toString()));
+        result.put("controller", StrUtil.format(getControllerCode(moduleName, packageName, author), controllerCode.toString()));
+        result.put("service", StrUtil.format(getServiceCode(moduleName, packageName, author), serviceCode.toString()));
+        result.put("serviceImpl", StrUtil.format(getServiceImplCode(moduleName, packageName, author), serviceImplCode.toString()));
+        result.put("repository", StrUtil.format(getRepositoryCode(moduleName, packageName, author), repositoryCode.toString()));
         result.put("BaseUtils", getBaseUtils(packageName));
         result.put("ProcedureUtils", getProcedureUtils(packageName));
         result.put("list", list);

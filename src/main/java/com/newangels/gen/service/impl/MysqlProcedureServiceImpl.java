@@ -29,7 +29,12 @@ public class MysqlProcedureServiceImpl implements DataBaseProcedureService {
 
     @Override
     public String selectProcedures(String name) {
-        return "select name from mysql.proc where type = 'PROCEDURE'";
+        return "select name as NAME, modified as LAST_UPDATE_TIME from mysql.proc where type = 'PROCEDURE' and db <> 'sys'";
+    }
+
+    @Override
+    public List<Map<String, Object>> selectProcedures(String name, DBUtil dbUtil) {
+        return dbUtil.executeQuery(selectProcedures(name));
     }
 
     @Override
@@ -48,7 +53,7 @@ public class MysqlProcedureServiceImpl implements DataBaseProcedureService {
 
     @Override
     public String selectArguments(String owner, String objectName) {
-        return null;
+        return "select PARAMETER_NAME as ARGUMENT_NAME, DATA_TYPE, PARAMETER_MODE as IN_OUT from information_schema.PARAMETERS t where t.ROUTINE_TYPE = 'PROCEDURE' and t.SPECIFIC_NAME = '" + objectName + "' ORDER BY ORDINAL_POSITION";
     }
 
     @Override
@@ -71,6 +76,7 @@ public class MysqlProcedureServiceImpl implements DataBaseProcedureService {
         map.put("VARCHAR", "String");
         map.put("INT", "int");
         map.put("BIGINT", "int");
+        map.put("TINYINT", "int");
         map.put("TIMESTAMP", "Date");
 
         dataTypeMap.put("VARCHAR2", "OracleTypes.VARCHAR");

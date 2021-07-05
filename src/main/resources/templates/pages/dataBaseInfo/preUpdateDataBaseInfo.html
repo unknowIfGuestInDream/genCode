@@ -95,7 +95,28 @@
                 name: 'DRIVER',
                 fieldLabel: '驱动类名称',
                 allowBlank: false,
-                style: 'clear:both'
+                forceSelection: true,
+                style: 'clear:both',
+                listeners: {
+                    select: function (combo, records) {
+                        switch (records[0].data.CODE_) {
+                            case "com.mysql.cj.jdbc.Driver":
+                                Ext.getCmp('URL').setValue('jdbc:mysql://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
+                                break;
+                            case "com.mysql.jdbc.Driver":
+                                Ext.getCmp('URL').setValue('jdbc:mysql://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
+                                break;
+                            case "oracle.jdbc.OracleDriver":
+                                Ext.getCmp('URL').setValue('jdbc:oracle:thin:@10.18.26.86:1521:SID');
+                                break;
+                            case "org.mariadb.jdbc.Driver":
+                                Ext.getCmp('URL').setValue('jdbc:mariadb://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
             }, {
                 xtype: 'textfield',
                 name: 'URL',
@@ -174,6 +195,9 @@
                 switch (action.failureType) {
                     case Ext.form.action.Action.CLIENT_INVALID:
                         Ext.MessageBox.alert('错误', '请填写必填项', Ext.MessageBox.ERROR);
+                        break;
+                    case Ext.form.action.Action.SERVER_INVALID:
+                        Ext.MessageBox.alert('错误', action.result.message, Ext.MessageBox.ERROR);
                         break;
                     case Ext.form.action.Action.CONNECT_FAILURE:
                         Ext.MessageBox.alert('错误', '服务器错误', Ext.MessageBox.ERROR);

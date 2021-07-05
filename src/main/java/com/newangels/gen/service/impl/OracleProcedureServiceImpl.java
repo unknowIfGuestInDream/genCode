@@ -31,11 +31,16 @@ public class OracleProcedureServiceImpl implements DataBaseProcedureService {
 
     @Override
     public String selectProcedures(String name) {
-        String sql = "select distinct name From user_source where type = 'PROCEDURE'";
+        String sql = "SELECT OBJECT_NAME as NAME, LAST_DDL_TIME as LAST_UPDATE_TIME, STATUS FROM USER_OBJECTS WHERE OBJECT_TYPE = 'PROCEDURE' ";
         if (StringUtils.isNotEmpty(name)) {
-            sql += " and NAME like '%" + name.toUpperCase() + "%'";
+            sql += " and OBJECT_NAME like '%" + name.toUpperCase() + "%'";
         }
         return sql;
+    }
+
+    @Override
+    public List<Map<String, Object>> selectProcedures(String name, DBUtil dbUtil) {
+        return dbUtil.executeQuery(selectProcedures(name));
     }
 
     @Override
@@ -61,7 +66,7 @@ public class OracleProcedureServiceImpl implements DataBaseProcedureService {
 
     @Override
     public String selectArguments(String owner, String objectName) {
-        return "select * from SYS.ALL_ARGUMENTS t where t.OWNER = '" + owner + "' and t.OBJECT_NAME = '" + objectName + "' ORDER BY POSITION";
+        return "select ARGUMENT_NAME, DATA_TYPE, IN_OUT from SYS.ALL_ARGUMENTS t where t.OWNER = '" + owner + "' and t.OBJECT_NAME = '" + objectName + "' ORDER BY POSITION";
     }
 
     @Override
