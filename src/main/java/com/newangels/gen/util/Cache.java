@@ -68,14 +68,14 @@ public class Cache<K, V> {
         Thread t = new Thread() {
             @Override
             public void run() {
-                dameonCheckOverdueKey();
+                checkOverdueKey();
             }
         };
         t.setDaemon(true);
         t.start();
     }
 
-    public void dameonCheckOverdueKey() {
+    public void checkOverdueKey() {
         while (true) {
             DelayedItem<K> delayedItem = queue.poll();
             if (delayedItem != null) {
