@@ -6,7 +6,7 @@
 
 ## 项目介绍
 
-现在已经支持oracle,mysql,mariadb的存储过程代码生成
+现在已经支持oracle, mysql, mariadb, sqlserver的存储过程代码生成
 
 * NameConventService 命名规范
 * DataBaseProcedureService 数据库对应获取过程相关的sql&数据库关键词对应的java类型等
