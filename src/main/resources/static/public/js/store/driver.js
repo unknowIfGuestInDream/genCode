@@ -18,6 +18,9 @@ oracleDriver.push({
 }, {
     CODE_: 'org.mariadb.jdbc.Driver',
     NAME_: 'MARIADB'
+}, {
+    CODE_: 'com.microsoft.sqlserver.jdbc.SQLServerDriver',
+    NAME_: 'SQLSERVER'
 });
 
 var oracleDriverStore = Ext.create("Ext.data.Store", {

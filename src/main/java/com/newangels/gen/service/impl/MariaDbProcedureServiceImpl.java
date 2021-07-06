@@ -4,6 +4,7 @@ import com.newangels.gen.enums.DataBaseType;
 import com.newangels.gen.factory.DataBaseFactory;
 import com.newangels.gen.service.DataBaseProcedureService;
 import com.newangels.gen.util.DataSourceUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +30,11 @@ public class MariaDbProcedureServiceImpl implements DataBaseProcedureService {
 
     @Override
     public String selectProcedures(String name) {
-        return "select name as NAME, modified as LAST_UPDATE_TIME from mysql.proc where type = 'PROCEDURE' and db <> 'sys'";
+        String sql = "select name as NAME, modified as LAST_UPDATE_TIME from mysql.proc where type = 'PROCEDURE' and db <> 'sys'";
+        if (StringUtils.isNotEmpty(name)) {
+            sql += " and name like '%" + name.toUpperCase() + "%'";
+        }
+        return sql;
     }
 
     @Override

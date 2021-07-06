@@ -99,6 +99,10 @@
                 style: 'clear:both',
                 listeners: {
                     select: function (combo, records) {
+                        if (dataBase['DRIVER'] === records[0].data.CODE_) {
+                            Ext.getCmp('URL').setValue(dataBase['URL']);
+                            return;
+                        }
                         switch (records[0].data.CODE_) {
                             case "com.mysql.cj.jdbc.Driver":
                                 Ext.getCmp('URL').setValue('jdbc:mysql://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
@@ -112,13 +116,18 @@
                             case "org.mariadb.jdbc.Driver":
                                 Ext.getCmp('URL').setValue('jdbc:mariadb://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
                                 break;
+                            case "com.microsoft.sqlserver.jdbc.SQLServerDriver":
+                                Ext.getCmp('URL').setValue('jdbc:sqlserver://ip:1433;DatabaseName=db');
+                                break;
                             default:
+                                Ext.getCmp('URL').setValue('');
                                 break;
                         }
                     }
                 }
             }, {
                 xtype: 'textfield',
+                id: 'URL',
                 name: 'URL',
                 fieldLabel: '链接',
                 allowBlank: false,

@@ -85,7 +85,11 @@
                             case "org.mariadb.jdbc.Driver":
                                 Ext.getCmp('URL').setValue('jdbc:mariadb://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
                                 break;
+                            case "com.microsoft.sqlserver.jdbc.SQLServerDriver":
+                                Ext.getCmp('URL').setValue('jdbc:sqlserver://ip:1433;DatabaseName=db');
+                                break;
                             default:
+                                Ext.getCmp('URL').setValue('');
                                 break;
                         }
                     }

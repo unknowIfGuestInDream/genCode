@@ -169,9 +169,9 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
             StringJoiner repositoryResult = new StringJoiner("\n");
             //获取存储过程所有参数
             for (Map<String, Object> map : list) {
-                if ("IN".equals(map.get("IN_OUT"))) {
+                if ("IN".equals(map.get("IN_OUT")) || !Boolean.parseBoolean(map.get("IN_OUT").toString())) {
                     //存储过程中传参去掉V_
-                    String value = map.get("ARGUMENT_NAME").toString().replaceFirst("V_", "");
+                    String value = map.get("ARGUMENT_NAME").toString().replaceFirst("V_", "").replaceFirst("@", "");
                     if (map.get("ARGUMENT_NAME").toString().startsWith("I_I_")) {
                         value = map.get("ARGUMENT_NAME").toString().replaceFirst("I_", "");
                     }
@@ -186,9 +186,9 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
                         repositoryParam.add("                statement.set" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\", " + value + ");");
                     }
                     serviceNote.add("     * @param " + value);
-                } else if ("OUT".equals(map.get("IN_OUT"))) {
+                } else if ("OUT".equals(map.get("IN_OUT")) || Boolean.parseBoolean(map.get("IN_OUT").toString())) {
                     //参数名
-                    String value = map.get("ARGUMENT_NAME").toString();
+                    String value = map.get("ARGUMENT_NAME").toString().replaceFirst("@", "");
                     //参数类型
                     String dataType = map.get("DATA_TYPE").toString();
                     procedureParams.add(":" + value + "");
@@ -200,7 +200,7 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
                     }
                 } else if ("IN/OUT".equals(map.get("IN_OUT"))) {
                     //存储过程中传参去掉V_
-                    String value = map.get("ARGUMENT_NAME").toString().replaceFirst("V_", "");
+                    String value = map.get("ARGUMENT_NAME").toString().replaceFirst("V_", "").replaceFirst("@", "");
                     if (map.get("ARGUMENT_NAME").toString().startsWith("I_I_")) {
                         value = map.get("ARGUMENT_NAME").toString().replaceFirst("I_", "");
                     }
@@ -231,7 +231,7 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
                     "     * \n" +
                     "     */\n" +
                     "    @" + mappingType + "(\"" + preName + moduleName + "\")\n" +
-                    "    public Map<String, Object> " + preName + moduleName + "(" + inParams + ", HttpServletRequest request) {\n" +
+                    "    public Map<String, Object> " + preName + moduleName + "(" + inParams + (inParams.length() > 0 ? ", " : "") + "HttpServletRequest request) {\n" +
                     "        return BaseUtils.success(" + BaseUtils.toLowerCase4Index(moduleName) + "Service." + preName + moduleName + "(" + outParams + "));\n" +
                     "    }\n");
 

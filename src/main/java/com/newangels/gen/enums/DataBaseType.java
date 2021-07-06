@@ -27,6 +27,10 @@ public enum DataBaseType {
      */
     MARIADB("org.mariadb.jdbc.Driver"),
     /**
+     * sqlserver驱动
+     */
+    SQLSERVER("com.microsoft.sqlserver.jdbc.SQLServerDriver"),
+    /**
      * 未知驱动
      */
     UNKNOW("UNKNOW");
