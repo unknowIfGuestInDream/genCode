@@ -146,10 +146,10 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
     public Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DBUtil dbUtil, String author) {
         Map<String, Object> result = new HashMap<>(16);
         //各层代码
-        StringBuffer controllerCode = new StringBuffer();
-        StringBuffer serviceCode = new StringBuffer();
-        StringBuffer serviceImplCode = new StringBuffer();
-        StringBuffer repositoryCode = new StringBuffer();
+        StringBuilder controllerCode = new StringBuilder();
+        StringBuilder serviceCode = new StringBuilder();
+        StringBuilder serviceImplCode = new StringBuilder();
+        StringBuilder repositoryCode = new StringBuilder();
         //排序
         nameConvent.sortMethod(procedureNameList);
         //循环存储过程
