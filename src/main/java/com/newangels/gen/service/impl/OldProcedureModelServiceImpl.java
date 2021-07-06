@@ -7,7 +7,7 @@ import com.newangels.gen.factory.GenProcedureModelFactory;
 import com.newangels.gen.service.DataBaseProcedureService;
 import com.newangels.gen.service.GenProcedureModelService;
 import com.newangels.gen.service.NameConventService;
-import com.newangels.gen.util.DBUtil;
+import com.newangels.gen.util.DataSourceUtil;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -139,7 +139,7 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
     }
 
     @Override
-    public Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DBUtil dbUtil, String author) {
+    public Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DataSourceUtil dataSourceUtil, String author) {
         Map<String, Object> result = new HashMap<>(16);
         //各层代码
         StringBuilder controllerCode = new StringBuilder();
@@ -150,7 +150,7 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
         nameConvent.sortMethod(procedureNameList);
         //循环存储过程
         for (String procedureName : procedureNameList) {
-            List<Map<String, Object>> list = dbUtil.executeQuery(dbProcedure.selectArguments(userName.toUpperCase(), procedureName.toUpperCase()));
+            List<Map<String, Object>> list = dataSourceUtil.executeQuery(dbProcedure.selectArguments(userName.toUpperCase(), procedureName.toUpperCase()));
             //方法传参
             StringJoiner inParams = new StringJoiner(", ");
             //入参

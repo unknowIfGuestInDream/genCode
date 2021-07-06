@@ -3,7 +3,7 @@ package com.newangels.gen.service.impl;
 import com.newangels.gen.enums.DataBaseType;
 import com.newangels.gen.factory.DataBaseFactory;
 import com.newangels.gen.service.DataBaseProcedureService;
-import com.newangels.gen.util.DBUtil;
+import com.newangels.gen.util.DataSourceUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -39,8 +39,8 @@ public class OracleProcedureServiceImpl implements DataBaseProcedureService {
     }
 
     @Override
-    public List<Map<String, Object>> selectProcedures(String name, DBUtil dbUtil) {
-        return dbUtil.executeQuery(selectProcedures(name));
+    public List<Map<String, Object>> selectProcedures(String name, DataSourceUtil dataSourceUtil) {
+        return dataSourceUtil.executeQuery(selectProcedures(name));
     }
 
     @Override
@@ -54,10 +54,10 @@ public class OracleProcedureServiceImpl implements DataBaseProcedureService {
     }
 
     @Override
-    public String loadProcedure(String name, DBUtil dbUtil) {
+    public String loadProcedure(String name, DataSourceUtil dataSourceUtil) {
         String allProceduresSql = loadProcedure(name);
         //执行sql
-        List<Map<String, Object>> list = dbUtil.executeQuery(allProceduresSql);
+        List<Map<String, Object>> list = dataSourceUtil.executeQuery(allProceduresSql);
         //获取结果集
         StringJoiner sj = new StringJoiner("");
         list.forEach(l -> sj.add(l.get("TEXT").toString()));

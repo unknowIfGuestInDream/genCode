@@ -75,3 +75,8 @@ logging:
     druid:
       sql:
         Statement: DEBUG
+## 定时任务线程池
+schedule:
+  poolSize: 20 #线程池核心线程数
+  removeOnCancelPolicy: true #取消时删除策略
+  threadNamePrefix: genSchedulTask- #线程前缀名

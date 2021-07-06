@@ -19,6 +19,7 @@ import java.util.logging.Logger;
  * @since 2.6
  */
 @Data
+@Deprecated
 public class DBUtil implements Cloneable {
     private static Logger logger = Logger.getLogger(DBUtil.class.getName());
     private static DruidDataSource dataSource;

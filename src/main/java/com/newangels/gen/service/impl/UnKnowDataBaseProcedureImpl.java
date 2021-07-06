@@ -3,7 +3,7 @@ package com.newangels.gen.service.impl;
 import com.newangels.gen.enums.DataBaseType;
 import com.newangels.gen.factory.DataBaseFactory;
 import com.newangels.gen.service.DataBaseProcedureService;
-import com.newangels.gen.util.DBUtil;
+import com.newangels.gen.util.DataSourceUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class UnKnowDataBaseProcedureImpl implements DataBaseProcedureService {
     }
 
     @Override
-    public List<Map<String, Object>> selectProcedures(String name, DBUtil dbUtil) {
+    public List<Map<String, Object>> selectProcedures(String name, DataSourceUtil dataSourceUtil) {
         throw new RuntimeException("未知数据源");
     }
 
@@ -34,7 +34,7 @@ public class UnKnowDataBaseProcedureImpl implements DataBaseProcedureService {
     }
 
     @Override
-    public String loadProcedure(String name, DBUtil dbUtil) {
+    public String loadProcedure(String name, DataSourceUtil dataSourceUtil) {
         throw new RuntimeException("未知数据源");
     }
 

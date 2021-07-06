@@ -228,7 +228,8 @@
                         async: false,
                         params: {
                             'ID': records[0].get('ID'),
-                            'URL': records[0].get('URL')
+                            'URL': records[0].get('URL'),
+                            'USERNAME': records[0].get('USERNAME')
                         },
                         callback: function (options, success, response) {
                             if (success) {

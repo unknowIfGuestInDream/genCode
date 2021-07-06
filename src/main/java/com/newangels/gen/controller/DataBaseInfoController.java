@@ -2,6 +2,7 @@ package com.newangels.gen.controller;
 
 import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
+import com.newangels.gen.factory.DataSourceUtilFactory;
 import com.newangels.gen.service.DataBaseInfoService;
 import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
@@ -105,6 +106,7 @@ public class DataBaseInfoController {
     @PostMapping("updateDataBaseInfo")
     @Log
     public Map<String, Object> updateDataBaseInfo(String ID, String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) {
+        DataSourceUtilFactory.remove(URL + USERNAME);
         return BaseUtils.success(dataBaseInfoService.updateDataBaseInfo(ID, NAME, URL, DRIVER, USERNAME, PASSWORD));
     }
 
@@ -113,7 +115,8 @@ public class DataBaseInfoController {
      */
     @PostMapping("deleteDataBaseInfo")
     @Log
-    public Map<String, Object> deleteDataBaseInfo(String ID) {
+    public Map<String, Object> deleteDataBaseInfo(String ID, String URL, String USERNAME) {
+        DataSourceUtilFactory.remove(URL + USERNAME);
         return BaseUtils.success(dataBaseInfoService.deleteDataBaseInfo(ID));
     }
 }

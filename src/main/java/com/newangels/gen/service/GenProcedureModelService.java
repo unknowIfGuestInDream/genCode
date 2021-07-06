@@ -1,6 +1,6 @@
 package com.newangels.gen.service;
 
-import com.newangels.gen.util.DBUtil;
+import com.newangels.gen.util.DataSourceUtil;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.util.List;
@@ -68,9 +68,9 @@ public interface GenProcedureModelService extends InitializingBean {
      * @param procedureNameList 存储过程集合
      * @param nameConvent       命名规范
      * @param dbProcedure       代码规范
-     * @param dbUtil            数据库连接
+     * @param dataSourceUtil    数据库连接
      */
-    Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DBUtil dbUtil, String author);
+    Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DataSourceUtil dataSourceUtil, String author);
 
     /**
      * BaseUtils工具类
