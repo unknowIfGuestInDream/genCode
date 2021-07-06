@@ -25,7 +25,7 @@ public interface GenProcedureModelService extends InitializingBean {
     String getControllerCode(String moduleName, String packageName, String author);
 
     /**
-     * 控制层代码生成
+     * 接口层代码生成
      *
      * @param moduleName  模块名
      * @param packageName 包名
@@ -34,7 +34,7 @@ public interface GenProcedureModelService extends InitializingBean {
     String getServiceCode(String moduleName, String packageName, String author);
 
     /**
-     * 控制层代码生成
+     * 实现层代码生成
      *
      * @param moduleName  模块名
      * @param packageName 包名
@@ -43,7 +43,7 @@ public interface GenProcedureModelService extends InitializingBean {
     String getServiceImplCode(String moduleName, String packageName, String author);
 
     /**
-     * 控制层代码生成
+     * 数据层代码生成
      *
      * @param moduleName  模块名
      * @param packageName 包名
