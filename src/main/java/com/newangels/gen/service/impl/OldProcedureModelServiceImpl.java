@@ -165,11 +165,15 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
             StringJoiner repositoryResult = new StringJoiner("\n");
             //获取存储过程所有参数
             for (Map<String, Object> map : list) {
-                if ("IN".equals(map.get("IN_OUT")) || !Boolean.parseBoolean(map.get("IN_OUT").toString())) {
+                if ("IN".equals(map.get("IN_OUT")) || "false".equals(map.get("IN_OUT").toString())) {
                     //存储过程中传参去掉V_
-                    String value = map.get("ARGUMENT_NAME").toString().replaceFirst("V_", "").replaceFirst("@", "");
-                    if (map.get("ARGUMENT_NAME").toString().startsWith("I_I_")) {
-                        value = map.get("ARGUMENT_NAME").toString().replaceFirst("I_", "");
+                    String value = map.get("ARGUMENT_NAME").toString();
+                    if (value.startsWith("@")) {
+                        value = value.replaceFirst("@", "");
+                    } else if (value.startsWith("I_I_")) {
+                        value = value.replaceFirst("I_", "");
+                    } else if (value.startsWith("V_")) {
+                        value = value.replaceFirst("V_", "");
                     }
                     //参数类型
                     String dataType = map.get("DATA_TYPE").toString();
@@ -182,9 +186,12 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
                         repositoryParam.add("                statement.set" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\", " + value + ");");
                     }
                     serviceNote.add("     * @param " + value);
-                } else if ("OUT".equals(map.get("IN_OUT")) || Boolean.parseBoolean(map.get("IN_OUT").toString())) {
+                } else if ("OUT".equals(map.get("IN_OUT")) || "true".equals(map.get("IN_OUT").toString())) {
                     //参数名
-                    String value = map.get("ARGUMENT_NAME").toString().replaceFirst("@", "");
+                    String value = map.get("ARGUMENT_NAME").toString();
+                    if (value.startsWith("@")) {
+                        value = value.replaceFirst("@", "");
+                    }
                     //参数类型
                     String dataType = map.get("DATA_TYPE").toString();
                     procedureParams.add(":" + value + "");
@@ -196,9 +203,13 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
                     }
                 } else if ("IN/OUT".equals(map.get("IN_OUT"))) {
                     //存储过程中传参去掉V_
-                    String value = map.get("ARGUMENT_NAME").toString().replaceFirst("V_", "").replaceFirst("@", "");
-                    if (map.get("ARGUMENT_NAME").toString().startsWith("I_I_")) {
-                        value = map.get("ARGUMENT_NAME").toString().replaceFirst("I_", "");
+                    String value = map.get("ARGUMENT_NAME").toString();
+                    if (value.startsWith("@")) {
+                        value = value.replaceFirst("@", "");
+                    } else if (value.startsWith("I_I_")) {
+                        value = value.replaceFirst("I_", "");
+                    } else if (value.startsWith("V_")) {
+                        value = value.replaceFirst("V_", "");
                     }
                     //参数类型
                     String dataType = map.get("DATA_TYPE").toString();
