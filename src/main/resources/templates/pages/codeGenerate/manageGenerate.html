@@ -372,39 +372,34 @@
 
     //生成代码
     function _genProcedure() {
-
         //模块名称验证
         if (Ext.getCmp('moduleName').getValue() === "") {
             Ext.MessageBox.alert('警告', '模块名称不能为空', Ext.MessageBox.WARNING);
             return;
         }
-
         if (Ext.getCmp('moduleName').getValue().length <= 1) {
             Ext.MessageBox.alert('警告', '模块名称长度不能为1', Ext.MessageBox.WARNING);
             return;
         }
-
         //包名验证
         if (Ext.getCmp('packageName').getValue() === "") {
             Ext.MessageBox.alert('警告', '包名不能为空', Ext.MessageBox.WARNING);
             return;
         }
-
         if (Ext.getCmp('packageName').getValue().length - Ext.getCmp('packageName').getValue().lastIndexOf('.') <= 2) {
             Ext.MessageBox.alert('警告', '包名格式错误\n格式如: com.newangels.gen', Ext.MessageBox.WARNING);
             return;
         }
-
         var records = Ext.getCmp('proceduresPanel').getSelectionModel().getSelection();
         if (records.length === 0) {
             Ext.MessageBox.alert('警告', '请选择存储过程', Ext.MessageBox.WARNING);
             return;
         }
+
         var procedureNameList = [];
         for (var i = 0, length = records.length; i < length; i++) {
             procedureNameList.push(records[i].data.NAME);
         }
-
         Ext.Ajax.request({
             url: '/gen/genProcedure',
             async: false,
