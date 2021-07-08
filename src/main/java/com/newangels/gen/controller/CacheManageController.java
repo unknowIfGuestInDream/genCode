@@ -2,10 +2,16 @@ package com.newangels.gen.controller;
 
 import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
+import com.newangels.gen.util.Cache;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static com.newangels.gen.base.CacheManage.CACHE_MAP;
@@ -19,14 +25,13 @@ import static com.newangels.gen.base.CacheManage.CACHE_MAP;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("clearCaches")
 public class CacheManageController {
 
     /**
      * 清除缓存
      * 为空清除所有缓存，否则清除指定缓存
      */
-    @DeleteMapping(value = {"/{name}", "/"})
+    @DeleteMapping(value = {"clearCaches/{name}", "clearCaches/"})
     @Log
     public Map<String, Object> clearCaches(@PathVariable(required = false) String name) {
         if (StringUtils.isEmpty(name)) {
@@ -42,11 +47,25 @@ public class CacheManageController {
 
     /**
      * 获取缓存信息
-     * //TODO 待后续设计开发
      */
-    @GetMapping("getCaches")
+    @GetMapping(value = {"caches/{name}", "caches/", "caches"})
     @Log
-    public Map<String, Object> getCaches(String name) {
-        return BaseUtils.success();
+    public Map<String, Object> getCaches(@PathVariable(required = false) String name) {
+        List<Object> list = new ArrayList<>();
+
+        if (StringUtils.isEmpty(name)) {
+            for (Cache cache : CACHE_MAP.values()) {
+                list.addAll(cache.keys());
+            }
+        } else {
+            for (Cache cache : CACHE_MAP.values()) {
+                Object o = cache.get(name);
+                if (null != o) {
+                    list.add(o);
+                    break;
+                }
+            }
+        }
+        return BaseUtils.success(list);
     }
 }
