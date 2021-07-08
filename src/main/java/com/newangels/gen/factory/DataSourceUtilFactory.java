@@ -2,6 +2,7 @@ package com.newangels.gen.factory;
 
 import com.alibaba.druid.util.StringUtils;
 import com.newangels.gen.util.DataSourceUtil;
+import com.newangels.gen.util.dataSource.DruidDataSourceUtil;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,7 +26,7 @@ public class DataSourceUtilFactory {
         DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url + userName);
         if (dataSourceUtil == null) {
             try {
-                dataSourceUtil = new DataSourceUtil(driver, url, userName, password);
+                dataSourceUtil = new DruidDataSourceUtil(driver, url, userName, password);
                 register(url + userName, dataSourceUtil);
             } catch (Exception e) {
                 e.printStackTrace();

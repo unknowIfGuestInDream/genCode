@@ -19,8 +19,8 @@ import java.time.format.DateTimeFormatter;
 @Component
 public class ReleaseDataSourceUtilSchedule {
 
-    //凌晨2点执行一次
-    @Scheduled(cron = "0 0 2 * * ?")
+    //每周五23点执行
+    @Scheduled(cron = "0 0 23 ? * FRI")
     public void dataSourceUtilScheduled() {
         DataSourceUtilFactory.removeAll();
         log.info("[{}]清除数据源工厂数据", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH时mm分ss秒")));

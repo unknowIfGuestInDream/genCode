@@ -1,8 +1,6 @@
 package com.newangels.gen.util;
 
-import com.alibaba.druid.pool.DruidDataSource;
-import org.apache.commons.lang3.StringUtils;
-
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,35 +8,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 数据源工具类
+ * 数据源工具抽象类
  *
  * @author: TangLiang
  * @date: 2021/7/6 11:43
  * @since: 1.0
  */
-public class DataSourceUtil {
-    private DruidDataSource dataSource;
+public abstract class DataSourceUtil {
+    protected DataSource dataSource;
 
-    public DataSourceUtil() {
-        dataSource = new DruidDataSource();
-    }
+    /**
+     * 初始化
+     */
+    public abstract void init(String driverClass, String url, String userName, String password);
 
-    public DataSourceUtil(String driverClass, String url, String userName, String password) {
-        dataSource = new DruidDataSource();
-        init(driverClass, url, userName, password);
-    }
-
-    public void init(String driverClass, String url, String userName, String password) {
-        if (StringUtils.isEmpty(url) || StringUtils.isEmpty(driverClass) || StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {
-            throw new RuntimeException("数据库配置不能为空");
-        }
-        if (dataSource != null && !dataSource.isInited()) {
-            dataSource.setUrl(url);//设置url
-            dataSource.setDriverClassName(driverClass);//设置驱动
-            dataSource.setUsername(userName);//账号
-            dataSource.setPassword(password);//密码
-        }
-    }
+    /**
+     * 连接池释放
+     */
+    public abstract void close();
 
     /**
      * 用于数据库增删改
@@ -178,10 +165,4 @@ public class DataSourceUtil {
         release(conn, ps, rs, null);
     }
 
-    public void close() {
-        if (dataSource != null) {
-            dataSource.close();
-        }
-        dataSource = null;
-    }
 }
