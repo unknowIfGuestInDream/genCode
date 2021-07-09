@@ -147,6 +147,7 @@
                 xtype: 'textfield',
                 id: 'moduleName',
                 beforeLabelTextTpl: required,
+                labelWidth: 80,
                 fieldLabel: '模块名称',
                 emptyText: '符合驼峰规范， 如: codeInfo'
             }, {
@@ -154,6 +155,7 @@
                 queryMode: 'local',
                 store: genProcedureModelTypeStore,
                 id: 'genProcedureModelType',
+                inputWidth: 160,
                 valueField: 'CODE_',
                 displayField: 'NAME_',
                 fieldLabel: '生成代码模版',
@@ -163,6 +165,8 @@
                 xtype: 'combo',
                 queryMode: 'local',
                 store: nameConventTypeStore,
+                labelWidth: 70,
+                inputWidth: 140,
                 id: 'nameConventType',
                 valueField: 'CODE_',
                 displayField: 'NAME_',
@@ -173,9 +177,19 @@
                 xtype: 'textfield',
                 id: 'packageName',
                 fieldLabel: '包名',
+                labelWidth: 50,
+                inputWidth: 140,
                 beforeLabelTextTpl: required,
                 value: 'com.newangels.',
                 emptyText: '如: com.newangels.gen'
+            }, {
+                xtype: 'textfield',
+                id: 'author',
+                fieldLabel: '作者',
+                labelWidth: 50,
+                inputWidth: 100,
+                value: 'admin',
+                emptyText: '如: admin'
             }]
         });
 
@@ -409,6 +423,7 @@
                 'genProcedureModelType': Ext.getCmp('genProcedureModelType').getValue(),//生成代码模版类型
                 'nameConventType': Ext.getCmp('nameConventType').getValue(),//命名规范类型
                 'packageName': Ext.getCmp('packageName').getValue(),//包名
+                'author': Ext.getCmp('author').getValue(),//作者
                 'url': Ext.getCmp('dataSource').valueModels[0].data.URL,
                 'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
                 'userName': Ext.getCmp('dataSource').valueModels[0].data.USERNAME,
@@ -491,6 +506,7 @@
             'genProcedureModelType': Ext.getCmp('genProcedureModelType').getValue(),//生成代码模版类型
             'nameConventType': Ext.getCmp('nameConventType').getValue(),//命名规范类型
             'packageName': Ext.getCmp('packageName').getValue(),//包名
+            'author': Ext.getCmp('author').getValue(),//作者
             'url': Ext.getCmp('dataSource').valueModels[0].data.URL,
             'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
             'userName': Ext.getCmp('dataSource').valueModels[0].data.USERNAME,

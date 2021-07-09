@@ -2,10 +2,14 @@ package com.newangels.gen.factory;
 
 import com.alibaba.druid.util.StringUtils;
 import com.newangels.gen.util.DataSourceUtil;
+import com.newangels.gen.util.DataSourceUtilTypes;
 import com.newangels.gen.util.dataSource.DruidDataSourceUtil;
+import com.newangels.gen.util.dataSource.HikariDataSourceUtil;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * 数据库连接池工厂
@@ -18,15 +22,45 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DataSourceUtilFactory {
     private static Map<String, DataSourceUtil> strategyMap = new ConcurrentHashMap<>();
 
+    /**
+     * 获取strategyMap中所有DataSourceUtil的连接池信息
+     */
+    public static List<String> getDataSourceList() {
+        return strategyMap.values().stream().map(DataSourceUtil::getDataSourceInfo).collect(Collectors.toList());
+    }
+
+    /**
+     * 获取DataSourceUtil连接池工具类
+     */
     public static DataSourceUtil getDataSourceUtil(String name) {
         return strategyMap.get(name);
     }
 
+    /**
+     * 获取DataSourceUtil连接池工具类，为null则初始化
+     */
     public static DataSourceUtil getDataSourceUtil(String url, String driver, String userName, String password) {
+        return getDataSourceUtil(url, driver, userName, password, DataSourceUtilTypes.DRUID);
+    }
+
+    /**
+     * 获取DataSourceUtil连接池工具类，为null则初始化
+     */
+    public static DataSourceUtil getDataSourceUtil(String url, String driver, String userName, String password, int dataSourceUtilType) {
         DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url + userName);
         if (dataSourceUtil == null) {
             try {
-                dataSourceUtil = new DruidDataSourceUtil(driver, url, userName, password);
+                switch (dataSourceUtilType) {
+                    case DataSourceUtilTypes.DRUID:
+                        dataSourceUtil = new DruidDataSourceUtil(driver, url, userName, password);
+                        break;
+                    case DataSourceUtilTypes.HIKARI:
+                        dataSourceUtil = new HikariDataSourceUtil(driver, url, userName, password);
+                        break;
+                    default:
+                        dataSourceUtil = new DruidDataSourceUtil(driver, url, userName, password);
+                        break;
+                }
                 register(url + userName, dataSourceUtil);
             } catch (Exception e) {
                 e.printStackTrace();

@@ -67,7 +67,7 @@ public class GenProcedureController {
         //缓存方案 url+用户名为主键
         //存储过程名称条件为空代表全查询 缓存一天，否则缓存一分钟
         if (StringUtils.isEmpty(name)) {
-            list = (List<Map<String, Object>>) CacheManage.PROCEDURES_CACHE.get(url + userName);
+            list = CacheManage.PROCEDURES_CACHE.get(url + userName);
             if (list == null) {
                 DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
                 //获取数据库过程sql
@@ -76,7 +76,7 @@ public class GenProcedureController {
                 CacheManage.PROCEDURES_CACHE.put(url + userName, list, Cache.CACHE_HOLD_FOREVER);
             }
         } else {
-            list = (List<Map<String, Object>>) CacheManage.PROCEDURES_CACHE.get(url + userName + name);
+            list = CacheManage.PROCEDURES_CACHE.get(url + userName + name);
             if (list == null) {
                 DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
                 DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));

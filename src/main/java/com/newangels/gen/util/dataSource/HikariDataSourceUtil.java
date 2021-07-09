@@ -26,6 +26,22 @@ public class HikariDataSourceUtil extends DataSourceUtil {
     }
 
     @Override
+    public String getDataSourceInfo() {
+        StringBuilder buf = new StringBuilder();
+        buf.append("{");
+        buf.append("\n\tPoolName:\"");
+        buf.append(dataSource.getPoolName());
+        buf.append(",\n\tTimeout:");
+        buf.append(dataSource.getConnectionTimeout());
+        buf.append(",\n\tIdleTimeout:");
+        buf.append(dataSource.getIdleTimeout());
+        buf.append(",\n\tValidationTimeout:");
+        buf.append(dataSource.getValidationTimeout());
+        buf.append("\n}");
+        return buf.toString();
+    }
+
+    @Override
     public void init(String driverClass, String url, String userName, String password) {
         if (StringUtils.isEmpty(url) || StringUtils.isEmpty(driverClass) || StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {
             throw new RuntimeException("数据库配置不能为空");

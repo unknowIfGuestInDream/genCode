@@ -2,6 +2,7 @@ package com.newangels.gen.controller;
 
 import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
+import com.newangels.gen.factory.DataSourceUtilFactory;
 import com.newangels.gen.util.Cache;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -46,7 +47,7 @@ public class CacheManageController {
     }
 
     /**
-     * 获取缓存信息
+     * 获取CacheManage类下的缓存信息
      */
     @GetMapping(value = {"caches/{name}", "caches/", "caches"})
     @Log
@@ -67,5 +68,14 @@ public class CacheManageController {
             }
         }
         return BaseUtils.success(list);
+    }
+
+    /**
+     * 获取数据库连接池DataSourceUtilFactory缓存信息
+     */
+    @GetMapping(value = {"dataSourceCaches/", "dataSourceCaches"})
+    @Log
+    public Map<String, Object> getDataSourceUtilCaches() {
+        return BaseUtils.success(DataSourceUtilFactory.getDataSourceList());
     }
 }
