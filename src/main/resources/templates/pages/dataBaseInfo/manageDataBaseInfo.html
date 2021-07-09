@@ -63,6 +63,11 @@
                 text: '删除',
                 icon: 'public/image/btn/delete.png',
                 handler: _deleteDataBaseInfo
+            }, {
+                xtype: 'button',
+                text: '查看',
+                icon: 'public/image/btn/view.png',
+                handler: _loadDataBaseInfo
             }]
         });
 
@@ -107,6 +112,68 @@
                 emptyText: '<div style="text-align: center; padding-top: 50px; font: italic bold 20px Microsoft YaHei;">没有数据</div>',
                 enableTextSelection: true
             },
+            listeners: {
+                'itemdblclick': function (dataview, record, item, index, e) {
+                    _loadDataBaseInfo();
+                }
+            }
+        });
+
+        var viewDataBasePanel = Ext.create('Ext.form.Panel', {//表单
+            id: 'viewDataBasePanel',
+            layout: 'column',
+            frame: true,
+            autoScroll: true,
+            defaults: {
+                labelAlign: 'right',
+                labelWidth: 150,
+                inputWidth: 300,
+                margin: '4'
+            },
+            items: [{
+                xtype: 'textfield',
+                name: 'NAME',
+                fieldLabel: '数据源名称',
+                style: 'clear:both',
+                readOnly: true
+            }, {
+                xtype: 'textfield',
+                name: 'DRIVER',
+                fieldLabel: '驱动类名称',
+                style: 'clear:both',
+                readOnly: true
+            }, {
+                xtype: 'textfield',
+                name: 'URL',
+                inputWidth: 600,
+                fieldLabel: '链接',
+                style: 'clear:both',
+                readOnly: true
+            }, {
+                xtype: 'textfield',
+                name: 'USERNAME',
+                fieldLabel: '用户名',
+                style: 'clear:both',
+                readOnly: true
+            }, {
+                xtype: 'textfield',
+                name: 'PASSWORD',
+                fieldLabel: '密码',
+                style: 'clear:both',
+                readOnly: true
+            }, {
+                xtype: 'textfield',
+                name: 'CREATE_TIME',
+                fieldLabel: '创建日期',
+                style: 'clear:both',
+                readOnly: true
+            }, {
+                xtype: 'textfield',
+                name: 'UPDATE_TIME',
+                fieldLabel: '更新日期',
+                style: 'clear:both',
+                readOnly: true
+            }]
         });
 
         Ext.create('Ext.container.Viewport', {
@@ -150,6 +217,32 @@
         var dataBaseStore = Ext.data.StoreManager.lookup('dataBaseStore');
         dataBaseStore.proxy.extraParams = {};
         dataBaseStore.load();
+    }
+
+    function _loadDataBaseInfo() {
+        var records = Ext.getCmp('dataBasePanel').getSelectionModel().getSelection();
+        if (records.length === 0) {
+            Ext.MessageBox.alert('警告', '请选择数据源', Ext.MessageBox.WARNING);
+            return;
+        }
+        var viewDataBaseForm = Ext.getCmp('viewDataBasePanel').getForm();
+        for (var key in records[0].data) {
+            (viewDataBaseForm.findField(key) != null) ? viewDataBaseForm.findField(key).setValue(records[0].data[key]) : 0;
+        }
+        var viewDataBasePanel = Ext.getCmp('viewDataBasePanel');
+        var win = Ext.create('Ext.window.Window', {
+            title: '详情信息',
+            modal: true,
+            autoShow: true,
+            maximized: false,
+            layout: 'fit',
+            width: document.documentElement.clientWidth * 0.6,
+            height: document.documentElement.clientHeight * 0.8,
+            closeAction: 'hide', //关闭窗体实际上是隐藏窗体并未关闭销毁此窗体对象(节约资源)
+            items: [viewDataBasePanel]
+        });
+        win.show();
+
     }
 
     function _preInsertDataBaseInfo() {
