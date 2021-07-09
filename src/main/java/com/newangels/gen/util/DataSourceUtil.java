@@ -18,13 +18,6 @@ public abstract class DataSourceUtil {
     protected DataSource dataSource;
 
     /**
-     * 获取缓存数据源信息
-     */
-    public String getDataSourceInfo() {
-        return dataSource.toString();
-    }
-
-    /**
      * 初始化
      */
     public abstract void init(String driverClass, String url, String userName, String password);
@@ -172,4 +165,10 @@ public abstract class DataSourceUtil {
         release(conn, ps, rs, null);
     }
 
+    /**
+     * 获取缓存数据源信息
+     */
+    public String getDataSourceInfo() {
+        return dataSource.toString();
+    }
 }

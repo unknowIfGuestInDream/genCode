@@ -404,9 +404,14 @@
             Ext.MessageBox.alert('警告', '包名格式错误\n格式如: com.newangels.gen', Ext.MessageBox.WARNING);
             return;
         }
+        //选择的数据校验
         var records = Ext.getCmp('proceduresPanel').getSelectionModel().getSelection();
         if (records.length === 0) {
             Ext.MessageBox.alert('警告', '请选择存储过程', Ext.MessageBox.WARNING);
+            return;
+        }
+        if (records.length > 50) {
+            Ext.MessageBox.alert('警告', '最多选择50个存储过程', Ext.MessageBox.WARNING);
             return;
         }
 
