@@ -51,12 +51,10 @@ public class DataSourceUtilFactory {
         if (dataSourceUtil == null) {
             try {
                 switch (dataSourceUtilType) {
-                    case DataSourceUtilTypes.DRUID:
-                        dataSourceUtil = new DruidDataSourceUtil(driver, url, userName, password);
-                        break;
                     case DataSourceUtilTypes.HIKARI:
                         dataSourceUtil = new HikariDataSourceUtil(driver, url, userName, password);
                         break;
+                    case DataSourceUtilTypes.DRUID:
                     default:
                         dataSourceUtil = new DruidDataSourceUtil(driver, url, userName, password);
                         break;
