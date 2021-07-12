@@ -27,13 +27,7 @@ public class DelayedItem<T> implements Delayed {
         if (o == this) return 0;
         if (o instanceof DelayedItem) {
             DelayedItem<T> tmpDelayedItem = (DelayedItem<T>) o;
-            if (liveTime > tmpDelayedItem.liveTime) {
-                return 1;
-            } else if (liveTime == tmpDelayedItem.liveTime) {
-                return 0;
-            } else {
-                return -1;
-            }
+            return Long.compare(liveTime, tmpDelayedItem.liveTime);
         }
         long diff = getDelay(TimeUnit.NANOSECONDS) - o.getDelay(TimeUnit.NANOSECONDS);
         return diff > 0 ? 1 : diff == 0 ? 0 : -1;
@@ -60,7 +54,7 @@ public class DelayedItem<T> implements Delayed {
     @Override
     public boolean equals(Object object) {
         if (object instanceof DelayedItem) {
-            return object.hashCode() == hashCode() ? true : false;
+            return object.hashCode() == hashCode();
         }
         return false;
     }

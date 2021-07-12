@@ -2,9 +2,9 @@ package com.newangels.gen.factory;
 
 import com.newangels.gen.enums.GenProcedureModelType;
 import com.newangels.gen.service.GenProcedureModelService;
-import org.springframework.util.StringUtils;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -22,7 +22,7 @@ public class GenProcedureModelFactory {
     }
 
     public static void register(GenProcedureModelType name, GenProcedureModelService handler) {
-        if (StringUtils.isEmpty(name) || null == handler) {
+        if (Objects.isNull(name) || null == handler) {
             return;
         }
         strategyMap.put(name, handler);

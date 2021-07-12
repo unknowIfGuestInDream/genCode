@@ -2,9 +2,9 @@ package com.newangels.gen.factory;
 
 import com.newangels.gen.enums.DataBaseType;
 import com.newangels.gen.service.DataBaseProcedureService;
-import org.springframework.util.StringUtils;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -22,7 +22,7 @@ public class DataBaseFactory {
     }
 
     public static void register(DataBaseType name, DataBaseProcedureService handler) {
-        if (StringUtils.isEmpty(name) || null == handler) {
+        if (Objects.isNull(name) || null == handler) {
             return;
         }
         strategyMap.put(name, handler);

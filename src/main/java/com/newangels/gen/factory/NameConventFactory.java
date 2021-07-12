@@ -2,9 +2,9 @@ package com.newangels.gen.factory;
 
 import com.newangels.gen.enums.NameConventType;
 import com.newangels.gen.service.NameConventService;
-import org.springframework.util.StringUtils;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -22,7 +22,7 @@ public class NameConventFactory {
     }
 
     public static void register(NameConventType name, NameConventService handler) {
-        if (StringUtils.isEmpty(name) || null == handler) {
+        if (Objects.isNull(name) || null == handler) {
             return;
         }
         strategyMap.put(name, handler);

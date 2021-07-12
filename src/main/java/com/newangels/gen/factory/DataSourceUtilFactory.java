@@ -1,10 +1,10 @@
 package com.newangels.gen.factory;
 
-import com.alibaba.druid.util.StringUtils;
 import com.newangels.gen.util.DataSourceUtil;
 import com.newangels.gen.util.DataSourceUtilTypes;
 import com.newangels.gen.util.dataSource.DruidDataSourceUtil;
 import com.newangels.gen.util.dataSource.HikariDataSourceUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +25,7 @@ public class DataSourceUtilFactory {
     /**
      * 获取strategyMap中所有DataSourceUtil的连接池信息
      */
-    public static List<String> getDataSourceList() {
+    public static List<String> getDataSourceInfoList() {
         return strategyMap.values().stream().map(DataSourceUtil::getDataSourceInfo).collect(Collectors.toList());
     }
 

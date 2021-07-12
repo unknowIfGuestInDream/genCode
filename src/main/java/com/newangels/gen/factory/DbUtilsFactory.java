@@ -29,7 +29,7 @@ public class DbUtilsFactory {
     }
 
     public static void remove(String name) {
-        if (StringUtils.isEmpty(name) || !strategyMap.containsKey("name")) {
+        if (StringUtils.isEmpty(name) || !strategyMap.containsKey(name)) {
             return;
         }
         DBUtil dbUtil = strategyMap.remove(name);
