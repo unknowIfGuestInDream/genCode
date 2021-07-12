@@ -1,7 +1,6 @@
 package com.newangels.gen.util;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.DelayQueue;
 
@@ -69,8 +68,8 @@ public class Cache<K, V> {
     /**
      * 取出缓存对象全部key值
      */
-    public List<K> keys() {
-        return new ArrayList<>(map.keySet());
+    public Set<K> keys() {
+        return map.keySet();
     }
 
     public Cache() {
