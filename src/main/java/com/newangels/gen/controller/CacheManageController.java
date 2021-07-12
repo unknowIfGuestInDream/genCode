@@ -76,6 +76,6 @@ public class CacheManageController {
     @GetMapping(value = {"dataSourceCaches/", "dataSourceCaches"})
     @Log
     public Map<String, Object> getDataSourceUtilCaches() {
-        return BaseUtils.success(DataSourceUtilFactory.getDataSourceList());
+        return BaseUtils.success(DataSourceUtilFactory.getDataSourceInfoList());
     }
 }
