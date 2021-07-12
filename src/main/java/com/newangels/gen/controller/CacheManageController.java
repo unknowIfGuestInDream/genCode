@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.newangels.gen.base.CacheManage.CACHE_MAP;
 
@@ -38,9 +39,7 @@ public class CacheManageController {
         if (StringUtils.isEmpty(name)) {
             CACHE_MAP.forEach((s, cache) -> cache.clear());
         } else {
-            if (CACHE_MAP.containsKey(name)) {
-                CACHE_MAP.get(name).clear();
-            }
+            Optional.ofNullable(CACHE_MAP.get(name)).ifPresent(Cache::clear);
         }
 
         return BaseUtils.success();

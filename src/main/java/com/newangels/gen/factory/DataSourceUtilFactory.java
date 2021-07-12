@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -26,14 +27,16 @@ public class DataSourceUtilFactory {
      * 获取strategyMap中所有DataSourceUtil的连接池信息
      */
     public static List<String> getDataSourceInfoList() {
-        return strategyMap.values().stream().map(DataSourceUtil::getDataSourceInfo).collect(Collectors.toList());
+        return strategyMap.values().stream()
+                .map(DataSourceUtil::getDataSourceInfo)
+                .collect(Collectors.toList());
     }
 
     /**
      * 获取DataSourceUtil连接池工具类
      */
-    public static DataSourceUtil getDataSourceUtil(String name) {
-        return strategyMap.get(name);
+    public static DataSourceUtil getDataSourceUtil(String key) {
+        return strategyMap.get(key);
     }
 
     /**
@@ -47,27 +50,36 @@ public class DataSourceUtilFactory {
      * 获取DataSourceUtil连接池工具类，为null则初始化
      */
     public static DataSourceUtil getDataSourceUtil(String url, String driver, String userName, String password, int dataSourceUtilType) {
-        DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url + userName);
-        if (dataSourceUtil == null) {
-            try {
-                switch (dataSourceUtilType) {
-                    case DataSourceUtilTypes.HIKARI:
-                        dataSourceUtil = new HikariDataSourceUtil(driver, url, userName, password);
-                        break;
-                    case DataSourceUtilTypes.DRUID:
-                    default:
-                        dataSourceUtil = new DruidDataSourceUtil(driver, url, userName, password);
-                        break;
-                }
-                register(url + userName, dataSourceUtil);
-            } catch (Exception e) {
-                e.printStackTrace();
-                remove(url + userName);
+        return Optional.ofNullable(DataSourceUtilFactory.getDataSourceUtil(url + userName))
+                .orElseGet(() -> createDataSourceUtil(url, driver, userName, password, dataSourceUtilType));
+    }
+
+    /**
+     * 创建DataSourceUtil并注册到strategyMap中
+     */
+    private static DataSourceUtil createDataSourceUtil(String url, String driver, String userName, String password, int dataSourceUtilType) {
+        DataSourceUtil dataSourceUtil = null;
+        try {
+            switch (dataSourceUtilType) {
+                case DataSourceUtilTypes.HIKARI:
+                    dataSourceUtil = new HikariDataSourceUtil(driver, url, userName, password);
+                    break;
+                case DataSourceUtilTypes.DRUID:
+                default:
+                    dataSourceUtil = new DruidDataSourceUtil(driver, url, userName, password);
+                    break;
             }
+            register(url + userName, dataSourceUtil);
+        } catch (Exception e) {
+            e.printStackTrace();
+            remove(url + userName);
         }
         return dataSourceUtil;
     }
 
+    /**
+     * 将DataSourceUtil注册到strategyMap中
+     */
     public static void register(String name, DataSourceUtil handler) {
         if (StringUtils.isEmpty(name) || null == handler) {
             return;
@@ -75,16 +87,19 @@ public class DataSourceUtilFactory {
         strategyMap.put(name, handler);
     }
 
-    public static void remove(String name) {
-        if (StringUtils.isEmpty(name) || !strategyMap.containsKey(name)) {
+    /**
+     * 删除strategyMap指定值
+     */
+    public static void remove(String key) {
+        if (StringUtils.isEmpty(key)) {
             return;
         }
-        DataSourceUtil dataSourceUtil = strategyMap.remove(name);
-        if (dataSourceUtil != null) {
-            dataSourceUtil.close();
-        }
+        Optional.ofNullable(strategyMap.remove(key)).ifPresent(DataSourceUtil::close);
     }
 
+    /**
+     * 删除strategyMap所有值
+     */
     public static void removeAll() {
         strategyMap.values().forEach(DataSourceUtil::close);
         strategyMap.clear();
