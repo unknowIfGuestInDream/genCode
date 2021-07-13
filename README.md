@@ -17,6 +17,19 @@
 如需要添加自己的代码模版则需要实现GenProcedureModelService, 并在前台static/public/js/store/genProcedureModelType.js中添加自己的代码模板编码  
 如需添加新的数据库则实现DataBaseProcedureService, 并在static/public/js/store/driver.js中添加新的数据库的驱动名称
 
+## 代码说明
+### 缓存
+1. 为具有过期时间的缓存Cache类 CacheManage负责维护Cache缓存, 目前缓存前台存储过程查询结果等，减少数据库压力
+2. 各个工厂类(factory目录下)各个类内部维护的集合，负责存储各个接口的实现类
+3. DataSourceUtilFactory缓存数据库连接池，减少连接池频繁创建销毁的开销
+4. CacheManageController负责缓存的查询，清除等
+
+### 定时
+位于schedule文件夹下
+
+### 枚举类
+位于enums下
+
 ## 最后
 
 如果有问题或者需求可以发送邮件或者提交Issues
