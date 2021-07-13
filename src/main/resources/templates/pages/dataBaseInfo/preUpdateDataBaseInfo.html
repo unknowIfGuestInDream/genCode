@@ -30,13 +30,13 @@
             async: false,//同步加载
             method: 'GET',
             params: {
-                'ID': ID,
+                'ID': 99,
             },
             callback: function (options, success, response) {
                 if (success) {
                     var data = Ext.decode(response.responseText);
-                    if (data.success === true && data.result.length > 0) {
-                        dataBase = data.result[0];
+                    if (data.success === true && !Ext.isEmpty(data.ID)) {
+                        dataBase = data;
                     }
                 }
             }
@@ -181,13 +181,18 @@
                 return;
             }
         }
-        Ext.getBody().unmask();//取消页面遮盖
 
+        if (dataBase == null) {
+            Toast.alert('警告', '无当前数据源, 请刷新页面重新选择', 5000);
+            setTimeout(_close, 5000);
+            return;
+        }
         var formPanel = Ext.getCmp('formPanel').getForm();
         for (var key in dataBase) {//装载被修改数据到页面
             (formPanel.findField(key) != null) ? formPanel.findField(key).setValue(dataBase[key]) : 0;
         }
         formPanel.isValid();//校验数据
+        Ext.getBody().unmask();//取消页面遮盖
     }
 
     //修改

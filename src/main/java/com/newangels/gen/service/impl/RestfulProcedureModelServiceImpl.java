@@ -242,6 +242,7 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
                     "     * \n" +
                     "     */\n" +
                     "    @" + mappingType + "(\"" + preName + moduleName + "\")\n" +
+                    "    @Log\n" +
                     "    public Map<String, Object> " + preName + moduleName + "(" + inParams + (inParams.length() > 0 ? ", " : "") + "HttpServletRequest request) {\n" +
                     "        return BaseUtils.success(" + BaseUtils.toLowerCase4Index(moduleName) + "Service." + preName + moduleName + "(" + outParams + "));\n" +
                     "    }\n");

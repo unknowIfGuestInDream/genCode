@@ -27,6 +27,7 @@ public class EamProcedureModelServiceImpl implements GenProcedureModelService {
     public String getControllerCode(String moduleName, String packageName, String author) {
         return "package " + packageName + ".controller;\n" +
                 "\n" +
+                "import " + packageName + ".annotation.Log;\n" +
                 "import " + packageName + ".base.BaseUtils;\n" +
                 "import " + packageName + ".service." + moduleName + "Service;\n" +
                 "import org.springframework.beans.factory.annotation.Autowired;\n" +
@@ -243,6 +244,7 @@ public class EamProcedureModelServiceImpl implements GenProcedureModelService {
                     "     */\n" +
                     "    @" + mappingType + "(\"" + preName + moduleName + "\")\n" +
                     "    @ResponseBody\n" +
+                    "    @Log\n" +
                     "    public Map<String, Object> " + preName + moduleName + "(" + inParams + (inParams.length() > 0 ? ", " : "") + "HttpServletRequest request) {\n" +
                     "        return BaseUtils.success(" + BaseUtils.toLowerCase4Index(moduleName) + "Service." + preName + moduleName + "(" + outParams + "));\n" +
                     "    }\n");

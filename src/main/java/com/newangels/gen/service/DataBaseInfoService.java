@@ -11,18 +11,17 @@ import java.util.Map;
  * @since: 1.0
  */
 public interface DataBaseInfoService {
-
-    /**
-     * 查询数据源
-     */
-    List<Map<String, Object>> selectDataBaseInfo();
-
     /**
      * 加载数据源
      *
      * @param ID ID
      */
-    List<Map<String, Object>> loadDataBaseInfo(String ID);
+    Map<String, Object> loadDataBaseInfo(String ID);
+
+    /**
+     * 查询数据源
+     */
+    List<Map<String, Object>> selectDataBaseInfo();
 
     /**
      * 新增数据源

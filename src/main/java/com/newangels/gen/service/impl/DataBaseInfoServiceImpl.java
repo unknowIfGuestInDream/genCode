@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,13 +23,19 @@ public class DataBaseInfoServiceImpl implements DataBaseInfoService {
     private final JdbcTemplate genJdbcTemplate;
 
     @Override
-    public List<Map<String, Object>> selectDataBaseInfo() {
-        return genJdbcTemplate.queryForList("select * from database_info");
+    public Map<String, Object> loadDataBaseInfo(String ID) {
+        String sql = "select * from database_info where ID = ?";
+        List<Map<String, Object>> result = genJdbcTemplate.queryForList(sql, ID);
+        if (result.size() == 1) {
+            return result.get(0);
+        } else {
+            return new HashMap();
+        }
     }
 
     @Override
-    public List<Map<String, Object>> loadDataBaseInfo(String ID) {
-        return genJdbcTemplate.queryForList("select * from database_info where ID = ?", ID);
+    public List<Map<String, Object>> selectDataBaseInfo() {
+        return genJdbcTemplate.queryForList("select * from database_info");
     }
 
     @Override
