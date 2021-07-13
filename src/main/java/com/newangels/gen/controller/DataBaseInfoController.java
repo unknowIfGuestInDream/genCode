@@ -53,15 +53,6 @@ public class DataBaseInfoController {
     }
 
     /**
-     * 查询数据源
-     */
-    @GetMapping("selectDataBaseInfo")
-    @Log
-    public Map<String, Object> selectDataBaseInfo() {
-        return BaseUtils.success(dataBaseInfoService.selectDataBaseInfo());
-    }
-
-    /**
      * 加载数据源
      */
     @GetMapping("loadDataBaseInfo")
@@ -71,12 +62,41 @@ public class DataBaseInfoController {
     }
 
     /**
+     * 查询数据源
+     */
+    @GetMapping("selectDataBaseInfo")
+    @Log
+    public Map<String, Object> selectDataBaseInfo() {
+        return BaseUtils.success(dataBaseInfoService.selectDataBaseInfo());
+    }
+
+    /**
      * 新增数据源
      */
     @PostMapping("insertDataBaseInfo")
     @Log
     public Map<String, Object> insertDataBaseInfo(String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) {
         return BaseUtils.success(dataBaseInfoService.insertDataBaseInfo(NAME, URL, DRIVER, USERNAME, PASSWORD));
+    }
+
+    /**
+     * 修改数据源
+     */
+    @PostMapping("updateDataBaseInfo")
+    @Log
+    public Map<String, Object> updateDataBaseInfo(String ID, String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) {
+        DataSourceUtilFactory.remove(URL + USERNAME);
+        return BaseUtils.success(dataBaseInfoService.updateDataBaseInfo(ID, NAME, URL, DRIVER, USERNAME, PASSWORD));
+    }
+
+    /**
+     * 删除数据源
+     */
+    @PostMapping("deleteDataBaseInfo")
+    @Log
+    public Map<String, Object> deleteDataBaseInfo(String ID, String URL, String USERNAME) {
+        DataSourceUtilFactory.remove(URL + USERNAME);
+        return BaseUtils.success(dataBaseInfoService.deleteDataBaseInfo(ID));
     }
 
     /**
@@ -98,25 +118,5 @@ public class DataBaseInfoController {
             String mes = "与数据库建立连接错误";
             return BaseUtils.failed(mes);
         }
-    }
-
-    /**
-     * 修改数据源
-     */
-    @PostMapping("updateDataBaseInfo")
-    @Log
-    public Map<String, Object> updateDataBaseInfo(String ID, String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) {
-        DataSourceUtilFactory.remove(URL + USERNAME);
-        return BaseUtils.success(dataBaseInfoService.updateDataBaseInfo(ID, NAME, URL, DRIVER, USERNAME, PASSWORD));
-    }
-
-    /**
-     * 删除数据源
-     */
-    @PostMapping("deleteDataBaseInfo")
-    @Log
-    public Map<String, Object> deleteDataBaseInfo(String ID, String URL, String USERNAME) {
-        DataSourceUtilFactory.remove(URL + USERNAME);
-        return BaseUtils.success(dataBaseInfoService.deleteDataBaseInfo(ID));
     }
 }

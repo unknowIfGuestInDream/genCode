@@ -24,13 +24,8 @@ public class DataBaseInfoServiceImpl implements DataBaseInfoService {
 
     @Override
     public Map<String, Object> loadDataBaseInfo(String ID) {
-        String sql = "select * from database_info where ID = ?";
-        List<Map<String, Object>> result = genJdbcTemplate.queryForList(sql, ID);
-        if (result.size() == 1) {
-            return result.get(0);
-        } else {
-            return new HashMap();
-        }
+        List<Map<String, Object>> result = genJdbcTemplate.queryForList("select * from database_info where ID = ?", ID);
+        return result.size() == 1 ? result.get(0) : new HashMap();
     }
 
     @Override
