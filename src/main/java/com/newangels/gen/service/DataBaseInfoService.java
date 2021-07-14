@@ -1,5 +1,6 @@
 package com.newangels.gen.service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ public interface DataBaseInfoService {
      * @param USERNAME 用户
      * @param PASSWORD 密码
      */
-    int insertDataBaseInfo(String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD);
+    int insertDataBaseInfo(String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) throws SQLException;
 
     /**
      * 修改数据源
@@ -44,7 +45,7 @@ public interface DataBaseInfoService {
      * @param USERNAME 用户
      * @param PASSWORD 密码
      */
-    int updateDataBaseInfo(String ID, String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD);
+    int updateDataBaseInfo(String ID, String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) throws SQLException;
 
     /**
      * 删除数据源

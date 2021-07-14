@@ -75,7 +75,7 @@ public class DataBaseInfoController {
      */
     @PostMapping("insertDataBaseInfo")
     @Log
-    public Map<String, Object> insertDataBaseInfo(String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) {
+    public Map<String, Object> insertDataBaseInfo(String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) throws SQLException {
         return BaseUtils.success(dataBaseInfoService.insertDataBaseInfo(NAME, URL, DRIVER, USERNAME, PASSWORD));
     }
 
@@ -84,7 +84,7 @@ public class DataBaseInfoController {
      */
     @PostMapping("updateDataBaseInfo")
     @Log
-    public Map<String, Object> updateDataBaseInfo(String ID, String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) {
+    public Map<String, Object> updateDataBaseInfo(String ID, String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) throws SQLException {
         DataSourceUtilFactory.remove(URL + USERNAME);
         return BaseUtils.success(dataBaseInfoService.updateDataBaseInfo(ID, NAME, URL, DRIVER, USERNAME, PASSWORD));
     }
