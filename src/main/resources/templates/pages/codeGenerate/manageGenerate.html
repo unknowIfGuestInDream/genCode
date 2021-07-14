@@ -8,12 +8,14 @@
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="public/css/ext-all.css"/>
     <link rel="stylesheet" type="text/css" href="public/css/ext-zh_CN.css"/>
+    <link rel="stylesheet" type="text/css" href="public/css/util/changeRowClass.css"/>
     <script type="text/javascript" src="public/js/ext-all.js"></script>
     <script type="text/javascript" src="public/js/ext-lang-zh_CN.js"></script>
     <script type="text/javascript" src="public/js/base.js"></script>
     <script type="text/javascript" src="public/js/store/genProcedureModelType.js"></script>
     <script type="text/javascript" src="public/js/store/nameConventType.js"></script>
     <script type="text/javascript" src="public/js/ajax/clearCaches.js"></script>
+    <script type="text/javascript" src="public/js/util/changeRowClass.js"></script>
 </head>
 <body>
 <script>
@@ -53,7 +55,7 @@
             autoLoad: false,//true为自动加载
             loading: false,//自动加载时必须为true
             pageSize: -1,
-            fields: ['NAME', 'LAST_UPDATE_TIME'],
+            fields: ['NAME', 'LAST_UPDATE_TIME', 'STATUS'],
             proxy: {
                 url: '/gen/selectProcedures',
                 type: 'ajax',
@@ -73,7 +75,7 @@
         var proceduresFilterStore = Ext.create('Ext.data.Store', {
             storeId: 'proceduresFilterStore',
             autoLoad: false,
-            fields: ['NAME', 'LAST_UPDATE_TIME']
+            fields: ['NAME', 'LAST_UPDATE_TIME', 'STATUS']
         });
 
         var westFormPanel = Ext.create('Ext.form.Panel', {
@@ -242,7 +244,8 @@
             },
             viewConfig: {
                 emptyText: '<div style="text-align: center; padding-top: 50px; font: italic bold 20px Microsoft YaHei;">没有数据</div>',
-                enableTextSelection: true
+                enableTextSelection: true,
+                getRowClass: _changeInValidRowClass
             }
         });
 
@@ -415,10 +418,36 @@
             return;
         }
 
-        var procedureNameList = [];
+        var procedureNameList = []; //存储过程名称集合，用于向后台接口传参
+        var inValieList = [];  //未编译的过程集合 用于前台提示用
         for (var i = 0, length = records.length; i < length; i++) {
             procedureNameList.push(records[i].data.NAME);
+            //不为空代表返回结果集有过程是否编译的值 oracle INVALID为未编译 VALID已编译
+            if (records[i].data.STATUS === 'INVALID') {
+                inValieList.push(records[i].data.NAME);
+            }
         }
+
+        if (inValieList.length > 0) {
+            Ext.MessageBox.show({
+                title: '请确认',
+                msg: inValieList.toString() + '过程未编译, 是否生成代码',
+                buttons: Ext.MessageBox.YESNO,
+                icon: Ext.MessageBox.QUESTION,
+                fn: function (btn) {
+                    if (btn === 'yes') {
+                        _genProcedureAjax(procedureNameList);
+                    }
+                }
+            });
+        } else {
+            _genProcedureAjax(procedureNameList);
+        }
+
+    }
+
+    //调后生成代码接口
+    function _genProcedureAjax(procedureNameList) {
         Ext.Ajax.request({
             url: '/gen/genProcedure',
             async: false,

@@ -1,6 +1,7 @@
 package com.newangels.gen.service.impl;
 
 import com.newangels.gen.enums.GenProcedureModelType;
+import com.newangels.gen.exception.UnSupportedProcedureModelException;
 import com.newangels.gen.factory.GenProcedureModelFactory;
 import com.newangels.gen.service.DataBaseProcedureService;
 import com.newangels.gen.service.GenProcedureModelService;
@@ -47,7 +48,7 @@ public class UnknowProcedureModelServiceImpl implements GenProcedureModelService
 
     @Override
     public Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DataSourceUtil dataSourceUtil, String author) {
-        throw new RuntimeException("未知代码模板");
+        throw new UnSupportedProcedureModelException("未知代码模板");
     }
 
     @Override

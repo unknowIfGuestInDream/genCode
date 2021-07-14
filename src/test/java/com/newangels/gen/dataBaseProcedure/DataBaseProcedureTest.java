@@ -1,7 +1,7 @@
 package com.newangels.gen.dataBaseProcedure;
 
 import com.newangels.gen.enums.DataBaseType;
-import com.newangels.gen.factory.DataBaseFactory;
+import com.newangels.gen.factory.DataBaseProcedureFactory;
 import com.newangels.gen.service.DataBaseProcedureService;
 import com.newangels.gen.util.DBUtil;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ public class DataBaseProcedureTest {
         dbUtil.setDriverClass("com.mysql.jdbc.Driver");
         dbUtil.setUserName("tangliang");
         dbUtil.setPassword("tangliang");
-        DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(V_TYPE));
+        DataBaseProcedureService dbProcedure = DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName(V_TYPE));
         List<Map<String, Object>> list = dbUtil.executeQuery("select * from database_info");
         System.out.println(list);
     }

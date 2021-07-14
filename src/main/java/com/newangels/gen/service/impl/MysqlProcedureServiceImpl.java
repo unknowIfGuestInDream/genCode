@@ -1,7 +1,7 @@
 package com.newangels.gen.service.impl;
 
 import com.newangels.gen.enums.DataBaseType;
-import com.newangels.gen.factory.DataBaseFactory;
+import com.newangels.gen.factory.DataBaseProcedureFactory;
 import com.newangels.gen.service.DataBaseProcedureService;
 import com.newangels.gen.util.DataSourceUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -93,7 +93,7 @@ public class MysqlProcedureServiceImpl implements DataBaseProcedureService {
         dataTypeOutMap.put("REF CURSOR", "Object");
         dataTypeOutMap.put("BLOB", "Blob");
         dataTypeOutMap.put("NUMBER", "Double");
-        DataBaseFactory.register(DataBaseType.MYSQL, this);
-        DataBaseFactory.register(DataBaseType.MYSQL8, this);
+        DataBaseProcedureFactory.register(DataBaseType.MYSQL, this);
+        DataBaseProcedureFactory.register(DataBaseType.MYSQL8, this);
     }
 }

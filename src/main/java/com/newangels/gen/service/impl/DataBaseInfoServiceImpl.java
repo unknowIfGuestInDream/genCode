@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author: TangLiang
@@ -24,8 +25,8 @@ public class DataBaseInfoServiceImpl implements DataBaseInfoService {
 
     @Override
     public Map<String, Object> loadDataBaseInfo(String ID) {
-        List<Map<String, Object>> result = genJdbcTemplate.queryForList("select * from database_info where ID = ?", ID);
-        return result.size() == 1 ? result.get(0) : new HashMap();
+        return Optional.ofNullable(genJdbcTemplate.queryForList("select * from database_info where ID = ?", ID).get(0))
+                .orElseGet(HashMap::new);
     }
 
     @Override

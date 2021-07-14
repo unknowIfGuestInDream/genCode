@@ -6,7 +6,7 @@ import com.newangels.gen.base.CacheManage;
 import com.newangels.gen.enums.DataBaseType;
 import com.newangels.gen.enums.GenProcedureModelType;
 import com.newangels.gen.enums.NameConventType;
-import com.newangels.gen.factory.DataBaseFactory;
+import com.newangels.gen.factory.DataBaseProcedureFactory;
 import com.newangels.gen.factory.DataSourceUtilFactory;
 import com.newangels.gen.factory.GenProcedureModelFactory;
 import com.newangels.gen.factory.NameConventFactory;
@@ -71,7 +71,7 @@ public class GenProcedureController {
             if (list == null) {
                 DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
                 //获取数据库过程sql
-                DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
+                DataBaseProcedureService dbProcedure = DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
                 list = dataSourceUtil.executeQuery(dbProcedure.selectProcedures(name));
                 CacheManage.PROCEDURES_CACHE.put(url + userName, list, Cache.CACHE_HOLD_FOREVER);
             }
@@ -79,7 +79,7 @@ public class GenProcedureController {
             list = CacheManage.PROCEDURES_CACHE.get(url + userName + name);
             if (list == null) {
                 DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
-                DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
+                DataBaseProcedureService dbProcedure = DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
                 list = dataSourceUtil.executeQuery(dbProcedure.selectProcedures(name));
                 CacheManage.PROCEDURES_CACHE.put(url + userName + name, list, Cache.CACHE_HOLD_30MINUTE);
             }
@@ -103,7 +103,7 @@ public class GenProcedureController {
         //获取数据库连接
         DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
         //获取数据库过程sql
-        DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
+        DataBaseProcedureService dbProcedure = DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
         String result = dbProcedure.loadProcedure(name, dataSourceUtil);
         return BaseUtils.success(result);
     }
@@ -132,7 +132,7 @@ public class GenProcedureController {
         //获取命名规范
         NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromTypeName(nameConventType));
         //获取数据库过程sql
-        DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
+        DataBaseProcedureService dbProcedure = DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
         Map<String, Object> result = genProcedureModel.genCode(moduleName, packageName, userName, procedureNameList, nameConvent, dbProcedure, dataSourceUtil, author);
         return BaseUtils.success(result);
     }
@@ -159,7 +159,7 @@ public class GenProcedureController {
             //获取命名规范
             NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromTypeName(nameConventType));
             //获取数据库过程sql
-            DataBaseProcedureService dbProcedure = DataBaseFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
+            DataBaseProcedureService dbProcedure = DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
             Map<String, Object> map = genProcedureModel.genCode(moduleName, packageName, userName, procedureNameList, nameConvent, dbProcedure, dataSourceUtil, author);
             List<String> list = (List<String>) map.get("list");
 
