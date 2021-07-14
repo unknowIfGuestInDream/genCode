@@ -2,6 +2,8 @@
 
 运行后访问 [http://localhost:8669/gen](http://localhost:8669/gen)
 
+druid监控账号密码默认都为admin
+
 ## 技术框架
 
 后台使用springBoot, druid连接池, 前台使用extjs4.0
