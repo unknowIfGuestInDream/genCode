@@ -4,6 +4,8 @@
 
 druid监控账号密码默认都为admin
 
+database文件夹下是oracle跟mysql数据库的sql文件
+
 ## 技术框架
 
 后台使用springBoot, druid连接池, 前台使用extjs4.0

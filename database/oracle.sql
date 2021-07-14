@@ -1,0 +1,64 @@
+/*
+Navicat Oracle Data Transfer
+Oracle Client Version : 11.2.0.1.0
+
+Source Server         : CG
+Source Server Version : 110200
+Source Host           : 10.18.26.86:1521
+Source Schema         : CG
+
+Target Server Type    : ORACLE
+Target Server Version : 110200
+File Encoding         : 65001
+
+Date: 2021-07-14 16:46:38
+*/
+
+
+-- ----------------------------
+-- Table structure for DATABASE_INFO
+-- ----------------------------
+CREATE TABLE DATABASE_INFO (
+ID NUMBER NOT NULL ,
+NAME VARCHAR2(40 BYTE) NOT NULL ,
+URL VARCHAR2(300 BYTE) NOT NULL ,
+DRIVER VARCHAR2(50 BYTE) NOT NULL ,
+USERNAME VARCHAR2(40 BYTE) NOT NULL ,
+PASSWORD VARCHAR2(40 BYTE) NOT NULL ,
+UPDATE_TIME TIMESTAMP(6)  NULL ,
+CREATE_TIME TIMESTAMP(6)  NULL 
+)
+LOGGING
+NOCOMPRESS
+NOCACHE
+
+;
+COMMENT ON TABLE DATABASE_INFO IS '存储过程生成代码项目数据源表';
+COMMENT ON COLUMN DATABASE_INFO.ID IS 'id';
+COMMENT ON COLUMN DATABASE_INFO.NAME IS '名称';
+COMMENT ON COLUMN DATABASE_INFO.URL IS 'url路径';
+COMMENT ON COLUMN DATABASE_INFO.DRIVER IS '驱动名称';
+COMMENT ON COLUMN DATABASE_INFO.USERNAME IS '用户名';
+COMMENT ON COLUMN DATABASE_INFO.PASSWORD IS '密码';
+COMMENT ON COLUMN DATABASE_INFO.UPDATE_TIME IS '修改时间';
+COMMENT ON COLUMN DATABASE_INFO.CREATE_TIME IS '创建时间';
+
+ALTER TABLE DATABASE_INFO ADD constraint PK_DATABASE_INFO PRIMARY KEY(ID);
+
+-- ----------------------------
+-- Indexes structure for table DATABASE_INFO
+-- ----------------------------
+-- Create sequence 
+create sequence DATABASE_INFO_SEQ
+minvalue 1
+maxvalue 9999999999999999999999
+start with 1
+increment by 1
+nocache;
+-- ----------------------------
+-- Triggers structure for table DATABASE_INFO
+-- ----------------------------
+CREATE OR REPLACE TRIGGER DATABASE_INFO_TRI BEFORE INSERT ON DATABASE_INFO REFERENCING OLD AS OLD NEW AS NEW FOR EACH ROW ENABLE
+BEGIN
+  SELECT DATABASE_INFO_SEQ.NEXTVAL INTO :NEW.ID FROM DUAL;
+END DATABASE_INFO_TRI;
