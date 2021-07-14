@@ -1,5 +1,7 @@
 本项目用于对数据库中的存储过程生成java代码
 
+运行后访问 [http://localhost:8669/gen](http://localhost:8669/gen)
+
 ## 技术框架
 
 后台使用springBoot, druid连接池, 前台使用extjs4.0
