@@ -28,7 +28,7 @@ public class DruidDataSourceUtil extends DataSourceUtil {
     @Override
     public void init(String driverClass, String url, String userName, String password) {
         if (StringUtils.isEmpty(url) || StringUtils.isEmpty(driverClass) || StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {
-            throw new RuntimeException("数据库配置不能为空");
+            throw new IllegalArgumentException("数据库配置不能为空");
         }
         if (dataSource != null && !dataSource.isInited()) {
             dataSource.setUrl(url);//设置url
