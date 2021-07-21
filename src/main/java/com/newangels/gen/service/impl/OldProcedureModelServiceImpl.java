@@ -197,7 +197,7 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
                     procedureParams.add(":" + value + "");
                     repositoryParam.add("                statement.registerOutParameter(\"" + value + "\", " + dbProcedure.getRepositoryOutType(dataType) + ");");
                     if ("REF CURSOR".equals(dataType)) {
-                        repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", ProcedureUtils.ResultHash((ResultSet) cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\")));");
+                        repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", ProcedureUtils.resultHash((ResultSet) cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\")));");
                     } else {
                         repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\"));");
                     }
@@ -223,7 +223,7 @@ public class OldProcedureModelServiceImpl implements GenProcedureModelService {
                     }
                     serviceNote.add("     * @param " + value);
                     if ("REF CURSOR".equals(dataType)) {
-                        repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", ProcedureUtils.ResultHash((ResultSet) cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\")));");
+                        repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", ProcedureUtils.resultHash((ResultSet) cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\")));");
                     } else {
                         repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\"));");
                     }
