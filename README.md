@@ -1,4 +1,4 @@
-本项目用于对数据库中的存储过程生成java代码
+本项目用于对数据库中的存储过程生成java代码&&根据表生成存储过程
 
 运行后访问 [http://localhost:8669/gen](http://localhost:8669/gen)
 
@@ -12,12 +12,14 @@ database文件夹下是oracle跟mysql数据库的sql文件
 
 ## 项目介绍
 
-现在已经支持oracle, mysql, mariadb, sqlserver的存储过程代码生成
+现在已经支持oracle, mysql, mariadb, sqlserver的存储过程代码生成  
+根据表生成存储过程目前仅支持oracle
 
 * NameConventService 命名规范
 * DataBaseProcedureService 数据库对应获取过程相关的sql&数据库关键词对应的java类型等
 * DataBaseInfoService 数据源管理
 * GenProcedureModelService 存储过程代码生成模板
+* TableToProcedureService 表生成过程相关接口
 
 如需要添加自己的命名规范则新增 NameConventService 的实现类, 并在前台static/public/js/store/nameConventType.js中添加自己的实现类编码  
 如需要添加自己的代码模版则需要实现GenProcedureModelService, 并在前台static/public/js/store/genProcedureModelType.js中添加自己的代码模板编码  
