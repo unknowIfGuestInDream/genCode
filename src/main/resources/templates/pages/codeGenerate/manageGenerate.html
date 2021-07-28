@@ -321,8 +321,8 @@
         }
 
         _selectdataSource();
-        _selectProcedures();
-        _proceduresFilter();
+        // _selectProcedures();
+        // _proceduresFilter();
         Ext.getBody().unmask();
     }
 
@@ -350,6 +350,10 @@
     function _proceduresFilter() {
         var proceduresStore = Ext.data.StoreManager.lookup('proceduresStore');
         var proceduresFilterStore = Ext.data.StoreManager.lookup('proceduresFilterStore');
+        //数据为空初始化
+        if (proceduresStore.data.items.length === 0) {
+            _selectProcedures();
+        }
 
         proceduresStore.filter('NAME', new RegExp(Ext.getCmp('procedure').getValue().toUpperCase()));
         proceduresFilterStore.removeAll();

@@ -45,6 +45,7 @@
     <ul>
         <li><a onclick="_manageDataBaseInfo()">管理数据源</a></li>
         <li><a onclick="_manageGenerate()">代码生成</a></li>
+        <li><a onclick="_manageGenerateByTable()">根据表生成存储过程</a></li>
     </ul>
     <span>缓存管理</span>
     <ul>
@@ -76,6 +77,10 @@
 
     function _dataSourceCaches() {
         window.open('/gen/dataSourceCaches');
+    }
+
+    function _manageGenerateByTable() {
+        window.open('/gen/manageGenerateByTable');
     }
 </script>
 </body>

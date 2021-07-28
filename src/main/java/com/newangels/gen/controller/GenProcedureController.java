@@ -62,29 +62,16 @@ public class GenProcedureController {
      */
     @GetMapping("selectProcedures")
     @Log
-    public Map<String, Object> selectProcedures(String url, String driver, String userName, String password, String name) {
-        List<Map<String, Object>> list;
-        //缓存方案 url+用户名为主键
+    public Map<String, Object> selectProcedures(String url, String driver, String userName, String password, @RequestParam(required = false, defaultValue = "") String name) {
+        List<Map<String, Object>> list = CacheManage.PROCEDURES_CACHE.get(url.replaceAll("/", "") + userName + name + "procedures");
+        //缓存方案 url+用户名+查询条件为主键
         //存储过程名称条件为空代表全查询 缓存一天，否则缓存一分钟
-        if (StringUtils.isEmpty(name)) {
-            list = CacheManage.PROCEDURES_CACHE.get(url + userName);
-            if (list == null) {
-                DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
-                //获取数据库过程sql
-                DataBaseProcedureService dbProcedure = DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
-                list = dataSourceUtil.executeQuery(dbProcedure.selectProcedures(name));
-                CacheManage.PROCEDURES_CACHE.put(url + userName, list, Cache.CACHE_HOLD_FOREVER);
-            }
-        } else {
-            list = CacheManage.PROCEDURES_CACHE.get(url + userName + name);
-            if (list == null) {
-                DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
-                DataBaseProcedureService dbProcedure = DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
-                list = dataSourceUtil.executeQuery(dbProcedure.selectProcedures(name));
-                CacheManage.PROCEDURES_CACHE.put(url + userName + name, list, Cache.CACHE_HOLD_30MINUTE);
-            }
+        if (list == null) {
+            DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
+            DataBaseProcedureService dbProcedure = DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
+            list = dataSourceUtil.executeQuery(dbProcedure.selectProcedures(name));
+            CacheManage.PROCEDURES_CACHE.put(url.replaceAll("/", "") + userName + name + "procedures", list, StringUtils.isEmpty(name) ? Cache.CACHE_HOLD_FOREVER : Cache.CACHE_HOLD_30MINUTE);
         }
-
         return BaseUtils.success(list);
     }
 

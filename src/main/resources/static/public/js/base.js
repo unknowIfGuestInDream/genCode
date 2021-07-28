@@ -75,7 +75,7 @@ function _close() {
  */
 function _viewValueTip(value, metaData, record, rowIndex, colIndex) {
     metaData.tdAttr = 'qclass="x-tip" data-qwidth="300" data-qtip="'
-        + value + '"';
+        + (Ext.isEmpty(value) ? '' : value) + '"';
     return value;
 }
 

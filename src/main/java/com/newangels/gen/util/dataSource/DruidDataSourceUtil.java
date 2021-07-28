@@ -35,6 +35,7 @@ public class DruidDataSourceUtil extends DataSourceUtil {
             dataSource.setDriverClassName(driverClass);//设置驱动
             dataSource.setUsername(userName);//账号
             dataSource.setPassword(password);//密码
+            dataSource.setBreakAfterAcquireFailure(true);
         }
     }
 

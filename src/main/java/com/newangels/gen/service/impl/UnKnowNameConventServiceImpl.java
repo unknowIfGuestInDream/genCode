@@ -33,6 +33,31 @@ public class UnKnowNameConventServiceImpl implements NameConventService {
     }
 
     @Override
+    public String getProcName(String tableName, int procType) {
+        return tableName;
+    }
+
+    @Override
+    public String getProcOutParamName(String name) {
+        return name;
+    }
+
+    @Override
+    public String genProcInParamName(String paramName, String paramType) {
+        return "V_" + paramName;
+    }
+
+    @Override
+    public String genSelProcInParam(String param, String paramType, String paramDesc, Integer selType) {
+        return genProcInParamName(param, paramType) + " IN " + paramType + ", --" + paramDesc;
+    }
+
+    @Override
+    public String genSelProcSqlWhere(String param, String paramType, Integer selType) {
+        return " T." + param + " = " + genProcInParamName(param, paramType);
+    }
+
+    @Override
     public void afterPropertiesSet() throws Exception {
         NameConventFactory.register(NameConventType.UNKNOW, this);
     }

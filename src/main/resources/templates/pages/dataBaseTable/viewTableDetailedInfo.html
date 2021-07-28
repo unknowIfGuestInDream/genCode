@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表详细信息</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="public/css/ext-all.css"/>
+    <link rel="stylesheet" type="text/css" href="public/css/ext-zh_CN.css"/>
+    <script type="text/javascript" src="public/js/ext-all.js"></script>
+    <script type="text/javascript" src="public/js/ext-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="public/js/base.js"></script>
+    <script type="text/javascript" src="public/js/store/yesNoStore.js"></script>
+</head>
+<body>
+<script>
+    var url;
+    var driver;
+    var userName;
+    var password;
+    var name;
+    var comment;//注释
+
+    if (location.href.split('?')[1] != undefined) {
+        var parameters = Ext.urlDecode(location.href.split('?')[1]);
+        (parameters.url != undefined) ? url = parameters.url : 0;
+        (parameters.driver != undefined) ? driver = parameters.driver : 0;
+        (parameters.userName != undefined) ? userName = parameters.userName : 0;
+        (parameters.password != undefined) ? password = parameters.password : 0;
+        (parameters.name != undefined) ? name = parameters.name : 0;
+        (parameters.comment != undefined) ? comment = parameters.comment : 0;
+    }
+
+    Ext.onReady(function () {
+        Ext.getBody().mask('加载中...');
+
+        var tableDetailedInfoFromPanel = Ext.create('Ext.form.Panel', {
+            id: 'tableDetailedInfoFromPanel',
+            layout: 'column',
+            frame: true,
+            border: false,
+            defaults: {
+                labelAlign: 'right',
+                labelWidth: 180,
+                inputWidth: 180,
+                margin: '4,0,0,0'
+            },
+            items: [{
+                xtype: 'displayfield',
+                name: 'TABLE_NAME',
+                fieldLabel: '表名'
+            }, {
+                xtype: 'displayfield',
+                name: 'CREATED',
+                fieldLabel: '创建时间'
+            }, {
+                xtype: 'displayfield',
+                name: 'LAST_DDL_TIME',
+                fieldLabel: '最后修改时间'
+            }, {
+                xtype: 'displayfield',
+                name: 'TABLESPACE_NAME',
+                fieldLabel: '空间名称',
+                style: 'clear:both'
+            }, {
+                xtype: 'displayfield',
+                name: 'CLUSTER_NAME',
+                fieldLabel: '集群名称'
+            }, {
+                xtype: 'displayfield',
+                name: 'PCT_FREE',
+                fieldLabel: '最小可用空间'
+            }, {
+                xtype: 'displayfield',
+                name: 'PCT_USED',
+                fieldLabel: '最小已用空间',
+                style: 'clear:both'
+            }, {
+                xtype: 'displayfield',
+                name: 'INI_TRANS',
+                fieldLabel: '初始交易次数'
+            }, {
+                xtype: 'displayfield',
+                name: 'MAX_TRANS',
+                fieldLabel: '最大交易次数'
+            }, {
+                xtype: 'displayfield',
+                name: 'NEXT_EXTENT',
+                fieldLabel: '二级盘区的大小',
+                style: 'clear:both'
+            }, {
+                xtype: 'displayfield',
+                name: 'MIN_EXTENTS',
+                fieldLabel: '段中允许的最小范围数'
+            }, {
+                xtype: 'displayfield',
+                name: 'MAX_EXTENTS',
+                fieldLabel: '段中允许的最大范围数'
+            }, {
+                xtype: 'displayfield',
+                name: 'PCT_INCREASE',
+                fieldLabel: '扩展区大小增加的百分比',
+                style: 'clear:both'
+            }, {
+                xtype: 'displayfield',
+                name: 'FREELISTS',
+                fieldLabel: '分配给段的进程空闲列表数'
+            }, {
+                xtype: 'displayfield',
+                name: 'FREELIST_GROUPS',
+                fieldLabel: '分配给段的空闲列表组数'
+            }, {
+                xtype: 'displayfield',
+                name: 'LOGGING',
+                fieldLabel: '指示是否记录对表的更改',
+                style: 'clear:both',
+                renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
+                    return (value != null && value != '' && yesNoStore.findRecord('CODE_', new RegExp('^' + value + '$'))) ? yesNoStore.findRecord('CODE_', new RegExp('^' + value + '$')).get('NAME_') : value;
+                }
+            }, {
+                xtype: 'displayfield',
+                name: 'BACKED_UP',
+                fieldLabel: '修改后是否备份',
+                renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
+                    return (value != null && value != '' && ynStore.findRecord('CODE_', new RegExp('^' + value + '$'))) ? ynStore.findRecord('CODE_', new RegExp('^' + value + '$')).get('NAME_') : value;
+                }
+            }, {
+                xtype: 'displayfield',
+                name: 'INITIAL_EXTENT',
+                fieldLabel: '初始范围的大小'
+            }, {
+                xtype: 'displayfield',
+                name: 'NUM_ROWS',
+                fieldLabel: '行数',
+                style: 'clear:both'
+            }, {
+                xtype: 'displayfield',
+                name: 'BLOCKS',
+                fieldLabel: '数据块数'
+            }, {
+                xtype: 'displayfield',
+                name: 'EMPTY_BLOCKS',
+                fieldLabel: '收集表的统计信息时填充此列'
+            }, {
+                xtype: 'displayfield',
+                name: 'AVG_SPACE',
+                fieldLabel: '平均可用空间量',
+                style: 'clear:both'
+            }, {
+                xtype: 'displayfield',
+                name: 'CHAIN_CNT',
+                fieldLabel: '保留旧 ROWID 的行数'
+            }, {
+                xtype: 'displayfield',
+                name: 'AVG_ROW_LEN',
+                fieldLabel: '一行的平均长度'
+            }, {
+                xtype: 'displayfield',
+                name: 'AVG_SPACE_FREELIST_BLOCKS',
+                fieldLabel: '平均空闲空间',
+                style: 'clear:both'
+            }, {
+                xtype: 'displayfield',
+                name: 'NUM_FREELIST_BLOCKS',
+                fieldLabel: '空闲列表上的块数'
+            }, {
+                xtype: 'displayfield',
+                name: 'DEGREE',
+                fieldLabel: '每个实例扫描表的线程数'
+            }, {
+                xtype: 'displayfield',
+                name: 'INSTANCES',
+                fieldLabel: '扫描表的实例数',
+                style: 'clear:both'
+            }, {
+                xtype: 'displayfield',
+                name: 'CACHE',
+                fieldLabel: '缓冲区缓存'
+            }, {
+                xtype: 'displayfield',
+                name: 'TABLE_LOCK',
+                fieldLabel: '锁定'
+            }, {
+                xtype: 'displayfield',
+                name: 'SAMPLE_SIZE',
+                fieldLabel: '样本大小',
+                style: 'clear:both'
+            }, {
+                xtype: 'displayfield',
+                name: 'LAST_ANALYZED',
+                fieldLabel: '最近分析日期'
+            }, {
+                xtype: 'displayfield',
+                name: 'PARTITIONED',
+                fieldLabel: '分区',
+                renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
+                    return (value != null && value != '' && yesNoStore.findRecord('CODE_', new RegExp('^' + value + '$'))) ? yesNoStore.findRecord('CODE_', new RegExp('^' + value + '$')).get('NAME_') : value;
+                }
+            }, {
+                xtype: 'displayfield',
+                name: 'TEMPORARY',
+                fieldLabel: '临时',
+                style: 'clear:both',
+                renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
+                    return (value != null && value != '' && ynStore.findRecord('CODE_', new RegExp('^' + value + '$'))) ? ynStore.findRecord('CODE_', new RegExp('^' + value + '$')).get('NAME_') : value;
+                }
+            }, {
+                xtype: 'displayfield',
+                name: 'SECONDARY',
+                fieldLabel: '创建辅助对象',
+                renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
+                    return (value != null && value != '' && ynStore.findRecord('CODE_', new RegExp('^' + value + '$'))) ? ynStore.findRecord('CODE_', new RegExp('^' + value + '$')).get('NAME_') : value;
+                }
+            }, {
+                xtype: 'displayfield',
+                name: 'NESTED',
+                fieldLabel: '嵌套表',
+                renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
+                    return (value != null && value != '' && yesNoStore.findRecord('CODE_', new RegExp('^' + value + '$'))) ? yesNoStore.findRecord('CODE_', new RegExp('^' + value + '$')).get('NAME_') : value;
+                }
+            }, {
+                xtype: 'displayfield',
+                name: 'BUFFER_POOL',
+                fieldLabel: '缓冲池',
+                style: 'clear:both'
+            }, {
+                xtype: 'displayfield',
+                name: 'FLASH_CACHE',
+                fieldLabel: '数据库智能闪存缓存提示'
+            }, {
+                xtype: 'displayfield',
+                name: 'CELL_FLASH_CACHE',
+                fieldLabel: '单元闪存缓存提示'
+            }, {
+                xtype: 'displayfield',
+                name: 'ROW_MOVEMENT',
+                fieldLabel: '分区行移动',
+                style: 'clear:both'
+            }, {
+                xtype: 'displayfield',
+                name: 'USER_STATS',
+                fieldLabel: '统计数据',
+                renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
+                    return (value != null && value != '' && yesNoStore.findRecord('CODE_', new RegExp('^' + value + '$'))) ? yesNoStore.findRecord('CODE_', new RegExp('^' + value + '$')).get('NAME_') : value;
+                }
+            }, {
+                xtype: 'displayfield',
+                name: 'DURATION',
+                fieldLabel: '临时表的持续时间'
+            }, {
+                xtype: 'displayfield',
+                name: 'CLUSTER_OWNER',
+                fieldLabel: '集群',
+                style: 'clear:both'
+            }, {
+                xtype: 'displayfield',
+                name: 'DEPENDENCIES',
+                fieldLabel: '行级依赖项跟踪'
+            }, {
+                xtype: 'displayfield',
+                name: 'COMPRESSION',
+                fieldLabel: '表压缩'
+            }, {
+                xtype: 'displayfield',
+                name: 'READ_ONLY',
+                fieldLabel: '表段READ-ONLY',
+                style: 'clear:both',
+                renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
+                    return (value != null && value != '' && yesNoStore.findRecord('CODE_', new RegExp('^' + value + '$'))) ? yesNoStore.findRecord('CODE_', new RegExp('^' + value + '$')).get('NAME_') : value;
+                }
+            }, {
+                xtype: 'displayfield',
+                name: 'RESULT_CACHE',
+                fieldLabel: '缓存模式注释'
+            }, {
+                xtype: 'displayfield',
+                name: 'RESULT_CACHE',
+                fieldLabel: '表注释',
+                style: 'clear: both;',
+                value: comment === 'null' ? '' : decodeURIComponent(comment)
+            }]
+        });
+
+        Ext.create('Ext.container.Viewport', {
+            layout: {
+                type: 'border',
+                regionWeights: {
+                    west: 1,
+                    north: -1,
+                    south: -1,
+                    east: 1
+                }
+            },
+            defaults: {
+                border: false
+            },
+            items: [{
+                region: 'center',
+                layout: 'fit',
+                items: [tableDetailedInfoFromPanel]
+            }]
+        });
+
+        _init();
+    });
+
+    function _init() {
+        for (var i = 0; i < Ext.data.StoreManager.getCount(); i++) {
+            if (Ext.data.StoreManager.getAt(i).isLoading()) {
+                return;
+            }
+        }
+        _selectTableDetailedInfo();
+        Ext.getBody().unmask();
+    }
+
+    function _selectTableDetailedInfo() {
+        Ext.Ajax.request({
+            url: '/gen/loadTable',
+            async: false,
+            method: 'GET',
+            params: {
+                'url': url,
+                'driver': driver,
+                'userName': userName,
+                'password': password,
+                'name': name,
+            },
+            callback: function (options, success, response) {
+                if (success) {
+                    var data = Ext.decode(response.responseText);
+                    var form = Ext.getCmp('tableDetailedInfoFromPanel').getForm();
+
+                    for (var key in data) {
+                        (form.findField(key) != null) ? form.findField(key).setValue(data[key]) : 0;
+                    }
+                } else {
+                    Ext.MessageBox.alert('错误', '服务器错误', Ext.MessageBox.ERROR);
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

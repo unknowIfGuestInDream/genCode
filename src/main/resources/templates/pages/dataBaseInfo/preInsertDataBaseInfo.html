@@ -61,7 +61,7 @@
             }, {
                 xtype: 'combo',
                 queryMode: 'local',
-                store: oracleDriverStore,
+                store: driverStore,
                 valueField: 'CODE_',
                 displayField: 'NAME_',
                 id: 'DRIVER',
@@ -151,7 +151,7 @@
             }
         }
 
-        var oracleDriverStore = Ext.data.StoreManager.lookup('oracleDriverStore');
+        var oracleDriverStore = Ext.data.StoreManager.lookup('driverStore');
         Ext.getCmp('DRIVER').select(oracleDriverStore.first());
 
         Ext.getBody().unmask();

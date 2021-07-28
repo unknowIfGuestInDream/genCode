@@ -28,27 +28,27 @@ public class MariaDbTableServiceImpl implements DataBaseTableService {
 
     @Override
     public Map<String, Object> loadTable(@NonNull String name, @NonNull DataSourceUtil dataSourceUtil) {
-        throw new UnSupportedDataSourceException("暂时不支持当前数据库表信息查询");
+        throw new UnSupportedDataSourceException("暂时不支持mariaDb数据库表信息查询");
     }
 
     @Override
     public String selectTables(String name) {
-        throw new UnSupportedDataSourceException("暂时不支持当前数据库表信息查询");
+        throw new UnSupportedDataSourceException("暂时不支持mariaDb数据库表信息查询");
     }
 
     @Override
     public List<Map<String, Object>> selectTables(String name, DataSourceUtil dataSourceUtil) {
-        throw new UnSupportedDataSourceException("暂时不支持当前数据库表信息查询");
+        throw new UnSupportedDataSourceException("暂时不支持mariaDb数据库表信息查询");
     }
 
     @Override
     public String selectTableInfo(@NonNull String name) {
-        throw new UnSupportedDataSourceException("暂时不支持当前数据库表信息查询");
+        throw new UnSupportedDataSourceException("暂时不支持mariaDb数据库表信息查询");
     }
 
     @Override
     public List<Map<String, Object>> selectTableInfo(@NonNull String name, @NonNull DataSourceUtil dataSourceUtil) {
-        throw new UnSupportedDataSourceException("暂时不支持当前数据库表信息查询");
+        throw new UnSupportedDataSourceException("暂时不支持mariaDb数据库表信息查询");
     }
 
     @Override

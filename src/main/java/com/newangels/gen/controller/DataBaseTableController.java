@@ -2,16 +2,27 @@ package com.newangels.gen.controller;
 
 import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
+import com.newangels.gen.base.CacheManage;
 import com.newangels.gen.enums.DataBaseType;
+import com.newangels.gen.enums.NameConventType;
 import com.newangels.gen.factory.DataBaseTableFactory;
+import com.newangels.gen.factory.DataBaseTableToProcFactory;
 import com.newangels.gen.factory.DataSourceUtilFactory;
+import com.newangels.gen.factory.NameConventFactory;
 import com.newangels.gen.service.DataBaseTableService;
+import com.newangels.gen.service.NameConventService;
+import com.newangels.gen.service.TableToProcedureService;
+import com.newangels.gen.util.Cache;
 import com.newangels.gen.util.DataSourceUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,11 +37,27 @@ import java.util.Map;
 public class DataBaseTableController {
 
     /**
+     * 根据表生成存储过程
+     */
+    @GetMapping("/manageGenerateByTable")
+    public ModelAndView manageGenerateByTable() {
+        return new ModelAndView("pages/dataBaseTable/manageGenerateByTable");
+    }
+
+    /**
+     * 表详细信息
+     */
+    @GetMapping("/viewTableDetailedInfo")
+    public ModelAndView viewTableDetailedInfo() {
+        return new ModelAndView("pages/dataBaseTable/viewTableDetailedInfo");
+    }
+
+    /**
      * 加载表详细信息
      */
-    @GetMapping("loadTable/{name}")
+    @GetMapping("loadTable")
     @Log
-    public Map<String, Object> loadTable(@PathVariable(required = false) String name, String url, String driver, String userName, String password) {
+    public Map<String, Object> loadTable(String name, String url, String driver, String userName, String password) {
         DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
         DataBaseTableService dataBaseTable = DataBaseTableFactory.getDataBaseTable(DataBaseType.fromTypeName(driver));
         return BaseUtils.success(dataBaseTable.loadTable(name, dataSourceUtil));
@@ -39,22 +66,42 @@ public class DataBaseTableController {
     /**
      * 获取数据库表数据
      */
-    @GetMapping(value = {"selectTables/{name}", "selectTables/"})
+    @GetMapping("selectTables")
     @Log
-    public Map<String, Object> selectTables(@PathVariable(required = false) String name, String url, String driver, String userName, String password) {
-        DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
-        DataBaseTableService dataBaseTable = DataBaseTableFactory.getDataBaseTable(DataBaseType.fromTypeName(driver));
-        return BaseUtils.success(dataBaseTable.selectTables(name, dataSourceUtil));
+    public Map<String, Object> selectTables(@RequestParam(required = false, defaultValue = "") String name, String url, String driver, String userName, String password) {
+        List<Map<String, Object>> list = CacheManage.TABLES_CACHE.get(url.replaceAll("/", "") + userName + name + "tables");
+        //缓存方案 url+用户名 + 查询条件为主键
+        //存储过程名称条件为空代表全查询一直缓存，否则30分钟
+        if (list == null) {
+            DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
+            DataBaseTableService dataBaseTable = DataBaseTableFactory.getDataBaseTable(DataBaseType.fromTypeName(driver));
+            list = dataBaseTable.selectTables(name, dataSourceUtil);
+            CacheManage.TABLES_CACHE.put(url.replaceAll("/", "") + userName + "tables", list, StringUtils.isEmpty(name) ? Cache.CACHE_HOLD_FOREVER : Cache.CACHE_HOLD_30MINUTE);
+        }
+        return BaseUtils.success(list);
     }
 
     /**
      * 查询数据库某表字段相关的详细信息
      */
-    @GetMapping("selectTableInfo/{name}")
+    @GetMapping("selectTableInfo")
     @Log
-    public Map<String, Object> selectTableInfo(@PathVariable(required = false) String name, String url, String driver, String userName, String password) {
+    public Map<String, Object> selectTableInfo(String name, String url, String driver, String userName, String password) {
         DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
         DataBaseTableService dataBaseTable = DataBaseTableFactory.getDataBaseTable(DataBaseType.fromTypeName(driver));
         return BaseUtils.success(dataBaseTable.selectTableInfo(name, dataSourceUtil));
+    }
+
+    /**
+     * 根据数据库表生成存储过程
+     */
+    @PostMapping("genProceduresByTable")
+    @Log
+    public Map<String, Object> genProceduresByTable(String nameConventType, String driver, String tableName, @RequestParam("params") List<String> params, @RequestParam("paramTypes") List<String> paramTypes, @RequestParam("paramDescs") List<String> paramDescs, @RequestParam("priParamIndex") List<Integer> priParamIndex, @RequestParam("selParamsIndex") List<Integer> selParamsIndex, @RequestParam("selType") List<Integer> selType, @RequestParam("insParamIndex") List<Integer> insParamIndex, @RequestParam("updParamIndex") List<Integer> updParamIndex) {
+        //获取命名规范
+        NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromTypeName(nameConventType));
+        //获取表生成存储过程实现类
+        TableToProcedureService tableToProcedure = DataBaseTableToProcFactory.getTableToProcedure(DataBaseType.fromTypeName(driver));
+        return BaseUtils.success(tableToProcedure.genProceduresByTable(tableName, params, paramTypes, paramDescs, priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex, nameConvent));
     }
 }

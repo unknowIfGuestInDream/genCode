@@ -5,8 +5,8 @@
  * @private
  */
 
-var oracleDriver = [];
-oracleDriver.push({
+var driver = [];
+driver.push({
     CODE_: 'oracle.jdbc.OracleDriver',
     NAME_: 'ORACLE'
 }, {
@@ -23,10 +23,10 @@ oracleDriver.push({
     NAME_: 'SQLSERVER'
 });
 
-var oracleDriverStore = Ext.create("Ext.data.Store", {
-    storeId: 'oracleDriverStore',
+var driverStore = Ext.create("Ext.data.Store", {
+    storeId: 'driverStore',
     fields: ['NAME_', 'CODE_'],
-    data: oracleDriver
+    data: driver
 });
 
-Ext.data.StoreManager.register(oracleDriverStore);
+Ext.data.StoreManager.register(driverStore);
