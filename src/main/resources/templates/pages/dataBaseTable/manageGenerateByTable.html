@@ -161,6 +161,11 @@
             },
             items: [{
                 xtype: 'button',
+                text: '是查询条件列全设置为否',
+                icon: 'public/image/btn/association.png',
+                handler: _setIsSelNo,
+            }, {
+                xtype: 'button',
                 text: '生成',
                 icon: 'public/image/btn/add.png',
                 handler: _genProceduresByTable,
@@ -692,6 +697,15 @@
                 }
             }
         });
+    }
+
+    //设置是查询条件列权威否
+    function _setIsSelNo() {
+        var tableInfoStore = Ext.data.StoreManager.lookup('tableInfoStore');
+        tableInfoStore.each(function (record) {
+            record.set('IS_SEL', 'N');
+            record.set('SELTYPE', '');
+        })
     }
 </script>
 </body>
