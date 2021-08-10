@@ -153,7 +153,8 @@ public class GenProcedureController {
             for (String name : list) {
                 String fileName;
                 if ("BaseUtils".equals(name) || "ProcedureUtils".equals(name)) {
-                    fileName = name + ".java";
+                    //fileName = name + ".java";
+                    continue;
                 } else {
                     fileName = moduleName + BaseUtils.toUpperCase4Index(name) + ".java";
                 }
