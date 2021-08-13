@@ -14,6 +14,12 @@ public enum NameConventType {
      * 常用规范
      */
     COMMON("1"),
+
+    /**
+     * EAM3期常用规范
+     */
+    EAM3("2"),
+
     /**
      * 未知规范
      */

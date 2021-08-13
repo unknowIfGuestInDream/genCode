@@ -23,6 +23,12 @@ public enum GenProcedureModelType {
      * 大连常用模板EAM模版
      */
     EAM("3"),
+
+    /**
+     * 大连常用模板EAM模版
+     */
+    EAM3("4"),
+
     /**
      * 未知模版
      */

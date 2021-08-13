@@ -10,6 +10,9 @@ nameConventType.push(
     {
         CODE_: '1',
         NAME_: '大连常用规范'
+    }, {
+        CODE_: '2',
+        NAME_: 'EAM3期规范'
     });
 
 var nameConventTypeStore = Ext.create("Ext.data.Store", {

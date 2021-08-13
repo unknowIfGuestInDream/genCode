@@ -269,7 +269,6 @@ public class EamProcedureModelServiceImpl implements GenProcedureModelService {
                     "     * \n" +
                     "     */\n" +
                     "    public Map<String, Object> " + procedureName + "(" + inParams + ") {\n" +
-                    "\n" +
                     "        return " + packageName.substring(packageName.lastIndexOf(".") + 1).toLowerCase() + "JdbcTemplate.execute(new CallableStatementCreator() {\n" +
                     "            @Override\n" +
                     "            public CallableStatement createCallableStatement(Connection con)\n" +

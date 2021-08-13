@@ -15,14 +15,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
- * RestFul风格代码
+ * Eam3期风格代码
  *
  * @author: TangLiang
- * @date: 2021/6/20 13:00
+ * @date: 2021/8/13 13:00
  * @since: 1.0
  */
 @Service
-public class RestfulProcedureModelServiceImpl implements GenProcedureModelService {
+public class EamNewProcedureModelServiceImpl implements GenProcedureModelService {
     @Override
     public String getControllerCode(String moduleName, String packageName, String author) {
         return "package " + packageName + ".controller;\n" +
@@ -267,31 +267,28 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
                     "     * \n" +
                     "     */\n" +
                     "    public Map<String, Object> " + procedureName + "(" + inParams + ") {\n" +
-                    "        return " + packageName.substring(packageName.lastIndexOf(".") + 1).toLowerCase() + "JdbcTemplate.execute(new CallableStatementCreator() {\n" +
-                    "            @Override\n" +
-                    "            public CallableStatement createCallableStatement(Connection con)\n" +
-                    "                    throws SQLException {\n" +
-                    "                String sql = \"{call " + procedureName + "(" + procedureParams + ")}\";\n" +
-                    "                CallableStatement statement = con.prepareCall(sql);\n" +
+                    "        return " + packageName.substring(packageName.lastIndexOf(".") + 1).toLowerCase() + "JdbcTemplate.execute((CallableStatementCreator) con -> {\n" +
+                    "            String sql = \"{call " + procedureName + "(" + procedureParams + ")}\";\n" +
+                    "            CallableStatement statement = con.prepareCall(sql);\n" +
                     repositoryParam +
-                    "\n                return statement;\n" +
-                    "            }\n" +
-                    "        }, new CallableStatementCallback<Map<String, Object>>() {\n" +
-                    "            @Override\n" +
-                    "            public Map<String, Object> doInCallableStatement(CallableStatement cs)\n" +
-                    "                    throws SQLException, DataAccessException {\n" +
-                    "                cs.execute();\n" +
-                    "                Map<String, Object> returnValue = new HashMap<>(8);\n" +
+                    "\n          return statement;\n" +
+                    "        }, cs -> {\n" +
+                    "            cs.execute();\n" +
+                    "            Map<String, Object> returnValue = new HashMap<>(8);\n" +
                     repositoryResult +
-                    "\n                return returnValue;\n" +
-                    "            }\n" +
+                    "\n          return returnValue;\n" +
                     "        });\n" +
                     "    }\n");
         }
 
+        //ant design pro规范
+        String controller = controllerCode.toString()
+                .replace("V_PAGESIZE", "pageSize")
+                .replace("V_PAGE", "current");
+
         //tab页集合
         List<String> list = new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "repository", "BaseUtils", "ProcedureUtils"));
-        result.put("controller", StrUtil.format(getControllerCode(moduleName, packageName, author), controllerCode.toString()));
+        result.put("controller", StrUtil.format(getControllerCode(moduleName, packageName, author), controller));
         result.put("service", StrUtil.format(getServiceCode(moduleName, packageName, author), serviceCode.toString()));
         result.put("serviceImpl", StrUtil.format(getServiceImplCode(moduleName, packageName, author), serviceImplCode.toString()));
         result.put("repository", StrUtil.format(getRepositoryCode(moduleName, packageName, author), repositoryCode.toString()));
@@ -303,6 +300,6 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        GenProcedureModelFactory.register(GenProcedureModelType.RESTFUL, this);
+        GenProcedureModelFactory.register(GenProcedureModelType.EAM3, this);
     }
 }
