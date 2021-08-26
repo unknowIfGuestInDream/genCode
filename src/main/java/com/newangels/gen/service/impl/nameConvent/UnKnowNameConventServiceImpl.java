@@ -1,4 +1,4 @@
-package com.newangels.gen.service.impl;
+package com.newangels.gen.service.impl.nameConvent;
 
 import com.newangels.gen.enums.NameConventType;
 import com.newangels.gen.factory.NameConventFactory;

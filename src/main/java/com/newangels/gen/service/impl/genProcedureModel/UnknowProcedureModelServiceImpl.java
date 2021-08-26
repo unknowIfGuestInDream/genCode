@@ -1,4 +1,4 @@
-package com.newangels.gen.service.impl;
+package com.newangels.gen.service.impl.genProcedureModel;
 
 import com.newangels.gen.enums.GenProcedureModelType;
 import com.newangels.gen.exception.UnSupportedProcedureModelException;

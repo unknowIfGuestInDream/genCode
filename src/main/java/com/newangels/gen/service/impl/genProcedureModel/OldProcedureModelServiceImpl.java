@@ -1,4 +1,4 @@
-package com.newangels.gen.service.impl;
+package com.newangels.gen.service.impl.genProcedureModel;
 
 import cn.hutool.core.util.StrUtil;
 import com.newangels.gen.base.BaseUtils;

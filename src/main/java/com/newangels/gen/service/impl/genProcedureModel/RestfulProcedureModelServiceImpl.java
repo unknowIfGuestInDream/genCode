@@ -1,4 +1,4 @@
-package com.newangels.gen.service.impl;
+package com.newangels.gen.service.impl.genProcedureModel;
 
 import cn.hutool.core.util.StrUtil;
 import com.newangels.gen.base.BaseUtils;
@@ -15,14 +15,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
- * EAM项目风格代码
+ * RestFul风格代码
  *
  * @author: TangLiang
  * @date: 2021/6/20 13:00
  * @since: 1.0
  */
 @Service
-public class EamProcedureModelServiceImpl implements GenProcedureModelService {
+public class RestfulProcedureModelServiceImpl implements GenProcedureModelService {
     @Override
     public String getControllerCode(String moduleName, String packageName, String author) {
         return "package " + packageName + ".controller;\n" +
@@ -30,11 +30,10 @@ public class EamProcedureModelServiceImpl implements GenProcedureModelService {
                 "import " + packageName + ".annotation.Log;\n" +
                 "import " + packageName + ".base.BaseUtils;\n" +
                 "import " + packageName + ".service." + moduleName + "Service;\n" +
-                "import org.springframework.beans.factory.annotation.Autowired;\n" +
+                "import lombok.RequiredArgsConstructor;\n" +
                 "import org.springframework.web.bind.annotation.GetMapping;\n" +
                 "import org.springframework.web.bind.annotation.PostMapping;\n" +
-                "import org.springframework.web.bind.annotation.ResponseBody;\n" +
-                "import org.springframework.stereotype.Controller;\n" +
+                "import org.springframework.web.bind.annotation.RestController;\n" +
                 "\n" +
                 "import javax.servlet.http.HttpServletRequest;\n" +
                 "import java.util.HashMap;\n" +
@@ -47,10 +46,10 @@ public class EamProcedureModelServiceImpl implements GenProcedureModelService {
                 " * @date: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")) + "\n" +
                 " * @since: 1.0\n" +
                 " */\n" +
-                "@Controller\n" +
+                "@RestController\n" +
+                "@RequiredArgsConstructor\n" +
                 "public class " + moduleName + "Controller {\n" +
-                "    @Autowired\n" +
-                "    private " + moduleName + "Service " + BaseUtils.toLowerCase4Index(moduleName) + "Service;\n" +
+                "    private final " + moduleName + "Service " + BaseUtils.toLowerCase4Index(moduleName) + "Service;\n" +
                 "{}" +
                 "}";
     }
@@ -81,7 +80,7 @@ public class EamProcedureModelServiceImpl implements GenProcedureModelService {
                 "\n" +
                 "import " + packageName + ".repository." + moduleName + "Repository;\n" +
                 "import " + packageName + ".service." + moduleName + "Service;\n" +
-                "import org.springframework.beans.factory.annotation.Autowired;\n" +
+                "import lombok.RequiredArgsConstructor;\n" +
                 "import org.springframework.stereotype.Service;\n" +
                 "import org.springframework.transaction.annotation.Propagation;\n" +
                 "import org.springframework.transaction.annotation.Transactional;\n" +
@@ -95,9 +94,9 @@ public class EamProcedureModelServiceImpl implements GenProcedureModelService {
                 " */\n" +
                 "@Service\n" +
                 "@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)\n" +
+                "@RequiredArgsConstructor\n" +
                 "public class " + moduleName + "ServiceImpl implements " + moduleName + "Service {\n" +
-                "    @Autowired\n" +
-                "    private " + moduleName + "Repository " + BaseUtils.toLowerCase4Index(moduleName) + "Repository;\n" +
+                "    private final " + moduleName + "Repository " + BaseUtils.toLowerCase4Index(moduleName) + "Repository;\n" +
                 "{}" +
                 "}";
     }
@@ -107,7 +106,7 @@ public class EamProcedureModelServiceImpl implements GenProcedureModelService {
         return "package " + packageName + ".repository;\n" +
                 "\n" +
                 "import " + packageName + ".util.ProcedureUtils;\n" +
-                "import org.springframework.beans.factory.annotation.Autowired;\n" +
+                "import lombok.RequiredArgsConstructor;\n" +
                 "import oracle.jdbc.OracleTypes;\n" +
                 "import org.springframework.dao.DataAccessException;\n" +
                 "import org.springframework.jdbc.core.CallableStatementCallback;\n" +
@@ -128,9 +127,9 @@ public class EamProcedureModelServiceImpl implements GenProcedureModelService {
                 " * @since: 1.0\n" +
                 " */\n" +
                 "@Repository\n" +
+                "@RequiredArgsConstructor\n" +
                 "public class " + moduleName + "Repository {\n" +
-                "    @Autowired\n" +
-                "    private JdbcTemplate " + packageName.substring(packageName.lastIndexOf(".") + 1).toLowerCase() + "JdbcTemplate;\n" +
+                "    private final JdbcTemplate " + packageName.substring(packageName.lastIndexOf(".") + 1).toLowerCase() + "JdbcTemplate;\n" +
                 "{}" +
                 "}";
     }
@@ -243,7 +242,6 @@ public class EamProcedureModelServiceImpl implements GenProcedureModelService {
                     "     * \n" +
                     "     */\n" +
                     "    @" + mappingType + "(\"" + preName + moduleName + "\")\n" +
-                    "    @ResponseBody\n" +
                     "    @Log\n" +
                     "    public Map<String, Object> " + preName + moduleName + "(" + inParams + (inParams.length() > 0 ? ", " : "") + "HttpServletRequest request) {\n" +
                     "        return BaseUtils.success(" + BaseUtils.toLowerCase4Index(moduleName) + "Service." + preName + moduleName + "(" + outParams + "));\n" +
@@ -305,6 +303,6 @@ public class EamProcedureModelServiceImpl implements GenProcedureModelService {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        GenProcedureModelFactory.register(GenProcedureModelType.EAM, this);
+        GenProcedureModelFactory.register(GenProcedureModelType.RESTFUL, this);
     }
 }

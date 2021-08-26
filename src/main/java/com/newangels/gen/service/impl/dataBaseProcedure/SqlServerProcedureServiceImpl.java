@@ -1,4 +1,4 @@
-package com.newangels.gen.service.impl;
+package com.newangels.gen.service.impl.dataBaseProcedure;
 
 import com.newangels.gen.enums.DataBaseType;
 import com.newangels.gen.factory.DataBaseProcedureFactory;
@@ -12,14 +12,14 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * mariaDb过程信息
+ * sqlserver过程信息
  *
  * @author: TangLiang
- * @date: 2021/6/19 8:55
+ * @date: 2021/7/6 8:55
  * @since: 1.0
  */
 @Service
-public class MariaDbProcedureServiceImpl implements DataBaseProcedureService {
+public class SqlServerProcedureServiceImpl implements DataBaseProcedureService {
 
     //数据库对java类型映射
     Map<String, String> map = new ConcurrentHashMap<>(32);
@@ -30,7 +30,7 @@ public class MariaDbProcedureServiceImpl implements DataBaseProcedureService {
 
     @Override
     public String selectProcedures(String name) {
-        String sql = "select name as NAME, modified as LAST_UPDATE_TIME from mysql.proc where type = 'PROCEDURE' and db <> 'sys'";
+        String sql = "select name as NAME, modify_date as LAST_UPDATE_TIME from sys.procedures where type = 'P'";
         if (StringUtils.isNotEmpty(name)) {
             sql += " and name like '%" + name.toUpperCase() + "%'";
         }
@@ -44,7 +44,8 @@ public class MariaDbProcedureServiceImpl implements DataBaseProcedureService {
 
     @Override
     public String loadProcedure(String name) {
-        return "show create procedure " + name;
+//        return "SP_HELPTEXT " + name;
+        return "SELECT TEXT FROM syscomments WHERE id=object_id('" + name + "')";
     }
 
     @Override
@@ -53,12 +54,12 @@ public class MariaDbProcedureServiceImpl implements DataBaseProcedureService {
         //执行sql
         List<Map<String, Object>> list = dataSourceUtil.executeQuery(allProceduresSql);
         //获取结果集
-        return list.size() > 0 ? list.get(0).get("Create Procedure").toString() : "";
+        return list.size() > 0 ? list.get(0).get("TEXT").toString() : "";
     }
 
     @Override
     public String selectArguments(String owner, String objectName) {
-        return "select PARAMETER_NAME as ARGUMENT_NAME, DATA_TYPE, PARAMETER_MODE as IN_OUT from information_schema.PARAMETERS t where t.ROUTINE_TYPE = 'PROCEDURE' and t.SPECIFIC_NAME = '" + objectName + "' ORDER BY ORDINAL_POSITION";
+        return "select P.name as ARGUMENT_NAME, P.is_output as IN_OUT, T.name as DATA_TYPE from sys.parameters P inner join sys.types T on P.system_type_id = T.system_type_id where P.object_id =object_id('" + objectName + "') and T.name <> 'sysname' ORDER BY P.parameter_id";
     }
 
     @Override
@@ -79,6 +80,7 @@ public class MariaDbProcedureServiceImpl implements DataBaseProcedureService {
     @Override
     public void afterPropertiesSet() throws Exception {
         map.put("VARCHAR", "String");
+        map.put("NVARCHAR", "String");
         map.put("INT", "int");
         map.put("BIGINT", "int");
         map.put("TINYINT", "int");
@@ -93,6 +95,6 @@ public class MariaDbProcedureServiceImpl implements DataBaseProcedureService {
         dataTypeOutMap.put("REF CURSOR", "Object");
         dataTypeOutMap.put("BLOB", "Blob");
         dataTypeOutMap.put("NUMBER", "Double");
-        DataBaseProcedureFactory.register(DataBaseType.MARIADB, this);
+        DataBaseProcedureFactory.register(DataBaseType.SQLSERVER, this);
     }
 }

@@ -1,4 +1,4 @@
-package com.newangels.gen.service.impl;
+package com.newangels.gen.service.impl.nameConvent;
 
 import com.newangels.gen.enums.NameConventType;
 import com.newangels.gen.factory.NameConventFactory;
@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since: 1.0
  */
 @Service
-public class CommonNameConventServiceImpl implements NameConventService {
+public class EamNewNameConventServiceImpl implements NameConventService {
 
     private Map<String, String> map = new ConcurrentHashMap<>(32);
     //排序规则
@@ -43,7 +43,7 @@ public class CommonNameConventServiceImpl implements NameConventService {
             return "message";
         }
         if (name.contains("V_C_CURSOR") || name.contains("RET") || name.contains("V_CURSOR") || name.contains("RESULT")) {
-            return "result";
+            return "data";
         }
         if (name.contains("NUM") || name.contains("TOTAL")) {
             return "total";
@@ -158,6 +158,6 @@ public class CommonNameConventServiceImpl implements NameConventService {
         inParamNameMap.put("BLOB", "B_");
         inParamNameMap.put("NUMBER", "I_");
         inParamNameMap.put("DATE", "V_");
-        NameConventFactory.register(NameConventType.COMMON, this);
+        NameConventFactory.register(NameConventType.EAM3, this);
     }
 }
