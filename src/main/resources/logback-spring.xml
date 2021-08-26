@@ -2,8 +2,9 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <springProperty scop="context" name="spring.application.name" source="spring.application.name" defaultValue=""/>
     <!--应用名称-->
-    <property name="APP_NAME" value="gen"/>
+    <property name="APP_NAME" value="${spring.application.name}"/>
     <!--日志文件保存路径-->
     <property name="LOG_FILE_PATH" value="logs"/>
     <contextName>${APP_NAME}</contextName>
