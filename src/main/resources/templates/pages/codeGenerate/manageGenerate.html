@@ -374,7 +374,7 @@
             _selectProcedures();
         }
 
-        proceduresStore.filter('NAME', new RegExp(Ext.getCmp('procedure').getValue().toUpperCase()));
+        proceduresStore.filter('NAME', new RegExp(Ext.getCmp('procedure').getValue(), 'i'));
         proceduresFilterStore.removeAll();
         proceduresFilterStore.add(proceduresStore.getRange());
         proceduresStore.clearFilter();
