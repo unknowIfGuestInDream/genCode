@@ -19,6 +19,10 @@
 </head>
 <body>
 <script>
+    var procedureList = [];//存储过程暂存数组
+    var procedureMap = [];//子页面数据源
+    var inValieList = [];//未编译的过程集合 用于前台提示用
+
     Ext.onReady(function () {
         Ext.getBody().mask('加载中...');
 
@@ -100,6 +104,21 @@
                 icon: 'public/image/btn/refresh.png',
                 handler: _clearProceduresCache
             }, {
+                xtype: 'button',
+                text: '暂存',
+                icon: 'public/image/btn/add.png',
+                handler: _temporaryStorage
+            }, {
+                xtype: 'button',
+                text: '查看暂存',
+                icon: 'public/image/btn/view.png',
+                handler: _viewTemporaryStorage
+            }, {
+                xtype: 'textfield',
+                id: 'temporaryStorage',
+                fieldLabel: '暂存',
+                hidden: true
+            }, {
                 xtype: 'combo',
                 queryMode: 'local',
                 store: dataSourceStore,
@@ -107,6 +126,7 @@
                 valueField: 'NAME',
                 displayField: 'NAME',
                 fieldLabel: '数据源名称',
+                style: 'clear:both',
                 forceSelection: true,
                 listeners: {
                     select: function (combo, records) {
@@ -144,13 +164,19 @@
                 xtype: 'button',
                 text: '生成',
                 icon: 'public/image/btn/add.png',
-                handler: _genProcedure,
+                handler: _genProcedure
+            }, {
+                xtype: 'button',
+                text: '一键生成',
+                icon: 'public/image/btn/add.png',
+                handler: _onekeyGenProcedure
             }, {
                 xtype: 'textfield',
                 id: 'moduleName',
                 beforeLabelTextTpl: required,
                 labelWidth: 80,
                 fieldLabel: '模块名称',
+                style: 'clear:both',
                 emptyText: '符合驼峰规范， 如: codeInfo'
             }, {
                 xtype: 'combo',
@@ -162,7 +188,7 @@
                 displayField: 'NAME_',
                 fieldLabel: '生成代码模版',
                 forceSelection: true,
-                value: '1'
+                value: '4'
             }, {
                 xtype: 'combo',
                 queryMode: 'local',
@@ -174,7 +200,7 @@
                 displayField: 'NAME_',
                 fieldLabel: '规范名称',
                 forceSelection: true,
-                value: '1'
+                value: '2'
             }, {
                 xtype: 'textfield',
                 id: 'packageName',
@@ -182,7 +208,7 @@
                 labelWidth: 50,
                 inputWidth: 140,
                 beforeLabelTextTpl: required,
-                value: 'com.newangels.',
+                value: 'cn.newangels.',
                 emptyText: '如: com.newangels.gen'
             }, {
                 xtype: 'textfield',
@@ -391,6 +417,42 @@
         });
     }
 
+    //添加暂存
+    function _temporaryStorage() {
+        var records = Ext.getCmp('proceduresPanel').getSelectionModel().getSelection();
+        for (let i = 0; i < records.length; i++) {
+            procedureList.push(records[i].data.NAME);
+            //不为空代表返回结果集有过程是否编译的值 oracle INVALID为未编译 VALID已编译
+            if (records[i].data.STATUS === 'INVALID') {
+                inValieList.push(records[i].data.NAME);
+            }
+        }
+        procedureList = [...new Set(procedureList)];
+        Ext.getCmp('temporaryStorage').setValue(procedureList);
+    }
+
+    //查看暂存
+    function _viewTemporaryStorage() {
+        for (let i = 0; i < procedureList.length; i++) {
+            procedureMap.push({NAME_: procedureList[i]});
+        }
+        win = Ext.create('Ext.window.Window', {
+            title: '查看暂存数据',
+            modal: true,
+            autoShow: true,
+            maximized: false,
+            maximizable: true,
+            width: document.documentElement.clientWidth * 0.4,
+            height: document.documentElement.clientHeight * 0.6,
+            html: '<iframe src="/gen/viewTemporaryStorage" style="width: 100%; height: 100%;" frameborder="0"></iframe>',
+            listeners: {
+                close: function (panel, eOpts) {
+                    Ext.getCmp('temporaryStorage').setValue(procedureList);
+                }
+            }
+        });
+    }
+
     //生成代码
     function _genProcedure() {
         //模块名称验证
@@ -408,12 +470,12 @@
             return;
         }
         if (Ext.getCmp('packageName').getValue().length - Ext.getCmp('packageName').getValue().lastIndexOf('.') <= 2) {
-            Ext.MessageBox.alert('警告', '包名格式错误\n格式如: com.newangels.gen', Ext.MessageBox.WARNING);
+            Ext.MessageBox.alert('警告', '包名格式错误\n格式如: cn.newangels.gen', Ext.MessageBox.WARNING);
             return;
         }
         //选择的数据校验
         var records = Ext.getCmp('proceduresPanel').getSelectionModel().getSelection();
-        if (records.length === 0) {
+        if (records.length === 0 && Ext.getCmp('temporaryStorage').getValue() === "") {
             Ext.MessageBox.alert('警告', '请选择存储过程', Ext.MessageBox.WARNING);
             return;
         }
@@ -422,15 +484,16 @@
             return;
         }
 
-        var procedureNameList = []; //存储过程名称集合，用于向后台接口传参
-        var inValieList = [];  //未编译的过程集合 用于前台提示用
-        for (var i = 0, length = records.length; i < length; i++) {
-            procedureNameList.push(records[i].data.NAME);
+        var records = Ext.getCmp('proceduresPanel').getSelectionModel().getSelection();
+        for (let i = 0; i < records.length; i++) {
+            procedureList.push(records[i].data.NAME);
             //不为空代表返回结果集有过程是否编译的值 oracle INVALID为未编译 VALID已编译
             if (records[i].data.STATUS === 'INVALID') {
                 inValieList.push(records[i].data.NAME);
             }
         }
+
+        procedureList = [...new Set(procedureList)];//暂存数据
 
         if (inValieList.length > 0) {
             Ext.MessageBox.show({
@@ -440,14 +503,57 @@
                 icon: Ext.MessageBox.QUESTION,
                 fn: function (btn) {
                     if (btn === 'yes') {
-                        _genProcedureAjax(procedureNameList);
+                        _genProcedureAjax(procedureList);
                     }
                 }
             });
         } else {
-            _genProcedureAjax(procedureNameList);
+            _genProcedureAjax(procedureList);
+        }
+        procedureList = [];
+        inValieList = [];
+    }
+
+    //一键生成代码
+    function _onekeyGenProcedure() {
+        //选择的数据校验
+        var records = Ext.getCmp('proceduresPanel').getSelectionModel().getSelection();
+        if (records.length === 0 && Ext.isEmpty(Ext.getCmp('temporaryStorage').getValue())) {
+            Ext.MessageBox.alert('警告', '请选择存储过程', Ext.MessageBox.WARNING);
+            return;
+        }
+        if (records.length > 50) {
+            Ext.MessageBox.alert('警告', '最多选择50个存储过程', Ext.MessageBox.WARNING);
+            return;
         }
 
+        for (let i = 0; i < records.length; i++) {
+            procedureList.push(records[i].data.NAME);
+            //不为空代表返回结果集有过程是否编译的值 oracle INVALID为未编译 VALID已编译
+            if (records[i].data.STATUS === 'INVALID') {
+                inValieList.push(records[i].data.NAME);
+            }
+        }
+
+        procedureList = [...new Set(procedureList)];//暂存数据
+
+        if (inValieList.length > 0) {
+            Ext.MessageBox.show({
+                title: '请确认',
+                msg: inValieList.toString() + '过程未编译, 是否生成代码',
+                buttons: Ext.MessageBox.YESNO,
+                icon: Ext.MessageBox.QUESTION,
+                fn: function (btn) {
+                    if (btn === 'yes') {
+                        _genProcedureAjax(procedureList);
+                    }
+                }
+            });
+        } else {
+            _genProcedureAjax(procedureList);
+        }
+        procedureList = [];
+        inValieList = [];
     }
 
     //调后生成代码接口
@@ -457,10 +563,10 @@
             async: false,
             method: 'POST',
             params: {
-                'moduleName': Ext.getCmp('moduleName').getValue(),//模块名称
+                'moduleName': Ext.getCmp('moduleName').getValue() === "" || Ext.getCmp('moduleName').getValue().length <= 1 ? 'moduleName' : Ext.getCmp('moduleName').getValue(),//模块名称
                 'genProcedureModelType': Ext.getCmp('genProcedureModelType').getValue(),//生成代码模版类型
                 'nameConventType': Ext.getCmp('nameConventType').getValue(),//命名规范类型
-                'packageName': Ext.getCmp('packageName').getValue(),//包名
+                'packageName': Ext.getCmp('moduleName').getValue() === "" || Ext.getCmp('packageName').getValue().length - Ext.getCmp('packageName').getValue().lastIndexOf('.') <= 2 ? 'cn.newangels.demo' : Ext.getCmp('packageName').getValue(),//包名
                 'author': Ext.getCmp('author').getValue(),//作者
                 'url': Ext.getCmp('dataSource').valueModels[0].data.URL,
                 'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,

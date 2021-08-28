@@ -52,6 +52,14 @@ public class GenProcedureController {
     }
 
     /**
+     * 查看暂存页面
+     */
+    @GetMapping("/viewTemporaryStorage")
+    public ModelAndView viewTemporaryStorage() {
+        return new ModelAndView("pages/codeGenerate/viewTemporaryStorage");
+    }
+
+    /**
      * 查询数据库中的过程信息
      *
      * @param url      数据库url 用于获取数据库连接
