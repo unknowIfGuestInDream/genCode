@@ -14,15 +14,12 @@
     <script type="text/javascript" src="public/js/base.js"></script>
     <script type="text/javascript" src="public/js/store/genProcedureModelType.js"></script>
     <script type="text/javascript" src="public/js/store/nameConventType.js"></script>
+    <script type="text/javascript" src="public/js/store/temporaryStorageStore.js"></script>
     <script type="text/javascript" src="public/js/ajax/clearCaches.js"></script>
     <script type="text/javascript" src="public/js/util/changeRowClass.js"></script>
 </head>
 <body>
 <script>
-    var procedureList = [];//存储过程暂存数组
-    var procedureMap = [];//子页面数据源
-    var inValieList = [];//未编译的过程集合 用于前台提示用
-
     Ext.onReady(function () {
         Ext.getBody().mask('加载中...');
 
@@ -114,11 +111,6 @@
                 icon: 'public/image/btn/view.png',
                 handler: _viewTemporaryStorage
             }, {
-                xtype: 'textfield',
-                id: 'temporaryStorage',
-                fieldLabel: '暂存',
-                hidden: true
-            }, {
                 xtype: 'combo',
                 queryMode: 'local',
                 store: dataSourceStore,
@@ -133,6 +125,7 @@
                         Ext.getCmp("procedure").setValue("");
                         _selectProcedures();
                         _proceduresFilter();
+                        _emptyTemporaryStorage();
                     }
                 }
             }, {
@@ -420,37 +413,16 @@
     //添加暂存
     function _temporaryStorage() {
         var records = Ext.getCmp('proceduresPanel').getSelectionModel().getSelection();
+        if (records.length === 0) {
+            Ext.MessageBox.alert('警告', '请选择存储过程', Ext.MessageBox.WARNING);
+            return;
+        }
+        var temporaryStorageStore = Ext.data.StoreManager.lookup('temporaryStorageStore');
         for (let i = 0; i < records.length; i++) {
-            procedureList.push(records[i].data.NAME);
-            //不为空代表返回结果集有过程是否编译的值 oracle INVALID为未编译 VALID已编译
-            if (records[i].data.STATUS === 'INVALID') {
-                inValieList.push(records[i].data.NAME);
+            if (records[i].data.STATUS !== 'INVALID' && temporaryStorageStore.find('NAME_', records[i].data.NAME) === -1) {
+                temporaryStorageStore.add({NAME_: records[i].data.NAME});
             }
         }
-        procedureList = [...new Set(procedureList)];
-        Ext.getCmp('temporaryStorage').setValue(procedureList);
-    }
-
-    //查看暂存
-    function _viewTemporaryStorage() {
-        for (let i = 0; i < procedureList.length; i++) {
-            procedureMap.push({NAME_: procedureList[i]});
-        }
-        win = Ext.create('Ext.window.Window', {
-            title: '查看暂存数据',
-            modal: true,
-            autoShow: true,
-            maximized: false,
-            maximizable: true,
-            width: document.documentElement.clientWidth * 0.4,
-            height: document.documentElement.clientHeight * 0.6,
-            html: '<iframe src="/gen/viewTemporaryStorage" style="width: 100%; height: 100%;" frameborder="0"></iframe>',
-            listeners: {
-                close: function (panel, eOpts) {
-                    Ext.getCmp('temporaryStorage').setValue(procedureList);
-                }
-            }
-        });
     }
 
     //生成代码
@@ -475,7 +447,8 @@
         }
         //选择的数据校验
         var records = Ext.getCmp('proceduresPanel').getSelectionModel().getSelection();
-        if (records.length === 0 && Ext.getCmp('temporaryStorage').getValue() === "") {
+        var temporaryStorageStore = Ext.data.StoreManager.lookup('temporaryStorageStore');
+        if (records.length + temporaryStorageStore.getCount() === 0) {
             Ext.MessageBox.alert('警告', '请选择存储过程', Ext.MessageBox.WARNING);
             return;
         }
@@ -484,17 +457,20 @@
             return;
         }
 
-        var records = Ext.getCmp('proceduresPanel').getSelectionModel().getSelection();
-        for (let i = 0; i < records.length; i++) {
-            procedureList.push(records[i].data.NAME);
+        var procedureNameList = []; //存储过程名称集合，用于向后台接口传参
+        var inValieList = [];  //未编译的过程集合 用于前台提示用
+        for (var i = 0, length = records.length; i < length; i++) {
+            procedureNameList.push(records[i].data.NAME);
             //不为空代表返回结果集有过程是否编译的值 oracle INVALID为未编译 VALID已编译
             if (records[i].data.STATUS === 'INVALID') {
                 inValieList.push(records[i].data.NAME);
             }
         }
-
-        procedureList = [...new Set(procedureList)];//暂存数据
-
+        //暂存箱数据
+        for (var i = 0, length = Ext.data.StoreManager.lookup('temporaryStorageStore').getCount(); i < length; i++) {
+            procedureNameList.push(temporaryStorageStore.getAt(i).data.NAME_);
+        }
+        procedureNameList = [...new Set(procedureNameList)];
         if (inValieList.length > 0) {
             Ext.MessageBox.show({
                 title: '请确认',
@@ -503,57 +479,17 @@
                 icon: Ext.MessageBox.QUESTION,
                 fn: function (btn) {
                     if (btn === 'yes') {
-                        _genProcedureAjax(procedureList);
+                        _genProcedureAjax(procedureNameList);
                     }
                 }
             });
         } else {
-            _genProcedureAjax(procedureList);
+            _genProcedureAjax(procedureNameList);
         }
-        procedureList = [];
-        inValieList = [];
     }
 
     //一键生成代码
     function _onekeyGenProcedure() {
-        //选择的数据校验
-        var records = Ext.getCmp('proceduresPanel').getSelectionModel().getSelection();
-        if (records.length === 0 && Ext.isEmpty(Ext.getCmp('temporaryStorage').getValue())) {
-            Ext.MessageBox.alert('警告', '请选择存储过程', Ext.MessageBox.WARNING);
-            return;
-        }
-        if (records.length > 50) {
-            Ext.MessageBox.alert('警告', '最多选择50个存储过程', Ext.MessageBox.WARNING);
-            return;
-        }
-
-        for (let i = 0; i < records.length; i++) {
-            procedureList.push(records[i].data.NAME);
-            //不为空代表返回结果集有过程是否编译的值 oracle INVALID为未编译 VALID已编译
-            if (records[i].data.STATUS === 'INVALID') {
-                inValieList.push(records[i].data.NAME);
-            }
-        }
-
-        procedureList = [...new Set(procedureList)];//暂存数据
-
-        if (inValieList.length > 0) {
-            Ext.MessageBox.show({
-                title: '请确认',
-                msg: inValieList.toString() + '过程未编译, 是否生成代码',
-                buttons: Ext.MessageBox.YESNO,
-                icon: Ext.MessageBox.QUESTION,
-                fn: function (btn) {
-                    if (btn === 'yes') {
-                        _genProcedureAjax(procedureList);
-                    }
-                }
-            });
-        } else {
-            _genProcedureAjax(procedureList);
-        }
-        procedureList = [];
-        inValieList = [];
     }
 
     //调后生成代码接口
@@ -563,10 +499,10 @@
             async: false,
             method: 'POST',
             params: {
-                'moduleName': Ext.getCmp('moduleName').getValue() === "" || Ext.getCmp('moduleName').getValue().length <= 1 ? 'moduleName' : Ext.getCmp('moduleName').getValue(),//模块名称
+                'moduleName': Ext.getCmp('moduleName').getValue(),//模块名称
                 'genProcedureModelType': Ext.getCmp('genProcedureModelType').getValue(),//生成代码模版类型
                 'nameConventType': Ext.getCmp('nameConventType').getValue(),//命名规范类型
-                'packageName': Ext.getCmp('moduleName').getValue() === "" || Ext.getCmp('packageName').getValue().length - Ext.getCmp('packageName').getValue().lastIndexOf('.') <= 2 ? 'cn.newangels.demo' : Ext.getCmp('packageName').getValue(),//包名
+                'packageName': Ext.getCmp('packageName').getValue(),//包名
                 'author': Ext.getCmp('author').getValue(),//作者
                 'url': Ext.getCmp('dataSource').valueModels[0].data.URL,
                 'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
