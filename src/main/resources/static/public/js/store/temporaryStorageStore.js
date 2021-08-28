@@ -39,7 +39,9 @@ var temporaryStoragePanel = Ext.create('Ext.grid.Panel', {
     dockedItems: [{
         xtype: 'form',
         border: false,
-        margin: '5px',
+        defaults: {
+            margin: '4,0,0,0'
+        },
         items: [{
             xtype: 'button',
             icon: 'public/image/btn/delete.png',

@@ -467,7 +467,7 @@
             }
         }
         //暂存箱数据
-        for (var i = 0, length = Ext.data.StoreManager.lookup('temporaryStorageStore').getCount(); i < length; i++) {
+        for (var i = 0, length = temporaryStorageStore.getCount(); i < length; i++) {
             procedureNameList.push(temporaryStorageStore.getAt(i).data.NAME_);
         }
         procedureNameList = [...new Set(procedureNameList)];
@@ -490,6 +490,13 @@
 
     //一键生成代码
     function _onekeyGenProcedure() {
+        var moduleName = Ext.getCmp('moduleName').getValue();
+        var packageName = Ext.getCmp('packageName').getValue();
+        Ext.getCmp('moduleName').setValue('code');
+        Ext.getCmp('packageName').setValue('cn.newangels.gen');
+        _genProcedure();
+        Ext.getCmp('moduleName').setValue(moduleName);
+        Ext.getCmp('packageName').setValue(packageName);
     }
 
     //调后生成代码接口
