@@ -340,8 +340,6 @@
         }
 
         _selectdataSource();
-        // _selectProcedures();
-        // _proceduresFilter();
         Ext.getBody().unmask();
     }
 
@@ -447,6 +445,7 @@
         }
         //选择的数据校验
         var records = Ext.getCmp('proceduresPanel').getSelectionModel().getSelection();
+        //暂存箱数据
         var temporaryStorageStore = Ext.data.StoreManager.lookup('temporaryStorageStore');
         if (records.length + temporaryStorageStore.getCount() === 0) {
             Ext.MessageBox.alert('警告', '请选择存储过程', Ext.MessageBox.WARNING);

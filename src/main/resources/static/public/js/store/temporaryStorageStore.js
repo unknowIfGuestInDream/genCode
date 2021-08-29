@@ -26,7 +26,7 @@ var temporaryStoragePanel = Ext.create('Ext.grid.Panel', {
         align: 'center',
         width: 50
     }, {
-        text: '暂存存储过程名称',
+        text: '存储过程名称',
         dataIndex: 'NAME_',
         style: 'text-align: center;',
         flex: 1,
