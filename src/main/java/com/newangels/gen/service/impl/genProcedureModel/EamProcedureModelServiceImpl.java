@@ -8,8 +8,15 @@ import com.newangels.gen.service.DataBaseProcedureService;
 import com.newangels.gen.service.GenProcedureModelService;
 import com.newangels.gen.service.NameConventService;
 import com.newangels.gen.util.DataSourceUtil;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -22,7 +29,10 @@ import java.util.*;
  * @since: 1.0
  */
 @Service
+@RequiredArgsConstructor
 public class EamProcedureModelServiceImpl implements GenProcedureModelService {
+    private final FreeMarkerConfigurer freeMarkerConfigurer;
+
     @Override
     public String getControllerCode(String moduleName, String packageName, String author) {
         return "package " + packageName + ".controller;\n" +
@@ -144,7 +154,7 @@ public class EamProcedureModelServiceImpl implements GenProcedureModelService {
     }
 
     @Override
-    public Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DataSourceUtil dataSourceUtil, String author) {
+    public Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DataSourceUtil dataSourceUtil, String author) throws IOException, TemplateException {
         Map<String, Object> result = new HashMap<>(16);
         //各层代码
         StringBuilder controllerCode = new StringBuilder();
@@ -293,12 +303,23 @@ public class EamProcedureModelServiceImpl implements GenProcedureModelService {
 
         //tab页集合
         List<String> list = new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "repository", "BaseUtils", "ProcedureUtils"));
+
+        Configuration configuration = freeMarkerConfigurer.getConfiguration();
+        StringWriter baseUtils = new StringWriter();
+        StringWriter procedureUtils = new StringWriter();
+        Map<String, Object> objectMap = new HashMap<>();
+        objectMap.put("package", packageName);
+        Template template1 = configuration.getTemplate("common/BaseUtils.ftl");
+        Template template2 = configuration.getTemplate("common/ProcedureUtils.ftl");
+        template1.process(objectMap, baseUtils);
+        template2.process(objectMap, procedureUtils);
+
         result.put("controller", StrUtil.format(getControllerCode(moduleName, packageName, author), controllerCode.toString()));
         result.put("service", StrUtil.format(getServiceCode(moduleName, packageName, author), serviceCode.toString()));
         result.put("serviceImpl", StrUtil.format(getServiceImplCode(moduleName, packageName, author), serviceImplCode.toString()));
         result.put("repository", StrUtil.format(getRepositoryCode(moduleName, packageName, author), repositoryCode.toString()));
-        result.put("BaseUtils", getBaseUtils(packageName));
-        result.put("ProcedureUtils", getProcedureUtils(packageName));
+        result.put("BaseUtils", baseUtils.toString());
+        result.put("ProcedureUtils", procedureUtils.toString());
         result.put("list", list);
         return result;
     }

@@ -15,6 +15,7 @@ import com.newangels.gen.service.GenProcedureModelService;
 import com.newangels.gen.service.NameConventService;
 import com.newangels.gen.util.Cache;
 import com.newangels.gen.util.DataSourceUtil;
+import freemarker.template.TemplateException;
 import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -110,7 +111,7 @@ public class GenProcedureController {
      */
     @PostMapping("genProcedure")
     @Log
-    public Map<String, Object> genProcedure(String moduleName, String genProcedureModelType, String nameConventType, String packageName, String url, String driver, String userName, String password, @RequestParam("procedureNameList") List<String> procedureNameList, @RequestParam(required = false, defaultValue = "admin") String author) {
+    public Map<String, Object> genProcedure(String moduleName, String genProcedureModelType, String nameConventType, String packageName, String url, String driver, String userName, String password, @RequestParam("procedureNameList") List<String> procedureNameList, @RequestParam(required = false, defaultValue = "admin") String author) throws IOException, TemplateException {
         moduleName = BaseUtils.toUpperCase4Index(moduleName);
         //获取数据库连接，为空则创建
         DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
@@ -174,7 +175,7 @@ public class GenProcedureController {
                 zos.closeEntry();
             }
             zos.close();
-        } catch (IOException e) {
+        } catch (IOException | TemplateException e) {
             e.printStackTrace();
             response.setContentType("text/html;charset=utf-8");
             @Cleanup PrintWriter out = null;
