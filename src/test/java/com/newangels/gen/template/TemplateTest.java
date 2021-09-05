@@ -41,7 +41,7 @@ public class TemplateTest {
         StringWriter stringWriter = new StringWriter();
         Map<String, Object> objectMap = new HashMap<>();
         objectMap.put("code", "774875");
-        Template template = configuration.getTemplate("BaseUtils.ftl");
+        Template template = configuration.getTemplate("common/BaseUtils.ftl");
         template.process(objectMap, stringWriter);
         System.out.println(stringWriter.toString());
     }
