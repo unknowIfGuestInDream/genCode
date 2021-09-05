@@ -1,4 +1,4 @@
-package cn.newangels.specequ.util;
+package ${package}.util;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

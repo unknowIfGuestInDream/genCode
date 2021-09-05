@@ -1,4 +1,4 @@
-package cn.newangels.er.base;
+package ${package}.base;
 
 import org.apache.commons.lang3.StringUtils;
 import lombok.Cleanup;
