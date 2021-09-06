@@ -1,10 +1,8 @@
 package com.newangels.gen.service;
 
 import com.newangels.gen.util.DataSourceUtil;
-import freemarker.template.TemplateException;
 import org.springframework.beans.factory.InitializingBean;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -72,5 +70,5 @@ public interface GenProcedureModelService extends InitializingBean {
      * @param dbProcedure       代码规范
      * @param dataSourceUtil    数据库连接
      */
-    Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DataSourceUtil dataSourceUtil, String author) throws IOException, TemplateException;
+    Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DataSourceUtil dataSourceUtil, String author);
 }
