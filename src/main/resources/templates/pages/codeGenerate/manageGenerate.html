@@ -222,7 +222,7 @@
             items: [{
                 xtype: 'textareafield',
                 width: document.documentElement.clientWidth - 60,
-                height: document.documentElement.clientHeight - 60,
+                height: document.documentElement.clientHeight - 100,
                 id: 'procedureInfo',
             }, {
                 xtype: 'displayfield',
@@ -589,10 +589,10 @@
     //下载
     function _downloadCode(procedureNameList) {
         var params = {
-            'moduleName': Ext.getCmp('moduleName').getValue(),//模块名称
+            'moduleName': Ext.isEmpty(Ext.getCmp('moduleName').getValue()) ? 'code' : Ext.getCmp('moduleName').getValue(),//模块名称
             'genProcedureModelType': Ext.getCmp('genProcedureModelType').getValue(),//生成代码模版类型
             'nameConventType': Ext.getCmp('nameConventType').getValue(),//命名规范类型
-            'packageName': Ext.getCmp('packageName').getValue(),//包名
+            'packageName': (Ext.getCmp('packageName').getValue().length - Ext.getCmp('packageName').getValue().lastIndexOf('.') <= 2) ? 'cn.newangels.gen' : Ext.getCmp('packageName').getValue(),//包名
             'author': Ext.getCmp('author').getValue(),//作者
             'url': Ext.getCmp('dataSource').valueModels[0].data.URL,
             'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
