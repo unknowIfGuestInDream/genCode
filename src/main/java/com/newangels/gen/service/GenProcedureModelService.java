@@ -14,7 +14,7 @@ import java.util.Map;
  * @author: TangLiang
  * @date: 2021/6/20 10:15
  * @since: 1.0
- */abstract
+ */
 public interface GenProcedureModelService extends InitializingBean {
 
     /**
