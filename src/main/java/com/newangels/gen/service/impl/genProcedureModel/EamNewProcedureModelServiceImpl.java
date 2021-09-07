@@ -178,7 +178,7 @@ public class EamNewProcedureModelServiceImpl implements GenProcedureModelService
             objectMap.put("package", packageName);
             objectMap.put("mappingType", mappingType);
             objectMap.put("method", preName + moduleName);
-            objectMap.put("inParams", inParams + (inParams.length() > 0 ? ", " : "") + "HttpServletRequest request");
+            objectMap.put("inParams", inParams);
             objectMap.put("outParams", outParams);
             objectMap.put("module", moduleName);
             objectMap.put("serviceNote", serviceNote);
