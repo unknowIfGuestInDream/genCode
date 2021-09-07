@@ -173,15 +173,27 @@ public class EamNewProcedureModelServiceImpl implements GenProcedureModelService
             String preName = nameConvent.getName(procedureName);
             //请求协议
             String mappingType = getMappingType(procedureName, nameConvent);
-            controllerCode.append("\n" +
-                    "    /**\n" +
-                    "     * \n" +
-                    "     */\n" +
-                    "    @" + mappingType + "(\"" + preName + moduleName + "\")\n" +
-                    "    @Log\n" +
-                    "    public Map<String, Object> " + preName + moduleName + "(" + inParams + (inParams.length() > 0 ? ", " : "") + "HttpServletRequest request) {\n" +
-                    "        return BaseUtils.success(" + BaseUtils.toLowerCase4Index(moduleName) + "Service." + preName + moduleName + "(" + outParams + "));\n" +
-                    "    }\n");
+
+            Configuration configuration = freeMarkerConfigurer.getConfiguration();
+            Map<String, Object> objectMap = new HashMap<>();
+            objectMap.put("package", packageName);
+            objectMap.put("mappingType", mappingType);
+            objectMap.put("method", preName + moduleName);
+            objectMap.put("inParams", inParams + (inParams.length() > 0 ? ", " : "") + "HttpServletRequest request");
+            objectMap.put("outParams", outParams);
+            objectMap.put("module", moduleName);
+
+//            controllerCode.append("\n" +
+//                    "    /**\n" +
+//                    "     * \n" +
+//                    "     */\n" +
+//                    "    @" + mappingType + "(\"" + preName + moduleName + "\")\n" +
+//                    "    @Log\n" +
+//                    "    public Map<String, Object> " + preName + moduleName + "(" + inParams + (inParams.length() > 0 ? ", " : "") + "HttpServletRequest request) {\n" +
+//                    "        return BaseUtils.success(" + BaseUtils.toLowerCase4Index(moduleName) + "Service." + preName + moduleName + "(" + outParams + "));\n" +
+//                    "    }\n");
+
+            controllerCode.append(FreeMarkerUtil.getTemplateContent(configuration, objectMap, "genProcedureModel/eamNew/controllerMethod.ftl") + "\n");
 
             serviceCode.append("\n" +
                     "    /**\n" +
