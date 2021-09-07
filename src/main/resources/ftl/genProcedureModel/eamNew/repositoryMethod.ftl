@@ -7,11 +7,11 @@
             String sql = "{call ${procedureName}(${procedureParams})}";
             CallableStatement statement = con.prepareCall(sql);
 ${repositoryParam}
-          return statement;
+            return statement;
         }, cs -> {
             cs.execute();
             Map<String, Object> returnValue = new HashMap<>(8);
 ${repositoryResult}
-          return returnValue;
+            return returnValue;
         });
     }

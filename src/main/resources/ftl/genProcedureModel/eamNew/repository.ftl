@@ -17,13 +17,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
-* @author: ${author}
-* @date: ${date}
-* @since: 1.0
-*/
+ * @author: ${author}
+ * @date: ${date}
+ * @since: 1.0
+ */
 @Repository
 @RequiredArgsConstructor
 public class ${module}Repository {
-private final JdbcTemplate ${package?substring(package?last_index_of(".")+1)?lower_case}JdbcTemplate;
+    private final JdbcTemplate ${package?substring(package?last_index_of(".")+1)?lower_case}JdbcTemplate;
 {}
 }

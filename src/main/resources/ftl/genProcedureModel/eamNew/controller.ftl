@@ -13,15 +13,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
-*
-*
-* @author: ${author}
-* @date: ${date}
-* @since: 1.0
-*/
+ *
+ *
+ * @author: ${author}
+ * @date: ${date}
+ * @since: 1.0
+ */
 @RestController
 @RequiredArgsConstructor
 public class ${module}Controller {
-private final ${module}Service ${module?uncap_first}Service;
+    private final ${module}Service ${module?uncap_first}Service;
 {}
 }

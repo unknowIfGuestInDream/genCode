@@ -10,14 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Map;
 
 /**
-* @author: ${author}
-* @date: ${date}
-* @since: 1.0
-*/
+ * @author: ${author}
+ * @date: ${date}
+ * @since: 1.0
+ */
 @Service
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 @RequiredArgsConstructor
 public class ${module}ServiceImpl implements ${module}Service {
-private final ${module}Repository ${module?uncap_first}Repository;
+    private final ${module}Repository ${module?uncap_first}Repository;
 {}
 }
