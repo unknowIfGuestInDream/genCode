@@ -1,7 +1,6 @@
 package com.newangels.gen.service.impl.genProcedureModel;
 
 import cn.hutool.core.util.StrUtil;
-import com.newangels.gen.base.BaseUtils;
 import com.newangels.gen.enums.GenProcedureModelType;
 import com.newangels.gen.factory.GenProcedureModelFactory;
 import com.newangels.gen.service.DataBaseProcedureService;
@@ -67,7 +66,7 @@ public class EamNewProcedureModelServiceImpl implements GenProcedureModelService
         objectMap.put("module", moduleName);
         objectMap.put("author", author);
         objectMap.put("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
-        return FreeMarkerUtil.getTemplateContent(freeMarkerConfigurer, objectMap, "genProcedureModel/eamNew/serviceImpl.ftl");
+        return FreeMarkerUtil.getTemplateContent(freeMarkerConfigurer, objectMap, "genProcedureModel/eamNew/repository.ftl");
     }
 
     @Override
@@ -121,9 +120,9 @@ public class EamNewProcedureModelServiceImpl implements GenProcedureModelService
                     outParams.add(value);
                     procedureParams.add(":" + value + "");
                     if ("DATE".equals(dataType)) {
-                        repositoryParam.add("                statement.set" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\", new Timestamp(" + value + ".getTime()));");
+                        repositoryParam.add("            statement.set" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\", new Timestamp(" + value + ".getTime()));");
                     } else {
-                        repositoryParam.add("                statement.set" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\", " + value + ");");
+                        repositoryParam.add("            statement.set" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\", " + value + ");");
                     }
                     serviceNote.add("     * @param " + value);
                 } else if ("OUT".equals(map.get("IN_OUT")) || "true".equals(map.get("IN_OUT").toString())) {
@@ -135,11 +134,11 @@ public class EamNewProcedureModelServiceImpl implements GenProcedureModelService
                     //参数类型
                     String dataType = map.get("DATA_TYPE").toString();
                     procedureParams.add(":" + value + "");
-                    repositoryParam.add("                statement.registerOutParameter(\"" + value + "\", " + dbProcedure.getRepositoryOutType(dataType) + ");");
+                    repositoryParam.add("            statement.registerOutParameter(\"" + value + "\", " + dbProcedure.getRepositoryOutType(dataType) + ");");
                     if ("REF CURSOR".equals(dataType)) {
-                        repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", ProcedureUtils.resultHash((ResultSet) cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\")));");
+                        repositoryResult.add("            returnValue.put(\"" + nameConvent.getResultName(value) + "\", ProcedureUtils.resultHash((ResultSet) cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\")));");
                     } else {
-                        repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\"));");
+                        repositoryResult.add("            returnValue.put(\"" + nameConvent.getResultName(value) + "\", cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\"));");
                     }
                 } else if ("IN/OUT".equals(map.get("IN_OUT"))) {
                     //存储过程中传参去掉V_
@@ -157,15 +156,15 @@ public class EamNewProcedureModelServiceImpl implements GenProcedureModelService
                     outParams.add(value);
                     procedureParams.add(":" + value + "");
                     if ("DATE".equals(dataType)) {
-                        repositoryParam.add("                statement.set" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\", new Timestamp(" + value + ".getTime()));");
+                        repositoryParam.add("            statement.set" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\", new Timestamp(" + value + ".getTime()));");
                     } else {
-                        repositoryParam.add("                statement.set" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\", " + value + ");");
+                        repositoryParam.add("            statement.set" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\", " + value + ");");
                     }
                     serviceNote.add("     * @param " + value);
                     if ("REF CURSOR".equals(dataType)) {
-                        repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", ProcedureUtils.resultHash((ResultSet) cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\")));");
+                        repositoryResult.add("            returnValue.put(\"" + nameConvent.getResultName(value) + "\", ProcedureUtils.resultHash((ResultSet) cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\")));");
                     } else {
-                        repositoryResult.add("                returnValue.put(\"" + nameConvent.getResultName(value) + "\", cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\"));");
+                        repositoryResult.add("            returnValue.put(\"" + nameConvent.getResultName(value) + "\", cs.get" + dbProcedure.getRepositoryOutTypeCode(dataType) + "(\"" + value + "\"));");
                     }
                 }
             }
@@ -182,51 +181,16 @@ public class EamNewProcedureModelServiceImpl implements GenProcedureModelService
             objectMap.put("inParams", inParams + (inParams.length() > 0 ? ", " : "") + "HttpServletRequest request");
             objectMap.put("outParams", outParams);
             objectMap.put("module", moduleName);
+            objectMap.put("serviceNote", serviceNote);
+            objectMap.put("procedureName", procedureName);
+            objectMap.put("procedureParams", procedureParams);
+            objectMap.put("repositoryParam", repositoryParam);
+            objectMap.put("repositoryResult", repositoryResult);
 
-//            controllerCode.append("\n" +
-//                    "    /**\n" +
-//                    "     * \n" +
-//                    "     */\n" +
-//                    "    @" + mappingType + "(\"" + preName + moduleName + "\")\n" +
-//                    "    @Log\n" +
-//                    "    public Map<String, Object> " + preName + moduleName + "(" + inParams + (inParams.length() > 0 ? ", " : "") + "HttpServletRequest request) {\n" +
-//                    "        return BaseUtils.success(" + BaseUtils.toLowerCase4Index(moduleName) + "Service." + preName + moduleName + "(" + outParams + "));\n" +
-//                    "    }\n");
-
-            controllerCode.append(FreeMarkerUtil.getTemplateContent(configuration, objectMap, "genProcedureModel/eamNew/controllerMethod.ftl") + "\n");
-
-            serviceCode.append("\n" +
-                    "    /**\n" +
-                    "     * \n" +
-                    "     *\n" +
-                    serviceNote +
-                    "\n     * @return\n" +
-                    "     */\n" +
-                    "    Map<String, Object> " + preName + moduleName + "(" + inParams + ");\n");
-
-            serviceImplCode.append("\n" +
-                    "    @Override\n" +
-                    "    public Map<String, Object> " + preName + moduleName + "(" + inParams + ") {\n" +
-                    "        return " + BaseUtils.toLowerCase4Index(moduleName) + "Repository." + procedureName + "(" + outParams + ");\n" +
-                    "    }\n");
-
-            repositoryCode.append("\n" +
-                    "    /**\n" +
-                    "     * \n" +
-                    "     */\n" +
-                    "    public Map<String, Object> " + procedureName + "(" + inParams + ") {\n" +
-                    "        return " + packageName.substring(packageName.lastIndexOf(".") + 1).toLowerCase() + "JdbcTemplate.execute((CallableStatementCreator) con -> {\n" +
-                    "            String sql = \"{call " + procedureName + "(" + procedureParams + ")}\";\n" +
-                    "            CallableStatement statement = con.prepareCall(sql);\n" +
-                    repositoryParam +
-                    "\n          return statement;\n" +
-                    "        }, cs -> {\n" +
-                    "            cs.execute();\n" +
-                    "            Map<String, Object> returnValue = new HashMap<>(8);\n" +
-                    repositoryResult +
-                    "\n          return returnValue;\n" +
-                    "        });\n" +
-                    "    }\n");
+            controllerCode.append(FreeMarkerUtil.getTemplateContent(configuration, objectMap, "genProcedureModel/eamNew/controllerMethod.ftl")).append("\n");
+            serviceCode.append(FreeMarkerUtil.getTemplateContent(configuration, objectMap, "genProcedureModel/eamNew/serviceMethod.ftl")).append("\n");
+            serviceImplCode.append(FreeMarkerUtil.getTemplateContent(configuration, objectMap, "genProcedureModel/eamNew/serviceImplMethod.ftl")).append("\n");
+            repositoryCode.append(FreeMarkerUtil.getTemplateContent(configuration, objectMap, "genProcedureModel/eamNew/repositoryMethod.ftl")).append("\n");
         }
 
         //ant design pro规范
