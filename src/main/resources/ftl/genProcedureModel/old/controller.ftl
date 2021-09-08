@@ -22,5 +22,5 @@ import java.util.Map;
 public class ${module}Controller {
     @Autowired
     private ${module}Service ${module?uncap_first}Service;
-{}
+${controllerMethod}
 }

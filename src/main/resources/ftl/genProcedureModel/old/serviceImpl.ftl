@@ -19,5 +19,5 @@ import java.util.Map;
 public class ${module}ServiceImpl implements ${module}Service {
     @Autowired
     private ${module}Repository ${module?uncap_first}Repository;
-{}
+${serviceImplMethod}
 }

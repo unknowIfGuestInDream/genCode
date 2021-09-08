@@ -11,5 +11,5 @@ import java.util.Map;
  * @since: 1.0
  */
 public interface ${module}Service {
-{}
+${serviceMethod}
 }
