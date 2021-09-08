@@ -69,6 +69,7 @@ public interface GenProcedureModelService extends InitializingBean {
      * @param nameConvent       命名规范
      * @param dbProcedure       代码规范
      * @param dataSourceUtil    数据库连接
+     * @param author            作者
      */
     Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DataSourceUtil dataSourceUtil, String author);
 }
