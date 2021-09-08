@@ -23,5 +23,5 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ${module}Controller {
     private final ${module}Service ${module?uncap_first}Service;
-{}
+{controllerMethod}
 }

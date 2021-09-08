@@ -25,5 +25,5 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ${module}Repository {
     private final JdbcTemplate ${package?substring(package?last_index_of(".")+1)?lower_case}JdbcTemplate;
-{}
+{repositoryMethod}
 }
