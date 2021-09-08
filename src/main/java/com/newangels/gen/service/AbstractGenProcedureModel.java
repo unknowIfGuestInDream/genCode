@@ -30,13 +30,6 @@ public abstract class AbstractGenProcedureModel {
     protected abstract String getMappingType(String procedureName, NameConventService nameConvent);
 
     /**
-     * 前台Tab页所需要集合
-     */
-    protected List<String> getTabTitles() {
-        return new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "repository", "BaseUtils", "ProcedureUtils"));
-    }
-
-    /**
      * 根据存储过程的入参出参生成各部分需要代码
      *
      * @param map              存储过程参数
