@@ -5,6 +5,8 @@ import com.newangels.gen.util.FreeMarkerUtil;
 import freemarker.template.Configuration;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -189,12 +191,16 @@ public abstract class AbstractGenProcedureModel {
      * @param nameConvent       命名规范
      * @param dbProcedure       代码规范
      * @param dataSourceUtil    数据库连接
+     * @param configuration     ftl模板引擎配置
      */
-    protected Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, String author, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DataSourceUtil dataSourceUtil, Configuration configuration) {
+    public Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, String author, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DataSourceUtil dataSourceUtil, Configuration configuration) {
         Map<String, Object> result = new HashMap<>();
         //方法代码
         Map<String, Object> objectMap = dealProcdure(moduleName, packageName, userName, procedureNameList, nameConvent, dbProcedure, dataSourceUtil, configuration);
         objectMap.put("package", packageName);
+        objectMap.put("module", moduleName);
+        objectMap.put("author", author);
+        objectMap.put("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
         //tab页集合
         List<String> list = new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "repository", "BaseUtils", "ProcedureUtils"));
         result.put("controller", getController(configuration, objectMap));
