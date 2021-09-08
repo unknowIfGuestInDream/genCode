@@ -1,7 +1,9 @@
 package com.newangels.gen.genProcedure;
 
 import com.newangels.gen.enums.DataBaseType;
+import com.newangels.gen.enums.GenProcedureModelType;
 import com.newangels.gen.enums.NameConventType;
+import com.newangels.gen.factory.AbstractGenProcedureModelFactory;
 import com.newangels.gen.factory.DataBaseProcedureFactory;
 import com.newangels.gen.factory.DataSourceUtilFactory;
 import com.newangels.gen.factory.NameConventFactory;
@@ -30,12 +32,66 @@ public class genProcedureTest {
 
     @Test
     public void genProcedureEamNew() {
-        AbstractGenProcedureModel genProcedureModel = new EamNewProcedureModel();
+        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromTypeName("4"));
         List<String> procedureNameList = new ArrayList<>();
         procedureNameList.add("PRO_BASE_DEPT_GET");
         procedureNameList.add("PRO_BASE_PERSONPOST_GET");
         Map<String, Object> result = genProcedureModel.genCode("code", "cn.newangels.gen", "budgetuser", procedureNameList, "admin", NameConventFactory.getNameConvent(NameConventType.fromTypeName("2")), DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")), DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET", "oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"), freeMarkerConfigurer.getConfiguration());
-        System.out.println(result);
+        System.out.println(result.get("controller"));
+        System.out.println("============================================");
+        System.out.println(result.get("service"));
+        System.out.println("============================================");
+        System.out.println(result.get("serviceImpl"));
+        System.out.println("============================================");
+        System.out.println(result.get("repository"));
+    }
+
+    @Test
+    public void genProcedureEam() {
+        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromTypeName("3"));
+        List<String> procedureNameList = new ArrayList<>();
+        procedureNameList.add("PRO_BASE_DEPT_GET");
+        procedureNameList.add("PRO_BASE_PERSONPOST_GET");
+        Map<String, Object> result = genProcedureModel.genCode("code", "cn.newangels.gen", "budgetuser", procedureNameList, "admin", NameConventFactory.getNameConvent(NameConventType.fromTypeName("2")), DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")), DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET", "oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"), freeMarkerConfigurer.getConfiguration());
+        System.out.println(result.get("controller"));
+        System.out.println("============================================");
+        System.out.println(result.get("service"));
+        System.out.println("============================================");
+        System.out.println(result.get("serviceImpl"));
+        System.out.println("============================================");
+        System.out.println(result.get("repository"));
+    }
+
+    @Test
+    public void genProcedureOld() {
+        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromTypeName("2"));
+        List<String> procedureNameList = new ArrayList<>();
+        procedureNameList.add("PRO_BASE_DEPT_GET");
+        procedureNameList.add("PRO_BASE_PERSONPOST_GET");
+        Map<String, Object> result = genProcedureModel.genCode("code", "cn.newangels.gen", "budgetuser", procedureNameList, "admin", NameConventFactory.getNameConvent(NameConventType.fromTypeName("2")), DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")), DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET", "oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"), freeMarkerConfigurer.getConfiguration());
+        System.out.println(result.get("controller"));
+        System.out.println("============================================");
+        System.out.println(result.get("service"));
+        System.out.println("============================================");
+        System.out.println(result.get("serviceImpl"));
+        System.out.println("============================================");
+        System.out.println(result.get("repository"));
+    }
+
+    @Test
+    public void genProcedureRestful() {
+        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromTypeName("1"));
+        List<String> procedureNameList = new ArrayList<>();
+        procedureNameList.add("PRO_BASE_DEPT_GET");
+        procedureNameList.add("PRO_BASE_PERSONPOST_GET");
+        Map<String, Object> result = genProcedureModel.genCode("code", "cn.newangels.gen", "budgetuser", procedureNameList, "admin", NameConventFactory.getNameConvent(NameConventType.fromTypeName("2")), DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")), DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET", "oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"), freeMarkerConfigurer.getConfiguration());
+        System.out.println(result.get("controller"));
+        System.out.println("============================================");
+        System.out.println(result.get("service"));
+        System.out.println("============================================");
+        System.out.println(result.get("serviceImpl"));
+        System.out.println("============================================");
+        System.out.println(result.get("repository"));
     }
 
 }
