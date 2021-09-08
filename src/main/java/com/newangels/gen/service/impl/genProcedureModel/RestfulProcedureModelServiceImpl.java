@@ -1,6 +1,5 @@
 package com.newangels.gen.service.impl.genProcedureModel;
 
-import cn.hutool.core.util.StrUtil;
 import com.newangels.gen.base.BaseUtils;
 import com.newangels.gen.enums.GenProcedureModelType;
 import com.newangels.gen.factory.GenProcedureModelFactory;
@@ -31,7 +30,7 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
     private final FreeMarkerConfigurer freeMarkerConfigurer;
 
     @Override
-    public String getControllerCode(String moduleName, String packageName, String author) {
+    public String getControllerCode(String moduleName, String packageName, String author, String methodCode) {
         return "package " + packageName + ".controller;\n" +
                 "\n" +
                 "import " + packageName + ".annotation.Log;\n" +
@@ -62,7 +61,7 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
     }
 
     @Override
-    public String getServiceCode(String moduleName, String packageName, String author) {
+    public String getServiceCode(String moduleName, String packageName, String author, String methodCode) {
         return "package " + packageName + ".service;\n" +
                 "\n" +
                 "import java.util.List;\n" +
@@ -82,7 +81,7 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
     }
 
     @Override
-    public String getServiceImplCode(String moduleName, String packageName, String author) {
+    public String getServiceImplCode(String moduleName, String packageName, String author, String methodCode) {
         return "package " + packageName + ".service.impl;\n" +
                 "\n" +
                 "import " + packageName + ".repository." + moduleName + "Repository;\n" +
@@ -109,7 +108,7 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
     }
 
     @Override
-    public String getRepositoryCode(String moduleName, String packageName, String author) {
+    public String getRepositoryCode(String moduleName, String packageName, String author, String methodCode) {
         return "package " + packageName + ".repository;\n" +
                 "\n" +
                 "import " + packageName + ".util.ProcedureUtils;\n" +
@@ -302,10 +301,10 @@ public class RestfulProcedureModelServiceImpl implements GenProcedureModelServic
 
         //tab页集合
         List<String> list = new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "repository", "BaseUtils", "ProcedureUtils"));
-        result.put("controller", StrUtil.format(getControllerCode(moduleName, packageName, author), controllerCode.toString()));
-        result.put("service", StrUtil.format(getServiceCode(moduleName, packageName, author), serviceCode.toString()));
-        result.put("serviceImpl", StrUtil.format(getServiceImplCode(moduleName, packageName, author), serviceImplCode.toString()));
-        result.put("repository", StrUtil.format(getRepositoryCode(moduleName, packageName, author), repositoryCode.toString()));
+        result.put("controller", getControllerCode(moduleName, packageName, author, controllerCode.toString()));
+        result.put("service", getServiceCode(moduleName, packageName, author, serviceCode.toString()));
+        result.put("serviceImpl", getServiceImplCode(moduleName, packageName, author, serviceImplCode.toString()));
+        result.put("repository", getRepositoryCode(moduleName, packageName, author, repositoryCode.toString()));
         result.put("BaseUtils", FreeMarkerUtil.getTemplateContent(configuration, objectMap, "common/BaseUtils.ftl"));
         result.put("ProcedureUtils", FreeMarkerUtil.getTemplateContent(configuration, objectMap, "common/ProcedureUtils.ftl"));
         result.put("list", list);

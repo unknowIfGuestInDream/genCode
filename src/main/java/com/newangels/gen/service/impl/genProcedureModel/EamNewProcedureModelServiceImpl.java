@@ -1,6 +1,5 @@
 package com.newangels.gen.service.impl.genProcedureModel;
 
-import cn.hutool.core.util.StrUtil;
 import com.newangels.gen.enums.GenProcedureModelType;
 import com.newangels.gen.factory.GenProcedureModelFactory;
 import com.newangels.gen.service.DataBaseProcedureService;
@@ -30,42 +29,46 @@ public class EamNewProcedureModelServiceImpl implements GenProcedureModelService
     private final FreeMarkerConfigurer freeMarkerConfigurer;
 
     @Override
-    public String getControllerCode(String moduleName, String packageName, String author) {
+    public String getControllerCode(String moduleName, String packageName, String author, String methodCode) {
         Map<String, Object> objectMap = new HashMap<>();
         objectMap.put("package", packageName);
         objectMap.put("module", moduleName);
         objectMap.put("author", author);
         objectMap.put("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
+        objectMap.put("controllerMethod", methodCode);
         return FreeMarkerUtil.getTemplateContent(freeMarkerConfigurer, objectMap, "genProcedureModel/eamNew/controller.ftl");
     }
 
     @Override
-    public String getServiceCode(String moduleName, String packageName, String author) {
+    public String getServiceCode(String moduleName, String packageName, String author, String methodCode) {
         Map<String, Object> objectMap = new HashMap<>();
         objectMap.put("package", packageName);
         objectMap.put("module", moduleName);
         objectMap.put("author", author);
         objectMap.put("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
+        objectMap.put("serviceMethod", methodCode);
         return FreeMarkerUtil.getTemplateContent(freeMarkerConfigurer, objectMap, "genProcedureModel/eamNew/service.ftl");
     }
 
     @Override
-    public String getServiceImplCode(String moduleName, String packageName, String author) {
+    public String getServiceImplCode(String moduleName, String packageName, String author, String methodCode) {
         Map<String, Object> objectMap = new HashMap<>();
         objectMap.put("package", packageName);
         objectMap.put("module", moduleName);
         objectMap.put("author", author);
         objectMap.put("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
+        objectMap.put("serviceImplMethod", methodCode);
         return FreeMarkerUtil.getTemplateContent(freeMarkerConfigurer, objectMap, "genProcedureModel/eamNew/serviceImpl.ftl");
     }
 
     @Override
-    public String getRepositoryCode(String moduleName, String packageName, String author) {
+    public String getRepositoryCode(String moduleName, String packageName, String author, String methodCode) {
         Map<String, Object> objectMap = new HashMap<>();
         objectMap.put("package", packageName);
         objectMap.put("module", moduleName);
         objectMap.put("author", author);
         objectMap.put("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
+        objectMap.put("repositoryMethod", methodCode);
         return FreeMarkerUtil.getTemplateContent(freeMarkerConfigurer, objectMap, "genProcedureModel/eamNew/repository.ftl");
     }
 
@@ -204,10 +207,10 @@ public class EamNewProcedureModelServiceImpl implements GenProcedureModelService
 
         //tab页集合
         List<String> list = new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "repository", "BaseUtils", "ProcedureUtils"));
-        result.put("controller", StrUtil.format(getControllerCode(moduleName, packageName, author), controller));
-        result.put("service", StrUtil.format(getServiceCode(moduleName, packageName, author), serviceCode.toString()));
-        result.put("serviceImpl", StrUtil.format(getServiceImplCode(moduleName, packageName, author), serviceImplCode.toString()));
-        result.put("repository", StrUtil.format(getRepositoryCode(moduleName, packageName, author), repositoryCode.toString()));
+        result.put("controller", getControllerCode(moduleName, packageName, author, controller));
+        result.put("service", getServiceCode(moduleName, packageName, author, serviceCode.toString()));
+        result.put("serviceImpl", getServiceImplCode(moduleName, packageName, author, serviceImplCode.toString()));
+        result.put("repository", getRepositoryCode(moduleName, packageName, author, repositoryCode.toString()));
         result.put("BaseUtils", FreeMarkerUtil.getTemplateContent(configuration, objectMap, "common/BaseUtils.ftl"));
         result.put("ProcedureUtils", FreeMarkerUtil.getTemplateContent(configuration, objectMap, "common/ProcedureUtils.ftl"));
         result.put("list", list);

@@ -22,22 +22,22 @@ import java.util.Map;
 @Service
 public class UnknowProcedureModelServiceImpl implements GenProcedureModelService {
     @Override
-    public String getControllerCode(String moduleName, String packageName, String author) {
+    public String getControllerCode(String moduleName, String packageName, String author, String methodCode) {
         return "";
     }
 
     @Override
-    public String getServiceCode(String moduleName, String packageName, String author) {
+    public String getServiceCode(String moduleName, String packageName, String author, String methodCode) {
         return "";
     }
 
     @Override
-    public String getServiceImplCode(String moduleName, String packageName, String author) {
+    public String getServiceImplCode(String moduleName, String packageName, String author, String methodCode) {
         return "";
     }
 
     @Override
-    public String getRepositoryCode(String moduleName, String packageName, String author) {
+    public String getRepositoryCode(String moduleName, String packageName, String author, String methodCode) {
         return "";
     }
 

@@ -21,8 +21,9 @@ public interface GenProcedureModelService extends InitializingBean {
      * @param moduleName  模块名
      * @param packageName 包名
      * @param author      作者
+     * @param methodCode  方法代码
      */
-    String getControllerCode(String moduleName, String packageName, String author);
+    String getControllerCode(String moduleName, String packageName, String author, String methodCode);
 
     /**
      * 接口层代码生成
@@ -30,8 +31,9 @@ public interface GenProcedureModelService extends InitializingBean {
      * @param moduleName  模块名
      * @param packageName 包名
      * @param author      作者
+     * @param methodCode  方法代码
      */
-    String getServiceCode(String moduleName, String packageName, String author);
+    String getServiceCode(String moduleName, String packageName, String author, String methodCode);
 
     /**
      * 实现层代码生成
@@ -39,8 +41,9 @@ public interface GenProcedureModelService extends InitializingBean {
      * @param moduleName  模块名
      * @param packageName 包名
      * @param author      作者
+     * @param methodCode  方法代码
      */
-    String getServiceImplCode(String moduleName, String packageName, String author);
+    String getServiceImplCode(String moduleName, String packageName, String author, String methodCode);
 
     /**
      * 数据层代码生成
@@ -48,8 +51,9 @@ public interface GenProcedureModelService extends InitializingBean {
      * @param moduleName  模块名
      * @param packageName 包名
      * @param author      作者
+     * @param methodCode  方法代码
      */
-    String getRepositoryCode(String moduleName, String packageName, String author);
+    String getRepositoryCode(String moduleName, String packageName, String author, String methodCode);
 
     /**
      * 获取请求协议
