@@ -1,8 +1,11 @@
 package com.newangels.gen.service.impl.genProcedureModel;
 
+import com.newangels.gen.enums.GenProcedureModelType;
+import com.newangels.gen.factory.AbstractGenProcedureModelFactory;
 import com.newangels.gen.service.AbstractGenProcedureModel;
 import com.newangels.gen.service.NameConventService;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.stereotype.Service;
 
 /**
  * Eam3期风格代码
@@ -11,6 +14,7 @@ import org.springframework.beans.factory.InitializingBean;
  * @date: 2021/9/8 16:24
  * @since: 1.0
  */
+@Service
 public class EamNewProcedureModel extends AbstractGenProcedureModel implements InitializingBean {
     @Override
     protected String getFtlPackageName() {
@@ -27,6 +31,6 @@ public class EamNewProcedureModel extends AbstractGenProcedureModel implements I
 
     @Override
     public void afterPropertiesSet() throws Exception {
-
+        AbstractGenProcedureModelFactory.register(GenProcedureModelType.EAM3, this);
     }
 }
