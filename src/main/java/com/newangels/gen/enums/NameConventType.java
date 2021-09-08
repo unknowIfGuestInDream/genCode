@@ -38,7 +38,7 @@ public enum NameConventType {
                 return type;
             }
         }
-        return UNKNOW;
+        return EAM3;
     }
 
     public String getTypeName() {
