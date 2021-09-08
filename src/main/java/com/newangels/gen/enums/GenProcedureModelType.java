@@ -32,6 +32,7 @@ public enum GenProcedureModelType {
     /**
      * 未知模版
      */
+    @Deprecated
     UNKNOW("UNKNOW");
 
     private String typeName;

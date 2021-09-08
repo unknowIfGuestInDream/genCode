@@ -23,6 +23,7 @@ public enum NameConventType {
     /**
      * 未知规范
      */
+    @Deprecated
     UNKNOW("UNKNOW");
 
     private String typeName;
