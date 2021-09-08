@@ -19,5 +19,5 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ${module}ServiceImpl implements ${module}Service {
     private final ${module}Repository ${module?uncap_first}Repository;
-{serviceImplMethod}
+${serviceImplMethod}
 }
