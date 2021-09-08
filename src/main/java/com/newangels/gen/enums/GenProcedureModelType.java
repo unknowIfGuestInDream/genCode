@@ -25,7 +25,7 @@ public enum GenProcedureModelType {
     EAM("3"),
 
     /**
-     * 大连常用模板EAM模版
+     * 大连常用模板EAM3期模版
      */
     EAM3("4"),
 
@@ -47,7 +47,7 @@ public enum GenProcedureModelType {
                 return type;
             }
         }
-        return UNKNOW;
+        return EAM3;
     }
 
     public String getTypeName() {

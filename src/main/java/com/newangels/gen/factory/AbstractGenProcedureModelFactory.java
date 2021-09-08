@@ -2,7 +2,6 @@ package com.newangels.gen.factory;
 
 import com.newangels.gen.enums.GenProcedureModelType;
 import com.newangels.gen.service.AbstractGenProcedureModel;
-import com.newangels.gen.service.GenProcedureModelService;
 
 import java.util.Map;
 import java.util.Objects;
