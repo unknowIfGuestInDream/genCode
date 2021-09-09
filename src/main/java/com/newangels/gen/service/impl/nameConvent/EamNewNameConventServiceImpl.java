@@ -145,7 +145,7 @@ public class EamNewNameConventServiceImpl implements NameConventService {
         outParamNameMap.put("message", "V_V_INFO");
         outParamNameMap.put("total", "V_V_SNUM");
         outParamNameMap.put("page", "V_PAGE");
-        outParamNameMap.put("limit", "V_V_PAGESIZE");
+        outParamNameMap.put("limit", "V_PAGESIZE");
 
         procTypeMap.put(ProcTypes.GET, "_GET");
         procTypeMap.put(ProcTypes.SELECT, "_SEL");
