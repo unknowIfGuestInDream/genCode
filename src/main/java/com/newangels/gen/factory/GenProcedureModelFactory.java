@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date: 2021/6/20 10:11
  * @since: 1.0
  */
+@Deprecated
 public class GenProcedureModelFactory {
     private static Map<GenProcedureModelType, GenProcedureModelService> strategyMap = new ConcurrentHashMap<>();
 
