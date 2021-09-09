@@ -20,6 +20,7 @@ import java.util.Map;
  * @since: 1.0
  */
 @Service
+@Deprecated
 public class UnknowProcedureModelServiceImpl implements GenProcedureModelService {
     @Override
     public String getControllerCode(String moduleName, String packageName, String author, String methodCode) {

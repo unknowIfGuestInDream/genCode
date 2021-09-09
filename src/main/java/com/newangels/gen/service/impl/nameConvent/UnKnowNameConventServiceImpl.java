@@ -16,6 +16,7 @@ import java.util.List;
  * @since: 1.0
  */
 @Service
+@Deprecated
 public class UnKnowNameConventServiceImpl implements NameConventService {
     @Override
     public String getName(String procedureName) {

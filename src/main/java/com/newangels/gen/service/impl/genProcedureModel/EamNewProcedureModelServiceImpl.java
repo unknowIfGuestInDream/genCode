@@ -25,6 +25,7 @@ import java.util.*;
  */
 @Service
 @RequiredArgsConstructor
+@Deprecated
 public class EamNewProcedureModelServiceImpl implements GenProcedureModelService {
     private final FreeMarkerConfigurer freeMarkerConfigurer;
 

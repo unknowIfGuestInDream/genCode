@@ -13,6 +13,7 @@ import java.util.Map;
  * @date: 2021/6/20 10:15
  * @since: 1.0
  */
+@Deprecated
 public interface GenProcedureModelService extends InitializingBean {
 
     /**

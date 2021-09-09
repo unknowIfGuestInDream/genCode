@@ -26,6 +26,7 @@ import java.util.*;
  */
 @Service
 @RequiredArgsConstructor
+@Deprecated
 public class OldProcedureModelServiceImpl implements GenProcedureModelService {
     private final FreeMarkerConfigurer freeMarkerConfigurer;
 
