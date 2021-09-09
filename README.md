@@ -10,7 +10,7 @@ database文件夹下是oracle跟mysql数据库的sql文件
 
 ## 技术框架
 
-后台使用springBoot, druid连接池, 前台使用extjs4.0
+后台使用springBoot, druid连接池, 前台使用extjs4.0, 模版使用freemarker引擎
 
 ## 项目介绍
 
@@ -20,12 +20,16 @@ database文件夹下是oracle跟mysql数据库的sql文件
 * NameConventService 命名规范
 * DataBaseProcedureService 数据库对应获取过程相关的sql&数据库关键词对应的java类型等
 * DataBaseInfoService 数据源管理
-* GenProcedureModelService 存储过程代码生成模板
+* ~~GenProcedureModelService 存储过程代码生成模板~~
+* AbstractGenProcedureModel 存储过程代码生成模板
 * TableToProcedureService 表生成过程相关接口
 
-如需要添加自己的命名规范则新增 NameConventService 的实现类, 并在前台static/public/js/store/nameConventType.js中添加自己的实现类编码  
-如需要添加自己的代码模版则需要实现GenProcedureModelService, 并在前台static/public/js/store/genProcedureModelType.js中添加自己的代码模板编码  
-如需添加新的数据库则实现DataBaseProcedureService, 并在static/public/js/store/driver.js中添加新的数据库的驱动名称
+如需要添加自己的命名规范则新增 NameConventService 的实现类,新增枚举类NameConventType参数,
+ 并在前台static/public/js/store/nameConventType.js中添加自己的实现类编码  
+如需要添加自己的代码模版则需要实现~~GenProcedureModelService~~AbstractGenProcedureModel,新增枚举类GenProcedureModelType参数,
+并在前台static/public/js/store/genProcedureModelType.js中添加自己的代码模板编码  
+如需添加新的数据库则实现DataBaseProcedureService,新增枚举类DataBaseType参数,
+ 并在static/public/js/store/driver.js中添加新的数据库的驱动名称
 
 ## 代码说明
 ### 缓存
@@ -36,10 +40,5 @@ database文件夹下是oracle跟mysql数据库的sql文件
 
 ### 定时
 位于schedule文件夹下
-
-### 枚举类
-位于enums下
-
-## 最后
 
 如果有问题或者需求可以发送邮件或者提交Issues
