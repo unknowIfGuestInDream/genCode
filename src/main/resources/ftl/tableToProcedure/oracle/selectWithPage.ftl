@@ -1,0 +1,21 @@
+CREATE OR REPLACE PROCEDURE ${procName}(${selectWithPageInParams}) IS
+/*查询${tableDesc}*/
+BEGIN
+  IF ${page} IS NOT NULL AND ${limit} IS NOT NULL AND ${limit} > 0 THEN
+    OPEN ${result} FOR
+      SELECT *
+        FROM (SELECT FULLTABLE.*, ROWNUM RN
+          FROM (SELECT * FROM ${tableName}${selectSqlWhere}) FULLTABLE
+                WHERE ROWNUM <= ${page} * ${limit})
+        WHERE RN >= (${page} - 1) * ${limit};
+  ELSE
+    OPEN V_C_CURSOR FOR
+      SELECT * FROM ${tableName}${selectSqlWhere};
+  END IF;
+  SELECT COUNT(1)
+    INTO #{total}
+    FROM ${tableName}${selectSqlWhere};
+EXCEPTION
+  WHEN OTHERS THEN
+    ${message} := SQLERRM;
+END ${procName};
