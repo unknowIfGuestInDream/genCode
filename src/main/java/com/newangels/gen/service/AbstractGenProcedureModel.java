@@ -232,7 +232,7 @@ public abstract class AbstractGenProcedureModel {
      * @param fileName             模板文件名
      */
     protected String getFtlModel(FreeMarkerConfigurer freeMarkerConfigurer, Map<String, Object> objectMap, String fileName) {
-        return getFtlModel(freeMarkerConfigurer.getConfiguration(), objectMap, "genProcedureModel/" + getFtlPackageName() + "/" + fileName);
+        return getFtlModel(freeMarkerConfigurer.getConfiguration(), objectMap, fileName);
     }
 
     /**
