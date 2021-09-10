@@ -2,6 +2,7 @@ package com.newangels.gen.service;
 
 import com.newangels.gen.util.DataSourceUtil;
 import com.newangels.gen.util.FreeMarkerUtil;
+import com.newangels.gen.util.template.AbstractFreeMarkerTemplate;
 import freemarker.template.Configuration;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
@@ -16,12 +17,12 @@ import java.util.*;
  * @date: 2021/9/7 21:40
  * @since: 1.0
  */
-public abstract class AbstractGenProcedureModel {
+public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTemplate {
 
-    /**
-     * 获取ftl包下各自规范的包名
-     */
-    protected abstract String getFtlPackageName();
+    @Override
+    protected String getRootPackageName() {
+        return "genProcedureModel";
+    }
 
     /**
      * 获取请求协议
@@ -211,28 +212,6 @@ public abstract class AbstractGenProcedureModel {
         result.put("ProcedureUtils", FreeMarkerUtil.getTemplateContent(configuration, objectMap, "common/ProcedureUtils.ftl"));
         result.put("list", list);
         return result;
-    }
-
-    /**
-     * 获取模板代码
-     *
-     * @param configuration ftl模板引擎配置
-     * @param objectMap     模板参数
-     * @param fileName      模板文件名
-     */
-    protected String getFtlModel(Configuration configuration, Map<String, Object> objectMap, String fileName) {
-        return FreeMarkerUtil.getTemplateContent(configuration, objectMap, "genProcedureModel/" + getFtlPackageName() + "/" + fileName);
-    }
-
-    /**
-     * 获取模板代码
-     *
-     * @param freeMarkerConfigurer ftl模板引擎配置
-     * @param objectMap            模板参数
-     * @param fileName             模板文件名
-     */
-    protected String getFtlModel(FreeMarkerConfigurer freeMarkerConfigurer, Map<String, Object> objectMap, String fileName) {
-        return getFtlModel(freeMarkerConfigurer.getConfiguration(), objectMap, fileName);
     }
 
     /**
