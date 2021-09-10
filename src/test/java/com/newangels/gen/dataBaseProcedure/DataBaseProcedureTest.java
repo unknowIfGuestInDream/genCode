@@ -3,7 +3,6 @@ package com.newangels.gen.dataBaseProcedure;
 import com.newangels.gen.enums.DataBaseType;
 import com.newangels.gen.factory.DataBaseProcedureFactory;
 import com.newangels.gen.service.DataBaseProcedureService;
-import com.newangels.gen.util.DBUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
