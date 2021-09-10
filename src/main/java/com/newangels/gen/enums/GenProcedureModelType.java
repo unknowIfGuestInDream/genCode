@@ -27,13 +27,7 @@ public enum GenProcedureModelType {
     /**
      * 大连常用模板EAM3期模版
      */
-    EAM3("4"),
-
-    /**
-     * 未知模版
-     */
-    @Deprecated
-    UNKNOW("UNKNOW");
+    EAM3("4");
 
     private String typeName;
 
