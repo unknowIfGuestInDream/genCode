@@ -55,7 +55,7 @@ public class UnKnowNameConventServiceImpl implements NameConventService {
 
     @Override
     public String genSelProcSqlWhere(String param, String paramType, Integer selType) {
-        return " T." + param + " = " + genProcInParamName(param, paramType);
+        return " " + param + " = " + genProcInParamName(param, paramType);
     }
 
     @Override

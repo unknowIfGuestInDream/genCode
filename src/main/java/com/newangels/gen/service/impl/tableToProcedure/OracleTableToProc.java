@@ -6,6 +6,7 @@ import com.newangels.gen.service.AbstractTableToProcedure;
 import com.newangels.gen.service.NameConventService;
 import com.newangels.gen.util.ProcTypes;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.StringJoiner;
  * @date: 2021/9/10 14:02
  * @since: 1.0
  */
+@Service
 public class OracleTableToProc extends AbstractTableToProcedure implements InitializingBean {
 
     @Override

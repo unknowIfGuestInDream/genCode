@@ -588,11 +588,11 @@
             return;
         }
 
-        _genProceduresByTableAjax(records[0].data.TABLE_NAME);
+        _genProceduresByTableAjax(records[0].data.TABLE_NAME, records[0].data.COMMENTS);
     }
 
     //调用表生成存储过程接口
-    function _genProceduresByTableAjax(tableName) {
+    function _genProceduresByTableAjax(tableName, tableDesc) {
 
         var params = [];
         var paramTypes = [];
@@ -628,6 +628,7 @@
                 'nameConventType': Ext.getCmp('nameConventType').getValue(),//命名规范类型
                 'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
                 'tableName': tableName,
+                'tableDesc': tableDesc,
                 'params': params,
                 'paramTypes': paramTypes,
                 'paramDescs': paramDescs,

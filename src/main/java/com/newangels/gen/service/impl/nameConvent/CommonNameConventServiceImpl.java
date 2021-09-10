@@ -93,14 +93,14 @@ public class CommonNameConventServiceImpl implements NameConventService {
         String sqlWhere;
         switch (selType) {
             case 2://区间
-                sqlWhere = " T." + param + " >= START_" + inParamName + "\n AND T." + param + " <= END_" + inParamName;
+                sqlWhere = " " + param + " >= START_" + inParamName + "\n AND " + param + " <= END_" + inParamName;
                 break;
             case 1://模糊
-                sqlWhere = " T." + param + " like '%' || " + inParamName + " || '%'";
+                sqlWhere = " " + param + " like '%' || " + inParamName + " || '%'";
                 break;
             case 0://精确
             default:
-                sqlWhere = " T." + param + " = " + inParamName;
+                sqlWhere = " " + param + " = " + inParamName;
                 break;
         }
         return sqlWhere;
