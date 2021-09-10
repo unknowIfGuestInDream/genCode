@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE ${getProcName}(${delInParams}) IS
+CREATE OR REPLACE PROCEDURE ${getProcName}(${getInParams}) IS
 /*查询某个${tableDesc}*/
 BEGIN
   OPEN ${result} FOR
