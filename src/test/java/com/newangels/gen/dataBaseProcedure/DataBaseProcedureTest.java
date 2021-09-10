@@ -1,8 +1,5 @@
 package com.newangels.gen.dataBaseProcedure;
 
-import com.newangels.gen.enums.DataBaseType;
-import com.newangels.gen.factory.DataBaseProcedureFactory;
-import com.newangels.gen.service.DataBaseProcedureService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -15,19 +12,6 @@ import java.util.*;
  */
 @SpringBootTest
 public class DataBaseProcedureTest {
-
-    @Test
-    public void test() {
-        String V_TYPE = "oracle.jdbc.driver.OracleDriver";
-        DBUtil dbUtil = DBUtil.getDbUtil();
-        dbUtil.setUrl("jdbc:mysql://42.192.10.174:3306/gen?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true");
-        dbUtil.setDriverClass("com.mysql.jdbc.Driver");
-        dbUtil.setUserName("tangliang");
-        dbUtil.setPassword("tangliang");
-        DataBaseProcedureService dbProcedure = DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName(V_TYPE));
-        List<Map<String, Object>> list = dbUtil.executeQuery("select * from database_info");
-        System.out.println(list);
-    }
 
     @Test
     public void Tes1() {
