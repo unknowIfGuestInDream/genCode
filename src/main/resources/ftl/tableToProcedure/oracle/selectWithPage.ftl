@@ -13,7 +13,7 @@ BEGIN
       SELECT * FROM ${tableName}${selectSqlWhere};
   END IF;
   SELECT COUNT(1)
-    INTO #{total}
+    INTO ${total}
     FROM ${tableName}${selectSqlWhere};
 EXCEPTION
   WHEN OTHERS THEN
