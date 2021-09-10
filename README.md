@@ -14,13 +14,13 @@ database文件夹下是oracle跟mysql数据库的sql文件
 
 ## 项目启动
 数据库sql文件在 database文件下  
-可以通过配置 gen.nodb来决定启动数据库版本或者无数据库版本  
-gen.nodb=true为数据库版本，也是默认配置  
+可以通过配置 gen.isdb来决定启动数据库版本或者无数据库版本  
+gen.isdb=true为数据库版本，也是默认配置  
 无数据库版本无需配置数据库，可以直接启动，数据存储在内存中，不可持久化
 
 启动无数据库命令
 ```shell script
-java -Dgen.nodb=false -jar jar包
+java -Dgen.isdb=false -jar jar包
 ```
 
 有数据库版本无需配置参数, 默认为有数据库版本

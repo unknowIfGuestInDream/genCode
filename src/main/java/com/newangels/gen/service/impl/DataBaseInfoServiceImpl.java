@@ -25,7 +25,7 @@ import java.util.Optional;
 @Service
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 @RequiredArgsConstructor
-@ConditionalOnProperty(name = "gen.nodb", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(name = "gen.isdb", havingValue = "true", matchIfMissing = true)
 public class DataBaseInfoServiceImpl implements DataBaseInfoService {
     private final JdbcTemplate genJdbcTemplate;
 

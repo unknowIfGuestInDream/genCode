@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * @since: 1.0
  */
 @Service
-@ConditionalOnProperty(name = "gen.nodb", havingValue = "false")
+@ConditionalOnProperty(name = "gen.isdb", havingValue = "false")
 public class NoDataBaseInfoServiceImpl implements DataBaseInfoService {
     //数据源集合
     private static List<Map<String, Object>> DataBaseInfoList = new ArrayList<>();

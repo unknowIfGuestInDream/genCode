@@ -19,7 +19,7 @@ import javax.sql.DataSource;
  * @since: 1.0
  */
 @Configuration
-@ConditionalOnProperty(name = "gen.nodb", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(name = "gen.isdb", havingValue = "true", matchIfMissing = true)
 public class DSConfig {
 
     @Primary
