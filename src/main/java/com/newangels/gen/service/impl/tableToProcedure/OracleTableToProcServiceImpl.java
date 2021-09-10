@@ -18,6 +18,7 @@ import java.util.*;
  * @since: 1.0
  */
 @Service
+@Deprecated
 public class OracleTableToProcServiceImpl implements TableToProcedureService {
 
     @Override

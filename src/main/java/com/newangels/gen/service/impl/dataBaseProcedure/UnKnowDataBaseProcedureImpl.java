@@ -24,6 +24,7 @@ import java.util.Map;
  * @since: 1.0
  */
 @Service
+@Deprecated
 public class UnKnowDataBaseProcedureImpl implements DataBaseProcedureService, DataBaseTableService, TableToProcedureService {
 
     @Override

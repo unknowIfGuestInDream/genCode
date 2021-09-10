@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date: 2021/7/23 9:56
  * @since: 1.0
  */
+@Deprecated
 public class DataBaseTableToProcFactory {
     private static Map<DataBaseType, TableToProcedureService> strategyMap = new ConcurrentHashMap<>();
 

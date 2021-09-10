@@ -12,6 +12,7 @@ import java.util.Map;
  * @date: 2021/7/23 9:14
  * @since: 1.0
  */
+@Deprecated
 public interface TableToProcedureService extends InitializingBean {
 
     /**

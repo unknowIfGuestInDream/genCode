@@ -18,6 +18,7 @@ import java.util.Map;
  * @since: 1.0
  */
 @Service
+@Deprecated
 public class MariaDbTableToProcServiceImpl implements TableToProcedureService {
     @Override
     public String genGetProcedure(String tableName, List<String> primarys, List<String> primaryTypes, List<String> primaryDesc, NameConventService nameConvent) {
