@@ -4,7 +4,6 @@ import com.newangels.gen.util.DataSourceUtil;
 import com.newangels.gen.util.FreeMarkerUtil;
 import com.newangels.gen.util.template.AbstractFreeMarkerTemplate;
 import freemarker.template.Configuration;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -217,13 +216,6 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
     /**
      * 获取controller层代码
      */
-    protected String getController(FreeMarkerConfigurer freeMarkerConfigurer, Map<String, Object> objectMap) {
-        return getFtlModel(freeMarkerConfigurer, objectMap, "controller.ftl");
-    }
-
-    /**
-     * 获取controller层代码
-     */
     protected String getController(Configuration configuration, Map<String, Object> objectMap) {
         return getFtlModel(configuration, objectMap, "controller.ftl");
     }
@@ -231,22 +223,8 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
     /**
      * 获取service层代码
      */
-    protected String getService(FreeMarkerConfigurer freeMarkerConfigurer, Map<String, Object> objectMap) {
-        return getFtlModel(freeMarkerConfigurer, objectMap, "service.ftl");
-    }
-
-    /**
-     * 获取service层代码
-     */
     protected String getService(Configuration configuration, Map<String, Object> objectMap) {
         return getFtlModel(configuration, objectMap, "service.ftl");
-    }
-
-    /**
-     * 获取serviceImpl层代码
-     */
-    protected String getServiceImpl(FreeMarkerConfigurer freeMarkerConfigurer, Map<String, Object> objectMap) {
-        return getFtlModel(freeMarkerConfigurer, objectMap, "serviceImpl.ftl");
     }
 
     /**
@@ -259,22 +237,8 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
     /**
      * 获取repository层代码
      */
-    protected String getRepository(FreeMarkerConfigurer freeMarkerConfigurer, Map<String, Object> objectMap) {
-        return getFtlModel(freeMarkerConfigurer, objectMap, "repository.ftl");
-    }
-
-    /**
-     * 获取repository层代码
-     */
     protected String getRepository(Configuration configuration, Map<String, Object> objectMap) {
         return getFtlModel(configuration, objectMap, "repository.ftl");
-    }
-
-    /**
-     * 获取controller层方法代码
-     */
-    protected String getControllerMethod(FreeMarkerConfigurer freeMarkerConfigurer, Map<String, Object> objectMap) {
-        return getFtlModel(freeMarkerConfigurer, objectMap, "controllerMethod.ftl");
     }
 
     /**
@@ -287,13 +251,6 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
     /**
      * 获取service层方法代码
      */
-    protected String getServiceMethod(FreeMarkerConfigurer freeMarkerConfigurer, Map<String, Object> objectMap) {
-        return getFtlModel(freeMarkerConfigurer, objectMap, "serviceMethod.ftl");
-    }
-
-    /**
-     * 获取service层方法代码
-     */
     protected String getServiceMethod(Configuration configuration, Map<String, Object> objectMap) {
         return getFtlModel(configuration, objectMap, "serviceMethod.ftl");
     }
@@ -301,22 +258,8 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
     /**
      * 获取serviceImpl层方法代码
      */
-    protected String getServiceImplMethod(FreeMarkerConfigurer freeMarkerConfigurer, Map<String, Object> objectMap) {
-        return getFtlModel(freeMarkerConfigurer, objectMap, "serviceImplMethod.ftl");
-    }
-
-    /**
-     * 获取serviceImpl层方法代码
-     */
     protected String getServiceImplMethod(Configuration configuration, Map<String, Object> objectMap) {
         return getFtlModel(configuration, objectMap, "serviceImplMethod.ftl");
-    }
-
-    /**
-     * 获取repository层方法代码
-     */
-    protected String getRepositoryMethod(FreeMarkerConfigurer freeMarkerConfigurer, Map<String, Object> objectMap) {
-        return getFtlModel(freeMarkerConfigurer, objectMap, "repositoryMethod.ftl");
     }
 
     /**
