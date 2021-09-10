@@ -7,8 +7,7 @@ import com.newangels.gen.util.DBUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author: TangLiang
@@ -29,5 +28,21 @@ public class DataBaseProcedureTest {
         DataBaseProcedureService dbProcedure = DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName(V_TYPE));
         List<Map<String, Object>> list = dbUtil.executeQuery("select * from database_info");
         System.out.println(list);
+    }
+
+    @Test
+    public void Tes1() {
+        Map<String, Object> result = new HashMap<>(16);
+        List<String> list = new ArrayList<>(Arrays.asList("get", "select", "selectWithPage", "insert", "update", "save", "delete"));
+        result.put("get", "get");
+        result.put("select", "select");
+        result.put("selectWithPage", "selectWithPage");
+        result.put("insert", "insert");
+        result.put("update", "update");
+        result.put("list", result.keySet());
+        System.out.println(result.get("list"));
+        System.out.println("=======================");
+        result.put("list", list);
+        System.out.println(result.get("list"));
     }
 }
