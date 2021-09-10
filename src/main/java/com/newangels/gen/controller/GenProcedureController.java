@@ -130,7 +130,7 @@ public class GenProcedureController {
     /**
      * 生成代码下载
      */
-    @GetMapping(value = "downloadCode")
+    @GetMapping("downloadCode")
     @Log
     public void downloadRiderList(String moduleName, String genProcedureModelType, String nameConventType, String packageName, String url, String driver, String userName, String password, @RequestParam("procedureNameList") List<String> procedureNameList, String author, HttpServletRequest request, HttpServletResponse response) {
         try {

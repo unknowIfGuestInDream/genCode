@@ -191,7 +191,7 @@ public abstract class AbstractTableToProcedure extends AbstractFreeMarkerTemplat
         }
 
         //模版值
-        Map<String, Object> objectMap = new HashMap<>(16);
+        Map<String, Object> objectMap = new HashMap<>(64);
         dealCommonProcedure(tableName, tableDesc, nameConvent, objectMap);
         dealGetProcedure(tableName, primarys, primaryTypes, primaryDesc, nameConvent, objectMap);
         dealSelProcedure(tableName, selParams, selParamTypes, selParamDescs, selType, nameConvent, objectMap);
@@ -202,6 +202,7 @@ public abstract class AbstractTableToProcedure extends AbstractFreeMarkerTemplat
         dealDelProcedure(tableName, primarys, primaryTypes, primaryDesc, nameConvent, objectMap);
         //返回结果
         Map<String, Object> result = new HashMap<>(16);
+        //tab页集合, 保证返回顺序
         List<String> list = new ArrayList<>(Arrays.asList("get", "select", "selectWithPage", "insert", "update", "save", "delete"));
         result.put("list", list);
         result.put("get", getGetProcedure(configuration, objectMap));

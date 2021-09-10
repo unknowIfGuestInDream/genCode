@@ -96,7 +96,7 @@ public class OracleTableToProc extends AbstractTableToProcedure implements Initi
         selectWithPageInParams.add(nameConvent.getProcOutParamName("total") + " OUT VARCHAR2, --返回总条数");
         selectWithPageInParams.add(nameConvent.getProcOutParamName("result") + " OUT SYS_REFCURSOR --成功返回结果集");
         //赋值
-        objectMap.put("selProcName", nameConvent.getProcName(tableName, ProcTypes.SELECT));
+        objectMap.putIfAbsent("selProcName", nameConvent.getProcName(tableName, ProcTypes.SELECT));
         objectMap.put("selectWithPageInParams", selectWithPageInParams.toString());
         objectMap.putIfAbsent("selectSqlWhere", selectSqlWhere.toString());
     }

@@ -201,7 +201,7 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
         objectMap.put("module", moduleName);
         objectMap.put("author", author);
         objectMap.put("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
-        //tab页集合
+        //tab页集合, 保证返回顺序
         List<String> list = new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "repository", "BaseUtils", "ProcedureUtils"));
         result.put("controller", getController(configuration, objectMap));
         result.put("service", getService(configuration, objectMap));
