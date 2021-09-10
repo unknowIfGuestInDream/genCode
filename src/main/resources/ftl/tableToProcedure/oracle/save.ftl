@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE ${procName}(${saveInParams}) IS
+CREATE OR REPLACE PROCEDURE ${saveProcName}(${saveInParams}) IS
 /*保存${tableDesc}*/
   V_I_NUMBER INT;
 BEGIN
@@ -16,4 +16,4 @@ BEGIN
 EXCEPTION
     WHEN OTHERS THEN
       ${message} := SQLERRM;
-END ${procName};
+END ${saveProcName};

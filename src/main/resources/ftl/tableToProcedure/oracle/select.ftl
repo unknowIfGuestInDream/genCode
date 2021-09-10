@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE ${procName}(${selectInParams}) IS
+CREATE OR REPLACE PROCEDURE ${selProcName}(${selectInParams}) IS
 /*查询${tableDesc}*/
 BEGIN
   OPEN ${result} FOR
@@ -7,4 +7,4 @@ BEGIN
 EXCEPTION
   WHEN OTHERS THEN
     ${message} := SQLERRM;
-END ${procName};
+END ${selProcName};

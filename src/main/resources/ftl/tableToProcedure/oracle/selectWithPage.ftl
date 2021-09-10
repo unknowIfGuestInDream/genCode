@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE ${procName}(${selectWithPageInParams}) IS
+CREATE OR REPLACE PROCEDURE ${selProcName}(${selectWithPageInParams}) IS
 /*查询${tableDesc}*/
 BEGIN
   IF ${page} IS NOT NULL AND ${limit} IS NOT NULL AND ${limit} > 0 THEN
@@ -18,4 +18,4 @@ BEGIN
 EXCEPTION
   WHEN OTHERS THEN
     ${message} := SQLERRM;
-END ${procName};
+END ${selProcName};

@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE ${procName}(${insInParams}) IS
+CREATE OR REPLACE PROCEDURE ${insProcName}(${insInParams}) IS
 /*新增${tableDesc}*/
 BEGIN
   INSERT INTO ${tableName}(${insField})
@@ -7,4 +7,4 @@ BEGIN
 EXCEPTION
   WHEN OTHERS THEN
     ${message} := SQLERRM;
-END ${procName};
+END ${insProcName};
