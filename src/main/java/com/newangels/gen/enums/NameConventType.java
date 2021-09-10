@@ -18,13 +18,7 @@ public enum NameConventType {
     /**
      * EAM3期常用规范
      */
-    EAM3("2"),
-
-    /**
-     * 未知规范
-     */
-    @Deprecated
-    UNKNOW("UNKNOW");
+    EAM3("2");
 
     private String typeName;
 
