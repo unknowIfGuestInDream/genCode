@@ -7,10 +7,10 @@ BEGIN
     FROM ${tableName}${getSqlWhere};
   IF (V_I_NUMBER = 0) THEN
     INSERT INTO ${tableName}(${insField})
-    VALUES (${insParams});
+    VALUES (${insValueParams});
   ELSE
     UPDATE ${tableName}
-      SET ${updParams}${getSqlWhere};
+      SET ${updSqlParams}${getSqlWhere};
   END IF;
   ${message} := 'success';
 EXCEPTION

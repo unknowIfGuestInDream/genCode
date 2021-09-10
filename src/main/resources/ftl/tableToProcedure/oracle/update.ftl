@@ -3,7 +3,7 @@ CREATE OR REPLACE PROCEDURE ${updProcName}(${updInParams}) IS
 BEGIN
   UPDATE ${tableName}
 
-    SET ${updParams}${getSqlWhere};
+    SET ${updSqlParams}${getSqlWhere};
   ${message} :='success';
 EXCEPTION
   WHEN OTHERS THEN
