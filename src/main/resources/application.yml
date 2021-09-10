@@ -80,3 +80,6 @@ schedule:
   poolSize: 20 #线程池核心线程数
   removeOnCancelPolicy: true #取消时删除策略
   threadNamePrefix: genSchedulTask- #线程前缀名
+##配置项目是否有数据库，默认有数据库
+gen:
+  nodb: false

@@ -2,6 +2,7 @@ package com.newangels.gen.service.impl;
 
 import com.newangels.gen.service.DataBaseInfoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -14,6 +15,9 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
+ * 有数据库实现类
+ * gen.nodb=true
+ *
  * @author: TangLiang
  * @date: 2021/6/19 13:21
  * @since: 1.0
@@ -21,6 +25,7 @@ import java.util.Optional;
 @Service
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "gen.nodb", havingValue = "true", matchIfMissing = true)
 public class DataBaseInfoServiceImpl implements DataBaseInfoService {
     private final JdbcTemplate genJdbcTemplate;
 
