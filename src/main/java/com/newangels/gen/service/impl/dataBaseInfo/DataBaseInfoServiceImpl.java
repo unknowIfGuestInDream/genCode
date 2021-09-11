@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * 有数据库实现类
@@ -31,8 +30,8 @@ public class DataBaseInfoServiceImpl implements DataBaseInfoService {
 
     @Override
     public Map<String, Object> loadDataBaseInfo(String ID) {
-        return Optional.ofNullable(genJdbcTemplate.queryForList("select * from database_info where ID = ?", ID).get(0))
-                .orElseGet(HashMap::new);
+        List<Map<String, Object>> list = genJdbcTemplate.queryForList("select * from database_info where ID = ?", ID);
+        return list.size() > 0 ? list.get(0) : new HashMap<>();
     }
 
     @Override

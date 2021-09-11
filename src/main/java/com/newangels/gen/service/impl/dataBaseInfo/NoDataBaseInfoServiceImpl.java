@@ -7,7 +7,10 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -40,10 +43,10 @@ public class NoDataBaseInfoServiceImpl implements DataBaseInfoService {
 
     @Override
     public Map<String, Object> loadDataBaseInfo(String ID) {
-        return Optional.ofNullable(DataBaseInfoList.stream()
+        List<Map<String, Object>> list = DataBaseInfoList.stream()
                 .filter(m -> m.get("ID").equals(ID))
-                .collect(Collectors.toList()).get(0))
-                .orElseGet(HashMap::new);
+                .collect(Collectors.toList());
+        return list.size() > 0 ? list.get(0) : new HashMap<>();
     }
 
     @Override
@@ -61,7 +64,6 @@ public class NoDataBaseInfoServiceImpl implements DataBaseInfoService {
         map.put("USERNAME", USERNAME);
         map.put("PASSWORD", PASSWORD);
         map.put("CREATE_TIME", LocalDateTime.now());
-        map.put("UPDATE_TIME", LocalDateTime.now());
         DataBaseInfoList.add(map);
         return 1;
     }
