@@ -1,4 +1,4 @@
-package com.newangels.gen.service.impl;
+package com.newangels.gen.service.impl.dataBaseInfo;
 
 import com.newangels.gen.service.DataBaseInfoService;
 import lombok.RequiredArgsConstructor;
