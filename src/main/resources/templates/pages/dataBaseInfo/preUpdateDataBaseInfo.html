@@ -191,11 +191,10 @@
         for (var key in dataBase) {//装载被修改数据到页面
             (formPanel.findField(key) != null) ? formPanel.findField(key).setValue(dataBase[key]) : 0;
         }
-        formPanel.isValid();//校验数据
         Ext.getBody().unmask();//取消页面遮盖
     }
 
-    //修改
+    //修改数据源
     function _updateDataBaseInfo() {
         Ext.getCmp('formPanel').getForm().submit({//提交表单
             url: '/gen/updateDataBaseInfo',
@@ -221,6 +220,7 @@
         });
     }
 
+    //测试连接
     function _testConnect() {
         Ext.getCmp('formPanel').getForm().submit({//提交表单
             url: '/gen/testConnect',

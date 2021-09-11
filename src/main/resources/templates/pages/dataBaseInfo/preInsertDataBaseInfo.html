@@ -101,7 +101,6 @@
                 inputWidth: 600,
                 fieldLabel: '链接',
                 allowBlank: false,
-                value: 'jdbc:oracle:thin:@10.18.26.86:1521:SID',
                 style: 'clear:both'
             }, {
                 xtype: 'textfield',
@@ -151,12 +150,14 @@
             }
         }
 
-        var oracleDriverStore = Ext.data.StoreManager.lookup('driverStore');
-        Ext.getCmp('DRIVER').select(oracleDriverStore.first());
+        //默认为oracle驱动
+        Ext.getCmp('DRIVER').setValue('oracle.jdbc.OracleDriver');
+        Ext.getCmp('URL').setValue('jdbc:oracle:thin:@10.18.26.86:1521:SID');
 
         Ext.getBody().unmask();
     }
 
+    //新增数据源
     function _insertDataBaseInfo() {
         Ext.getCmp('formPanel').getForm().submit({//提交表单
             url: '/gen/insertDataBaseInfo',
@@ -182,6 +183,7 @@
         });
     }
 
+    //测试连接
     function _testConnect() {
         Ext.getCmp('formPanel').getForm().submit({//提交表单
             url: '/gen/testConnect',

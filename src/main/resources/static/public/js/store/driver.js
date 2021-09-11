@@ -1,10 +1,9 @@
 /**
- *驱动类
+ * 驱动类
  *
  * @author ZhangXu
  * @private
  */
-
 var driver = [];
 driver.push({
     CODE_: 'oracle.jdbc.OracleDriver',
