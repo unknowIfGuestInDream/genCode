@@ -5,7 +5,7 @@ import com.newangels.gen.base.BaseUtils;
 import com.newangels.gen.enums.DataBaseType;
 import com.newangels.gen.enums.GenProcedureModelType;
 import com.newangels.gen.enums.NameConventType;
-import com.newangels.gen.util.SimpleCache;
+import com.newangels.gen.util.cache.SimpleCache;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

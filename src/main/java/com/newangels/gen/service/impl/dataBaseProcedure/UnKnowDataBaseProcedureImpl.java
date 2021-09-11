@@ -9,7 +9,7 @@ import com.newangels.gen.service.DataBaseProcedureService;
 import com.newangels.gen.service.DataBaseTableService;
 import com.newangels.gen.service.NameConventService;
 import com.newangels.gen.service.TableToProcedureService;
-import com.newangels.gen.util.DataSourceUtil;
+import com.newangels.gen.util.dataSource.DataSourceUtil;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 

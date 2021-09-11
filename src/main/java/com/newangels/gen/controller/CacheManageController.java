@@ -3,7 +3,7 @@ package com.newangels.gen.controller;
 import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
 import com.newangels.gen.factory.DataSourceUtilFactory;
-import com.newangels.gen.util.Cache;
+import com.newangels.gen.util.cache.Cache;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;

@@ -1,4 +1,4 @@
-package com.newangels.gen.util;
+package com.newangels.gen.util.template;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;

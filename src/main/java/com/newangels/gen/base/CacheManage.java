@@ -1,6 +1,6 @@
 package com.newangels.gen.base;
 
-import com.newangels.gen.util.Cache;
+import com.newangels.gen.util.cache.Cache;
 
 import java.util.List;
 import java.util.Map;

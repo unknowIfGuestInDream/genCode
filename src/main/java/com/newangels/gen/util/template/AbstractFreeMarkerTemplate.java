@@ -1,6 +1,5 @@
 package com.newangels.gen.util.template;
 
-import com.newangels.gen.util.FreeMarkerUtil;
 import freemarker.template.Configuration;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 

@@ -1,4 +1,4 @@
-package com.newangels.gen.util;
+package com.newangels.gen.util.dataSource;
 
 import javax.sql.DataSource;
 import java.sql.*;

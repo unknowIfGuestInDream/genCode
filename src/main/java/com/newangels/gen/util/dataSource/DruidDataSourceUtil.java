@@ -1,7 +1,6 @@
 package com.newangels.gen.util.dataSource;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.newangels.gen.util.DataSourceUtil;
 import org.apache.commons.lang3.StringUtils;
 
 /**

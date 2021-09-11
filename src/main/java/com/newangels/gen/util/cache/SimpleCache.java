@@ -1,4 +1,4 @@
-package com.newangels.gen.util;
+package com.newangels.gen.util.cache;
 
 import lombok.NonNull;
 

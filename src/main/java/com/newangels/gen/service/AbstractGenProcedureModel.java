@@ -1,7 +1,7 @@
 package com.newangels.gen.service;
 
-import com.newangels.gen.util.DataSourceUtil;
-import com.newangels.gen.util.FreeMarkerUtil;
+import com.newangels.gen.util.dataSource.DataSourceUtil;
+import com.newangels.gen.util.template.FreeMarkerUtil;
 import com.newangels.gen.util.template.AbstractFreeMarkerTemplate;
 import freemarker.template.Configuration;
 

@@ -5,7 +5,7 @@ import com.newangels.gen.factory.AbstractGenProcedureModelFactory;
 import com.newangels.gen.service.AbstractGenProcedureModel;
 import com.newangels.gen.service.DataBaseProcedureService;
 import com.newangels.gen.service.NameConventService;
-import com.newangels.gen.util.DataSourceUtil;
+import com.newangels.gen.util.dataSource.DataSourceUtil;
 import freemarker.template.Configuration;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
