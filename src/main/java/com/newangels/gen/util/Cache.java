@@ -19,9 +19,9 @@ import java.util.concurrent.DelayQueue;
 public class Cache<K, V> {
 
     //存储缓存
-    public ConcurrentHashMap<K, V> map = new ConcurrentHashMap<K, V>();
+    public ConcurrentHashMap<K, V> map = new ConcurrentHashMap<>();
     //延迟队列
-    public DelayQueue<DelayedItem<K>> queue = new DelayQueue<DelayedItem<K>>();
+    public DelayQueue<DelayedItem<K>> queue = new DelayQueue<>();
     //缓存30秒
     public static final long CACHE_HOLD_30SECOND = 30 * 1000 * 1000 * 1000L;
     //缓存30分钟
