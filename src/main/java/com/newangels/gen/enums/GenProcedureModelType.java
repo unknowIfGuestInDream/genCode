@@ -30,12 +30,12 @@ public enum GenProcedureModelType {
     EAM3("4", "大连模版EAM3期风格");
 
     /**
-     * 规范编码/名称
+     * 模版编码/名称
      */
     private String code;
 
     /**
-     * 规范描述
+     * 模版描述
      */
     private String desc;
 
@@ -44,7 +44,7 @@ public enum GenProcedureModelType {
         this.desc = desc;
     }
 
-    //跟据后缀获取文件类型枚举变量
+    //跟据模板编码获取模板
     public static GenProcedureModelType fromCode(String typeName) {
         for (GenProcedureModelType type : GenProcedureModelType.values()) {
             if (StringUtils.isNotEmpty(typeName) && type.getCode().equals(typeName)) {

@@ -35,7 +35,7 @@ public class genProcedureTest {
         List<String> procedureNameList = new ArrayList<>();
         procedureNameList.add("PRO_BASE_DEPT_GET");
         procedureNameList.add("PRO_BASE_PERSONPOST_GET");
-        Map<String, Object> result = genProcedureModel.genCode("code", "cn.newangels.gen", "budgetuser", procedureNameList, "admin", NameConventFactory.getNameConvent(NameConventType.fromTypeName("2")), DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")), DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET", "oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"), freeMarkerConfigurer.getConfiguration());
+        Map<String, Object> result = genProcedureModel.genCode("code", "cn.newangels.gen", "budgetuser", procedureNameList, "admin", NameConventFactory.getNameConvent(NameConventType.fromCode("2")), DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")), DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET", "oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"), freeMarkerConfigurer.getConfiguration());
         System.out.println(result.get("controller"));
         System.out.println("============================================");
         System.out.println(result.get("service"));
@@ -51,7 +51,7 @@ public class genProcedureTest {
         List<String> procedureNameList = new ArrayList<>();
         procedureNameList.add("PRO_BASE_DEPT_GET");
         procedureNameList.add("PRO_BASE_PERSONPOST_GET");
-        Map<String, Object> result = genProcedureModel.genCode("code", "cn.newangels.gen", "budgetuser", procedureNameList, "admin", NameConventFactory.getNameConvent(NameConventType.fromTypeName("2")), DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")), DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET", "oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"), freeMarkerConfigurer.getConfiguration());
+        Map<String, Object> result = genProcedureModel.genCode("code", "cn.newangels.gen", "budgetuser", procedureNameList, "admin", NameConventFactory.getNameConvent(NameConventType.fromCode("2")), DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")), DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET", "oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"), freeMarkerConfigurer.getConfiguration());
         System.out.println(result.get("controller"));
         System.out.println("============================================");
         System.out.println(result.get("service"));
@@ -67,7 +67,7 @@ public class genProcedureTest {
         List<String> procedureNameList = new ArrayList<>();
         procedureNameList.add("PRO_BASE_DEPT_GET");
         procedureNameList.add("PRO_BASE_PERSONPOST_GET");
-        Map<String, Object> result = genProcedureModel.genCode("code", "cn.newangels.gen", "budgetuser", procedureNameList, "admin", NameConventFactory.getNameConvent(NameConventType.fromTypeName("2")), DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")), DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET", "oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"), freeMarkerConfigurer.getConfiguration());
+        Map<String, Object> result = genProcedureModel.genCode("code", "cn.newangels.gen", "budgetuser", procedureNameList, "admin", NameConventFactory.getNameConvent(NameConventType.fromCode("2")), DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")), DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET", "oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"), freeMarkerConfigurer.getConfiguration());
         System.out.println(result.get("controller"));
         System.out.println("============================================");
         System.out.println(result.get("service"));
@@ -83,7 +83,7 @@ public class genProcedureTest {
         List<String> procedureNameList = new ArrayList<>();
         procedureNameList.add("PRO_BASE_DEPT_GET");
         procedureNameList.add("PRO_BASE_PERSONPOST_GET");
-        Map<String, Object> result = genProcedureModel.genCode("code", "cn.newangels.gen", "budgetuser", procedureNameList, "admin", NameConventFactory.getNameConvent(NameConventType.fromTypeName("2")), DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")), DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET", "oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"), freeMarkerConfigurer.getConfiguration());
+        Map<String, Object> result = genProcedureModel.genCode("code", "cn.newangels.gen", "budgetuser", procedureNameList, "admin", NameConventFactory.getNameConvent(NameConventType.fromCode("2")), DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")), DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET", "oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"), freeMarkerConfigurer.getConfiguration());
         System.out.println(result.get("controller"));
         System.out.println("============================================");
         System.out.println(result.get("service"));

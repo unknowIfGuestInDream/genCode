@@ -101,7 +101,7 @@ public class DataBaseTableController {
     @Log
     public Map<String, Object> genProceduresByTable(String nameConventType, String driver, String tableName, String tableDesc, @RequestParam("params") List<String> params, @RequestParam("paramTypes") List<String> paramTypes, @RequestParam("paramDescs") List<String> paramDescs, @RequestParam("priParamIndex") List<Integer> priParamIndex, @RequestParam("selParamsIndex") List<Integer> selParamsIndex, @RequestParam("selType") List<Integer> selType, @RequestParam("insParamIndex") List<Integer> insParamIndex, @RequestParam("updParamIndex") List<Integer> updParamIndex) {
         //获取命名规范
-        NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromTypeName(nameConventType));
+        NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromCode(nameConventType));
         //获取表生成存储过程实现类
         AbstractTableToProcedure tableToProcedure = AbstractTableToProcedureFactory.getTableToProcedure(DataBaseType.fromTypeName(driver));
         return BaseUtils.success(tableToProcedure.genProceduresByTable(tableName, tableDesc, params, paramTypes, paramDescs, priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex, nameConvent, freeMarkerConfigurer.getConfiguration()));
