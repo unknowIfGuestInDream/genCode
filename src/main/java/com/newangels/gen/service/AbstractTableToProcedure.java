@@ -2,6 +2,7 @@ package com.newangels.gen.service;
 
 import com.newangels.gen.util.template.AbstractFreeMarkerTemplate;
 import freemarker.template.Configuration;
+import org.springframework.beans.factory.InitializingBean;
 
 import java.util.*;
 
@@ -12,7 +13,7 @@ import java.util.*;
  * @date: 2021/9/9 21:40
  * @since: 1.0
  */
-public abstract class AbstractTableToProcedure extends AbstractFreeMarkerTemplate {
+public abstract class AbstractTableToProcedure extends AbstractFreeMarkerTemplate implements InitializingBean {
 
     @Override
     protected String getRootPackageName() {

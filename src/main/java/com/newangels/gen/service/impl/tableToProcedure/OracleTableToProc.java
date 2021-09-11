@@ -5,7 +5,6 @@ import com.newangels.gen.factory.AbstractTableToProcedureFactory;
 import com.newangels.gen.service.AbstractTableToProcedure;
 import com.newangels.gen.service.NameConventService;
 import com.newangels.gen.util.ProcTypes;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +19,7 @@ import java.util.StringJoiner;
  * @since: 1.0
  */
 @Service
-public class OracleTableToProc extends AbstractTableToProcedure implements InitializingBean {
+public class OracleTableToProc extends AbstractTableToProcedure {
 
     @Override
     protected String getFtlPackageName() {
