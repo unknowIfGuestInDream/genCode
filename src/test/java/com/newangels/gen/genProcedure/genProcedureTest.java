@@ -8,7 +8,6 @@ import com.newangels.gen.factory.DataBaseProcedureFactory;
 import com.newangels.gen.factory.DataSourceUtilFactory;
 import com.newangels.gen.factory.NameConventFactory;
 import com.newangels.gen.service.AbstractGenProcedureModel;
-import com.newangels.gen.service.impl.genProcedureModel.EamNewProcedureModel;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,7 +31,7 @@ public class genProcedureTest {
 
     @Test
     public void genProcedureEamNew() {
-        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromTypeName("4"));
+        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromCode("4"));
         List<String> procedureNameList = new ArrayList<>();
         procedureNameList.add("PRO_BASE_DEPT_GET");
         procedureNameList.add("PRO_BASE_PERSONPOST_GET");
@@ -48,7 +47,7 @@ public class genProcedureTest {
 
     @Test
     public void genProcedureEam() {
-        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromTypeName("3"));
+        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromCode("3"));
         List<String> procedureNameList = new ArrayList<>();
         procedureNameList.add("PRO_BASE_DEPT_GET");
         procedureNameList.add("PRO_BASE_PERSONPOST_GET");
@@ -64,7 +63,7 @@ public class genProcedureTest {
 
     @Test
     public void genProcedureOld() {
-        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromTypeName("2"));
+        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromCode("2"));
         List<String> procedureNameList = new ArrayList<>();
         procedureNameList.add("PRO_BASE_DEPT_GET");
         procedureNameList.add("PRO_BASE_PERSONPOST_GET");
@@ -80,7 +79,7 @@ public class genProcedureTest {
 
     @Test
     public void genProcedureRestful() {
-        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromTypeName("1"));
+        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromCode("1"));
         List<String> procedureNameList = new ArrayList<>();
         procedureNameList.add("PRO_BASE_DEPT_GET");
         procedureNameList.add("PRO_BASE_PERSONPOST_GET");

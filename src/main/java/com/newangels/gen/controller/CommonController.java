@@ -3,6 +3,7 @@ package com.newangels.gen.controller;
 import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
 import com.newangels.gen.enums.DataBaseType;
+import com.newangels.gen.enums.GenProcedureModelType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,6 +46,22 @@ public class CommonController {
             Map<String, Object> result = new HashMap<>();
             result.put("CODE_", dataBaseType.getTypeName());
             result.put("NAME_", dataBaseType.toString());
+            list.add(result);
+        }
+        return BaseUtils.success(list);
+    }
+
+    /**
+     * 获取GenProcedureModelType的数据
+     */
+    @GetMapping("selectGenProcedureModelType")
+    @Log
+    public Map<String, Object> selectGenProcedureModelType() {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (GenProcedureModelType genProcedureModelType : GenProcedureModelType.values()) {
+            Map<String, Object> result = new HashMap<>();
+            result.put("CODE_", genProcedureModelType.getCode());
+            result.put("NAME_", genProcedureModelType.getDesc());
             list.add(result);
         }
         return BaseUtils.success(list);

@@ -117,7 +117,7 @@ public class GenProcedureController {
         //获取数据库连接，为空则创建
         DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
         //获取生成代码模版
-        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromTypeName(genProcedureModelType));
+        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromCode(genProcedureModelType));
         //获取命名规范
         NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromTypeName(nameConventType));
         //获取数据库过程sql
@@ -144,7 +144,7 @@ public class GenProcedureController {
 
             ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
             //获取生成代码模版
-            AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromTypeName(genProcedureModelType));
+            AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromCode(genProcedureModelType));
             //获取命名规范
             NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromTypeName(nameConventType));
             //获取数据库过程sql
