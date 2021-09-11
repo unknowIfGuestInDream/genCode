@@ -35,13 +35,14 @@ druid监控账号密码默认都为admin
 * NameConventService 命名规范
 * DataBaseProcedureService 数据库对应获取过程相关的sql&数据库关键词对应的java类型等
 * DataBaseInfoService 数据源管理
+* DataBaseTableService 数据库表相关sql
 * AbstractGenProcedureModel 存储过程代码生成模板
-* TableToProcedureService 表生成过程相关接口
+* AbstractTableToProcedure 表生成过程相关接口
 
 ## 新增规范，模板以及数据库
 * 如需要添加自己的命名规范则新增 NameConventService 的实现类并新增枚举类NameConventType参数,
 * 如需要添加自己的代码模版则需要实现AbstractGenProcedureModel并新增枚举类GenProcedureModelType参数,
-* 如需添加新的数据库则实现DataBaseProcedureService并新增枚举类DataBaseType参数,
+* 如需添加新的JDBC规范的数据库则实现DataBaseProcedureService，DataBaseTableService和AbstractTableToProcedure并新增枚举类DataBaseType参数，依赖中引入新的驱动
 
 ## 代码说明
 1. Cache类为具有过期时间的缓存 CacheManage负责维护Cache缓存, 目前主要应用于缓存前台存储过程查询结果等，减少数据库压力
