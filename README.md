@@ -38,12 +38,10 @@ druid监控账号密码默认都为admin
 * AbstractGenProcedureModel 存储过程代码生成模板
 * TableToProcedureService 表生成过程相关接口
 
-如需要添加自己的命名规范则新增 NameConventService 的实现类并新增枚举类NameConventType参数,
- 并在前台static/public/js/store/nameConventType.js中添加自己的实现类编码  
-如需要添加自己的代码模版则需要实现AbstractGenProcedureModel并新增枚举类GenProcedureModelType参数,
-并在前台static/public/js/store/genProcedureModelType.js中添加自己的代码模板编码  
-如需添加新的数据库则实现DataBaseProcedureService并新增枚举类DataBaseType参数,
- 并在static/public/js/store/driver.js中添加新的数据库的驱动名称
+## 新增规范，模板以及数据库
+* 如需要添加自己的命名规范则新增 NameConventService 的实现类并新增枚举类NameConventType参数,
+* 如需要添加自己的代码模版则需要实现AbstractGenProcedureModel并新增枚举类GenProcedureModelType参数,
+* 如需添加新的数据库则实现DataBaseProcedureService并新增枚举类DataBaseType参数,
 
 ## 代码说明
 1. Cache类为具有过期时间的缓存 CacheManage负责维护Cache缓存, 目前主要应用于缓存前台存储过程查询结果等，减少数据库压力
@@ -51,6 +49,7 @@ druid监控账号密码默认都为admin
 3. DataSourceUtilFactory缓存数据库连接池，减少连接池频繁创建销毁的开销
 4. CacheManageController中为缓存的查询，清除等API
 5. 定时任务位于schedule文件夹下，目前任务只有每周五清空数据库连接池缓存
+6. SimpleCache类为简易缓存, 主要缓存一些不常变数据
 
 ##最后
 如果有问题或者需求可以发送邮件或者提交Issues
