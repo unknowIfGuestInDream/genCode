@@ -1,9 +1,10 @@
 package com.newangels.gen.service;
 
 import com.newangels.gen.util.dataSource.DataSourceUtil;
-import com.newangels.gen.util.template.FreeMarkerUtil;
 import com.newangels.gen.util.template.AbstractFreeMarkerTemplate;
+import com.newangels.gen.util.template.FreeMarkerUtil;
 import freemarker.template.Configuration;
+import org.springframework.beans.factory.InitializingBean;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,7 +17,7 @@ import java.util.*;
  * @date: 2021/9/7 21:40
  * @since: 1.0
  */
-public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTemplate {
+public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTemplate implements InitializingBean {
 
     @Override
     protected String getRootPackageName() {

@@ -4,7 +4,6 @@ import com.newangels.gen.enums.GenProcedureModelType;
 import com.newangels.gen.factory.AbstractGenProcedureModelFactory;
 import com.newangels.gen.service.AbstractGenProcedureModel;
 import com.newangels.gen.service.NameConventService;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Service;
  * @since: 1.0
  */
 @Service
-public class EamProcedureModel extends AbstractGenProcedureModel implements InitializingBean {
+public class EamProcedureModel extends AbstractGenProcedureModel {
     @Override
     protected String getFtlPackageName() {
         return "eam";

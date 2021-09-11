@@ -7,7 +7,6 @@ import com.newangels.gen.service.DataBaseProcedureService;
 import com.newangels.gen.service.NameConventService;
 import com.newangels.gen.util.dataSource.DataSourceUtil;
 import freemarker.template.Configuration;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +20,7 @@ import java.util.Map;
  * @since: 1.0
  */
 @Service
-public class EamNewProcedureModel extends AbstractGenProcedureModel implements InitializingBean {
+public class EamNewProcedureModel extends AbstractGenProcedureModel {
     @Override
     protected String getFtlPackageName() {
         return "eamNew";
