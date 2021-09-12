@@ -125,11 +125,11 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
      */
     protected Map<String, Object> dealProcdure(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DataSourceUtil dataSourceUtil, Configuration configuration) {
         Map<String, Object> result = new HashMap<>(8);
-        //各层方法代码
-        StringBuilder controllerMethod = new StringBuilder();
-        StringBuilder serviceMethod = new StringBuilder();
-        StringBuilder serviceImplMethod = new StringBuilder();
-        StringBuilder repositoryMethod = new StringBuilder();
+        //各层方法代码 初始化容量按照每次生成四个过程赋予初始值
+        StringBuilder controllerMethod = new StringBuilder(1024);
+        StringBuilder serviceMethod = new StringBuilder(512);
+        StringBuilder serviceImplMethod = new StringBuilder(512);
+        StringBuilder repositoryMethod = new StringBuilder(3072);
         //排序
         nameConvent.sortMethod(procedureNameList);
         //获取方法名称集合
@@ -157,7 +157,7 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
             //请求协议
             String mappingType = getMappingType(procedureName, nameConvent);
             //方法模版参数
-            Map<String, Object> objectMap = new HashMap<>();
+            Map<String, Object> objectMap = new HashMap<>(16);
             objectMap.put("package", packageName);
             objectMap.put("mappingType", mappingType);
             objectMap.put("method", methodNames.get(i));
@@ -196,7 +196,7 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
      * @param configuration     ftl模板引擎配置
      */
     public Map<String, Object> genCode(String moduleName, String packageName, String userName, List<String> procedureNameList, String author, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DataSourceUtil dataSourceUtil, Configuration configuration) {
-        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>(16);
         //方法代码
         Map<String, Object> objectMap = dealProcdure(moduleName, packageName, userName, procedureNameList, nameConvent, dbProcedure, dataSourceUtil, configuration);
         objectMap.put("package", packageName);

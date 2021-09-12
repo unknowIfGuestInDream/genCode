@@ -152,36 +152,40 @@ public abstract class AbstractTableToProcedure extends AbstractFreeMarkerTemplat
     public Map<String, Object> genProceduresByTable(String tableName, String tableDesc, List<String> params, List<String> paramTypes, List<String> paramDescs, List<Integer> priParamIndex, List<Integer> selParamsIndex, List<Integer> selType, List<Integer> insParamIndex, List<Integer> updParamIndex, NameConventService nameConvent, Configuration configuration) {
         //一个集合包含所有字段，以及其它相关的存储集合的索引（0开始）
         //通过遍历所有字段集合来为相关集合赋值
-        List<String> primarys = new ArrayList<>();
-        List<String> primaryTypes = new ArrayList<>();
-        List<String> primaryDesc = new ArrayList<>();
-        List<String> selParams = new ArrayList<>();
-        List<String> selParamTypes = new ArrayList<>();
-        List<String> selParamDescs = new ArrayList<>();
-        List<String> insParams = new ArrayList<>();
-        List<String> insParamTypes = new ArrayList<>();
-        List<String> insParamDescs = new ArrayList<>();
-        List<String> updParams = new ArrayList<>();
-        List<String> updParamTypes = new ArrayList<>();
-        List<String> updParamDescs = new ArrayList<>();
+        int priLength = priParamIndex.size();
+        int selLength = selParamsIndex.size();
+        int insLength = insParamIndex.size();
+        int updLength = updParamIndex.size();
+        List<String> primarys = new ArrayList<>(priLength);
+        List<String> primaryTypes = new ArrayList<>(priLength);
+        List<String> primaryDesc = new ArrayList<>(priLength);
+        List<String> selParams = new ArrayList<>(selLength);
+        List<String> selParamTypes = new ArrayList<>(selLength);
+        List<String> selParamDescs = new ArrayList<>(selLength);
+        List<String> insParams = new ArrayList<>(insLength);
+        List<String> insParamTypes = new ArrayList<>(insLength);
+        List<String> insParamDescs = new ArrayList<>(insLength);
+        List<String> updParams = new ArrayList<>(updLength);
+        List<String> updParamTypes = new ArrayList<>(updLength);
+        List<String> updParamDescs = new ArrayList<>(updLength);
 
         for (int i = 0, length = params.size(); i < length; i++) {
-            if (i < priParamIndex.size()) {
+            if (i < priLength) {
                 primarys.add(params.get(priParamIndex.get(i)));
                 primaryTypes.add(paramTypes.get(priParamIndex.get(i)));
                 primaryDesc.add(paramDescs.get(priParamIndex.get(i)));
             }
-            if (i < selParamsIndex.size()) {
+            if (i < selLength) {
                 selParams.add(params.get(selParamsIndex.get(i)));
                 selParamTypes.add(paramTypes.get(selParamsIndex.get(i)));
                 selParamDescs.add(paramDescs.get(selParamsIndex.get(i)));
             }
-            if (i < insParamIndex.size()) {
+            if (i < insLength) {
                 insParams.add(params.get(insParamIndex.get(i)));
                 insParamTypes.add(paramTypes.get(insParamIndex.get(i)));
                 insParamDescs.add(paramDescs.get(insParamIndex.get(i)));
             }
-            if (i < updParamIndex.size()) {
+            if (i < updLength) {
                 updParams.add(params.get(updParamIndex.get(i)));
                 updParamTypes.add(paramTypes.get(updParamIndex.get(i)));
                 updParamDescs.add(paramDescs.get(updParamIndex.get(i)));
