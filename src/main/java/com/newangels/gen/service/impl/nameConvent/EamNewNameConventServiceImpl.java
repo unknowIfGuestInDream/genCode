@@ -6,6 +6,7 @@ import com.newangels.gen.service.NameConventService;
 import com.newangels.gen.util.ProcTypes;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -49,6 +50,18 @@ public class EamNewNameConventServiceImpl implements NameConventService {
             return "total";
         }
         return name;
+    }
+
+    @Override
+    public List<String> getMethodNames(String moduleName, List<String> procedureNameList) {
+        List<String> methodNames = new ArrayList<>(procedureNameList.size());
+        for (String procedureName : procedureNameList) {
+            //方法名称前缀
+            String preName = getName(procedureName);
+            String methodName = preName + moduleName;
+            methodNames.add(methodName);
+        }
+        return methodNames;
     }
 
     @Override

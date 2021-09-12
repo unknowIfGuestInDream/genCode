@@ -132,8 +132,11 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
         StringBuilder repositoryMethod = new StringBuilder();
         //排序
         nameConvent.sortMethod(procedureNameList);
+        //获取方法名称集合
+        List<String> methodNames = nameConvent.getMethodNames(moduleName, procedureNameList);
         //循环存储过程
-        for (String procedureName : procedureNameList) {
+        for (int i = 0, length = procedureNameList.size(); i < length; i++) {
+            String procedureName = procedureNameList.get(i);
             List<Map<String, Object>> list = dataSourceUtil.executeQuery(dbProcedure.selectArguments(userName.toUpperCase(), procedureName.toUpperCase()));
             //方法传参
             StringJoiner inParams = new StringJoiner(", ");
@@ -151,15 +154,13 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
             for (Map<String, Object> map : list) {
                 dealProcParams(map, inParams, outParams, procedureParams, serviceNote, repositoryParam, repositoryResult, nameConvent, dbProcedure);
             }
-            //方法名称前缀
-            String preName = nameConvent.getName(procedureName);
             //请求协议
             String mappingType = getMappingType(procedureName, nameConvent);
             //方法模版参数
             Map<String, Object> objectMap = new HashMap<>();
             objectMap.put("package", packageName);
             objectMap.put("mappingType", mappingType);
-            objectMap.put("method", preName + moduleName);
+            objectMap.put("method", methodNames.get(i));
             objectMap.put("inParams", inParams);
             objectMap.put("outParams", outParams);
             objectMap.put("module", moduleName);
