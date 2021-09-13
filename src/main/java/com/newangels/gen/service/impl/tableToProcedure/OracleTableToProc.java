@@ -34,9 +34,9 @@ public class OracleTableToProc extends AbstractTableToProcedure {
         StringJoiner getInParams = new StringJoiner("\n");
         for (int i = 0, length = primarys.size(); i < length; i++) {
             if (i == 0) {
-                getSqlWhere.append(" \nWHERE");
+                getSqlWhere.append(" \n      WHERE");
             } else {
-                getSqlWhere.append(" \nAND");
+                getSqlWhere.append(" \n      AND");
             }
             getInParams.add(nameConvent.genSelProcInParam(primarys.get(i), primaryTypes.get(i), primaryDesc.get(i), 0));
             getSqlWhere.append(nameConvent.genSelProcSqlWhere(primarys.get(i), primaryTypes.get(i), 0));
@@ -58,9 +58,9 @@ public class OracleTableToProc extends AbstractTableToProcedure {
         StringJoiner selectInParams = new StringJoiner("\n");
         for (int i = 0, length = selParams.size(); i < length; i++) {
             if (i == 0) {
-                selectSqlWhere.append(" \nWHERE");
+                selectSqlWhere.append(" \n      WHERE");
             } else {
-                selectSqlWhere.append(" \nAND");
+                selectSqlWhere.append(" \n      AND");
             }
             selectInParams.add(nameConvent.genSelProcInParam(selParams.get(i), selParamTypes.get(i), selParamDescs.get(i), selType.get(i)));
             selectSqlWhere.append(nameConvent.genSelProcSqlWhere(selParams.get(i), selParamTypes.get(i), selType.get(i)));
@@ -71,23 +71,23 @@ public class OracleTableToProc extends AbstractTableToProcedure {
         //赋值
         objectMap.put("selProcName", nameConvent.getProcName(tableName, ProcTypes.SELECT));
         objectMap.put("selectInParams", selectInParams.toString());
-        objectMap.putIfAbsent("selectSqlWhere", selectSqlWhere.toString());
+        objectMap.put("selectSqlWhere", selectSqlWhere.toString());
     }
 
     @Override
     protected void dealSelWithPageProcedure(String tableName, List<String> selParams, List<String> selParamTypes, List<String> selParamDescs, List<Integer> selType, NameConventService nameConvent, Map<String, Object> objectMap) {
         //查询条件
-        StringBuilder selectSqlWhere = new StringBuilder();
+        StringBuilder selWithPageSqlWhere = new StringBuilder();
         //存储过程入参
         StringJoiner selectWithPageInParams = new StringJoiner("\n");
         for (int i = 0, length = selParams.size(); i < length; i++) {
             if (i == 0) {
-                selectSqlWhere.append(" \nWHERE");
+                selWithPageSqlWhere.append(" \n                  WHERE");
             } else {
-                selectSqlWhere.append(" \nAND");
+                selWithPageSqlWhere.append(" \n                  AND");
             }
             selectWithPageInParams.add(nameConvent.genSelProcInParam(selParams.get(i), selParamTypes.get(i), selParamDescs.get(i), selType.get(i)));
-            selectSqlWhere.append(nameConvent.genSelProcSqlWhere(selParams.get(i), selParamTypes.get(i), selType.get(i)));
+            selWithPageSqlWhere.append(nameConvent.genSelProcSqlWhere(selParams.get(i), selParamTypes.get(i), selType.get(i)));
         }
         //添加出参字段, 出参类型和出参信息以及入参分页相关参数
         String page = nameConvent.getProcOutParamName("page");
@@ -99,7 +99,7 @@ public class OracleTableToProc extends AbstractTableToProcedure {
         //赋值
         objectMap.putIfAbsent("selProcName", nameConvent.getProcName(tableName, ProcTypes.SELECT));
         objectMap.put("selectWithPageInParams", selectWithPageInParams.toString());
-        objectMap.putIfAbsent("selectSqlWhere", selectSqlWhere.toString());
+        objectMap.put("selWithPageSqlWhere", selWithPageSqlWhere.toString());
     }
 
     @Override
@@ -107,9 +107,9 @@ public class OracleTableToProc extends AbstractTableToProcedure {
         //存储过程入参
         StringJoiner insInParams = new StringJoiner("\n");
         //新增语句字段
-        StringJoiner insField = new StringJoiner(",\n");
+        StringJoiner insField = new StringJoiner(", ");
         //新增语句传参参数
-        StringJoiner insValueParams = new StringJoiner(",\n");
+        StringJoiner insValueParams = new StringJoiner(", ");
         for (int i = 0, length = insParams.size(); i < length; i++) {
             insField.add(insParams.get(i));
             insValueParams.add(nameConvent.genProcInParamName(insParams.get(i), insParamTypes.get(i)));
@@ -131,16 +131,16 @@ public class OracleTableToProc extends AbstractTableToProcedure {
         StringBuilder getSqlWhere = new StringBuilder();
         for (int i = 0, length = primarys.size(); i < length; i++) {
             if (i == 0) {
-                getSqlWhere.append(" \nWHERE");
+                getSqlWhere.append(" \n      WHERE");
             } else {
-                getSqlWhere.append(" \nAND");
+                getSqlWhere.append(" \n      AND");
             }
             getSqlWhere.append(nameConvent.genSelProcSqlWhere(primarys.get(i), primaryTypes.get(i), 0));
         }
         //存储过程入参
         StringJoiner updInParams = new StringJoiner("\n");
         //修改语句传参参数
-        StringJoiner updSqlParams = new StringJoiner(",\n");
+        StringJoiner updSqlParams = new StringJoiner(",\n        ");
         for (int i = 0, length = primarys.size(); i < length; i++) {
             updInParams.add(nameConvent.genSelProcInParam(primarys.get(i), primaryTypes.get(i), primaryDesc.get(i), 0));
         }
@@ -164,16 +164,16 @@ public class OracleTableToProc extends AbstractTableToProcedure {
         StringBuilder getSqlWhere = new StringBuilder();
         for (int i = 0, length = primarys.size(); i < length; i++) {
             if (i == 0) {
-                getSqlWhere.append(" \nWHERE");
+                getSqlWhere.append(" \n      WHERE");
             } else {
-                getSqlWhere.append(" \nAND");
+                getSqlWhere.append(" \n      AND");
             }
             getSqlWhere.append(nameConvent.genSelProcSqlWhere(primarys.get(i), primaryTypes.get(i), 0));
         }
         //存储过程入参 以修改传参为主
         StringJoiner saveInParams = new StringJoiner("\n");
         //修改语句传参参数
-        StringJoiner updSqlParams = new StringJoiner(",\n");
+        StringJoiner updSqlParams = new StringJoiner(",\n        ");
         for (int i = 0, length = primarys.size(); i < length; i++) {
             saveInParams.add(nameConvent.genSelProcInParam(primarys.get(i), primaryTypes.get(i), primaryDesc.get(i), 0));
         }
@@ -182,9 +182,9 @@ public class OracleTableToProc extends AbstractTableToProcedure {
             saveInParams.add(nameConvent.genSelProcInParam(updParams.get(i), updParamTypes.get(i), updParamDescs.get(i), 0));
         }
         //新增语句字段
-        StringJoiner insField = new StringJoiner(",\n");
+        StringJoiner insField = new StringJoiner(", ");
         //新增语句传参参数
-        StringJoiner insValueParams = new StringJoiner(",\n");
+        StringJoiner insValueParams = new StringJoiner(", ");
         for (int i = 0, length = insParams.size(); i < length; i++) {
             insField.add(insParams.get(i));
             insValueParams.add(nameConvent.genProcInParamName(insParams.get(i), insParamTypes.get(i)));
@@ -204,24 +204,24 @@ public class OracleTableToProc extends AbstractTableToProcedure {
     @Override
     protected void dealDelProcedure(String tableName, List<String> primarys, List<String> primaryTypes, List<String> primaryDesc, NameConventService nameConvent, Map<String, Object> objectMap) {
         //查询条件
-        StringBuilder getSqlWhere = new StringBuilder();
+        StringBuilder delSqlWhere = new StringBuilder();
         //存储过程入参
         StringJoiner delInParams = new StringJoiner("\n");
         for (int i = 0, length = primarys.size(); i < length; i++) {
             if (i == 0) {
-                getSqlWhere.append(" \nWHERE");
+                delSqlWhere.append(" \n         WHERE");
             } else {
-                getSqlWhere.append(" \nAND");
+                delSqlWhere.append(" \n         AND");
             }
             delInParams.add(nameConvent.genSelProcInParam(primarys.get(i), primaryTypes.get(i), primaryDesc.get(i), 0));
-            getSqlWhere.append(nameConvent.genSelProcSqlWhere(primarys.get(i), primaryTypes.get(i), 0));
+            delSqlWhere.append(nameConvent.genSelProcSqlWhere(primarys.get(i), primaryTypes.get(i), 0));
         }
         //添加出参字段, 出参类型和出参信息
         delInParams.add(nameConvent.getProcOutParamName("message") + " OUT VARCHAR2 --成功执行信息为：‘success’，失败执行信息为错误信息");
         //赋值
         objectMap.put("delProcName", nameConvent.getProcName(tableName, ProcTypes.DELETE));
         objectMap.put("delInParams", delInParams.toString());
-        objectMap.putIfAbsent("getSqlWhere", getSqlWhere.toString());
+        objectMap.put("delSqlWhere", delSqlWhere.toString());
     }
 
     @Override

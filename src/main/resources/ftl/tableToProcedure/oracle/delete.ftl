@@ -1,7 +1,9 @@
-CREATE OR REPLACE PROCEDURE ${delProcName}(${delInParams}) IS
+CREATE OR REPLACE PROCEDURE ${delProcName}(
+${delInParams}
+) IS
 /*删除某个${tableDesc}*/
 BEGIN
-  DELETE FROM ${tableName}${getSqlWhere};
+  DELETE FROM ${tableName}${delSqlWhere};
   ${message} := 'success';
 EXCEPTION
   WHEN OTHERS THEN

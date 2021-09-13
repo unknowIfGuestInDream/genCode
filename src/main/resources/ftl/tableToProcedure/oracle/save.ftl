@@ -1,4 +1,6 @@
-CREATE OR REPLACE PROCEDURE ${saveProcName}(${saveInParams}) IS
+CREATE OR REPLACE PROCEDURE ${saveProcName}(
+${saveInParams}
+) IS
 /*保存${tableDesc}*/
   V_I_NUMBER INT;
 BEGIN
@@ -7,7 +9,7 @@ BEGIN
     FROM ${tableName}${getSqlWhere};
   IF (V_I_NUMBER = 0) THEN
     INSERT INTO ${tableName}(${insField})
-    VALUES (${insValueParams});
+      VALUES (${insValueParams});
   ELSE
     UPDATE ${tableName}
       SET ${updSqlParams}${getSqlWhere};

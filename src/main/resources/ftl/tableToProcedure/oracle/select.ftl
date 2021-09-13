@@ -1,8 +1,11 @@
-CREATE OR REPLACE PROCEDURE ${selProcName}(${selectInParams}) IS
+CREATE OR REPLACE PROCEDURE ${selProcName}(
+${selectInParams}
+) IS
 /*查询${tableDesc}*/
 BEGIN
   OPEN ${result} FOR
-    SELECT * FROM ${tableName}${selectSqlWhere};
+    SELECT *
+      FROM ${tableName}${selectSqlWhere};
   ${message} := 'success';
 EXCEPTION
   WHEN OTHERS THEN

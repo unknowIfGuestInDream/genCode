@@ -1,11 +1,13 @@
-CREATE OR REPLACE PROCEDURE ${selProcName}(${selectWithPageInParams}) IS
+CREATE OR REPLACE PROCEDURE ${selProcName}(
+${selectWithPageInParams}
+) IS
 /*查询${tableDesc}*/
 BEGIN
   IF ${page} IS NOT NULL AND ${limit} IS NOT NULL AND ${limit} > 0 THEN
     OPEN ${result} FOR
       SELECT *
         FROM (SELECT FULLTABLE.*, ROWNUM RN
-          FROM (SELECT * FROM ${tableName}${selectSqlWhere}) FULLTABLE
+          FROM (SELECT * FROM ${tableName}${selWithPageSqlWhere}) FULLTABLE
                 WHERE ROWNUM <= ${page} * ${limit})
         WHERE RN >= (${page} - 1) * ${limit};
   ELSE
