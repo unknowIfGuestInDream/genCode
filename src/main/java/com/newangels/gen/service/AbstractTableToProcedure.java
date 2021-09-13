@@ -221,6 +221,14 @@ public abstract class AbstractTableToProcedure extends AbstractFreeMarkerTemplat
     }
 
     /**
+     * 生成自增主键
+     *
+     * @param tableName  表名
+     * @param primaryKey 主键字段名
+     */
+    public abstract Map<String, Object> genAutoInsKey(String tableName, String primaryKey);
+
+    /**
      * 获取加载数据过程
      */
     protected String getGetProcedure(Configuration configuration, Map<String, Object> objectMap) {

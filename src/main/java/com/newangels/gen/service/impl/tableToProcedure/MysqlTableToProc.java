@@ -61,6 +61,11 @@ public class MysqlTableToProc extends AbstractTableToProcedure {
     }
 
     @Override
+    public Map<String, Object> genAutoInsKey(String tableName, String primaryKey) {
+        return null;
+    }
+
+    @Override
     public void afterPropertiesSet() throws Exception {
         AbstractTableToProcedureFactory.register(DataBaseType.MYSQL, this);
         AbstractTableToProcedureFactory.register(DataBaseType.MYSQL8, this);

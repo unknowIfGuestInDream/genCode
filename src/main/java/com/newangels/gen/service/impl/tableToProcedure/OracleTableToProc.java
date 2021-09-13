@@ -225,6 +225,11 @@ public class OracleTableToProc extends AbstractTableToProcedure {
     }
 
     @Override
+    public Map<String, Object> genAutoInsKey(String tableName, String primaryKey) {
+        return null;
+    }
+
+    @Override
     public void afterPropertiesSet() throws Exception {
         AbstractTableToProcedureFactory.register(DataBaseType.ORACLE, this);
     }
