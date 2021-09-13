@@ -5,11 +5,8 @@ import com.newangels.gen.factory.AbstractTableToProcedureFactory;
 import com.newangels.gen.service.AbstractTableToProcedure;
 import com.newangels.gen.service.NameConventService;
 import com.newangels.gen.util.ProcTypes;
-import freemarker.template.Configuration;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -225,16 +222,6 @@ public class OracleTableToProc extends AbstractTableToProcedure {
         objectMap.put("delProcName", nameConvent.getProcName(tableName, ProcTypes.DELETE));
         objectMap.put("delInParams", delInParams.toString());
         objectMap.put("delSqlWhere", delSqlWhere.toString());
-    }
-
-    @Override
-    public Map<String, Object> genAutoInsKey(String tableName, String primaryKey, Configuration configuration) {
-        Map<String, Object> result = new HashMap<>(4);
-        Map<String, Object> objectMap = new HashMap<>(4);
-        objectMap.put("tableName", tableName);
-        objectMap.put("primaryKey", StringUtils.isEmpty(primaryKey) ? "I_ID" : primaryKey);
-        result.put("autoInsKey", getAutoInsKey(configuration, objectMap));
-        return result;
     }
 
     @Override

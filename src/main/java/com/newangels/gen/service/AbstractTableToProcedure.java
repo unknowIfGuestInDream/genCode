@@ -1,8 +1,8 @@
 package com.newangels.gen.service;
 
-import com.newangels.gen.exception.UnSupportedDataSourceException;
 import com.newangels.gen.util.template.AbstractFreeMarkerTemplate;
 import freemarker.template.Configuration;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.util.*;
@@ -229,7 +229,12 @@ public abstract class AbstractTableToProcedure extends AbstractFreeMarkerTemplat
      * @param configuration ftl模板引擎配置
      */
     public Map<String, Object> genAutoInsKey(String tableName, String primaryKey, Configuration configuration) {
-        throw new UnSupportedDataSourceException("当前数据库不支持生成自增主键的功能");
+        Map<String, Object> result = new HashMap<>(4);
+        Map<String, Object> objectMap = new HashMap<>(4);
+        objectMap.put("tableName", tableName);
+        objectMap.put("primaryKey", StringUtils.isEmpty(primaryKey) ? "I_ID" : primaryKey);
+        result.put("autoInsKey", getAutoInsKey(configuration, objectMap));
+        return result;
     }
 
     /**

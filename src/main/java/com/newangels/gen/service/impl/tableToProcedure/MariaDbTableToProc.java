@@ -5,6 +5,7 @@ import com.newangels.gen.exception.UnSupportedDataSourceException;
 import com.newangels.gen.factory.AbstractTableToProcedureFactory;
 import com.newangels.gen.service.AbstractTableToProcedure;
 import com.newangels.gen.service.NameConventService;
+import freemarker.template.Configuration;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,6 +59,11 @@ public class MariaDbTableToProc extends AbstractTableToProcedure {
     @Override
     protected void dealDelProcedure(String tableName, List<String> primarys, List<String> primaryTypes, List<String> primaryDesc, NameConventService nameConvent, Map<String, Object> objectMap) {
         throw new UnSupportedDataSourceException("暂时不支持mariaDb数据库存储过程生成");
+    }
+
+    @Override
+    public Map<String, Object> genAutoInsKey(String tableName, String primaryKey, Configuration configuration) {
+        throw new UnSupportedDataSourceException("暂时不支持mariaDb数据库生成自增主键");
     }
 
     @Override
