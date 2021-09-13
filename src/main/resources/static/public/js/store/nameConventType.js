@@ -4,21 +4,29 @@
  * @author FengGuanZhong
  * @private
  */
-
-var nameConventType = [];
-nameConventType.push(
-    {
-        CODE_: '1',
-        NAME_: '大连常用规范'
-    }, {
-        CODE_: '2',
-        NAME_: 'EAM3期规范'
-    });
-
 var nameConventTypeStore = Ext.create("Ext.data.Store", {
     storeId: 'nameConventTypeStore',
     fields: ['NAME_', 'CODE_'],
-    data: nameConventType
+    autoLoad: true,
+    loading: true,
+    proxy: {
+        url: '/gen/selectNameConventType',
+        type: 'ajax',
+        async: true,//false=同步.
+        actionMethods: {
+            read: 'GET'
+        },
+        extraParams: {},
+        reader: {
+            type: 'json',
+            root: 'result'
+        }
+    },
+    listeners: {
+        load: function (store, records, successful, eOpts) {
+            _init();
+        }
+    }
 });
 
 Ext.data.StoreManager.register(nameConventTypeStore);

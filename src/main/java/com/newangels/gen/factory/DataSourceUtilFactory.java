@@ -1,7 +1,7 @@
 package com.newangels.gen.factory;
 
-import com.newangels.gen.util.DataSourceUtil;
-import com.newangels.gen.util.DataSourceUtilTypes;
+import com.newangels.gen.util.dataSource.DataSourceUtil;
+import com.newangels.gen.util.dataSource.DataSourceUtilTypes;
 import com.newangels.gen.util.dataSource.DruidDataSourceUtil;
 import com.newangels.gen.util.dataSource.HikariDataSourceUtil;
 import org.apache.commons.lang3.StringUtils;

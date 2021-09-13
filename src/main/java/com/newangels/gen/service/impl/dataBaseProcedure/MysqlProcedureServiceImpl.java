@@ -3,7 +3,7 @@ package com.newangels.gen.service.impl.dataBaseProcedure;
 import com.newangels.gen.enums.DataBaseType;
 import com.newangels.gen.factory.DataBaseProcedureFactory;
 import com.newangels.gen.service.DataBaseProcedureService;
-import com.newangels.gen.util.DataSourceUtil;
+import com.newangels.gen.util.dataSource.DataSourceUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 

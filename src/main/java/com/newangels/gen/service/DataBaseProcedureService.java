@@ -1,6 +1,6 @@
 package com.newangels.gen.service;
 
-import com.newangels.gen.util.DataSourceUtil;
+import com.newangels.gen.util.dataSource.DataSourceUtil;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.util.List;

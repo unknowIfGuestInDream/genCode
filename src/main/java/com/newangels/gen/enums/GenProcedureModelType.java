@@ -13,44 +13,52 @@ public enum GenProcedureModelType {
     /**
      * 大连常用模板restful风格向
      */
-    RESTFUL("1"),
+    RESTFUL("1", "大连模版restful风格"),
     /**
      * 大连常用模板demo模版
      */
-    DEMO("2"),
+    DEMO("2", "大连模版demo风格"),
 
     /**
      * 大连常用模板EAM模版
      */
-    EAM("3"),
+    EAM("3", "大连模版EAM风格"),
 
     /**
-     * 大连常用模板EAM模版
+     * 大连常用模板EAM3期模版
      */
-    EAM3("4"),
+    EAM3("4", "大连模版EAM3期风格");
 
     /**
-     * 未知模版
+     * 模版编码/名称
      */
-    UNKNOW("UNKNOW");
+    private String code;
 
-    private String typeName;
+    /**
+     * 模版描述
+     */
+    private String desc;
 
-    GenProcedureModelType(String typeName) {
-        this.typeName = typeName;
+    GenProcedureModelType(String code, String desc) {
+        this.code = code;
+        this.desc = desc;
     }
 
-    //跟据后缀获取文件类型枚举变量
-    public static GenProcedureModelType fromTypeName(String typeName) {
+    //跟据模板编码获取模板
+    public static GenProcedureModelType fromCode(String typeName) {
         for (GenProcedureModelType type : GenProcedureModelType.values()) {
-            if (StringUtils.isNotEmpty(typeName) && type.getTypeName().equals(typeName)) {
+            if (StringUtils.isNotEmpty(typeName) && type.getCode().equals(typeName)) {
                 return type;
             }
         }
-        return UNKNOW;
+        return EAM3;
     }
 
-    public String getTypeName() {
-        return this.typeName;
+    public String getCode() {
+        return this.code;
+    }
+
+    public String getDesc() {
+        return this.desc;
     }
 }

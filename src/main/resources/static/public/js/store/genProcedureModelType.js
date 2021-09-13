@@ -4,27 +4,29 @@
  * @author FengGuanZhong
  * @private
  */
-
-var genProcedureModelType = [];
-genProcedureModelType.push(
-    {
-        CODE_: '1',
-        NAME_: '大连模版restful风格'
-    }, {
-        CODE_: '2',
-        NAME_: '大连模版demo风格'
-    }, {
-        CODE_: '3',
-        NAME_: '大连模版EAM风格'
-    }, {
-        CODE_: '4',
-        NAME_: '大连模版EAM3期规范'
-    });
-
 var genProcedureModelTypeStore = Ext.create("Ext.data.Store", {
     storeId: 'genProcedureModelTypeStore',
     fields: ['NAME_', 'CODE_'],
-    data: genProcedureModelType
+    autoLoad: true,
+    loading: true,
+    proxy: {
+        url: '/gen/selectGenProcedureModelType',
+        type: 'ajax',
+        async: true,//false=同步.
+        actionMethods: {
+            read: 'GET'
+        },
+        extraParams: {},
+        reader: {
+            type: 'json',
+            root: 'result'
+        }
+    },
+    listeners: {
+        load: function (store, records, successful, eOpts) {
+            _init();
+        }
+    }
 });
 
 Ext.data.StoreManager.register(genProcedureModelTypeStore);

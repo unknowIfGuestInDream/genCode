@@ -6,15 +6,15 @@ import com.newangels.gen.base.CacheManage;
 import com.newangels.gen.enums.DataBaseType;
 import com.newangels.gen.enums.GenProcedureModelType;
 import com.newangels.gen.enums.NameConventType;
+import com.newangels.gen.factory.AbstractGenProcedureModelFactory;
 import com.newangels.gen.factory.DataBaseProcedureFactory;
 import com.newangels.gen.factory.DataSourceUtilFactory;
-import com.newangels.gen.factory.GenProcedureModelFactory;
 import com.newangels.gen.factory.NameConventFactory;
+import com.newangels.gen.service.AbstractGenProcedureModel;
 import com.newangels.gen.service.DataBaseProcedureService;
-import com.newangels.gen.service.GenProcedureModelService;
 import com.newangels.gen.service.NameConventService;
-import com.newangels.gen.util.Cache;
-import com.newangels.gen.util.DataSourceUtil;
+import com.newangels.gen.util.cache.Cache;
+import com.newangels.gen.util.dataSource.DataSourceUtil;
 import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,6 +43,7 @@ import java.util.zip.ZipOutputStream;
 @RestController
 @RequiredArgsConstructor
 public class GenProcedureController {
+    private final FreeMarkerConfigurer freeMarkerConfigurer;
 
     /**
      * 代码生成页面
@@ -115,19 +117,19 @@ public class GenProcedureController {
         //获取数据库连接，为空则创建
         DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
         //获取生成代码模版
-        GenProcedureModelService genProcedureModel = GenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromTypeName(genProcedureModelType));
+        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromCode(genProcedureModelType));
         //获取命名规范
-        NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromTypeName(nameConventType));
+        NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromCode(nameConventType));
         //获取数据库过程sql
         DataBaseProcedureService dbProcedure = DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
-        Map<String, Object> result = genProcedureModel.genCode(moduleName, packageName, userName, procedureNameList, nameConvent, dbProcedure, dataSourceUtil, author);
+        Map<String, Object> result = genProcedureModel.genCode(moduleName, packageName, userName, procedureNameList, author, nameConvent, dbProcedure, dataSourceUtil, freeMarkerConfigurer.getConfiguration());
         return BaseUtils.success(result);
     }
 
     /**
      * 生成代码下载
      */
-    @GetMapping(value = "downloadCode")
+    @GetMapping("downloadCode")
     @Log
     public void downloadRiderList(String moduleName, String genProcedureModelType, String nameConventType, String packageName, String url, String driver, String userName, String password, @RequestParam("procedureNameList") List<String> procedureNameList, String author, HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -142,12 +144,12 @@ public class GenProcedureController {
 
             ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
             //获取生成代码模版
-            GenProcedureModelService genProcedureModel = GenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromTypeName(genProcedureModelType));
+            AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromCode(genProcedureModelType));
             //获取命名规范
-            NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromTypeName(nameConventType));
+            NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromCode(nameConventType));
             //获取数据库过程sql
             DataBaseProcedureService dbProcedure = DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
-            Map<String, Object> map = genProcedureModel.genCode(moduleName, packageName, userName, procedureNameList, nameConvent, dbProcedure, dataSourceUtil, author);
+            Map<String, Object> map = genProcedureModel.genCode(moduleName, packageName, userName, procedureNameList, author, nameConvent, dbProcedure, dataSourceUtil, freeMarkerConfigurer.getConfiguration());
             List<String> list = (List<String>) map.get("list");
 
             for (String name : list) {

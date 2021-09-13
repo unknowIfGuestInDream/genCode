@@ -5,15 +5,15 @@ import com.newangels.gen.base.BaseUtils;
 import com.newangels.gen.base.CacheManage;
 import com.newangels.gen.enums.DataBaseType;
 import com.newangels.gen.enums.NameConventType;
+import com.newangels.gen.factory.AbstractTableToProcedureFactory;
 import com.newangels.gen.factory.DataBaseTableFactory;
-import com.newangels.gen.factory.DataBaseTableToProcFactory;
 import com.newangels.gen.factory.DataSourceUtilFactory;
 import com.newangels.gen.factory.NameConventFactory;
+import com.newangels.gen.service.AbstractTableToProcedure;
 import com.newangels.gen.service.DataBaseTableService;
 import com.newangels.gen.service.NameConventService;
-import com.newangels.gen.service.TableToProcedureService;
-import com.newangels.gen.util.Cache;
-import com.newangels.gen.util.DataSourceUtil;
+import com.newangels.gen.util.cache.Cache;
+import com.newangels.gen.util.dataSource.DataSourceUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 public class DataBaseTableController {
+    private final FreeMarkerConfigurer freeMarkerConfigurer;
 
     /**
      * 根据表生成存储过程
@@ -97,11 +99,11 @@ public class DataBaseTableController {
      */
     @PostMapping("genProceduresByTable")
     @Log
-    public Map<String, Object> genProceduresByTable(String nameConventType, String driver, String tableName, @RequestParam("params") List<String> params, @RequestParam("paramTypes") List<String> paramTypes, @RequestParam("paramDescs") List<String> paramDescs, @RequestParam("priParamIndex") List<Integer> priParamIndex, @RequestParam("selParamsIndex") List<Integer> selParamsIndex, @RequestParam("selType") List<Integer> selType, @RequestParam("insParamIndex") List<Integer> insParamIndex, @RequestParam("updParamIndex") List<Integer> updParamIndex) {
+    public Map<String, Object> genProceduresByTable(String nameConventType, String driver, String tableName, String tableDesc, @RequestParam("params") List<String> params, @RequestParam("paramTypes") List<String> paramTypes, @RequestParam("paramDescs") List<String> paramDescs, @RequestParam("priParamIndex") List<Integer> priParamIndex, @RequestParam("selParamsIndex") List<Integer> selParamsIndex, @RequestParam("selType") List<Integer> selType, @RequestParam("insParamIndex") List<Integer> insParamIndex, @RequestParam("updParamIndex") List<Integer> updParamIndex) {
         //获取命名规范
-        NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromTypeName(nameConventType));
+        NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromCode(nameConventType));
         //获取表生成存储过程实现类
-        TableToProcedureService tableToProcedure = DataBaseTableToProcFactory.getTableToProcedure(DataBaseType.fromTypeName(driver));
-        return BaseUtils.success(tableToProcedure.genProceduresByTable(tableName, params, paramTypes, paramDescs, priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex, nameConvent));
+        AbstractTableToProcedure tableToProcedure = AbstractTableToProcedureFactory.getTableToProcedure(DataBaseType.fromTypeName(driver));
+        return BaseUtils.success(tableToProcedure.genProceduresByTable(tableName, tableDesc, params, paramTypes, paramDescs, priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex, nameConvent, freeMarkerConfigurer.getConfiguration()));
     }
 }

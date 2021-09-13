@@ -6,9 +6,12 @@ import com.newangels.gen.service.NameConventService;
 import com.newangels.gen.util.ProcTypes;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 常用命名规范
@@ -49,6 +52,25 @@ public class EamNewNameConventServiceImpl implements NameConventService {
             return "total";
         }
         return name;
+    }
+
+    @Override
+    public List<String> getMethodNames(String moduleName, List<String> procedureNameList) {
+        Map<String, AtomicInteger> map = new HashMap<>();
+        List<String> methodNames = new ArrayList<>(procedureNameList.size());
+        for (String procedureName : procedureNameList) {
+            //方法名称前缀
+            String preName = getName(procedureName);
+            String methodName;
+            if (map.get(preName) == null) {
+                map.put(preName, new AtomicInteger(0));
+                methodName = preName + moduleName;
+            } else {
+                methodName = preName + moduleName + map.get(preName).incrementAndGet();
+            }
+            methodNames.add(methodName);
+        }
+        return methodNames;
     }
 
     @Override
@@ -93,14 +115,14 @@ public class EamNewNameConventServiceImpl implements NameConventService {
         String sqlWhere;
         switch (selType) {
             case 2://区间
-                sqlWhere = " T." + param + " >= START_" + inParamName + "\n AND T." + param + " <= END_" + inParamName;
+                sqlWhere = " " + param + " >= START_" + inParamName + "\n AND " + param + " <= END_" + inParamName;
                 break;
             case 1://模糊
-                sqlWhere = " T." + param + " like '%' || " + inParamName + " || '%'";
+                sqlWhere = " " + param + " like '%' || " + inParamName + " || '%'";
                 break;
             case 0://精确
             default:
-                sqlWhere = " T." + param + " = " + inParamName;
+                sqlWhere = " " + param + " = " + inParamName;
                 break;
         }
         return sqlWhere;

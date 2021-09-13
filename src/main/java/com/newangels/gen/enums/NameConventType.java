@@ -13,35 +13,36 @@ public enum NameConventType {
     /**
      * 常用规范
      */
-    COMMON("1"),
+    COMMON("1", "大连常用规范"),
 
     /**
      * EAM3期常用规范
      */
-    EAM3("2"),
+    EAM3("2", "EAM3期规范");
 
-    /**
-     * 未知规范
-     */
-    UNKNOW("UNKNOW");
+    private String code;
+    private String desc;
 
-    private String typeName;
-
-    NameConventType(String typeName) {
-        this.typeName = typeName;
+    NameConventType(String code, String desc) {
+        this.code = code;
+        this.desc = desc;
     }
 
-    //跟据后缀获取文件类型枚举变量
-    public static NameConventType fromTypeName(String typeName) {
+    //跟据规范编码获取规范
+    public static NameConventType fromCode(String typeName) {
         for (NameConventType type : NameConventType.values()) {
-            if (StringUtils.isNotEmpty(typeName) && type.getTypeName().equals(typeName)) {
+            if (StringUtils.isNotEmpty(typeName) && type.getCode().equals(typeName)) {
                 return type;
             }
         }
-        return UNKNOW;
+        return EAM3;
     }
 
-    public String getTypeName() {
-        return this.typeName;
+    public String getCode() {
+        return this.code;
+    }
+
+    public String getDesc() {
+        return this.desc;
     }
 }

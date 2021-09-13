@@ -28,6 +28,14 @@ public interface NameConventService extends InitializingBean {
     String getResultName(String name);
 
     /**
+     * 获取方法名集合
+     *
+     * @param moduleName        模块名
+     * @param procedureNameList 存储过程名称集合
+     */
+    List<String> getMethodNames(String moduleName, List<String> procedureNameList);
+
+    /**
      * 排序方法
      *
      * @param procedureNameList 存储过程集合
