@@ -56,6 +56,12 @@ public class DataBaseTableController {
 
     /**
      * 加载表详细信息
+     *
+     * @param name     表名(精确查询)
+     * @param url      数据库url 用于获取数据库连接
+     * @param driver   数据库驱动 用于获取存储过程sql
+     * @param userName 数据库账户
+     * @param password 数据库密码
      */
     @GetMapping("loadTable")
     @Log
@@ -67,6 +73,12 @@ public class DataBaseTableController {
 
     /**
      * 获取数据库表数据
+     *
+     * @param name     表名(模糊查询)
+     * @param url      数据库url 用于获取数据库连接
+     * @param driver   数据库驱动 用于获取存储过程sql
+     * @param userName 数据库账户
+     * @param password 数据库密码
      */
     @GetMapping("selectTables")
     @Log
@@ -85,6 +97,12 @@ public class DataBaseTableController {
 
     /**
      * 查询数据库某表字段相关的详细信息
+     *
+     * @param name     表名(精确查询)
+     * @param url      数据库url 用于获取数据库连接
+     * @param driver   数据库驱动 用于获取存储过程sql
+     * @param userName 数据库账户
+     * @param password 数据库密码
      */
     @GetMapping("selectTableInfo")
     @Log
@@ -96,6 +114,19 @@ public class DataBaseTableController {
 
     /**
      * 根据数据库表生成存储过程
+     *
+     * @param nameConventType 命名规范
+     * @param driver          数据库驱动, 用于判断数据库类型
+     * @param tableName       表名
+     * @param tableDesc       表描述
+     * @param params          表所有字段
+     * @param paramTypes      表所有字段的类型
+     * @param paramDescs      表所有字段的类型
+     * @param priParamIndex   主键列索引
+     * @param selParamsIndex  查询条件列索引
+     * @param selType         查询条件类型
+     * @param insParamIndex   新增列索引
+     * @param updParamIndex   修改列索引
      */
     @PostMapping("genProceduresByTable")
     @Log
@@ -105,5 +136,15 @@ public class DataBaseTableController {
         //获取表生成存储过程实现类
         AbstractTableToProcedure tableToProcedure = AbstractTableToProcedureFactory.getTableToProcedure(DataBaseType.fromTypeName(driver));
         return BaseUtils.success(tableToProcedure.genProceduresByTable(tableName, tableDesc, params, paramTypes, paramDescs, priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex, nameConvent, freeMarkerConfigurer.getConfiguration()));
+    }
+
+    /**
+     * 生成主键id的sql
+     */
+    @PostMapping("genAutoInsKey")
+    @Log
+    public Map<String, Object> genAutoInsKey(String tableName, String primaryKey, String driver) {
+        AbstractTableToProcedure tableToProcedure = AbstractTableToProcedureFactory.getTableToProcedure(DataBaseType.fromTypeName(driver));
+        return BaseUtils.success(tableToProcedure.genAutoInsKey(tableName, primaryKey, freeMarkerConfigurer.getConfiguration()));
     }
 }
