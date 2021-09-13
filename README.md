@@ -5,7 +5,7 @@
 
 ## 技术框架
 
-后台使用springBoot, druid连接池, 前台使用extjs4.0, 模版使用freemarker引擎
+后台使用springBoot, druid连接池, 前台使用thymeleaf + extjs4.0, 代码模版使用freemarker引擎
 
 ## 项目启动
 数据库sql文件在 database文件下  
@@ -52,5 +52,5 @@ druid监控账号密码默认都为admin
 5. 定时任务位于schedule文件夹下，目前任务只有每周五清空数据库连接池缓存
 6. SimpleCache类为简易缓存, 主要缓存一些不常变数据
 
-##最后
+## 最后
 如果有问题或者需求可以发送邮件或者提交Issues
