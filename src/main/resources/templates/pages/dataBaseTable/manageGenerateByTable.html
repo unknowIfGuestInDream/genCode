@@ -170,6 +170,11 @@
                 icon: 'public/image/btn/add.png',
                 handler: _genProceduresByTable,
             }, {
+                xtype: 'button',
+                text: '生成自增主键',
+                icon: 'public/image/btn/add.png',
+                handler: _genAutoInsKey
+            }, {
                 xtype: 'combo',
                 queryMode: 'local',
                 store: nameConventTypeStore,
@@ -204,7 +209,7 @@
                 minWidth: 200,
                 dataIndex: 'TABLE_NAME',
                 renderer: function (value, metaData, record, rowIdx, colIdx, store, view) {
-                    return '<a href=javascript:_ViewTableDetailedInfo(\'' + value + '\',\'' + encodeURIComponent(record.data.COMMENTS) + '\')>' + value + '</a>'
+                    return '<a href=javascript:_viewTableDetailedInfo(\'' + value + '\',\'' + encodeURIComponent(record.data.COMMENTS) + '\')>' + value + '</a>'
                 }
             }, {
                 text: '备注',
@@ -557,7 +562,7 @@
     }
 
     //查看表详细信息
-    function _ViewTableDetailedInfo(name, comment) {
+    function _viewTableDetailedInfo(name, comment) {
         returnValue = null;
         win = Ext.create('Ext.window.Window', {
             title: '表详细信息',
@@ -690,6 +695,68 @@
                         });
 
                         win.add(codeTabPanel);
+                    } else {
+                        Ext.MessageBox.alert('错误', data.message, Ext.MessageBox.ERROR);
+                    }
+                } else {
+                    Ext.MessageBox.alert('错误', '服务器错误', Ext.MessageBox.ERROR);
+                }
+            }
+        });
+    }
+
+    //生成自增主键
+    function _genAutoInsKey() {
+        //选择的数据校验
+        var records = Ext.getCmp('tablePanel').getSelectionModel().getSelection();
+        if (records.length === 0) {
+            Ext.MessageBox.alert('警告', '请选择要生成自增主键的表', Ext.MessageBox.WARNING);
+            return;
+        }
+        var list = Ext.getCmp('tableInfoPanel').store.data.items;
+        var primaryKey = "";
+        for (let i = 0; i < list.length; i++) {
+            if (list[i].data.IS_PRIMARY === "Y") {
+                primaryKey = list[i].data.COLUMN_NAME;
+                break;
+            }
+        }
+        Ext.Ajax.request({
+            url: '/gen/genAutoInsKey',
+            async: false,
+            method: 'POST',
+            params: {
+                'tableName': records[0].data.TABLE_NAME,
+                'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
+                'primaryKey': primaryKey
+            },
+            callback: function (options, success, response) {
+                if (success) {
+                    var data = Ext.decode(response.responseText);
+                    if (data.success) {
+                        var autoInsKeyFormPanel = Ext.create('Ext.form.Panel', {
+                            id: 'autoInsKeyFormPanel',
+                            layout: 'fit',
+                            frame: true,
+                            border: false,
+                            items: [{
+                                xtype: 'textareafield',
+                                name: 'PARAMETER_MAP_',
+                                width: '100%',
+                                height: document.documentElement.clientHeight - 80,
+                                value: data.autoInsKey
+                            }]
+                        });
+                        Ext.create('Ext.window.Window', {
+                            title: '自增主键',
+                            modal: true,
+                            autoShow: true,
+                            maximized: false,
+                            maximizable: true,
+                            width: document.documentElement.clientWidth * 0.8,
+                            height: document.documentElement.clientHeight * 0.8,
+                            items: [autoInsKeyFormPanel]
+                        });
                     } else {
                         Ext.MessageBox.alert('错误', data.message, Ext.MessageBox.ERROR);
                     }
