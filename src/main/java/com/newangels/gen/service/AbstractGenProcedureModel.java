@@ -154,6 +154,12 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
             for (Map<String, Object> map : list) {
                 dealProcParams(map, inParams, outParams, procedureParams, serviceNote, repositoryParam, repositoryResult, nameConvent, dbProcedure);
             }
+            //存储过程名称处理（主要用于处理包下的存储过程）
+            String procedureFullName = procedureName;
+            int start = procedureName.indexOf(".");
+            if (start >= 0) {
+                procedureFullName = procedureName.substring(start).replaceFirst(".", "");
+            }
             //请求协议
             String mappingType = getMappingType(procedureName, nameConvent);
             //方法模版参数
@@ -165,6 +171,7 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
             objectMap.put("outParams", outParams);
             objectMap.put("module", moduleName);
             objectMap.put("serviceNote", serviceNote);
+            objectMap.put("procedureFullName", procedureFullName);
             objectMap.put("procedureName", procedureName);
             objectMap.put("procedureParams", procedureParams);
             objectMap.put("repositoryParam", repositoryParam);

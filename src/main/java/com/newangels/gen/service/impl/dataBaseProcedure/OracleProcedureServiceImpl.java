@@ -80,6 +80,10 @@ public class OracleProcedureServiceImpl implements DataBaseProcedureService {
 
     @Override
     public String selectArguments(String owner, String objectName) {
+        int start = objectName.indexOf(".");
+        if (start >= 0) {
+            objectName = objectName.substring(start).replaceFirst(".", "");
+        }
         return "select ARGUMENT_NAME, DATA_TYPE, IN_OUT from SYS.ALL_ARGUMENTS t where t.OWNER = '" + owner + "' and t.OBJECT_NAME = '" + objectName + "' ORDER BY POSITION";
     }
 
