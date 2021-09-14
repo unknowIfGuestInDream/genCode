@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * oracle表信息
@@ -37,12 +36,12 @@ public class OracleTableServiceImpl implements DataBaseTableService {
     //TODO 是否能提到接口层？
     @Override
     public Map<String, Object> loadTable(@NonNull String name, @NonNull DataSourceUtil dataSourceUtil) {
-        return Optional.ofNullable(dataSourceUtil.executeQuery(loadTable(name)).get(0))
-                .orElseGet(HashMap::new);
+        List<Map<String, Object>> list = dataSourceUtil.executeQuery(loadTable(name));
+        return list.size() > 0 ? list.get(0) : new HashMap<>();
     }
 
     @Override
-    public String selectTables(String name) {
+    public String selectTables(String name, String schema) {
         String sql = "SELECT P.TABLE_NAME, P.COMMENTS, T.LAST_DDL_TIME FROM USER_TAB_COMMENTS P LEFT JOIN USER_OBJECTS T ON T.OBJECT_NAME = P.TABLE_NAME WHERE P.TABLE_TYPE = 'TABLE' ";
         if (StringUtils.isNotEmpty(name)) {
             sql += "AND P.TABLE_NAME like '%" + name.toUpperCase() + "%'";
@@ -51,8 +50,8 @@ public class OracleTableServiceImpl implements DataBaseTableService {
     }
 
     @Override
-    public List<Map<String, Object>> selectTables(String name, DataSourceUtil dataSourceUtil) {
-        return dataSourceUtil.executeQuery(selectTables(name));
+    public List<Map<String, Object>> selectTables(String name, String schema, DataSourceUtil dataSourceUtil) {
+        return dataSourceUtil.executeQuery(selectTables(name, schema));
     }
 
     @Override

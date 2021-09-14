@@ -32,12 +32,12 @@ public class SqlServerTableServiceImpl implements DataBaseTableService {
     }
 
     @Override
-    public String selectTables(String name) {
+    public String selectTables(String name, String schema) {
         throw new UnSupportedDataSourceException("暂时不支持sqlserver数据库表信息查询");
     }
 
     @Override
-    public List<Map<String, Object>> selectTables(String name, DataSourceUtil dataSourceUtil) {
+    public List<Map<String, Object>> selectTables(String name, String schema, DataSourceUtil dataSourceUtil) {
         throw new UnSupportedDataSourceException("暂时不支持sqlserver数据库表信息查询");
     }
 

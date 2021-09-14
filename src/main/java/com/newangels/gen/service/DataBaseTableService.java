@@ -34,17 +34,19 @@ public interface DataBaseTableService extends InitializingBean {
     /**
      * 查询数据库表信息的sql
      *
-     * @param name 表名
+     * @param name   表名
+     * @param schema 表空间
      */
-    String selectTables(String name);
+    String selectTables(String name, String schema);
 
     /**
      * 查询数据库表信息结果集
      *
      * @param name           表名
+     * @param schema         表空间
      * @param dataSourceUtil 数据库连接工具类
      */
-    List<Map<String, Object>> selectTables(String name, DataSourceUtil dataSourceUtil);
+    List<Map<String, Object>> selectTables(String name, String schema, DataSourceUtil dataSourceUtil);
 
     /**
      * 查询数据库某表字段相关的详细信息的sql

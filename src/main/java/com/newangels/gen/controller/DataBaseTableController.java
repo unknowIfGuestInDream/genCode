@@ -82,14 +82,14 @@ public class DataBaseTableController {
      */
     @GetMapping("selectTables")
     @Log
-    public Map<String, Object> selectTables(@RequestParam(required = false, defaultValue = "") String name, String url, String driver, String userName, String password) {
+    public Map<String, Object> selectTables(@RequestParam(required = false, defaultValue = "") String name, String schema, String url, String driver, String userName, String password) {
         List<Map<String, Object>> list = CacheManage.TABLES_CACHE.get(url.replaceAll("/", "") + userName + name + "tables");
         //缓存方案 url+用户名 + 查询条件为主键
         //存储过程名称条件为空代表全查询一直缓存，否则30分钟
         if (list == null) {
             DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
             DataBaseTableService dataBaseTable = DataBaseTableFactory.getDataBaseTable(DataBaseType.fromTypeName(driver));
-            list = dataBaseTable.selectTables(name, dataSourceUtil);
+            list = dataBaseTable.selectTables(name, schema, dataSourceUtil);
             CacheManage.TABLES_CACHE.put(url.replaceAll("/", "") + userName + "tables", list, StringUtils.isEmpty(name) ? Cache.CACHE_HOLD_FOREVER : Cache.CACHE_HOLD_30MINUTE);
         }
         return BaseUtils.success(list);
