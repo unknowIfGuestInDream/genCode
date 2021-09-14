@@ -163,7 +163,7 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
             //请求协议
             String mappingType = getMappingType(procedureName, nameConvent);
             //方法模版参数
-            Map<String, Object> objectMap = new HashMap<>(16);
+            Map<String, Object> objectMap = new HashMap<>(32);
             objectMap.put("package", packageName);
             objectMap.put("mappingType", mappingType);
             objectMap.put("method", methodNames.get(i));
