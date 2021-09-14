@@ -4,7 +4,7 @@
      */
     public Map<String, Object> ${procedureName}(${inParams}) {
         return ${package?substring(package?last_index_of(".")+1)?lower_case}JdbcTemplate.execute((CallableStatementCreator) con -> {
-            String sql = "{call ${procedureName}(${procedureParams})}";
+            String sql = "{call ${procedureFullName}(${procedureParams})}";
             CallableStatement statement = con.prepareCall(sql);
 <#if repositoryParam! != ''>
 ${repositoryParam}
