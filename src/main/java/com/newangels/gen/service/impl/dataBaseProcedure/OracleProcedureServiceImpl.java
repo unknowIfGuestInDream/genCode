@@ -33,7 +33,16 @@ public class OracleProcedureServiceImpl implements DataBaseProcedureService {
     public String selectProcedures(String name) {
         String sql = "SELECT OBJECT_NAME as NAME, LAST_DDL_TIME as LAST_UPDATE_TIME, STATUS FROM USER_OBJECTS WHERE OBJECT_TYPE = 'PROCEDURE' ";
         if (StringUtils.isNotEmpty(name)) {
-            sql += " and OBJECT_NAME like '%" + name.toUpperCase() + "%'";
+            sql += " AND OBJECT_NAME like '%" + name.toUpperCase() + "%'";
+        }
+        sql += "UNION ALL SELECT T.OBJECT_NAME || '.' || PROCNAME AS NAME, T.LAST_DDL_TIME AS LAST_UPDATE_TIME, T.STATUS FROM (\n" +
+                "SELECT OBJECT_NAME,LAST_DDL_TIME,STATUS FROM USER_OBJECTS WHERE OBJECT_TYPE = 'PACKAGE') T\n" +
+                "LEFT JOIN (SELECT U.PACKAGE_NAME, U.OBJECT_NAME AS PROCNAME FROM USER_ARGUMENTS U\n" +
+                "GROUP BY U.OBJECT_NAME, U.PACKAGE_NAME\n" +
+                "ORDER BY U.PACKAGE_NAME, U.OBJECT_NAME) P\n" +
+                "ON T.OBJECT_NAME = P.PACKAGE_NAME";
+        if (StringUtils.isNotEmpty(name)) {
+            sql += " WHERE P.PROCNAME LIKE '%" + name.toUpperCase() + "%'";
         }
         return sql;
     }

@@ -519,17 +519,26 @@
         dataSourceStore.load();
     }
 
+    //查询表数据
     function _selectTable() {
+        var jdbcUrl = Ext.getCmp('dataSource').valueModels[0].data.URL;
+        var schema = "";
+        if (jdbcUrl.startsWith("jdbc:mysql") || jdbcUrl.startsWith("jdbc:mariadb")) {
+            var endIndex = jdbcUrl.indexOf('?');
+            var startIndex = jdbcUrl.substring(0, endIndex).lastIndexOf('/');
+            schema = jdbcUrl.substring(startIndex + 1, endIndex);
+        }
         Ext.Ajax.request({
             url: '/gen/selectTables',
             async: false,
             method: 'GET',
             params: {
-                'url': Ext.getCmp('dataSource').valueModels[0].data.URL,
+                'url': jdbcUrl,
                 'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
                 'userName': Ext.getCmp('dataSource').valueModels[0].data.USERNAME,
                 'password': Ext.getCmp('dataSource').valueModels[0].data.PASSWORD,
                 'name': Ext.getCmp('tableName').getValue(),
+                'schema': schema
             },
             callback: function (options, success, response) {
                 var data = Ext.decode(response.responseText);
@@ -558,7 +567,11 @@
             'password': Ext.getCmp('dataSource').valueModels[0].data.PASSWORD,
             'name': name,
         };
-        tableInfoStore.load();
+        var result = tableInfoStore.load().getProxy().getReader();
+        if (!result.jsonData.success) {
+            tableInfoStore.removeAll();
+            Ext.MessageBox.alert('错误', result.jsonData.message, Ext.MessageBox.ERROR);
+        }
     }
 
     //查看表详细信息
