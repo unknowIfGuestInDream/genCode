@@ -31,7 +31,7 @@ public class CommonNameConventServiceImpl implements NameConventService {
     //入参名称映射
     private Map<String, String> inParamNameMap = new ConcurrentHashMap<>(8);
     //参数类型映射
-    private Map<Integer, String> procTypeMap = new ConcurrentHashMap<>(16);
+    private Map<Integer, String> procTypeMap = new ConcurrentHashMap<>(8);
 
     @Override
     public String getName(String procedureName) {
