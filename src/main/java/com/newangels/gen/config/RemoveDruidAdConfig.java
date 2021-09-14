@@ -31,9 +31,7 @@ public class RemoveDruidAdConfig {
      * 方法名: removeDruidAdFilterRegistrationBean
      * 方法描述:  除去页面底部的广告
      *
-     * @param properties
      * @return org.springframework.boot.web.servlet.FilterRegistrationBean
-     * @throws
      */
     @Bean
     public FilterRegistrationBean removeDruidAdFilterRegistrationBean(DruidStatProperties properties) {

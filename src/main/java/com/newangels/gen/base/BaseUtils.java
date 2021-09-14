@@ -19,6 +19,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * 常用方法封装
+ *
  * @author: TangLiang
  * @date: 2021/4/14 15:16
  * @since: 1.0

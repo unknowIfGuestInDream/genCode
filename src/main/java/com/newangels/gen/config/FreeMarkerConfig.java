@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * FreeMarker模板引擎配置
+ *
  * @author: TangLiang
  * @date: 2021/9/5 13:47
  * @since: 1.0

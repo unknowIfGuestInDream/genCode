@@ -20,7 +20,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @ConditionalOnProperty(name = "gen.isdb", havingValue = "true", matchIfMissing = true)
-public class DSConfig {
+public class DataSourceConfig {
 
     @Primary
     @Bean(name = "genDataSource")
