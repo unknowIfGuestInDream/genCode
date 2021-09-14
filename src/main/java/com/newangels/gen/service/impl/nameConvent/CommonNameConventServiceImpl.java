@@ -42,10 +42,10 @@ public class CommonNameConventServiceImpl implements NameConventService {
     @Override
     public String getResultName(String name) {
         name = name.toUpperCase();
-        if (name.contains("V_INFO") || name.contains("MESSAGE")) {
+        if (name.contains("V_INFO") || name.contains("MESSAGE") || name.contains("RET")) {
             return "message";
         }
-        if (name.contains("V_C_CURSOR") || name.contains("RET") || name.contains("V_CURSOR") || name.contains("RESULT")) {
+        if (name.contains("V_C_CURSOR") || name.contains("V_CURSOR") || name.contains("RESULT")) {
             return "result";
         }
         if (name.contains("NUM") || name.contains("TOTAL")) {

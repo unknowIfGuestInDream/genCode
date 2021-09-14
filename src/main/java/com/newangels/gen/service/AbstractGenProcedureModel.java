@@ -158,7 +158,7 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
             String procedureFullName = procedureName;
             int start = procedureName.indexOf(".");
             if (start >= 0) {
-                procedureFullName = procedureName.substring(start).replaceFirst(".", "");
+                procedureName = procedureName.substring(start).replaceFirst(".", "");
             }
             //请求协议
             String mappingType = getMappingType(procedureName, nameConvent);
