@@ -54,14 +54,17 @@ public class OracleProcedureServiceImpl implements DataBaseProcedureService {
 
     @Override
     public String loadProcedure(String name) {
-        String sql = "SELECT * FROM USER_SOURCE";
+        String sql = "SELECT * FROM USER_SOURCE WHERE 1 = 1";
+        //处理包下的存储过程
         int start = name.indexOf(".");
         if (start >= 0) {
             name = name.substring(0, start);
-            sql += " WHERE TYPE = 'PACKAGE'";
+            sql += " AND TYPE = 'PACKAGE'";
+        } else {
+            sql += " AND TYPE = 'PROCEDURE'";
         }
         if (StringUtils.isNotEmpty(name)) {
-            sql += " WHERE TYPE = 'PROCEDURE' AND NAME = '" + name + "'";
+            sql += " AND NAME = '" + name + "'";
         }
         sql += " ORDER BY LINE";
         return sql;
@@ -80,6 +83,7 @@ public class OracleProcedureServiceImpl implements DataBaseProcedureService {
 
     @Override
     public String selectArguments(String owner, String objectName) {
+        //处理包下的存储过程
         int start = objectName.indexOf(".");
         if (start >= 0) {
             objectName = objectName.substring(start).replaceFirst(".", "");

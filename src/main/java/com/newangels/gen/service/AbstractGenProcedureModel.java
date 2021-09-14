@@ -156,6 +156,7 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
             }
             //存储过程名称处理（主要用于处理包下的存储过程）
             String procedureFullName = procedureName;
+            //处理包下的存储过程
             int start = procedureName.indexOf(".");
             if (start >= 0) {
                 procedureName = procedureName.substring(start).replaceFirst(".", "");
