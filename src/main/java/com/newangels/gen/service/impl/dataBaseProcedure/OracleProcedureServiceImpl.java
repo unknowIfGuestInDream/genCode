@@ -54,9 +54,14 @@ public class OracleProcedureServiceImpl implements DataBaseProcedureService {
 
     @Override
     public String loadProcedure(String name) {
-        String sql = "SELECT * FROM USER_SOURCE where type = 'PROCEDURE'";
+        String sql = "SELECT * FROM USER_SOURCE";
+        int start = name.indexOf(".");
+        if (start >= 0) {
+            name = name.substring(0, start);
+            sql += " WHERE TYPE = 'PACKAGE'";
+        }
         if (StringUtils.isNotEmpty(name)) {
-            sql += " and NAME = '" + name + "'";
+            sql += " WHERE TYPE = 'PROCEDURE' AND NAME = '" + name + "'";
         }
         sql += " ORDER BY LINE";
         return sql;
