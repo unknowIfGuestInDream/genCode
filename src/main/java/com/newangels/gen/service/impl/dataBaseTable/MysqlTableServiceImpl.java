@@ -23,8 +23,6 @@ import java.util.Map;
 @Service
 public class MysqlTableServiceImpl implements DataBaseTableService {
 
-    //-- select * from information_schema.tables where table_schema = 'gen' and table_Name like '%per%';
-    // show full columns from daily_person;
     @Override
     public String loadTable(@NonNull String name) {
         throw new UnSupportedDataSourceException("暂时不支持mysql数据库表信息查询");
@@ -50,6 +48,7 @@ public class MysqlTableServiceImpl implements DataBaseTableService {
         return dataSourceUtil.executeQuery(selectTables(name, schema));
     }
 
+    //show full columns from daily_person;
     @Override
     public String selectTableInfo(@NonNull String name) {
         throw new UnSupportedDataSourceException("暂时不支持mysql数据库表信息查询");

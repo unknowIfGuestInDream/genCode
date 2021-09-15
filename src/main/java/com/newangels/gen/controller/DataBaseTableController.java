@@ -90,7 +90,7 @@ public class DataBaseTableController {
             DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
             DataBaseTableService dataBaseTable = DataBaseTableFactory.getDataBaseTable(DataBaseType.fromTypeName(driver));
             list = dataBaseTable.selectTables(name, schema, dataSourceUtil);
-            CacheManage.TABLES_CACHE.put(url.replaceAll("/", "") + userName + "tables", list, StringUtils.isEmpty(name) ? Cache.CACHE_HOLD_FOREVER : Cache.CACHE_HOLD_30MINUTE);
+            CacheManage.TABLES_CACHE.put(url.replaceAll("/", "") + userName + name + "tables", list, StringUtils.isEmpty(name) ? Cache.CACHE_HOLD_FOREVER : Cache.CACHE_HOLD_30MINUTE);
         }
         return BaseUtils.success(list);
     }
