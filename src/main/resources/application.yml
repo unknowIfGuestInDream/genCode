@@ -80,6 +80,13 @@ schedule:
   poolSize: 20 #线程池核心线程数
   removeOnCancelPolicy: true #取消时删除策略
   threadNamePrefix: genSchedulTask- #线程前缀名
+##线程池配置
+thread:
+  corePoolSize: 10 #核心线程数
+  maxPoolSize: 50 #设置最大线程数
+  queueCapacity: 200 #队列容量
+  keepAliveSeconds: 30 #线程活跃时间（秒）
+  threadNamePrefix: genAsync- #默认线程名称
 ##配置项目是否有数据库，默认有数据库
 gen:
   isdb: true
