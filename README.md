@@ -30,7 +30,7 @@ druid监控账号密码默认都为admin
 ## 项目介绍
 
 存储过程生成代码功能支持oracle, mysql, mariadb, sqlserver数据库
-表生成存储过程目前仅支持oracle
+表生成存储过程目前仅支持oracle,部分支持mysql
 
 * NameConventService 命名规范
 * DataBaseProcedureService 数据库对应获取过程相关的sql&数据库关键词对应的java类型等
