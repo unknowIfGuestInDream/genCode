@@ -221,8 +221,9 @@
             border: false,
             items: [{
                 xtype: 'textareafield',
-                width: document.documentElement.clientWidth - 60,
+                width: document.documentElement.clientWidth * 0.65,
                 height: document.documentElement.clientHeight - 100,
+                // minWidth: 1240,//默认环境1960
                 id: 'procedureInfo',
             }, {
                 xtype: 'displayfield',
