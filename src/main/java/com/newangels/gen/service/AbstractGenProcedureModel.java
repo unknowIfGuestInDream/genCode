@@ -124,7 +124,8 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
      * @param configuration     ftl模板引擎配置
      */
     protected Map<String, Object> dealProcdure(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DataSourceUtil dataSourceUtil, Configuration configuration) {
-        Map<String, Object> result = new HashMap<>(8);
+        Map<String, Object> result = new HashMap<>(16);
+
         //各层方法代码 初始化容量按照每次生成四个过程赋予初始值
         StringBuilder controllerMethod = new StringBuilder(1024);
         StringBuilder serviceMethod = new StringBuilder(512);
