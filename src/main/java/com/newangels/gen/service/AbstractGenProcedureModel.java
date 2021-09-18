@@ -33,6 +33,21 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
     protected abstract String getMappingType(String procedureName, NameConventService nameConvent);
 
     /**
+     * 处理通用代码以及tab页集合list
+     *
+     * @param configuration ftl模板引擎配置
+     * @param objectMap     方法模版参数
+     * @param result        返回结果集
+     */
+    protected void dealCommonCode(Configuration configuration, Map<String, Object> objectMap, Map<String, Object> result) {
+        //tab页集合, 保证返回顺序
+        List<String> list = new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "repository", "BaseUtils", "ProcedureUtils"));
+        result.put("BaseUtils", FreeMarkerUtil.getTemplateContent(configuration, objectMap, "common/BaseUtils.ftl"));
+        result.put("ProcedureUtils", FreeMarkerUtil.getTemplateContent(configuration, objectMap, "common/ProcedureUtils.ftl"));
+        result.put("list", list);
+    }
+
+    /**
      * 根据存储过程的入参出参生成各部分需要代码
      *
      * @param map              存储过程参数
@@ -215,15 +230,12 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
         objectMap.put("module", moduleName);
         objectMap.put("author", author);
         objectMap.put("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
-        //tab页集合, 保证返回顺序
-        List<String> list = new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "repository", "BaseUtils", "ProcedureUtils"));
+        //返回结果处理
+        dealCommonCode(configuration, objectMap, result);
         result.put("controller", getController(configuration, objectMap));
         result.put("service", getService(configuration, objectMap));
         result.put("serviceImpl", getServiceImpl(configuration, objectMap));
         result.put("repository", getRepository(configuration, objectMap));
-        result.put("BaseUtils", FreeMarkerUtil.getTemplateContent(configuration, objectMap, "common/BaseUtils.ftl"));
-        result.put("ProcedureUtils", FreeMarkerUtil.getTemplateContent(configuration, objectMap, "common/ProcedureUtils.ftl"));
-        result.put("list", list);
         return result;
     }
 
