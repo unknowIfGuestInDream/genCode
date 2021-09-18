@@ -9,7 +9,7 @@ BEGIN
         FROM (SELECT FULLTABLE.*, ROWNUM RN
           FROM (SELECT * FROM ${tableName}${selWithPageSqlWhere}) FULLTABLE
                 WHERE ROWNUM <= ${page} * ${limit})
-        WHERE RN >= (${page} - 1) * ${limit};
+        WHERE RN > (${page} - 1) * ${limit};
   ELSE
     OPEN V_C_CURSOR FOR
       SELECT * FROM ${tableName}${selectSqlWhere};
