@@ -8,6 +8,7 @@ import com.newangels.gen.service.NameConventService;
 import freemarker.template.Configuration;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -63,7 +64,9 @@ public class MariaDbTableToProc extends AbstractTableToProcedure {
 
     @Override
     public Map<String, Object> genAutoInsKey(String tableName, String primaryKey, Configuration configuration) {
-        throw new UnSupportedDataSourceException("暂时不支持mariaDb数据库生成自增主键");
+        Map<String, Object> result = new HashMap<>(4);
+        result.put("autoInsKey", "暂时不支持mariaDb数据库生成自增主键");
+        return result;
     }
 
     @Override
