@@ -60,6 +60,14 @@ public class spelTest {
     private String str4;
     @Value("#{{1, 3, 5, 7}.?[#this > 3]}")//this表示当前的对象
     private int[] int3;
+    @Value("#{not false}")
+    private boolean bool8;
+    @Value("#{! false}")
+    private String str5;
+    @Value("#{true && false}")
+    private String str6;
+    @Value("#{true || false}")
+    private String str7;
 
     @Test
     public void spel1() {
@@ -85,5 +93,9 @@ public class spelTest {
         System.out.println(bool7);
         System.out.println(str4);
         System.out.println(int3.length);
+        System.out.println(bool8);
+        System.out.println(str5);
+        System.out.println(str6);
+        System.out.println(str7);
     }
 }
