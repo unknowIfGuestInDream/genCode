@@ -459,6 +459,11 @@
 
         var procedureNameList = []; //存储过程名称集合，用于向后台接口传参
         var inValieList = [];  //未编译的过程集合 用于前台提示用
+        //暂存箱数据
+        for (var i = 0, length = temporaryStorageStore.getCount(); i < length; i++) {
+            procedureNameList.push(temporaryStorageStore.getAt(i).data.NAME_);
+        }
+        //表格数据
         for (var i = 0, length = records.length; i < length; i++) {
             procedureNameList.push(records[i].data.NAME);
             //不为空代表返回结果集有过程是否编译的值 oracle INVALID为未编译 VALID已编译
@@ -466,10 +471,7 @@
                 inValieList.push(records[i].data.NAME);
             }
         }
-        //暂存箱数据
-        for (var i = 0, length = temporaryStorageStore.getCount(); i < length; i++) {
-            procedureNameList.push(temporaryStorageStore.getAt(i).data.NAME_);
-        }
+        //去重
         procedureNameList = [...new Set(procedureNameList)];
         if (inValieList.length > 0) {
             Ext.MessageBox.show({
