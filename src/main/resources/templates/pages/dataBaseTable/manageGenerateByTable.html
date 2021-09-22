@@ -638,6 +638,11 @@
             records[i].data.IS_UPD === "Y" ? updParamIndex.push(records[i].data.COLUMN_ID - 1) : 0;
         }
 
+        if (params.length === 0) {
+            Ext.MessageBox.alert('警告', '不支持当前数据库表生成过程', Ext.MessageBox.WARNING);
+            return;
+        }
+
         Ext.Ajax.request({
             url: '/gen/genProceduresByTable',
             async: false,
@@ -780,7 +785,7 @@
         });
     }
 
-    //设置是查询条件列权威否
+    //设置是查询条件列全为否
     function _setIsSelNo() {
         var tableInfoStore = Ext.data.StoreManager.lookup('tableInfoStore');
         tableInfoStore.each(function (record) {

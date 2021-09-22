@@ -33,6 +33,21 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
     protected abstract String getMappingType(String procedureName, NameConventService nameConvent);
 
     /**
+     * 处理通用代码以及tab页集合list
+     *
+     * @param configuration ftl模板引擎配置
+     * @param objectMap     方法模版参数
+     * @param result        返回结果集
+     */
+    protected void dealCommonCode(Configuration configuration, Map<String, Object> objectMap, Map<String, Object> result) {
+        //tab页集合, 保证返回顺序
+        List<String> list = new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "repository", "BaseUtils", "ProcedureUtils"));
+        result.put("BaseUtils", FreeMarkerUtil.getTemplateContent(configuration, objectMap, "common/BaseUtils.ftl"));
+        result.put("ProcedureUtils", FreeMarkerUtil.getTemplateContent(configuration, objectMap, "common/ProcedureUtils.ftl"));
+        result.put("list", list);
+    }
+
+    /**
      * 根据存储过程的入参出参生成各部分需要代码
      *
      * @param map              存储过程参数
@@ -124,18 +139,22 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
      * @param configuration     ftl模板引擎配置
      */
     protected Map<String, Object> dealProcdure(String moduleName, String packageName, String userName, List<String> procedureNameList, NameConventService nameConvent, DataBaseProcedureService dbProcedure, DataSourceUtil dataSourceUtil, Configuration configuration) {
-        Map<String, Object> result = new HashMap<>(8);
+        Map<String, Object> result = new HashMap<>(16);
+        int length = procedureNameList.size();
+        if (length == 0) {
+            return result;
+        }
         //各层方法代码 初始化容量按照每次生成四个过程赋予初始值
-        StringBuilder controllerMethod = new StringBuilder(1024);
-        StringBuilder serviceMethod = new StringBuilder(512);
-        StringBuilder serviceImplMethod = new StringBuilder(512);
-        StringBuilder repositoryMethod = new StringBuilder(3072);
+        StringBuilder controllerMethod = new StringBuilder(256 * length);
+        StringBuilder serviceMethod = new StringBuilder(128 * length);
+        StringBuilder serviceImplMethod = new StringBuilder(128 * length);
+        StringBuilder repositoryMethod = new StringBuilder(768 * length);
         //排序
         nameConvent.sortMethod(procedureNameList);
         //获取方法名称集合
         List<String> methodNames = nameConvent.getMethodNames(moduleName, procedureNameList);
         //循环存储过程
-        for (int i = 0, length = procedureNameList.size(); i < length; i++) {
+        for (int i = 0; i < length; i++) {
             String procedureName = procedureNameList.get(i);
             List<Map<String, Object>> list = dataSourceUtil.executeQuery(dbProcedure.selectArguments(userName.toUpperCase(), procedureName.toUpperCase()));
             //方法传参
@@ -211,15 +230,12 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
         objectMap.put("module", moduleName);
         objectMap.put("author", author);
         objectMap.put("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
-        //tab页集合, 保证返回顺序
-        List<String> list = new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "repository", "BaseUtils", "ProcedureUtils"));
+        //返回结果处理
+        dealCommonCode(configuration, objectMap, result);
         result.put("controller", getController(configuration, objectMap));
         result.put("service", getService(configuration, objectMap));
         result.put("serviceImpl", getServiceImpl(configuration, objectMap));
         result.put("repository", getRepository(configuration, objectMap));
-        result.put("BaseUtils", FreeMarkerUtil.getTemplateContent(configuration, objectMap, "common/BaseUtils.ftl"));
-        result.put("ProcedureUtils", FreeMarkerUtil.getTemplateContent(configuration, objectMap, "common/ProcedureUtils.ftl"));
-        result.put("list", list);
         return result;
     }
 
