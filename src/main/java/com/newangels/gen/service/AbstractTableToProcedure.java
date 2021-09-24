@@ -287,7 +287,7 @@ public abstract class AbstractTableToProcedure extends AbstractFreeMarkerTemplat
     }
 
     /**
-     * 获取自增主键sqk
+     * 获取自增主键
      */
     protected String getAutoInsKey(Configuration configuration, Map<String, Object> objectMap) {
         return getFtlModel(configuration, objectMap, "autoInsKey.ftl");
