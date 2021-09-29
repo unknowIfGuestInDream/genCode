@@ -775,6 +775,12 @@ public class BaseUtils {
         if ("0:0:0:0:0:0:0:1".equals(ip)) {
             return "127.0.0.1";
         }
+        //解决经过nginx转发, 配置了proxy_set_header x-forwarded-for $proxy_add_x_forwarded_for;带来的多ip的情况
+        if (ip != null && ip.length() > 15) {
+            if (ip.indexOf(",") > 0) {
+                ip = ip.substring(0, ip.indexOf(","));
+            }
+        }
 
         return ip;
     }
