@@ -645,6 +645,12 @@
         _selectProcedures();
         _proceduresFilter();
     }
+
+    //监听浏览器窗口变化，修改右侧文本域大小
+    window.onresize = function () {
+        Ext.getCmp('procedureInfo').setWidth(document.documentElement.clientWidth * 0.65);
+        Ext.getCmp('procedureInfo').setHeight(document.documentElement.clientHeight - 100);
+    }
 </script>
 </body>
 </html>
