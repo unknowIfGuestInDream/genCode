@@ -221,8 +221,8 @@
             border: false,
             items: [{
                 xtype: 'textareafield',
-                width: document.documentElement.clientWidth * 0.65,
-                height: document.documentElement.clientHeight - 100,
+                width: _getprocedureInfoWidth(),
+                height: _getprocedureInfoHeight(),
                 // minWidth: 1240,//默认环境1960
                 id: 'procedureInfo',
             }, {
@@ -646,11 +646,21 @@
         _proceduresFilter();
     }
 
+    //存储过程详情文本域宽度
+    function _getprocedureInfoWidth() {
+        return document.documentElement.clientWidth * 0.65;
+    }
+
+    //存储过程详情文本域高度
+    function _getprocedureInfoHeight() {
+        return document.documentElement.clientHeight - 100;
+    }
+
     //监听浏览器窗口变化，修改右侧文本域大小
     window.onresize = function () {
-        Ext.getCmp('procedureInfo').setWidth(document.documentElement.clientWidth * 0.65);
-        Ext.getCmp('procedureInfo').setHeight(document.documentElement.clientHeight - 100);
-    }
+        Ext.getCmp('procedureInfo').setWidth(_getprocedureInfoWidth());
+        Ext.getCmp('procedureInfo').setHeight(_getprocedureInfoHeight());
+    };
 </script>
 </body>
 </html>
