@@ -132,6 +132,7 @@
                     select: function (combo, records) {
                         Ext.getCmp("tableName").setValue("");
                         _selectTable();
+                        TABLE_NAME = "";//重置全局变量
                     }
                 }
             }, {
