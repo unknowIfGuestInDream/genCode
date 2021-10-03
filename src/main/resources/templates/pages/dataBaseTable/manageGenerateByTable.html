@@ -571,7 +571,7 @@
         var result = tableInfoStore.load().getProxy().getReader();
         if (!result.jsonData.success) {
             tableInfoStore.removeAll();
-            Ext.MessageBox.alert('错误', result.jsonData.message, Ext.MessageBox.ERROR);
+            Toast.alert('错误', result.jsonData.message, 3000);
         }
     }
 
