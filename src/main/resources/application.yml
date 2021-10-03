@@ -2,6 +2,12 @@ server:
   port: 8669
   servlet:
     context-path: /gen
+  undertow:
+    threads:
+      io: 8
+      worker: 256
+    buffer-size: 1024
+    direct-buffers: true
 spring:
   application:
     name: gen
