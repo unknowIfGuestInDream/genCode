@@ -45,7 +45,7 @@ public class CommonController {
         if (list == null) {
             list = new ArrayList<>();
             for (DataBaseType dataBaseType : DataBaseType.values()) {
-                if ("UNKNOW".equals(dataBaseType.toString())) {
+                if (DataBaseType.UNKNOW == dataBaseType) {
                     continue;
                 }
                 Map<String, Object> result = new HashMap<>(4);
