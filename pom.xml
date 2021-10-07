@@ -83,6 +83,14 @@
             <artifactId>mariadb-java-client</artifactId>
             <version>2.1.2</version>
         </dependency>
+        <!-- 在1.0.5版本基础上实现了excel文档 -->
+        <dependency>
+            <groupId>cn.smallbun.screw</groupId>
+            <artifactId>screw-core</artifactId>
+            <version>1.0.6-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/screw-core-1.0.6-SNAPSHOT.jar</systemPath>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
