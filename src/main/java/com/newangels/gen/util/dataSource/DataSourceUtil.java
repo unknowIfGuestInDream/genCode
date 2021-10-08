@@ -28,10 +28,38 @@ public abstract class DataSourceUtil {
     public abstract void close();
 
     /**
-     * 初始化连接池时新增的配置参数
+     * 连接池新增配置参数
+     */
+    protected abstract void addDataSourceProperty(String propertyName, Object value);
+
+    /**
+     * 初始化连接池时配置参数
      * 用于生成数据库文档功能用
      */
-    protected abstract void addDataSourcePropertys();
+    protected void addDataSourcePropertys() {
+        String databaseProductName = "";
+        try {
+            databaseProductName = dataSource.getConnection().getMetaData().getDatabaseProductName();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        switch (databaseProductName) {
+            case "MySQL":
+                //设置mysql/mariadb可以获取 tables remarks 信息
+                addDataSourceProperty("useInformationSchema", "true");
+                addDataSourceProperty("characterEncoding", "UTF-8");
+                break;
+            case "Oracle":
+                //设置oracle是否获取注释
+                addDataSourceProperty("remarksReporting", "true");
+                break;
+            case "Microsoft SQL Server":
+            default:
+                break;
+        }
+    }
+
+    ;
 
     /**
      * 用于数据库增删改

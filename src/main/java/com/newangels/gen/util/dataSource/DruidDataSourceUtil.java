@@ -3,8 +3,6 @@ package com.newangels.gen.util.dataSource;
 import com.alibaba.druid.pool.DruidDataSource;
 import org.apache.commons.lang3.StringUtils;
 
-import java.sql.SQLException;
-
 /**
  * Druid连接池工具实现类
  *
@@ -50,27 +48,8 @@ public class DruidDataSourceUtil extends DataSourceUtil {
     }
 
     @Override
-    public void addDataSourcePropertys() {
-        String databaseProductName = "";
-        try {
-            databaseProductName = dataSource.getConnection().getMetaData().getDatabaseProductName();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        switch (databaseProductName) {
-            case "MySQL":
-                //设置mysql/mariadb可以获取 tables remarks 信息
-                dataSource.addConnectionProperty("useInformationSchema", "true");
-                dataSource.addConnectionProperty("characterEncoding", "UTF-8");
-                break;
-            case "Oracle":
-                //设置oracle是否获取注释
-                dataSource.addConnectionProperty("remarksReporting", "true");
-                break;
-            case "Microsoft SQL Server":
-                break;
-            default:
-                break;
-        }
+    protected void addDataSourceProperty(String propertyName, Object value) {
+        dataSource.addConnectionProperty(propertyName, value.toString());
     }
+
 }
