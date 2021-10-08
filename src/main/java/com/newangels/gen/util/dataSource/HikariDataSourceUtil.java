@@ -3,6 +3,8 @@ package com.newangels.gen.util.dataSource;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.lang3.StringUtils;
 
+import java.sql.SQLException;
+
 /**
  * Hikari连接池工具实现类
  *
@@ -34,12 +36,7 @@ public class HikariDataSourceUtil extends DataSourceUtil {
             dataSource.setDriverClassName(driverClass);//设置驱动
             dataSource.setUsername(userName);//账号
             dataSource.setPassword(password);//密码
-            //以下参数配置用于生成数据库文档用
-            //设置oracle是否获取注释
-            dataSource.addDataSourceProperty("remarksReporting", "true");
-            //设置mysql/mariadb可以获取 tables remarks 信息
-            dataSource.addDataSourceProperty("useInformationSchema", "true");
-            dataSource.addDataSourceProperty("characterEncoding", "UTF-8");
+            addDataSourcePropertys();
         }
     }
 
@@ -49,6 +46,31 @@ public class HikariDataSourceUtil extends DataSourceUtil {
             dataSource.close();
         }
         dataSource = null;
+    }
+
+    @Override
+    public void addDataSourcePropertys() {
+        String databaseProductName = "";
+        try {
+            databaseProductName = dataSource.getConnection().getMetaData().getDatabaseProductName();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        switch (databaseProductName) {
+            case "MySQL":
+                //设置mysql/mariadb可以获取 tables remarks 信息
+                dataSource.addDataSourceProperty("useInformationSchema", "true");
+                dataSource.addDataSourceProperty("characterEncoding", "UTF-8");
+                break;
+            case "Oracle":
+                //设置oracle是否获取注释
+                dataSource.addDataSourceProperty("remarksReporting", "true");
+                break;
+            case "Microsoft SQL Server":
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

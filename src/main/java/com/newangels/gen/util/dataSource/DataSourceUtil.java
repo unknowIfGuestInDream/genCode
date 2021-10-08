@@ -28,6 +28,12 @@ public abstract class DataSourceUtil {
     public abstract void close();
 
     /**
+     * 初始化连接池时新增的配置参数
+     * 用于生成数据库文档功能用
+     */
+    public abstract void addDataSourcePropertys();
+
+    /**
      * 用于数据库增删改
      */
     public int executeUpdate(String sql, Object... obj) throws SQLException {
