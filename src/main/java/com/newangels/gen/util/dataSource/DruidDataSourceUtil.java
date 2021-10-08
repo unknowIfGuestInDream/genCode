@@ -35,6 +35,12 @@ public class DruidDataSourceUtil extends DataSourceUtil {
             dataSource.setUsername(userName);//账号
             dataSource.setPassword(password);//密码
             dataSource.setBreakAfterAcquireFailure(true);
+            //以下参数配置用于生成数据库文档用
+            //设置oracle是否获取注释
+            dataSource.addConnectionProperty("remarksReporting", "true");
+            //设置mysql/mariadb可以获取 tables remarks 信息
+            dataSource.addConnectionProperty("useInformationSchema", "true");
+            dataSource.addConnectionProperty("characterEncoding", "UTF-8");
         }
     }
 

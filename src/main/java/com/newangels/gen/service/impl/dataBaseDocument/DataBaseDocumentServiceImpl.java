@@ -9,8 +9,6 @@ import cn.smallbun.screw.core.process.ProcessConfig;
 import com.newangels.gen.factory.DataSourceUtilFactory;
 import com.newangels.gen.service.DataBaseDocumentService;
 import com.newangels.gen.util.dataSource.DataSourceUtilTypes;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +27,7 @@ public class DataBaseDocumentServiceImpl implements DataBaseDocumentService {
 
     @Override
     public String executeFile(String url, String driver, String userName, String password, String version, String description, String fileName) {
-        DataSource dataSource = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password, DataSourceUtilTypes.DRUID).getDataSource();
+        DataSource dataSource = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password, DataSourceUtilTypes.HIKARI).getDataSource();
         // 创建 screw 的配置
         Configuration config = Configuration.builder()
                 // 版本
@@ -44,25 +42,6 @@ public class DataBaseDocumentServiceImpl implements DataBaseDocumentService {
                 .produceConfig(buildProcessConfig())
                 .build();
         return new DocumentationExecute(config).executeFile();
-    }
-
-    //mysql的url需要两个参数
-
-    /**
-     * 创建数据源
-     */
-    private static HikariDataSource buildDataSource(String url, String driver, String userName, String password) {
-        // 创建 HikariConfig 配置类
-        HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setDriverClassName(driver);
-        hikariConfig.setJdbcUrl(url);
-        hikariConfig.setUsername(userName);
-        hikariConfig.setPassword(password);
-        // 设置可以获取 tables remarks 信息
-//        hikariConfig.addDataSourceProperty("useInformationSchema", "true");
-//        hikariConfig.addDataSourceProperty("characterEncoding", "UTF-8");
-        // 创建数据源
-        return new HikariDataSource(hikariConfig);
     }
 
     /**

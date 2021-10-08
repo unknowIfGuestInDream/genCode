@@ -34,6 +34,12 @@ public class HikariDataSourceUtil extends DataSourceUtil {
             dataSource.setDriverClassName(driverClass);//设置驱动
             dataSource.setUsername(userName);//账号
             dataSource.setPassword(password);//密码
+            //以下参数配置用于生成数据库文档用
+            //设置oracle是否获取注释
+            dataSource.addDataSourceProperty("remarksReporting", "true");
+            //设置mysql/mariadb可以获取 tables remarks 信息
+            dataSource.addDataSourceProperty("useInformationSchema", "true");
+            dataSource.addDataSourceProperty("characterEncoding", "UTF-8");
         }
     }
 
