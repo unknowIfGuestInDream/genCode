@@ -16,6 +16,7 @@ import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -27,10 +28,13 @@ import java.util.Collections;
 @SpringBootTest
 public class ScrewTest {
 
-    private static final String DB_URL = "jdbc:mysql://localhost:3306";
-    private static final String DB_NAME = "mall";
-    private static final String DB_USERNAME = "root";
-    private static final String DB_PASSWORD = "mysql";
+//    private static final String DB_URL = "jdbc:mysql://localhost:3306";
+//    private static final String DB_NAME = "mall";
+//    private static final String DB_USERNAME = "root";
+//    private static final String DB_PASSWORD = "mysql";
+
+    private static final String DB_USERNAME = "pmnew";
+    private static final String DB_PASSWORD = "pmnew";
 
     private static final String FILE_OUTPUT_DIR = "E:\\test";
     private static final EngineFileType FILE_OUTPUT_TYPE = EngineFileType.XLS; // 可以设置 Word 或者 Markdown 格式
@@ -52,11 +56,11 @@ public class ScrewTest {
 
         // 执行 screw，生成数据库文档
 //        new DocumentationExecute(config).execute();
-        InputStream inputStream = new ByteArrayInputStream(file.getBytes("UTF-8"));
+        InputStream inputStream = new ByteArrayInputStream(file.getBytes(StandardCharsets.UTF_8));
 
         int index;
         byte[] bytes = new byte[1024];
-        FileOutputStream downloadFile = new FileOutputStream("E:\\test\\文档.xls");
+        FileOutputStream downloadFile = new FileOutputStream("E:\\test\\文档1.xls");
         while ((index = inputStream.read(bytes)) != -1) {
             downloadFile.write(bytes, 0, index);
             downloadFile.flush();
@@ -71,8 +75,10 @@ public class ScrewTest {
     private static DataSource buildDataSource() {
         // 创建 HikariConfig 配置类
         HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setDriverClassName("com.mysql.jdbc.Driver");
-        hikariConfig.setJdbcUrl(DB_URL + "/" + DB_NAME);
+        hikariConfig.setDriverClassName("oracle.jdbc.OracleDriver");
+//        hikariConfig.setDriverClassName("com.mysql.jdbc.Driver");
+//        hikariConfig.setJdbcUrl(DB_URL + "/" + DB_NAME);
+        hikariConfig.setJdbcUrl("jdbc:oracle:thin:@10.18.26.86:1521:pmnewpro");
         hikariConfig.setUsername(DB_USERNAME);
         hikariConfig.setPassword(DB_PASSWORD);
         hikariConfig.addDataSourceProperty("useInformationSchema", "true"); // 设置可以获取 tables remarks 信息
