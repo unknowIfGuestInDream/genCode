@@ -31,7 +31,7 @@ public abstract class DataSourceUtil {
      * 初始化连接池时新增的配置参数
      * 用于生成数据库文档功能用
      */
-    public abstract void addDataSourcePropertys();
+    protected abstract void addDataSourcePropertys();
 
     /**
      * 用于数据库增删改
