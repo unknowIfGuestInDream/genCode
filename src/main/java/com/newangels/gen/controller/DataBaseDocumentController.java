@@ -8,7 +8,9 @@ import cn.smallbun.screw.core.execute.DocumentationExecute;
 import cn.smallbun.screw.core.process.ProcessConfig;
 import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
+import com.newangels.gen.factory.DataSourceUtilFactory;
 import com.newangels.gen.service.DataBaseDocumentService;
+import com.newangels.gen.util.dataSource.DataSourceUtilTypes;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Cleanup;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,8 +46,7 @@ public class DataBaseDocumentController {
     @GetMapping("genDataBaseDocument")
     @Log
     public void genDataBaseDocument(String url, String driver, String userName, String password, String version, String description, String fileName, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //druid连接池有点问题，因此使用hikari连接池，疑似要升级druid版本到1.1.21
-        HikariDataSource dataSource = buildDataSource(url, driver, userName, password);
+        DataSource dataSource = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password, DataSourceUtilTypes.DRUID).getDataSource();
         // 创建 screw 的配置
         Configuration config = Configuration.builder()
                 // 版本
@@ -60,8 +62,7 @@ public class DataBaseDocumentController {
                 .build();
         String file = new DocumentationExecute(config).executeFile();
         @Cleanup InputStream inputStream = new ByteArrayInputStream(file.getBytes(StandardCharsets.UTF_8));
-        dataSource.close();
-        BaseUtils.download(inputStream, "数据库文档.md", request, response);
+        BaseUtils.download(inputStream, "数据库文档.doc", request, response);
     }
 
     /**
@@ -87,7 +88,7 @@ public class DataBaseDocumentController {
     private EngineConfig buildEngineConfig() {
         return EngineConfig.builder()
                 // 文件类型
-                .fileType(EngineFileType.MD)
+                .fileType(EngineFileType.WORD)
                 // 文件类型
                 .produceType(EngineTemplateType.freemarker)
                 .build();
