@@ -171,4 +171,11 @@ public abstract class DataSourceUtil {
     public String getDataSourceInfo() {
         return dataSource.toString();
     }
+
+    /**
+     * 获取连接池
+     */
+    public DataSource getDataSource() {
+        return dataSource;
+    }
 }
