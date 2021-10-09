@@ -68,6 +68,11 @@
                 text: '查看',
                 icon: 'public/image/btn/view.png',
                 handler: _loadDataBaseInfo
+            }, {
+                xtype: 'button',
+                text: '生成数据库文档',
+                icon: 'public/image/btn/association.png',
+                handler: _preGenDataBaseDocument
             }]
         });
 
@@ -305,7 +310,7 @@
     function _deleteDataBaseInfo() {
         var records = Ext.getCmp('dataBasePanel').getSelectionModel().getSelection();
         if (records.length === 0) {
-            Ext.MessageBox.alert('警告', '请选择数据源表', Ext.MessageBox.WARNING);
+            Ext.MessageBox.alert('警告', '请选择数据源', Ext.MessageBox.WARNING);
             return;
         }
 
@@ -338,6 +343,52 @@
                             }
                         }
                     });
+                }
+            }
+        });
+    }
+
+    //生成数据库文档
+    function _preGenDataBaseDocument() {
+        var records = Ext.getCmp('dataBasePanel').getSelectionModel().getSelection();
+        if (records.length === 0) {
+            Ext.MessageBox.alert('警告', '请选择数据源', Ext.MessageBox.WARNING);
+            return;
+        }
+        //测试连接
+        Ext.Ajax.request({
+            url: '/gen/testConnect',
+            async: false,
+            params: {
+                'URL': records[0].get('URL'),
+                'DRIVER': records[0].get('DRIVER'),
+                'USERNAME': records[0].get('USERNAME'),
+                'PASSWORD': records[0].get('PASSWORD')
+            },
+            callback: function (options, success, response) {
+                if (success) {
+                    var data = Ext.decode(response.responseText);
+                    if (data.success === true) {
+                        //跳转数据库文档生成页
+                        var url = '?URL=' + encodeURIComponent(records[0].get('URL')) +
+                            '&DRIVER=' + encodeURIComponent(records[0].get('DRIVER')) +
+                            '&USERNAME=' + encodeURIComponent(records[0].get('USERNAME')) +
+                            '&PASSWORD=' + encodeURIComponent(records[0].get('PASSWORD'));
+                        win = Ext.create('Ext.window.Window', {
+                            title: '数据库文档生成',
+                            modal: true,
+                            autoShow: true,
+                            maximized: false,
+                            maximizable: true,
+                            width: document.documentElement.clientWidth * 0.6,
+                            height: document.documentElement.clientHeight * 0.8,
+                            html: '<iframe src="/gen/preGenDataBaseDocument' + url + '" style="width: 100%; height: 100%;" frameborder="0"></iframe>'
+                        });
+                    } else {
+                        Ext.MessageBox.alert('错误', data.message, Ext.MessageBox.ERROR);
+                    }
+                } else {
+                    Ext.MessageBox.alert('错误', '服务器错误', Ext.MessageBox.ERROR);
                 }
             }
         });

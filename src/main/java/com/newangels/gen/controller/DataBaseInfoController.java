@@ -31,7 +31,7 @@ public class DataBaseInfoController {
     /**
      * 管理数据源
      */
-    @GetMapping(value = "manageDataBaseInfo")
+    @GetMapping("/manageDataBaseInfo")
     public ModelAndView manageDataBaseInfo() {
         return new ModelAndView("pages/dataBaseInfo/manageDataBaseInfo");
     }
@@ -39,7 +39,7 @@ public class DataBaseInfoController {
     /**
      * 新增数据源
      */
-    @GetMapping(value = "preInsertDataBaseInfo")
+    @GetMapping("/preInsertDataBaseInfo")
     public ModelAndView preInsertDataBaseInfo() {
         return new ModelAndView("pages/dataBaseInfo/preInsertDataBaseInfo");
     }
@@ -47,7 +47,7 @@ public class DataBaseInfoController {
     /**
      * 修改数据源
      */
-    @GetMapping(value = "preUpdateDataBaseInfo")
+    @GetMapping("/preUpdateDataBaseInfo")
     public ModelAndView preUpdateDataBaseInfo() {
         return new ModelAndView("pages/dataBaseInfo/preUpdateDataBaseInfo");
     }
@@ -104,7 +104,7 @@ public class DataBaseInfoController {
      */
     @PostMapping("testConnect")
     @Log
-    public Map<String, Object> testConnect(String URL, String DRIVER, String USERNAME, String PASSWORD) throws SQLException, ClassNotFoundException {
+    public Map<String, Object> testConnect(String URL, String DRIVER, String USERNAME, String PASSWORD) throws ClassNotFoundException {
         @Cleanup Connection con = null;
         Class.forName(DRIVER);
         try {
