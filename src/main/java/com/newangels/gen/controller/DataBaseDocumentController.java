@@ -1,5 +1,6 @@
 package com.newangels.gen.controller;
 
+import cn.smallbun.screw.core.engine.EngineFileType;
 import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
 import com.newangels.gen.service.DataBaseDocumentService;
@@ -43,10 +44,10 @@ public class DataBaseDocumentController {
      */
     @GetMapping("genDataBaseDocument")
     @Log
-    public void genDataBaseDocument(String url, String driver, String userName, String password, @RequestParam(required = false, defaultValue = "1.0.0") String version, String description, @RequestParam(required = false, defaultValue = "数据库文档") String fileName, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String file = dataBaseDocumentService.executeFile(url, driver, userName, password, version, description, fileName);
+    public void genDataBaseDocument(String url, String driver, String userName, String password, @RequestParam(required = false, defaultValue = "1.0.0") String version, String description, @RequestParam(required = false, defaultValue = "数据库文档") String fileName, @RequestParam(required = false, defaultValue = "WORD") String engineFileType, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String file = dataBaseDocumentService.executeFile(url, driver, userName, password, version, description, fileName, engineFileType);
         @Cleanup InputStream inputStream = new ByteArrayInputStream(file.getBytes(StandardCharsets.UTF_8));
-        BaseUtils.download(inputStream, "数据库文档.doc", request, response);
+        BaseUtils.download(inputStream, fileName + EngineFileType.valueOf(engineFileType).getFileSuffix(), request, response);
     }
 
 }

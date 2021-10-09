@@ -1,5 +1,6 @@
 package com.newangels.gen.enums;
 
+import cn.smallbun.screw.core.engine.EngineFileType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -19,6 +20,12 @@ public class enumTest {
             System.out.println(dataBaseType.getTypeName());
             System.out.println(dataBaseType.toString());
         }
+    }
+
+    @Test
+    public void enum2() {
+        EngineFileType engineFileType = EngineFileType.valueOf("WORD");
+        System.out.println(engineFileType.getFileSuffix());
     }
 
 }

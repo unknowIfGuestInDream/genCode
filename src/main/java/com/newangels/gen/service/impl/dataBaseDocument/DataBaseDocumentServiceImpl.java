@@ -26,7 +26,7 @@ import java.util.Collections;
 public class DataBaseDocumentServiceImpl implements DataBaseDocumentService {
 
     @Override
-    public String executeFile(String url, String driver, String userName, String password, String version, String description, String fileName) {
+    public String executeFile(String url, String driver, String userName, String password, String version, String description, String fileName, String engineFileType) {
         DataSource dataSource = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password, DataSourceUtilTypes.HIKARI).getDataSource();
         // 创建 screw 的配置
         Configuration config = Configuration.builder()
@@ -37,7 +37,7 @@ public class DataBaseDocumentServiceImpl implements DataBaseDocumentService {
                 // 数据源
                 .dataSource(dataSource)
                 // 引擎配置
-                .engineConfig(buildEngineConfig())
+                .engineConfig(buildEngineConfig(EngineFileType.valueOf(engineFileType)))
                 // 处理配置
                 .produceConfig(buildProcessConfig())
                 .build();
@@ -47,10 +47,10 @@ public class DataBaseDocumentServiceImpl implements DataBaseDocumentService {
     /**
      * 创建 screw 的引擎配置
      */
-    private EngineConfig buildEngineConfig() {
+    private EngineConfig buildEngineConfig(EngineFileType engineFileType) {
         return EngineConfig.builder()
                 // 文件类型
-                .fileType(EngineFileType.WORD)
+                .fileType(engineFileType)
                 // 文件类型
                 .produceType(EngineTemplateType.freemarker)
                 .build();
