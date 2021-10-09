@@ -104,7 +104,7 @@ public class DataBaseInfoController {
      */
     @PostMapping("testConnect")
     @Log
-    public Map<String, Object> testConnect(String URL, String DRIVER, String USERNAME, String PASSWORD) throws ClassNotFoundException {
+    public Map<String, Object> testConnect(String URL, String DRIVER, String USERNAME, String PASSWORD) throws SQLException, ClassNotFoundException {
         @Cleanup Connection con = null;
         Class.forName(DRIVER);
         try {
