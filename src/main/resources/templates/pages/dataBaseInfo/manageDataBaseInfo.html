@@ -373,7 +373,8 @@
                         var url = '?URL=' + encodeURIComponent(records[0].get('URL')) +
                             '&DRIVER=' + encodeURIComponent(records[0].get('DRIVER')) +
                             '&USERNAME=' + encodeURIComponent(records[0].get('USERNAME')) +
-                            '&PASSWORD=' + encodeURIComponent(records[0].get('PASSWORD'));
+                            '&PASSWORD=' + encodeURIComponent(records[0].get('PASSWORD')) +
+                            '&NAME=' + encodeURIComponent(records[0].get('NAME'));
                         win = Ext.create('Ext.window.Window', {
                             title: '数据库文档生成',
                             modal: true,

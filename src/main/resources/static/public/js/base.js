@@ -46,10 +46,6 @@ var returnValue;//子页返回值
 var SUCCESS = 'success';
 //必填样式 配合afterLabelTextTpl/beforeLabelTextTpl使用
 var required = '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>';
-//控制成本中心默认显示
-var ckShow = true;
-//数量列默认隐藏
-var numShow = true;
 
 /**
  * 子页关闭方法

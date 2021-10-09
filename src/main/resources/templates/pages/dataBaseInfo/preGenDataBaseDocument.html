@@ -3,8 +3,224 @@
 <head>
     <meta charset="UTF-8">
     <title>数据库文档生成</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="public/css/ext-all.css"/>
+    <link rel="stylesheet" type="text/css" href="public/css/ext-zh_CN.css"/>
+    <script type="text/javascript" src="public/js/ext-all.js"></script>
+    <script type="text/javascript" src="public/js/ext-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="public/js/base.js"></script>
+    <script type="text/javascript" src="public/js/util/allowBlank.js"></script>
+    <script type="text/javascript" src="public/js/store/driver.js"></script>
 </head>
 <body>
+<script>
+    var URL = null;
+    var DRIVER = null;
+    var USERNAME = null;
+    var PASSWORD = null;
+    var NAME = null;
+    if (location.href.split('?')[1] !== undefined) {
+        var parameters = Ext.urlDecode(location.href.split('?')[1]);
+        (parameters.URL !== undefined) ? URL = parameters.URL : 0;
+        (parameters.DRIVER !== undefined) ? DRIVER = parameters.DRIVER : 0;
+        (parameters.USERNAME !== undefined) ? USERNAME = parameters.USERNAME : 0;
+        (parameters.PASSWORD !== undefined) ? PASSWORD = parameters.PASSWORD : 0;
+        (parameters.NAME !== undefined) ? NAME = parameters.NAME : 0;
+    }
+    Ext.onReady(function () {
+        Ext.getBody().mask('加载中...');//加载时页面遮盖
 
+        //按钮栏
+        var buttonPanel = Ext.create('Ext.Panel', {
+            id: 'buttonPanel',
+            defaults: {
+                style: 'margin: 2px;'
+            },
+            items: [{
+                xtype: 'button',
+                text: '保存',
+                icon: 'public/image/btn/save.png',
+                handler: _insertDataBaseInfo
+            }, {
+                xtype: 'button',
+                text: '连接测试',
+                icon: 'public/image/btn/association.png',
+                handler: _testConnect
+            }, {
+                xtype: 'button',
+                text: '关闭',
+                icon: 'public/image/btn/close.png',
+                handler: _close
+            }]
+        });
+
+        var formPanel = Ext.create('Ext.form.Panel', {//表单
+            id: 'formPanel',
+            layout: 'column',
+            frame: true,
+            autoScroll: true,
+            defaults: {
+                labelAlign: 'right',
+                labelWidth: 150,
+                inputWidth: 300,
+            },
+            items: [{
+                xtype: 'textfield',
+                name: 'NAME',
+                fieldLabel: '数据源名称',
+                allowBlank: false
+            }, {
+                xtype: 'combo',
+                queryMode: 'local',
+                store: driverStore,
+                valueField: 'CODE_',
+                displayField: 'NAME_',
+                id: 'DRIVER',
+                name: 'DRIVER',
+                fieldLabel: '驱动类名称',
+                allowBlank: false,
+                forceSelection: true,
+                style: 'clear:both',
+                listeners: {
+                    select: function (combo, records) {
+                        switch (records[0].data.CODE_) {
+                            case "com.mysql.cj.jdbc.Driver":
+                                Ext.getCmp('URL').setValue('jdbc:mysql://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
+                                break;
+                            case "com.mysql.jdbc.Driver":
+                                Ext.getCmp('URL').setValue('jdbc:mysql://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
+                                break;
+                            case "oracle.jdbc.OracleDriver":
+                                Ext.getCmp('URL').setValue('jdbc:oracle:thin:@10.18.26.86:1521:SID');
+                                break;
+                            case "org.mariadb.jdbc.Driver":
+                                Ext.getCmp('URL').setValue('jdbc:mariadb://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
+                                break;
+                            case "com.microsoft.sqlserver.jdbc.SQLServerDriver":
+                                Ext.getCmp('URL').setValue('jdbc:sqlserver://ip:1433;DatabaseName=db');
+                                break;
+                            default:
+                                Ext.getCmp('URL').setValue('');
+                                break;
+                        }
+                    }
+                }
+            }, {
+                xtype: 'textfield',
+                id: 'URL',
+                name: 'URL',
+                inputWidth: 600,
+                fieldLabel: '链接',
+                allowBlank: false,
+                style: 'clear:both'
+            }, {
+                xtype: 'textfield',
+                name: 'USERNAME',
+                fieldLabel: '用户名',
+                allowBlank: false,
+                style: 'clear:both'
+            }, {
+                xtype: 'textfield',
+                name: 'PASSWORD',
+                fieldLabel: '密码',
+                allowBlank: false,
+                style: 'clear:both'
+            }]
+        });
+
+        Ext.create('Ext.container.Viewport', {//整体布局
+            layout: {
+                type: 'border',//border布局
+                regionWeights: {//四个角的归属
+                    west: -1,
+                    north: 1,
+                    south: 1,
+                    east: -1
+                }
+            },
+            defaults: {
+                border: false
+            },
+            items: [{
+                region: 'north',
+                items: [buttonPanel]
+            }, {
+                region: 'center',
+                layout: 'fit',//充满
+                items: [formPanel]
+            }]
+        });
+
+        _init();
+    });
+
+    function _init() {
+        for (var i = 0; i < Ext.data.StoreManager.getCount(); i++) {
+            if (Ext.data.StoreManager.getAt(i).isLoading()) {
+                return;
+            }
+        }
+
+        //默认为oracle驱动
+        Ext.getCmp('DRIVER').setValue('oracle.jdbc.OracleDriver');
+        Ext.getCmp('URL').setValue('jdbc:oracle:thin:@10.18.26.86:1521:SID');
+
+        Ext.getBody().unmask();
+    }
+
+    //新增数据源
+    function _insertDataBaseInfo() {
+        Ext.getCmp('formPanel').getForm().submit({//提交表单
+            url: '/gen/insertDataBaseInfo',
+            submitEmptyText: false,
+            waitMsg: '进行中',
+            success: function (form, action) {
+                var data = action.result;
+                parent.returnValue = data.success;
+                _close();
+            },
+            failure: function (form, action) {
+                switch (action.failureType) {
+                    case Ext.form.action.Action.CLIENT_INVALID:
+                        Ext.MessageBox.alert('错误', '请填写必填项', Ext.MessageBox.ERROR);
+                        break;
+                    case Ext.form.action.Action.SERVER_INVALID:
+                        Ext.MessageBox.alert('错误', action.result.message, Ext.MessageBox.ERROR);
+                        break;
+                    case Ext.form.action.Action.CONNECT_FAILURE:
+                        Ext.MessageBox.alert('错误', '服务器错误', Ext.MessageBox.ERROR);
+                }
+            }
+        });
+    }
+
+    //测试连接
+    function _testConnect() {
+        Ext.getCmp('formPanel').getForm().submit({//提交表单
+            url: '/gen/testConnect',
+            submitEmptyText: false,
+            waitMsg: '进行中',
+            success: function (form, action) {
+                if (action.result.success) {
+                    Ext.MessageBox.alert('信息', '连接成功', Ext.MessageBox.INFO);
+                }
+            },
+            failure: function (form, action) {
+                switch (action.failureType) {
+                    case Ext.form.action.Action.CLIENT_INVALID:
+                        Ext.MessageBox.alert('错误', '请填写必填项', Ext.MessageBox.ERROR);
+                        break;
+                    case Ext.form.action.Action.SERVER_INVALID:
+                        Ext.MessageBox.alert('错误', action.result.message, Ext.MessageBox.ERROR);
+                        break;
+                    case Ext.form.action.Action.CONNECT_FAILURE:
+                        Ext.MessageBox.alert('错误', '服务器错误', Ext.MessageBox.ERROR);
+                }
+            }
+        });
+    }
+</script>
 </body>
 </html>
