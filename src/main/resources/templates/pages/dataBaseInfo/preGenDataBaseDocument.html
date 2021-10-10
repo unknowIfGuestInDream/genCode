@@ -221,6 +221,35 @@
             }
         });
     }
+
+    //生成数据库文档 附带随机数
+    function _genDataBaseDocument() {
+        Ext.Ajax.request({
+            url: '/gen/genDataBaseDocument',
+            async: false,
+            params: {
+                'url': URL,
+                'driver': DRIVER,
+                'userName': USERNAME,
+                'password': PASSWORD,
+                'version': '1.0.0',
+                'description': '数据库文档',
+                'fileName': '数据库文档',
+                'engineFileType': 'WORD'
+            },
+            callback: function (options, success, response) {
+                if (success) {
+                    var data = Ext.decode(response.responseText);
+                    if (data.success === true) {
+                    } else {
+                        Ext.MessageBox.alert('错误', data.message, Ext.MessageBox.ERROR);
+                    }
+                } else {
+                    Ext.MessageBox.alert('错误', '服务器错误', Ext.MessageBox.ERROR);
+                }
+            }
+        });
+    }
 </script>
 </body>
 </html>

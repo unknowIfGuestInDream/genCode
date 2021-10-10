@@ -40,7 +40,6 @@ public class DataBaseDocumentController {
 
     /**
      * 生成数据库文档
-     * //TODO 请求加随机数
      */
     @GetMapping("genDataBaseDocument")
     @Log
