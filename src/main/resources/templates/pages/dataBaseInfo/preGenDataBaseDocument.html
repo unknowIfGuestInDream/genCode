@@ -12,7 +12,6 @@
     <script type="text/javascript" src="public/js/ext-lang-zh_CN.js"></script>
     <script type="text/javascript" src="public/js/base.js"></script>
     <script type="text/javascript" src="public/js/util/allowBlank.js"></script>
-    <script type="text/javascript" src="public/js/store/driver.js"></script>
     <script type="text/javascript" src="public/js/store/engineFileTypeStore.js"></script>
 </head>
 <body>
@@ -41,8 +40,8 @@
             },
             items: [{
                 xtype: 'button',
-                text: '保存',
-                icon: 'public/image/btn/save.png',
+                text: '生成文档',
+                icon: 'public/image/btn/add.png',
                 handler: _genDataBaseDocument
             }, {
                 xtype: 'button',
@@ -60,67 +59,44 @@
             defaults: {
                 labelAlign: 'right',
                 labelWidth: 150,
-                inputWidth: 300,
+                inputWidth: 340,
             },
             items: [{
-                xtype: 'textfield',
-                name: 'NAME',
+                xtype: 'displayfield',
                 fieldLabel: '数据源名称',
-                allowBlank: false
+                value: NAME
             }, {
                 xtype: 'combo',
                 queryMode: 'local',
-                store: driverStore,
+                store: engineFileTypeStore,
                 valueField: 'CODE_',
                 displayField: 'NAME_',
-                id: 'DRIVER',
-                name: 'DRIVER',
-                fieldLabel: '驱动类名称',
+                id: 'engineFileType',
+                name: 'engineFileType',
+                fieldLabel: '导出文件类型',
                 allowBlank: false,
-                forceSelection: true,
-                style: 'clear:both',
-                listeners: {
-                    select: function (combo, records) {
-                        switch (records[0].data.CODE_) {
-                            case "com.mysql.cj.jdbc.Driver":
-                                Ext.getCmp('URL').setValue('jdbc:mysql://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
-                                break;
-                            case "com.mysql.jdbc.Driver":
-                                Ext.getCmp('URL').setValue('jdbc:mysql://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
-                                break;
-                            case "oracle.jdbc.OracleDriver":
-                                Ext.getCmp('URL').setValue('jdbc:oracle:thin:@10.18.26.86:1521:SID');
-                                break;
-                            case "org.mariadb.jdbc.Driver":
-                                Ext.getCmp('URL').setValue('jdbc:mariadb://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
-                                break;
-                            case "com.microsoft.sqlserver.jdbc.SQLServerDriver":
-                                Ext.getCmp('URL').setValue('jdbc:sqlserver://ip:1433;DatabaseName=db');
-                                break;
-                            default:
-                                Ext.getCmp('URL').setValue('');
-                                break;
-                        }
-                    }
-                }
+                multiSelect: true,
+                editable: false,
+                style: 'clear:both'
             }, {
                 xtype: 'textfield',
-                id: 'URL',
-                name: 'URL',
-                inputWidth: 600,
-                fieldLabel: '链接',
+                id: 'version',
+                name: 'version',
+                fieldLabel: '版本号',
+                allowBlank: false,
+                style: 'clear:both'
+            }, {
+                xtype: 'textareafield',
+                id: 'description',
+                name: 'description',
+                fieldLabel: '文档描述',
                 allowBlank: false,
                 style: 'clear:both'
             }, {
                 xtype: 'textfield',
-                name: 'USERNAME',
-                fieldLabel: '用户名',
-                allowBlank: false,
-                style: 'clear:both'
-            }, {
-                xtype: 'textfield',
-                name: 'PASSWORD',
-                fieldLabel: '密码',
+                id: 'fileName',
+                name: 'fileName',
+                fieldLabel: '文档文件名称',
                 allowBlank: false,
                 style: 'clear:both'
             }]
@@ -159,24 +135,26 @@
             }
         }
 
-        //默认为oracle驱动
-        Ext.getCmp('DRIVER').setValue('oracle.jdbc.OracleDriver');
-        Ext.getCmp('URL').setValue('jdbc:oracle:thin:@10.18.26.86:1521:SID');
+        Ext.getCmp('engineFileType').setValue(['WORD']);
+        Ext.getCmp('version').setValue('1.0.0');
+        Ext.getCmp('description').setValue('数据库文档');
+        Ext.getCmp('fileName').setValue(NAME + '数据库文档');
 
         Ext.getBody().unmask();
     }
 
-    //生成数据库文档 附带随机数
+    //生成数据库文档
     function _genDataBaseDocument() {
         var params = {
             'url': URL,
             'driver': DRIVER,
             'userName': USERNAME,
             'password': PASSWORD,
-            'version': '1.0.0',
-            'description': '数据库文档',
-            'fileName': '数据库文档',
-            'engineFileType': 'WORD'
+            'version': Ext.getCmp('version').getValue(),
+            'description': Ext.getCmp('description').getValue(),
+            'fileName': Ext.getCmp('fileName').getValue(),
+            'engineFileType': Ext.getCmp('engineFileType').getValue(),
+            't': new Date().getTime()
         };
 
         var body = Ext.getBody();
