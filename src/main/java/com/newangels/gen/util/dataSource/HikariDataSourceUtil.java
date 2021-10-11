@@ -34,6 +34,7 @@ public class HikariDataSourceUtil extends DataSourceUtil {
             dataSource.setDriverClassName(driverClass);//设置驱动
             dataSource.setUsername(userName);//账号
             dataSource.setPassword(password);//密码
+            addDataSourcePropertys(driverClass);
         }
     }
 
@@ -43,6 +44,11 @@ public class HikariDataSourceUtil extends DataSourceUtil {
             dataSource.close();
         }
         dataSource = null;
+    }
+
+    @Override
+    protected void addDataSourceProperty(String propertyName, String value) {
+        dataSource.addDataSourceProperty(propertyName, value);
     }
 
     @Override

@@ -1,6 +1,9 @@
+## 项目介绍
 本项目功能：
 1. 存储过程生成java代码
 2. 根据表生成存储过程
+3. 表生成自增主键sql
+4. 生成数据库表文档
 
 ## 技术框架
 
@@ -26,17 +29,23 @@ druid监控账号密码默认都为admin
 
 运行后访问 [http://localhost:8669/gen](http://localhost:8669/gen)
 
-## 项目介绍
+## 数据库支持
+功能 | oracle | mysql | mariadb | sqlserver
+----|----|----|----|----
+数据源管理| √ | √ | √ | √
+存储过程生成代码| √ | √ | √ | √
+表生成存储过程| √ | - | - | -
+表生成自增主键| √ | √ | √ | -
+生成数据库表文档| √ | √ | √ | √
 
-存储过程生成代码功能支持oracle, mysql, mariadb, sqlserver数据库
-表生成存储过程目前仅支持oracle,部分支持mysql
-
+## 项目代码介绍
 * NameConventService 命名规范
 * DataBaseProcedureService 数据库对应获取过程相关的sql&数据库关键词对应的java类型等
 * DataBaseInfoService 数据源管理
 * DataBaseTableService 数据库表相关sql
 * AbstractGenProcedureModel 存储过程代码生成模板
 * AbstractTableToProcedure 表生成过程相关接口
+* DataBaseDocumentService 生成数据库文档
 
 ## 新增规范，模板以及数据库
 * 如需要添加自己的命名规范则新增 NameConventService 的实现类并新增枚举类NameConventType参数,

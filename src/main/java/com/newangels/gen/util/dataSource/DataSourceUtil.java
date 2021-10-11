@@ -1,5 +1,7 @@
 package com.newangels.gen.util.dataSource;
 
+import com.newangels.gen.enums.DataBaseType;
+
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
@@ -26,6 +28,35 @@ public abstract class DataSourceUtil {
      * 连接池释放
      */
     public abstract void close();
+
+    /**
+     * 连接池新增配置参数
+     */
+    protected abstract void addDataSourceProperty(String propertyName, String value);
+
+    /**
+     * 初始化连接池时配置参数
+     * 设计时用于生成数据库文档功能用
+     */
+    protected void addDataSourcePropertys(String driver) {
+        switch (DataBaseType.fromTypeName(driver)) {
+            case MYSQL:
+            case MYSQL8:
+            case MARIADB:
+                //设置mysql/mariadb可以获取 tables remarks 信息
+                addDataSourceProperty("useInformationSchema", "true");
+                addDataSourceProperty("characterEncoding", "UTF-8");
+                break;
+            case ORACLE:
+                //设置oracle是否获取注释
+                addDataSourceProperty("remarksReporting", "true");
+                break;
+            case SQLSERVER:
+            case UNKNOW:
+            default:
+                break;
+        }
+    }
 
     /**
      * 用于数据库增删改
@@ -170,5 +201,12 @@ public abstract class DataSourceUtil {
      */
     public String getDataSourceInfo() {
         return dataSource.toString();
+    }
+
+    /**
+     * 获取连接池
+     */
+    public DataSource getDataSource() {
+        return dataSource;
     }
 }

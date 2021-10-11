@@ -35,6 +35,7 @@ public class DruidDataSourceUtil extends DataSourceUtil {
             dataSource.setUsername(userName);//账号
             dataSource.setPassword(password);//密码
             dataSource.setBreakAfterAcquireFailure(true);
+            addDataSourcePropertys(driverClass);
         }
     }
 
@@ -45,4 +46,10 @@ public class DruidDataSourceUtil extends DataSourceUtil {
         }
         dataSource = null;
     }
+
+    @Override
+    protected void addDataSourceProperty(String propertyName, String value) {
+        dataSource.addConnectionProperty(propertyName, value);
+    }
+
 }

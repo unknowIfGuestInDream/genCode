@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.newangels</groupId>
     <artifactId>gen</artifactId>
-    <version>2.0</version>
+    <version>3.0</version>
     <packaging>jar</packaging>
     <name>gen</name>
     <description>存储过程生成</description>
@@ -33,11 +33,21 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.1.9</version>
+            <version>1.1.22</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -72,6 +82,14 @@
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
             <version>2.1.2</version>
+        </dependency>
+        <!-- 在1.0.5版本基础上实现了excel文档 -->
+        <dependency>
+            <groupId>cn.smallbun.screw</groupId>
+            <artifactId>screw-core</artifactId>
+            <version>1.0.6-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/screw-core-1.0.6-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

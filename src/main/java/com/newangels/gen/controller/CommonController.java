@@ -1,5 +1,6 @@
 package com.newangels.gen.controller;
 
+import cn.smallbun.screw.core.engine.EngineFileType;
 import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
 import com.newangels.gen.enums.DataBaseType;
@@ -94,6 +95,26 @@ public class CommonController {
                 list.add(result);
             }
             SimpleCache.put(SimpleCache.NAMECONVENTTYPE, list);
+        }
+        return BaseUtils.success(list);
+    }
+
+    /**
+     * 获取EngineFileType的数据
+     */
+    @GetMapping("selectEngineFileType")
+    @Log
+    public Map<String, Object> selectEngineFileType() {
+        List<Map<String, Object>> list = SimpleCache.get(SimpleCache.ENGINEFILETYPE);
+        if (list == null) {
+            list = new ArrayList<>();
+            for (EngineFileType engineFileType : EngineFileType.values()) {
+                Map<String, Object> result = new HashMap<>(4);
+                result.put("CODE_", engineFileType.toString());
+                result.put("NAME_", engineFileType.getDesc());
+                list.add(result);
+            }
+            SimpleCache.put(SimpleCache.ENGINEFILETYPE, list);
         }
         return BaseUtils.success(list);
     }

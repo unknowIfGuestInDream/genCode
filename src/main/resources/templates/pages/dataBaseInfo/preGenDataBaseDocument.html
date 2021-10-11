@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据库文档生成</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="public/css/ext-all.css"/>
+    <link rel="stylesheet" type="text/css" href="public/css/ext-zh_CN.css"/>
+    <script type="text/javascript" src="public/js/ext-all.js"></script>
+    <script type="text/javascript" src="public/js/ext-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="public/js/base.js"></script>
+    <script type="text/javascript" src="public/js/util/allowBlank.js"></script>
+    <script type="text/javascript" src="public/js/store/engineFileTypeStore.js"></script>
+</head>
+<body>
+<script>
+    var URL = null;
+    var DRIVER = null;
+    var USERNAME = null;
+    var PASSWORD = null;
+    var NAME = null;
+    if (location.href.split('?')[1] !== undefined) {
+        var parameters = Ext.urlDecode(location.href.split('?')[1]);
+        (parameters.URL !== undefined) ? URL = parameters.URL : 0;
+        (parameters.DRIVER !== undefined) ? DRIVER = parameters.DRIVER : 0;
+        (parameters.USERNAME !== undefined) ? USERNAME = parameters.USERNAME : 0;
+        (parameters.PASSWORD !== undefined) ? PASSWORD = parameters.PASSWORD : 0;
+        (parameters.NAME !== undefined) ? NAME = parameters.NAME : 0;
+    }
+    Ext.onReady(function () {
+        Ext.getBody().mask('加载中...');//加载时页面遮盖
+
+        //按钮栏
+        var buttonPanel = Ext.create('Ext.Panel', {
+            id: 'buttonPanel',
+            defaults: {
+                style: 'margin: 2px;'
+            },
+            items: [{
+                xtype: 'button',
+                text: '生成文档',
+                icon: 'public/image/btn/add.png',
+                handler: _genDataBaseDocument
+            }, {
+                xtype: 'button',
+                text: '关闭',
+                icon: 'public/image/btn/close.png',
+                handler: _close
+            }]
+        });
+
+        var formPanel = Ext.create('Ext.form.Panel', {//表单
+            id: 'formPanel',
+            layout: 'column',
+            frame: true,
+            autoScroll: true,
+            defaults: {
+                labelAlign: 'right',
+                labelWidth: 150,
+                inputWidth: 340,
+            },
+            items: [{
+                xtype: 'displayfield',
+                fieldLabel: '数据源名称',
+                value: NAME
+            }, {
+                xtype: 'combo',
+                queryMode: 'local',
+                store: engineFileTypeStore,
+                valueField: 'CODE_',
+                displayField: 'NAME_',
+                id: 'engineFileType',
+                name: 'engineFileType',
+                fieldLabel: '导出文件类型',
+                allowBlank: false,
+                multiSelect: true,
+                editable: false,
+                style: 'clear:both'
+            }, {
+                xtype: 'textfield',
+                id: 'version',
+                name: 'version',
+                fieldLabel: '版本号',
+                allowBlank: false,
+                style: 'clear:both'
+            }, {
+                xtype: 'textareafield',
+                id: 'description',
+                name: 'description',
+                fieldLabel: '文档描述',
+                allowBlank: false,
+                style: 'clear:both'
+            }, {
+                xtype: 'textfield',
+                id: 'fileName',
+                name: 'fileName',
+                fieldLabel: '文档文件名称',
+                allowBlank: false,
+                style: 'clear:both'
+            }]
+        });
+
+        Ext.create('Ext.container.Viewport', {//整体布局
+            layout: {
+                type: 'border',//border布局
+                regionWeights: {//四个角的归属
+                    west: -1,
+                    north: 1,
+                    south: 1,
+                    east: -1
+                }
+            },
+            defaults: {
+                border: false
+            },
+            items: [{
+                region: 'north',
+                items: [buttonPanel]
+            }, {
+                region: 'center',
+                layout: 'fit',//充满
+                items: [formPanel]
+            }]
+        });
+
+        _init();
+    });
+
+    function _init() {
+        for (var i = 0; i < Ext.data.StoreManager.getCount(); i++) {
+            if (Ext.data.StoreManager.getAt(i).isLoading()) {
+                return;
+            }
+        }
+
+        Ext.getCmp('engineFileType').setValue(['WORD']);
+        Ext.getCmp('version').setValue('1.0.0');
+        Ext.getCmp('description').setValue('数据库文档');
+        Ext.getCmp('fileName').setValue(NAME + '数据库文档');
+
+        Ext.getBody().unmask();
+    }
+
+    //生成数据库文档
+    function _genDataBaseDocument() {
+        if (!Ext.getCmp('formPanel').getForm().isValid()) {
+            Ext.MessageBox.alert('警告', '请填写必填项', Ext.MessageBox.WARNING);
+            return;
+        }
+        var params = {
+            'url': URL,
+            'driver': DRIVER,
+            'userName': USERNAME,
+            'password': PASSWORD,
+            'version': Ext.getCmp('version').getValue(),
+            'description': Ext.getCmp('description').getValue(),
+            'fileName': Ext.getCmp('fileName').getValue(),
+            'engineFileTypes': Ext.getCmp('engineFileType').getValue(),
+            't': new Date().getTime()
+        };
+
+        var body = Ext.getBody();
+        var form = body.createChild({
+            tag: 'form',
+            cls: 'x-hidden',
+            action: "/gen/genDataBaseDocument",
+            method: "get",
+            target: '_blank'
+        });
+
+        for (var key in params) {
+            if (!Ext.isArray(params[key])) {
+                form.createChild({
+                    tag: 'input',
+                    type: 'text',
+                    cls: 'x-hidden',
+                    name: key,
+                    value: params[key]
+                });
+            } else {
+                for (var i = 0; i < params[key].length; i++) {
+                    form.createChild({
+                        tag: 'input',
+                        type: 'text',
+                        cls: 'x-hidden',
+                        name: key,
+                        value: params[key][i]
+                    });
+                }
+            }
+        }
+
+        form.dom.submit();
+    }
+</script>
+</body>
+</html>
