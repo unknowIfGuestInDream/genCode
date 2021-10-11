@@ -145,6 +145,10 @@
 
     //生成数据库文档
     function _genDataBaseDocument() {
+        if (!Ext.getCmp('formPanel').getForm().isValid()) {
+            Ext.MessageBox.alert('警告', '请填写必填项', Ext.MessageBox.WARNING);
+            return;
+        }
         var params = {
             'url': URL,
             'driver': DRIVER,
@@ -153,7 +157,7 @@
             'version': Ext.getCmp('version').getValue(),
             'description': Ext.getCmp('description').getValue(),
             'fileName': Ext.getCmp('fileName').getValue(),
-            'engineFileType': Ext.getCmp('engineFileType').getValue(),
+            'engineFileTypes': Ext.getCmp('engineFileType').getValue(),
             't': new Date().getTime()
         };
 
