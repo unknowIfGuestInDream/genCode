@@ -39,9 +39,17 @@
         </encoder>
     </appender>
 
-    <root>
-        <appender-ref ref="CONSOLE"/>
+    <!-- 异步处理文件日志，提高生产环境性能 -->
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>512</queueSize>
+        <neverBlock>true</neverBlock>
         <appender-ref ref="FILE"/>
         <appender-ref ref="FILE_ERROR"/>
+    </appender>
+
+    <root>
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ASYNC_FILE"/>
     </root>
 </configuration>
