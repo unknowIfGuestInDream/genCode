@@ -61,6 +61,7 @@ druid监控账号密码默认都为admin
 6. SimpleCache类为简易缓存, 主要缓存一些不常变数据
 
 ## CHANGELOG
+
 相较于2.0版本变更
 
 1. tomcat更换为undertow
@@ -69,5 +70,11 @@ druid监控账号密码默认都为admin
 4. 升级druid版本 1.1.9 -> 1.1.22
 5. 优化架构
 
+## 感谢
+
+- <a href="https://jb.gg/OpenSource"><img src="http://static.xkcoding.com/spring-boot-demo/064312.jpg" width="100px" alt="jetbrains">**
+  感谢 JetBrains 提供的免费开源 License**</a>
+
 ## 最后
+
 如果有问题或者需求可以发送邮件或者提交Issues
