@@ -95,7 +95,8 @@ public class OracleTableToProc extends AbstractTableToProcedure {
         selectWithPageInParams.add(page + " IN VARCHAR2, --页数");
         selectWithPageInParams.add(limit + " IN VARCHAR2, --每页显示条数");
         selectWithPageInParams.add(nameConvent.getProcOutParamName("total") + " OUT VARCHAR2, --返回总条数");
-        selectWithPageInParams.add(nameConvent.getProcOutParamName("result") + " OUT SYS_REFCURSOR --成功返回结果集");
+        selectWithPageInParams.add(nameConvent.getProcOutParamName("result") + " OUT SYS_REFCURSOR, --成功返回结果集");
+        selectWithPageInParams.add(nameConvent.getProcOutParamName("message") + " OUT VARCHAR2 --成功执行信息为：‘success’，失败执行信息为错误信息");
         //赋值
         objectMap.putIfAbsent("selProcName", nameConvent.getProcName(tableName, ProcTypes.SELECT));
         objectMap.put("selectWithPageInParams", selectWithPageInParams.toString());

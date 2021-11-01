@@ -17,6 +17,7 @@ BEGIN
   SELECT COUNT(1)
     INTO ${total}
     FROM ${tableName}${selectSqlWhere};
+  ${message} := 'success';
 EXCEPTION
   WHEN OTHERS THEN
     ${message} := SQLERRM;
