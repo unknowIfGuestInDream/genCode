@@ -516,7 +516,6 @@
     //查询数据源
     function _selectdataSource() {
         var dataSourceStore = Ext.data.StoreManager.lookup('dataSourceStore');
-        dataSourceStore.proxy.extraParams = {};
         dataSourceStore.load();
     }
 
@@ -685,6 +684,13 @@
                             items: [],
                             listeners: {
                                 beforetabchange: function (tabs, newTab, oldTab) {
+                                    if (newTab.id === 'copy') {
+                                        var text = '';
+                                        for (var i = 0; i < codeList.length; i++) {
+                                            text += Ext.getCmp('tab_' + codeList[i]).items.items[0].value + '\n';
+                                        }
+                                        copyText(text);
+                                    }
                                     if (newTab.id === 'close') {
                                         win.close();
                                     }
@@ -696,6 +702,7 @@
                             var codeMap = codeList[i];
                             var codeTab = {
                                 title: codeList[i],
+                                id: 'tab_' + codeList[i],
                                 layout: 'fit',
                                 readOnly: true,
                                 items: [{
@@ -708,6 +715,10 @@
                             };
                             codeTabPanel.add(codeTab);
                         }
+                        codeTabPanel.add({
+                            id: 'copy',
+                            title: '复制到剪切板'
+                        });
                         codeTabPanel.add({
                             id: 'close',
                             title: '关闭'
@@ -793,6 +804,18 @@
             record.set('IS_SEL', 'N');
             record.set('SELTYPE', '');
         })
+    }
+
+    //复制内容到剪切板
+    function copyText(text) {
+        var tag = document.createElement('textarea');
+        tag.setAttribute('id', 'cp_hgz_textarea');
+        tag.value = text;
+        document.getElementsByTagName('body')[0].appendChild(tag);
+        document.getElementById('cp_hgz_textarea').select();
+        document.execCommand('copy');
+        document.getElementById('cp_hgz_textarea').remove();
+        Toast.alert('信息', '已复制到剪切板', 2000);
     }
 </script>
 </body>
