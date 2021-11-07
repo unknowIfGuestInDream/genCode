@@ -2,7 +2,6 @@ package com.newangels.gen.controller;
 
 import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
-import com.newangels.gen.base.CacheManage;
 import com.newangels.gen.enums.DataBaseType;
 import com.newangels.gen.enums.GenProcedureModelType;
 import com.newangels.gen.enums.NameConventType;
@@ -13,11 +12,9 @@ import com.newangels.gen.factory.NameConventFactory;
 import com.newangels.gen.service.AbstractGenProcedureModel;
 import com.newangels.gen.service.DataBaseProcedureService;
 import com.newangels.gen.service.NameConventService;
-import com.newangels.gen.util.cache.Cache;
 import com.newangels.gen.util.dataSource.DataSourceUtil;
 import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,71 +31,28 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
- * 存储过程代码生成
+ * 后台代码生成
  *
  * @author: TangLiang
- * @date: 2021/6/20 10:05
+ * @date: 2021/11/7 10:05
  * @since: 1.0
  */
 @RestController
 @RequiredArgsConstructor
-public class GenProcedureController {
+public class GenCodeController {
     private final FreeMarkerConfigurer freeMarkerConfigurer;
 
     /**
-     * 代码生成页面
+     * 后台代码生成页面
      */
-    @GetMapping("/manageGenerate")
-    public ModelAndView manageGenerate() {
-        return new ModelAndView("pages/codeGenerate/manageGenerate");
+    @GetMapping("/manageCodeByTable")
+    public ModelAndView manageCodeByTable() {
+        return new ModelAndView("pages/codeGenerate/manageCodeByTable");
     }
 
     /**
-     * 查询数据库中的过程信息
-     *
-     * @param url      数据库url 用于获取数据库连接
-     * @param driver   数据库驱动 用于获取存储过程sql
-     * @param userName 数据库账户
-     * @param password 数据库密码
-     * @param name     过程名 模糊查询
-     */
-    @GetMapping("selectProcedures")
-    @Log
-    public Map<String, Object> selectProcedures(String url, String driver, String userName, String password, @RequestParam(required = false, defaultValue = "") String name) {
-        List<Map<String, Object>> list = CacheManage.PROCEDURES_CACHE.get(url.replaceAll("/", "") + userName + name + "procedures");
-        //缓存方案 url+用户名+查询条件为主键
-        //存储过程名称条件为空代表全查询 缓存一天，否则缓存一分钟
-        if (list == null) {
-            DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
-            DataBaseProcedureService dbProcedure = DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
-            list = dataSourceUtil.executeQuery(dbProcedure.selectProcedures(name));
-            CacheManage.PROCEDURES_CACHE.put(url.replaceAll("/", "") + userName + name + "procedures", list, StringUtils.isEmpty(name) ? Cache.CACHE_HOLD_FOREVER : Cache.CACHE_HOLD_30MINUTE);
-        }
-        return BaseUtils.success(list);
-    }
-
-    /**
-     * 加载过程信息
-     *
-     * @param url      数据库url 用于获取数据库连接
-     * @param driver   数据库驱动 用于获取存储过程sql
-     * @param userName 数据库账户
-     * @param password 数据库密码
-     * @param name     存储过程名称
-     */
-    @GetMapping("loadProcedureInfo")
-    @Log
-    public Map<String, Object> loadProcedureInfo(String url, String driver, String userName, String password, String name) {
-        //获取数据库连接
-        DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
-        //获取数据库过程sql
-        DataBaseProcedureService dbProcedure = DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
-        String result = dbProcedure.loadProcedure(name, dataSourceUtil);
-        return BaseUtils.success(result);
-    }
-
-    /**
-     * 生成代码
+     * 生成后台代码
+     * //TODO
      *
      * @param moduleName            模块名称
      * @param genProcedureModelType 生成代码模版类型
@@ -108,11 +62,21 @@ public class GenProcedureController {
      * @param driver                数据库驱动 用于获取存储过程sql
      * @param userName              数据库账户
      * @param password              数据库密码
-     * @param procedureNameList     存储过程名称集合
+     * @param author                作者
+     * @param tableName             表名
+     * @param tableDesc             表描述
+     * @param params                表所有字段
+     * @param paramTypes            表所有字段的类型
+     * @param paramDescs            表所有字段的类型
+     * @param priParamIndex         主键列索引
+     * @param selParamsIndex        查询条件列索引
+     * @param selType               查询条件类型
+     * @param insParamIndex         新增列索引
+     * @param updParamIndex         修改列索引
      */
-    @PostMapping("genProcedure")
+    @PostMapping("genCodeByTable")
     @Log
-    public Map<String, Object> genProcedure(String moduleName, String genProcedureModelType, String nameConventType, String packageName, String url, String driver, String userName, String password, @RequestParam("procedureNameList") List<String> procedureNameList, @RequestParam(required = false, defaultValue = "admin") String author) {
+    public Map<String, Object> genCodeByTable(String moduleName, String genProcedureModelType, String nameConventType, String packageName, String url, String driver, String userName, String password, @RequestParam(required = false, defaultValue = "admin") String author, String tableName, String tableDesc, @RequestParam("params") List<String> params, @RequestParam("paramTypes") List<String> paramTypes, @RequestParam("paramDescs") List<String> paramDescs, @RequestParam("priParamIndex") List<Integer> priParamIndex, @RequestParam("selParamsIndex") List<Integer> selParamsIndex, @RequestParam("selType") List<Integer> selType, @RequestParam("insParamIndex") List<Integer> insParamIndex, @RequestParam("updParamIndex") List<Integer> updParamIndex) {
         moduleName = BaseUtils.toUpperCase4Index(moduleName);
         //获取数据库连接，为空则创建
         DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
@@ -122,16 +86,17 @@ public class GenProcedureController {
         NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromCode(nameConventType));
         //获取数据库过程sql
         DataBaseProcedureService dbProcedure = DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
-        Map<String, Object> result = genProcedureModel.genCode(moduleName, packageName, userName, procedureNameList, author, nameConvent, dbProcedure, dataSourceUtil, freeMarkerConfigurer.getConfiguration());
+        Map<String, Object> result = genProcedureModel.genCode(moduleName, packageName, userName, null, author, nameConvent, dbProcedure, dataSourceUtil, freeMarkerConfigurer.getConfiguration());
         return BaseUtils.success(result);
     }
 
     /**
      * 生成代码下载
+     * //TODO
      */
-    @GetMapping("downloadCode")
+    @GetMapping("downloadCodeByTable")
     @Log
-    public void downloadCode(String moduleName, String genProcedureModelType, String nameConventType, String packageName, String url, String driver, String userName, String password, @RequestParam("procedureNameList") List<String> procedureNameList, String author, HttpServletRequest request, HttpServletResponse response) {
+    public void downloadCodeByTable(String moduleName, String genProcedureModelType, String nameConventType, String packageName, String url, String driver, String userName, String password, @RequestParam("procedureNameList") List<String> procedureNameList, String author, HttpServletRequest request, HttpServletResponse response) {
         try {
             String zipName = moduleName + ".zip";
             moduleName = BaseUtils.toUpperCase4Index(moduleName);
