@@ -110,8 +110,8 @@ public class ProcedureUtils {
         if (list == null) {
             return new PageImpl<Map<String, Object>>(new ArrayList<>(), pageable, 0);
         }
-        Integer total = list.size();
-        Integer fromIndex = pageable.getPageSize() * pageable.getPageNumber();
+        int total = list.size();
+        int fromIndex = pageable.getPageSize() * pageable.getPageNumber();
         List<Map<String, Object>> result = null;
         if (total > pageable.getPageSize() * (pageable.getPageNumber() + 1)) {
             result = list.subList(fromIndex, pageable.getPageSize());
