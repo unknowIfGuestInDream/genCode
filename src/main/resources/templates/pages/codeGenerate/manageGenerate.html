@@ -347,7 +347,6 @@
     //查询数据源
     function _selectdataSource() {
         var dataSourceStore = Ext.data.StoreManager.lookup('dataSourceStore');
-        dataSourceStore.proxy.extraParams = {};
         dataSourceStore.load();
     }
 
