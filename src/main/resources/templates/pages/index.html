@@ -43,45 +43,19 @@
 <div class="list">
     <span>代码生成系统</span>
     <ul>
-        <li><a onclick="_manageDataBaseInfo()">管理数据源</a></li>
-        <li><a onclick="_manageGenerate()">代码生成</a></li>
-        <li><a onclick="_manageGenerateByTable()">根据表生成存储过程</a></li>
+        <li><a onclick="_openLink('manageDataBaseInfo','/gen/manageDataBaseInfo');">管理数据源</a></li>
+        <li><a onclick="_openLink('manageGenerate','/gen/manageGenerate');">代码生成</a></li>
+        <li><a onclick="_openLink('manageGenerateByTable','/gen/manageGenerateByTable');">根据表生成存储过程</a></li>
     </ul>
     <span>缓存管理</span>
     <ul>
-        <li><a onclick="_caches()">/caches 获取全部数据缓存key</a></li>
-        <li>/caches/{key} 获取指定缓存</li>
-        <li><a onclick="_dataSourceCaches()">/dataSourceCaches 获取当前已有的连接池</a></li>
+        <li><a onclick="_openLink('manageDataBaseInfo','/gen/caches');">/caches 获取全部数据缓存key /caches/{key} 获取指定缓存</a>
+        </li>
+        <li><a onclick="_openLink('dataSourceCaches','/gen/dataSourceCaches');">/dataSourceCaches 获取当前已有的连接池</a></li>
     </ul>
     <ul>
-        <li><a onclick="_druid()">druid监控</a></li>
+        <li><a onclick="_openLink('druid','/gen/druid/index.html');">druid监控</a></li>
     </ul>
 </div>
-
-<script>
-    function _druid() {
-        window.open('/gen/druid/index.html');
-    }
-
-    function _manageDataBaseInfo() {
-        window.open('/gen/manageDataBaseInfo');
-    }
-
-    function _manageGenerate() {
-        window.open('/gen/manageGenerate');
-    }
-
-    function _caches() {
-        window.open('/gen/caches');
-    }
-
-    function _dataSourceCaches() {
-        window.open('/gen/dataSourceCaches');
-    }
-
-    function _manageGenerateByTable() {
-        window.open('/gen/manageGenerateByTable');
-    }
-</script>
 </body>
 </html>
