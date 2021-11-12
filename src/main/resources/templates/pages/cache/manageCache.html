@@ -2,9 +2,806 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>缓存管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="public/css/ext-all.css"/>
+    <link rel="stylesheet" type="text/css" href="public/css/ext-zh_CN.css"/>
+    <script type="text/javascript" src="public/js/ext-all.js"></script>
+    <script type="text/javascript" src="public/js/ext-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="public/js/base.js"></script>
+    <script type="text/javascript" src="public/js/ajax/clearCaches.js"></script>
 </head>
 <body>
+<script>
+    //点击时拿到表名
+    var TABLE_NAME;
 
+    Ext.onReady(function () {
+        Ext.getBody().mask('加载中...');
+        Ext.QuickTips.init();
+
+        //数据源名称
+        var dataSourceStore = Ext.create('Ext.data.Store', {
+            storeId: 'dataSourceStore',
+            autoLoad: false,//true为自动加载
+            loading: false,//自动加载时必须为true
+            pageSize: -1,
+            fields: ['ID', 'URL', 'DRIVER', 'USERNAME', 'PASSWORD', 'NAME'],
+            proxy: {
+                url: '/gen/selectDataBaseInfo',
+                type: 'ajax',
+                async: false,
+                actionMethods: {
+                    read: 'GET'
+                },
+                extraParams: {},
+                reader: {
+                    type: 'json',
+                    root: 'result'
+                }
+            },
+            listeners: {
+                load: function (store, records, successful, eOpts) {
+                    Ext.getCmp('dataSource').select(store.first());
+                }
+            }
+        });
+
+        //表名Store
+        var tableStore = Ext.create('Ext.data.Store', {
+            storeId: 'tableStore',
+            fields: ['TABLE_NAME', 'COMMENTS', 'LAST_DDL_TIME']
+        });
+
+        //表信息Store
+        var tableInfoStore = Ext.create('Ext.data.Store', {
+            storeId: 'tableInfoStore',
+            autoLoad: false,//true为自动加载
+            loading: false,//自动加载时必须为true
+            pageSize: -1,
+            fields: ['COLUMN_NAME', 'DATA_TYPE', 'DATA_LENGTH', 'NULLABLE', 'DATA_DEFAULT', 'NUM_DISTINCT', 'LOW_VALUE', 'HIGH_VALUE', 'NUM_NULLS', 'LAST_ANALYZED', 'AVG_COL_LEN', 'COMMENTS', 'COLUMN_ID', 'IS_PRIMARY', 'IS_SEL', 'SELTYPE', 'IS_INS', 'IS_UPD'],
+            proxy: {
+                url: '/gen/selectTableInfo',
+                type: 'ajax',
+                async: false,
+                actionMethods: {
+                    read: 'GET'
+                },
+                extraParams: {},
+                reader: {
+                    type: 'json',
+                    root: 'result'
+                }
+            },
+            listeners: {
+                load: function (store, records, successful, eOpts) {
+                    store.each(function (record) {
+                        if (record.get("COLUMN_ID") === 1 && record.get("COLUMN_NAME").indexOf("ID") > 0) {
+                            record.set('IS_PRIMARY', 'Y');
+                            record.set('IS_SEL', 'N');
+                            record.set('IS_UPD', 'N');
+                            record.set('SELTYPE', '');
+                        } else {
+                            record.set('IS_PRIMARY', 'N');
+                            record.set('IS_SEL', 'Y');
+                            record.set('IS_UPD', 'Y');
+                            record.set('SELTYPE', '0');
+                        }
+                        record.set('IS_INS', 'Y');
+                    })
+                }
+            }
+        });
+
+        var westFormPanel = Ext.create('Ext.form.Panel', {
+            id: 'westFormPanel',
+            layout: 'column',
+            frame: true,
+            border: false,
+            defaults: {
+                labelAlign: 'right',
+                labelWidth: 100,
+                inputWidth: 140,
+                margin: '4,0,0,0'
+            },
+            items: [{
+                xtype: 'button',
+                text: '查询',
+                icon: 'public/image/btn/search.png',
+                handler: _selectTable
+            }, {
+                xtype: 'button',
+                text: '清除缓存',
+                icon: 'public/image/btn/refresh.png',
+                handler: _clearTablesCache
+            }, {
+                xtype: 'combo',
+                queryMode: 'local',
+                store: dataSourceStore,
+                id: 'dataSource',
+                valueField: 'NAME',
+                displayField: 'NAME',
+                fieldLabel: '数据源名称',
+                forceSelection: true,
+                listeners: {
+                    select: function (combo, records) {
+                        Ext.getCmp("tableName").setValue("");
+                        _selectTable();
+                        TABLE_NAME = "";//重置全局变量
+                    }
+                }
+            }, {
+                xtype: 'textfield',
+                id: 'tableName',
+                fieldLabel: '表名',
+                listeners: {
+                    specialKey: function (field, e) {
+                        if (e.getKey() === Ext.EventObject.ENTER) {
+                            _selectTable();
+                        }
+                    }
+                }
+            }]
+        });
+
+        var eastFormPanel = Ext.create('Ext.form.Panel', {
+            id: 'eastFormPanel',
+            layout: 'column',
+            frame: true,
+            border: false,
+            defaults: {
+                labelAlign: 'right',
+                labelWidth: 100,
+                inputWidth: 180,
+                margin: '4,0,0,0'
+            },
+            items: [{
+                xtype: 'button',
+                text: '是查询条件列全设置为否',
+                icon: 'public/image/btn/association.png',
+                handler: _setIsSelNo,
+            }, {
+                xtype: 'button',
+                text: '生成',
+                icon: 'public/image/btn/add.png',
+                handler: _genProceduresByTable,
+            }, {
+                xtype: 'button',
+                text: '生成自增主键',
+                icon: 'public/image/btn/add.png',
+                handler: _genAutoInsKey
+            }, {
+                xtype: 'combo',
+                queryMode: 'local',
+                store: nameConventTypeStore,
+                labelWidth: 70,
+                inputWidth: 140,
+                id: 'nameConventType',
+                valueField: 'CODE_',
+                displayField: 'NAME_',
+                fieldLabel: '规范名称',
+                forceSelection: true,
+                value: '2'
+            }]
+        });
+
+        //表名gird
+        var tablePanel = Ext.create('Ext.grid.Panel', {
+            id: 'tablePanel',
+            store: tableStore,
+            columnLines: true,
+            frame: true,
+            selModel: {
+                selType: 'checkboxmodel',
+                mode: 'SINGEL'
+            },
+            columns: [{
+                xtype: 'rownumberer',
+                align: 'center',
+                width: 50
+            }, {
+                text: '表名',
+                flex: 1,
+                minWidth: 200,
+                dataIndex: 'TABLE_NAME',
+                renderer: function (value, metaData, record, rowIdx, colIdx, store, view) {
+                    return '<a href=javascript:_viewTableDetailedInfo(\'' + value + '\',\'' + encodeURIComponent(record.data.COMMENTS) + '\')>' + value + '</a>'
+                }
+            }, {
+                text: '备注',
+                flex: 1,
+                minWidth: 200,
+                dataIndex: 'COMMENTS',
+                renderer: _viewValueTip
+            }, {
+                text: '最后修改时间',
+                width: 140,
+                dataIndex: 'LAST_DDL_TIME'
+            }],
+            listeners: {
+                itemclick: function (view, record, item, index, e, eOpts) {
+                    //连续两次点击同一个表名 只执行一次查询
+                    if (record.data.TABLE_NAME !== TABLE_NAME) {
+                        _selectTableInfo(record.data.TABLE_NAME);
+                    }
+                    TABLE_NAME = record.data.TABLE_NAME;
+                }
+            },
+            viewConfig: {
+                emptyText: '<div style="text-align: center; padding-top: 50px; font: italic bold 20px Microsoft YaHei;">没有数据</div>',
+                enableTextSelection: true,
+            }
+        });
+
+        //表信息gird
+        var tableInfoPanel = Ext.create('Ext.grid.Panel', {
+            id: 'tableInfoPanel',
+            store: tableInfoStore,
+            columnLines: true,
+            frame: true,
+            selModel: {
+                selType: 'cellmodel'
+            },
+            plugins: [Ext.create('Ext.grid.plugin.CellEditing', {
+                clicksToEdit: 1,
+                autoCancel: false,
+                errorSummary: false,
+                saveBtnText: '保存',
+                cancelBtnText: '取消',
+                errorsText: '提示',
+                dirtyText: '<div style="font: italic bold 20px Microsoft YaHei; color: red;">需要保存</div>',
+                listeners: {
+                    beforeedit: function (editor, context, eOpts) {
+                        //修改 是修改字段的值，如果当前字段是主键，拒绝修改
+                        if (context.field === 'IS_UPD') {
+                            if (context.record.data.IS_PRIMARY === 'Y') {
+                                return false;
+                            }
+                        }
+                        //是查询为否 拒绝修改
+                        if (context.field === 'SELTYPE') {
+                            if (context.record.data.IS_SEL === 'N') {
+                                return false;
+                            }
+                        }
+                    },
+                    edit: function (editor, context, eOpts) {//点击保存以后触发事件
+                        var record = context.record;
+                        record.commit();
+                    },
+                    validateedit: function (editor, context, eOpts) {
+                        //查询条件类型列，是查询条件列为是，则不能为空
+                        if (context.field === 'SELTYPE') {
+                            if (context.record.data.IS_SEL === 'Y' && context.value === '') {
+                                return false;
+                            }
+                        }
+                        //修改 是主键
+                        if (context.field === 'IS_PRIMARY') {
+                            //由否->是 是查询变为否 查询条件空 是修改变否
+                            if (context.originalValue === 'N' && context.value === 'Y') {
+                                context.record.data.IS_SEL === 'Y' ? context.record.set('IS_SEL', 'N') : 0;
+                                context.record.data.SELTYPE !== '' ? context.record.set('SELTYPE', '') : 0;
+                                context.record.data.IS_UPD === 'Y' ? context.record.set('IS_UPD', 'N') : 0;
+                                return true;
+                            }
+                        }
+                        //是查询改成否 查询条件为空 否-> 是 查询类型初始化
+                        if (context.field === 'IS_SEL') {
+                            if (context.originalValue === 'Y' && context.value === 'N') {
+                                context.record.data.SELTYPE !== '' ? context.record.set('SELTYPE', '') : 0;
+                                return true;
+                            }
+                            if (context.originalValue === 'N' && context.value === 'Y') {
+                                context.record.data.SELTYPE === '' ? context.record.set('SELTYPE', '0') : 0;
+                                return true;
+                            }
+                        }
+                    }
+                }
+            })],
+            columns: [{
+                text: '列索引',
+                locked: true,
+                width: 70,
+                dataIndex: 'COLUMN_ID'
+            }, {
+                text: '列名',
+                locked: true,
+                flex: 1,
+                minWidth: 210,
+                dataIndex: 'COLUMN_NAME'
+            }, {
+                text: '数据类型',
+                width: 120,
+                dataIndex: 'DATA_TYPE'
+            }, {
+                text: '是主键',
+                width: 70,
+                dataIndex: 'IS_PRIMARY',
+                renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
+                    return (value != null && value != '' && ynStore.findRecord('CODE_', new RegExp('^' + value + '$'))) ? ynStore.findRecord('CODE_', new RegExp('^' + value + '$')).get('NAME_') : value;
+                },
+                editor: {
+                    xtype: 'combo',
+                    store: ynStore,
+                    queryMode: 'local',
+                    valueField: 'CODE_',
+                    displayField: 'NAME_',
+                    forceSelection: true
+                }
+            }, {
+                text: '是查询条件',
+                width: 100,
+                dataIndex: 'IS_SEL',
+                renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
+                    return (value != null && value != '' && ynStore.findRecord('CODE_', new RegExp('^' + value + '$'))) ? ynStore.findRecord('CODE_', new RegExp('^' + value + '$')).get('NAME_') : value;
+                },
+                editor: {
+                    xtype: 'combo',
+                    store: ynStore,
+                    queryMode: 'local',
+                    valueField: 'CODE_',
+                    displayField: 'NAME_',
+                    forceSelection: true
+                }
+            }, {
+                text: '查询条件类型',
+                width: 100,
+                dataIndex: 'SELTYPE',
+                renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
+                    return (value != null && value != '' && selTypeStore.findRecord('CODE_', new RegExp('^' + value + '$'))) ? selTypeStore.findRecord('CODE_', new RegExp('^' + value + '$')).get('NAME_') : value;
+                },
+                editor: {
+                    xtype: 'combo',
+                    store: selTypeStore,
+                    queryMode: 'local',
+                    valueField: 'CODE_',
+                    displayField: 'NAME_',
+                    forceSelection: true
+                }
+            }, {
+                text: '是新增字段',
+                width: 100,
+                dataIndex: 'IS_INS',
+                renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
+                    return (value != null && value != '' && ynStore.findRecord('CODE_', new RegExp('^' + value + '$'))) ? ynStore.findRecord('CODE_', new RegExp('^' + value + '$')).get('NAME_') : value;
+                },
+                editor: {
+                    xtype: 'combo',
+                    store: ynStore,
+                    queryMode: 'local',
+                    valueField: 'CODE_',
+                    displayField: 'NAME_',
+                    forceSelection: true
+                }
+            }, {
+                text: '是修改字段',
+                width: 100,
+                dataIndex: 'IS_UPD',
+                renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
+                    return (value != null && value != '' && ynStore.findRecord('CODE_', new RegExp('^' + value + '$'))) ? ynStore.findRecord('CODE_', new RegExp('^' + value + '$')).get('NAME_') : value;
+                },
+                editor: {
+                    xtype: 'combo',
+                    store: ynStore,
+                    queryMode: 'local',
+                    valueField: 'CODE_',
+                    displayField: 'NAME_',
+                    forceSelection: true
+                }
+            }, {
+                text: '数据长度',
+                width: 70,
+                dataIndex: 'DATA_LENGTH'
+            }, {
+                text: '是否能为Null',
+                width: 105,
+                dataIndex: 'NULLABLE',
+                renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
+                    return (value != null && value != '' && ynStore.findRecord('CODE_', new RegExp('^' + value + '$'))) ? ynStore.findRecord('CODE_', new RegExp('^' + value + '$')).get('NAME_') : value;
+                }
+            }, {
+                text: '默认值',
+                width: 100,
+                dataIndex: 'DATA_DEFAULT'
+            }, {
+                text: '注释',
+                flex: 1,
+                minWidth: 200,
+                dataIndex: 'COMMENTS',
+                renderer: _viewValueTip
+            }, {
+                text: '不同值的数量',
+                width: 110,
+                dataIndex: 'NUM_DISTINCT'
+            }, {
+                text: '空值数量',
+                width: 80,
+                dataIndex: 'NUM_NULLS'
+            }, {
+                text: '最近分析此列的日期',
+                width: 140,
+                dataIndex: 'LAST_ANALYZED'
+            }, {
+                text: '平均长度',
+                width: 80,
+                dataIndex: 'AVG_COL_LEN'
+            }],
+            viewConfig: {
+                emptyText: '<div style="text-align: center; padding-top: 50px; font: italic bold 20px Microsoft YaHei;">没有数据</div>',
+                enableTextSelection: true,
+            }
+        });
+
+        var westPanel = Ext.create('Ext.Panel', {
+            id: 'westPanel',
+            layout: 'border',
+            defaults: {
+                border: false
+            },
+            items: [{
+                region: 'north',
+                layout: 'fit',
+                items: [westFormPanel]
+            }, {
+                region: 'center',
+                layout: 'fit',
+                items: [tablePanel]
+            }]
+        });
+
+        var eastPanel = Ext.create('Ext.Panel', {
+            id: 'eastPanel',
+            layout: 'border',
+            defaults: {
+                border: false
+            },
+            items: [{
+                region: 'north',
+                layout: 'fit',
+                items: [eastFormPanel]
+            }, {
+                region: 'center',
+                layout: 'fit',
+                items: [tableInfoPanel]
+            }]
+        });
+
+        Ext.create('Ext.container.Viewport', {
+            layout: {
+                type: 'border',
+                regionWeights: {
+                    west: 1,
+                    north: -1,
+                    south: -1,
+                    east: 1
+                }
+            },
+            defaults: {
+                border: false
+            },
+            items: [{
+                region: 'west',
+                width: '35%',
+                layout: 'fit',
+                items: [westPanel]
+            }, {
+                region: 'center',
+                layout: 'fit',
+                items: [eastPanel]
+            }]
+        });
+
+        _init();
+    });
+
+    function _init() {
+        for (var i = 0; i < Ext.data.StoreManager.getCount(); i++) {
+            if (Ext.data.StoreManager.getAt(i).isLoading()) {
+                return;
+            }
+        }
+
+        _selectdataSource();
+        //_selectTable();
+        Ext.getBody().unmask();
+    }
+
+    //查询数据源
+    function _selectdataSource() {
+        var dataSourceStore = Ext.data.StoreManager.lookup('dataSourceStore');
+        dataSourceStore.load();
+    }
+
+    //查询表数据
+    function _selectTable() {
+        var jdbcUrl = Ext.getCmp('dataSource').valueModels[0].data.URL;
+        var schema = "";
+        if (jdbcUrl.startsWith("jdbc:mysql") || jdbcUrl.startsWith("jdbc:mariadb")) {
+            var endIndex = jdbcUrl.indexOf('?');
+            var startIndex = jdbcUrl.substring(0, endIndex).lastIndexOf('/');
+            schema = jdbcUrl.substring(startIndex + 1, endIndex);
+        }
+        Ext.Ajax.request({
+            url: '/gen/selectTables',
+            async: false,
+            method: 'GET',
+            params: {
+                'url': jdbcUrl,
+                'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
+                'userName': Ext.getCmp('dataSource').valueModels[0].data.USERNAME,
+                'password': Ext.getCmp('dataSource').valueModels[0].data.PASSWORD,
+                'name': Ext.getCmp('tableName').getValue(),
+                'schema': schema
+            },
+            callback: function (options, success, response) {
+                var data = Ext.decode(response.responseText);
+                var tableStore = Ext.data.StoreManager.lookup('tableStore');
+                var tableInfoStore = Ext.data.StoreManager.lookup('tableInfoStore');
+                if (success) {
+                    if (data.message !== undefined) {
+                        tableStore.removeAll();
+                        tableInfoStore.removeAll();
+                        Ext.MessageBox.alert('错误', data.message, Ext.MessageBox.ERROR);
+                    } else {
+                        tableStore.loadData(data.result, false);
+                    }
+                }
+            }
+        });
+    }
+
+    //查询表信息
+    function _selectTableInfo(name) {
+        var tableInfoStore = Ext.data.StoreManager.lookup('tableInfoStore');
+        tableInfoStore.proxy.extraParams = {
+            'url': Ext.getCmp('dataSource').valueModels[0].data.URL,
+            'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
+            'userName': Ext.getCmp('dataSource').valueModels[0].data.USERNAME,
+            'password': Ext.getCmp('dataSource').valueModels[0].data.PASSWORD,
+            'name': name,
+        };
+        var result = tableInfoStore.load().getProxy().getReader();
+        if (!result.jsonData.success) {
+            tableInfoStore.removeAll();
+            Toast.alert('错误', result.jsonData.message, 3000);
+        }
+    }
+
+    //查看表详细信息
+    function _viewTableDetailedInfo(name, comment) {
+        returnValue = null;
+        win = Ext.create('Ext.window.Window', {
+            title: '表详细信息',
+            modal: true,
+            autoShow: true,
+            maximized: false,
+            maximizable: true,
+            autoScroll: true,
+            width: document.documentElement.clientWidth * 0.7,
+            height: document.documentElement.clientHeight * 0.8,
+            html: '<iframe src="/gen/viewTableDetailedInfo?name=' + name + '&url=' + Ext.getCmp('dataSource').valueModels[0].data.URL + '&driver=' + Ext.getCmp('dataSource').valueModels[0].data.DRIVER + '&userName=' + Ext.getCmp('dataSource').valueModels[0].data.USERNAME + '&password=' + Ext.getCmp('dataSource').valueModels[0].data.PASSWORD + '&comment=' + comment + '" style="width: 100%; height: 99%;" frameborder="0"></iframe>'
+        });
+    }
+
+    //清除缓存 清除后进行一次查询
+    function _clearTablesCache() {
+        _clearCaches('tables');
+        Ext.getCmp("tableName").setValue("");
+        _selectTable();
+    }
+
+    //生成
+    function _genProceduresByTable() {
+        //选择的数据校验
+        var records = Ext.getCmp('tablePanel').getSelectionModel().getSelection();
+        if (records.length === 0) {
+            Ext.MessageBox.alert('警告', '请选择要生成存储过程的表', Ext.MessageBox.WARNING);
+            return;
+        }
+
+        _genProceduresByTableAjax(records[0].data.TABLE_NAME, records[0].data.COMMENTS);
+    }
+
+    //调用表生成存储过程接口
+    function _genProceduresByTableAjax(tableName, tableDesc) {
+
+        var params = [];
+        var paramTypes = [];
+        var paramDescs = [];
+        var priParamIndex = [];
+        var selParamsIndex = [];
+        var selType = [];
+        var insParamIndex = [];
+        var updParamIndex = [];
+
+        var records = Ext.getCmp('tableInfoPanel').store.data.items;
+
+        Ext.Array.sort(records, function (a, b) {
+            return a.data.COLUMN_ID - b.data.COLUMN_ID
+        });
+
+        for (let i = 0; i < records.length; i++) {
+            params.push(records[i].data.COLUMN_NAME);
+            paramTypes.push(records[i].data.DATA_TYPE);
+            paramDescs.push(records[i].data.COMMENTS);
+            records[i].data.IS_PRIMARY === "Y" ? priParamIndex.push(records[i].data.COLUMN_ID - 1) : 0;
+            records[i].data.IS_SEL === "Y" ? selParamsIndex.push(records[i].data.COLUMN_ID - 1) : 0;
+            records[i].data.SELTYPE !== "" ? selType.push(records[i].data.SELTYPE) : 0;
+            records[i].data.IS_INS === "Y" ? insParamIndex.push(records[i].data.COLUMN_ID - 1) : 0;
+            records[i].data.IS_UPD === "Y" ? updParamIndex.push(records[i].data.COLUMN_ID - 1) : 0;
+        }
+
+        if (params.length === 0) {
+            Ext.MessageBox.alert('警告', '不支持当前数据库表生成过程', Ext.MessageBox.WARNING);
+            return;
+        }
+
+        Ext.Ajax.request({
+            url: '/gen/genProceduresByTable',
+            async: false,
+            method: 'POST',
+            params: {
+                'nameConventType': Ext.getCmp('nameConventType').getValue(),//命名规范类型
+                'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
+                'tableName': tableName,
+                'tableDesc': tableDesc,
+                'params': params,
+                'paramTypes': paramTypes,
+                'paramDescs': paramDescs,
+                'priParamIndex': priParamIndex,
+                'selParamsIndex': selParamsIndex,
+                'selType': selType,
+                'insParamIndex': insParamIndex,
+                'updParamIndex': updParamIndex
+            },
+            callback: function (options, success, response) {
+                if (success) {
+                    var data = Ext.decode(response.responseText);
+                    if (data.success) {
+                        var codeList = data.list;
+
+                        var win = Ext.create('Ext.window.Window', {
+                            title: '存储过程',
+                            modal: true,
+                            autoShow: true,
+                            maximized: true,
+                            maximizable: false,
+                            width: 560,
+                            height: 420,
+                            items: [],
+                        });
+
+                        var codeTabPanel = Ext.create('Ext.tab.Panel', {
+                            id: 'codeTabPanel',
+                            header: false,
+                            items: [],
+                            listeners: {
+                                beforetabchange: function (tabs, newTab, oldTab) {
+                                    if (newTab.id === 'copy') {
+                                        var text = '';
+                                        for (var i = 0; i < codeList.length; i++) {
+                                            text += Ext.getCmp('tab_' + codeList[i]).items.items[0].value + '\n\n';
+                                        }
+                                        _copyText(text);
+                                    }
+                                    if (newTab.id === 'close') {
+                                        win.close();
+                                    }
+                                }
+                            }
+                        });
+
+                        for (var i = 0; i < codeList.length; i++) {
+                            var codeMap = codeList[i];
+                            var codeTab = {
+                                title: codeList[i],
+                                id: 'tab_' + codeList[i],
+                                layout: 'fit',
+                                readOnly: true,
+                                items: [{
+                                    xtype: 'textareafield',
+                                    name: 'PARAMETER_MAP_',
+                                    width: '100%',
+                                    height: document.documentElement.clientHeight - 80,
+                                    value: data[codeMap]
+                                }],
+                            };
+                            codeTabPanel.add(codeTab);
+                        }
+                        codeTabPanel.add({
+                            id: 'copy',
+                            title: '复制到剪切板'
+                        });
+                        codeTabPanel.add({
+                            id: 'close',
+                            title: '关闭'
+                        });
+
+                        win.add(codeTabPanel);
+                    } else {
+                        Ext.MessageBox.alert('错误', data.message, Ext.MessageBox.ERROR);
+                    }
+                } else {
+                    Ext.MessageBox.alert('错误', '服务器错误', Ext.MessageBox.ERROR);
+                }
+            }
+        });
+    }
+
+    //生成自增主键
+    function _genAutoInsKey() {
+        //选择的数据校验
+        var records = Ext.getCmp('tablePanel').getSelectionModel().getSelection();
+        if (records.length === 0) {
+            Ext.MessageBox.alert('警告', '请选择要生成自增主键的表', Ext.MessageBox.WARNING);
+            return;
+        }
+        var list = Ext.getCmp('tableInfoPanel').store.data.items;
+        var primaryKey = "";
+        for (let i = 0; i < list.length; i++) {
+            if (list[i].data.IS_PRIMARY === "Y") {
+                primaryKey = list[i].data.COLUMN_NAME;
+                break;
+            }
+        }
+        Ext.Ajax.request({
+            url: '/gen/genAutoInsKey',
+            async: false,
+            method: 'POST',
+            params: {
+                'tableName': records[0].data.TABLE_NAME,
+                'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
+                'primaryKey': primaryKey
+            },
+            callback: function (options, success, response) {
+                if (success) {
+                    var data = Ext.decode(response.responseText);
+                    if (data.success) {
+                        var autoInsKeyFormPanel = Ext.create('Ext.form.Panel', {
+                            id: 'autoInsKeyFormPanel',
+                            layout: 'fit',
+                            frame: true,
+                            border: false,
+                            items: [{
+                                xtype: 'textareafield',
+                                name: 'PARAMETER_MAP_',
+                                width: '100%',
+                                height: document.documentElement.clientHeight - 80,
+                                value: data.autoInsKey
+                            }]
+                        });
+                        Ext.create('Ext.window.Window', {
+                            title: '自增主键',
+                            modal: true,
+                            autoShow: true,
+                            maximized: false,
+                            maximizable: true,
+                            width: document.documentElement.clientWidth * 0.8,
+                            height: document.documentElement.clientHeight * 0.8,
+                            items: [autoInsKeyFormPanel]
+                        });
+                    } else {
+                        Ext.MessageBox.alert('错误', data.message, Ext.MessageBox.ERROR);
+                    }
+                } else {
+                    Ext.MessageBox.alert('错误', '服务器错误', Ext.MessageBox.ERROR);
+                }
+            }
+        });
+    }
+
+    //设置是查询条件列全为否
+    function _setIsSelNo() {
+        var tableInfoStore = Ext.data.StoreManager.lookup('tableInfoStore');
+        tableInfoStore.each(function (record) {
+            record.set('IS_SEL', 'N');
+            record.set('SELTYPE', '');
+        })
+    }
+</script>
 </body>
 </html>
