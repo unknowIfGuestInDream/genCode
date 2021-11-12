@@ -639,6 +639,7 @@
 
     //清除缓存 清除后进行一次查询
     function _clearProceduresCache() {
+        sessionStorage.clear();
         _clearCaches('procedures');
         Ext.getCmp("procedure").setValue("");
         _selectProcedures();
