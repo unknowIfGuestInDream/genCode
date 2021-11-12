@@ -228,8 +228,8 @@
                     //连续两次点击同一个表名 只执行一次查询
                     if (record.data.TABLE_NAME !== TABLE_NAME) {
                         _selectTableInfo(record.data.TABLE_NAME);
+                        TABLE_NAME = record.data.TABLE_NAME;
                     }
-                    TABLE_NAME = record.data.TABLE_NAME;
                 }
             },
             viewConfig: {
