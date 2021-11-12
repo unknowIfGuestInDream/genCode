@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,14 @@ import static com.newangels.gen.base.CacheManage.CACHE_MAP;
 @RestController
 @RequiredArgsConstructor
 public class CacheManageController {
+
+    /**
+     * 缓存管理页
+     */
+    @GetMapping("/manageCache")
+    public ModelAndView manageCache() {
+        return new ModelAndView("pages/cache/manageCache");
+    }
 
     /**
      * 清除缓存
