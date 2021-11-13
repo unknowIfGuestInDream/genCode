@@ -1,5 +1,7 @@
 package com.newangels.gen.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
 import com.newangels.gen.factory.DataSourceUtilFactory;
@@ -12,10 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static com.newangels.gen.base.CacheManage.CACHE_MAP;
 
@@ -29,6 +28,7 @@ import static com.newangels.gen.base.CacheManage.CACHE_MAP;
 @RestController
 @RequiredArgsConstructor
 public class CacheManageController {
+    private final ObjectMapper objectMapper;
 
     /**
      * 缓存管理页
@@ -36,6 +36,28 @@ public class CacheManageController {
     @GetMapping("/manageCache")
     public ModelAndView manageCache() {
         return new ModelAndView("pages/cache/manageCache");
+    }
+
+    /**
+     * 查询项目缓存
+     */
+    @GetMapping("selectCaches")
+    @Log
+    public Map<String, Object> selectCaches() throws JsonProcessingException {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (Cache cache : CACHE_MAP.values()) {
+            Map<String, Object> map = cache.getMap();
+            Map<String, Object> result = new HashMap<>(4);
+            for (Map.Entry entry : map.entrySet()) {
+                String mapKey = (String) entry.getKey();
+                Object mapValue = entry.getValue();
+                result.put("key", mapKey);
+                //String text = objectMapper.writeValueAsString(mapValue);
+                result.put("value", mapValue);
+                list.add(result);
+            }
+        }
+        return BaseUtils.success(list);
     }
 
     /**
