@@ -4,6 +4,7 @@ import cn.smallbun.screw.core.engine.EngineFileType;
 import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
 import com.newangels.gen.enums.DataBaseType;
+import com.newangels.gen.enums.GenCodeModelType;
 import com.newangels.gen.enums.GenProcedureModelType;
 import com.newangels.gen.enums.NameConventType;
 import com.newangels.gen.util.cache.SimpleCache;
@@ -75,6 +76,26 @@ public class CommonController {
                 list.add(result);
             }
             SimpleCache.put(SimpleCache.GENPROCEDUREMODELTYPE, list);
+        }
+        return BaseUtils.success(list);
+    }
+
+    /**
+     * 获取GenCodeModelType的数据
+     */
+    @GetMapping("selectGenCodeModelType")
+    @Log
+    public Map<String, Object> selectGenCodeModelType() {
+        List<Map<String, Object>> list = SimpleCache.get(SimpleCache.GENCODEMODELTYPE);
+        if (list == null) {
+            list = new ArrayList<>();
+            for (GenCodeModelType genCodeModelType : GenCodeModelType.values()) {
+                Map<String, Object> result = new HashMap<>(4);
+                result.put("CODE_", genCodeModelType.getCode());
+                result.put("NAME_", genCodeModelType.getDesc());
+                list.add(result);
+            }
+            SimpleCache.put(SimpleCache.GENCODEMODELTYPE, list);
         }
         return BaseUtils.success(list);
     }
