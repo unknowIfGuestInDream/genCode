@@ -13,11 +13,11 @@ import java.util.*;
  * @date: 2021/11/7 21:40
  * @since: 1.0
  */
-public abstract class AbstractTableToCode extends AbstractFreeMarkerTemplate implements InitializingBean {
+public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate implements InitializingBean {
 
     @Override
     protected String getRootPackageName() {
-        return "tableToCode";
+        return "genCodeModel";
     }
 
     /**
@@ -210,62 +210,35 @@ public abstract class AbstractTableToCode extends AbstractFreeMarkerTemplate imp
         //tab页集合, 保证返回顺序
         List<String> list = new ArrayList<>(Arrays.asList("get", "select", "selectWithPage", "insert", "update", "save", "delete"));
         result.put("list", list);
-        result.put("get", getGetCode(configuration, objectMap));
-        result.put("select", getSelCode(configuration, objectMap));
-        result.put("selectWithPage", getSelWithPageCode(configuration, objectMap));
-        result.put("insert", getInsCode(configuration, objectMap));
-        result.put("update", getUpdCode(configuration, objectMap));
-        result.put("save", getSaveCode(configuration, objectMap));
-        result.put("delete", getDelCode(configuration, objectMap));
+//        result.put("get", getGetCode(configuration, objectMap));
+//        result.put("select", getSelCode(configuration, objectMap));
+//        result.put("selectWithPage", getSelWithPageCode(configuration, objectMap));
+//        result.put("insert", getInsCode(configuration, objectMap));
+//        result.put("update", getUpdCode(configuration, objectMap));
+//        result.put("save", getSaveCode(configuration, objectMap));
+//        result.put("delete", getDelCode(configuration, objectMap));
         return result;
     }
 
     /**
-     * 获取加载数据代码
+     * 获取controller层代码
      */
-    protected String getGetCode(Configuration configuration, Map<String, Object> objectMap) {
-        return getFtlModel(configuration, objectMap, "get.ftl");
+    protected String getController(Configuration configuration, Map<String, Object> objectMap) {
+        return getFtlModel(configuration, objectMap, "controller.ftl");
     }
 
     /**
-     * 获取查询代码
+     * 获取service层代码
      */
-    protected String getSelCode(Configuration configuration, Map<String, Object> objectMap) {
-        return getFtlModel(configuration, objectMap, "select.ftl");
+    protected String getService(Configuration configuration, Map<String, Object> objectMap) {
+        return getFtlModel(configuration, objectMap, "service.ftl");
     }
 
     /**
-     * 获取分页查询代码
+     * 获取service层代码
      */
-    protected String getSelWithPageCode(Configuration configuration, Map<String, Object> objectMap) {
-        return getFtlModel(configuration, objectMap, "selectWithPage.ftl");
+    protected String getServiceImpl(Configuration configuration, Map<String, Object> objectMap) {
+        return getFtlModel(configuration, objectMap, "serviceImpl.ftl");
     }
 
-    /**
-     * 获取新增代码
-     */
-    protected String getInsCode(Configuration configuration, Map<String, Object> objectMap) {
-        return getFtlModel(configuration, objectMap, "insert.ftl");
-    }
-
-    /**
-     * 获取修改代码
-     */
-    protected String getUpdCode(Configuration configuration, Map<String, Object> objectMap) {
-        return getFtlModel(configuration, objectMap, "update.ftl");
-    }
-
-    /**
-     * 获取保存代码
-     */
-    protected String getSaveCode(Configuration configuration, Map<String, Object> objectMap) {
-        return getFtlModel(configuration, objectMap, "save.ftl");
-    }
-
-    /**
-     * 获取删除代码
-     */
-    protected String getDelCode(Configuration configuration, Map<String, Object> objectMap) {
-        return getFtlModel(configuration, objectMap, "delete.ftl");
-    }
 }
