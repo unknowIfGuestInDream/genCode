@@ -112,7 +112,7 @@ public class BaseUtils {
      * @return 流转字节数组
      * @throws Exception IOException
      */
-    public static byte[] inputStreamToBytes(InputStream inputStream) throws Exception {
+    public static byte[] inputStreamToBytes(InputStream inputStream) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] content = new byte[65535];
         int length = 0;
@@ -130,7 +130,7 @@ public class BaseUtils {
      * @return 流转字符串
      * @throws Exception IOException
      */
-    public static String inputStreamToString(InputStream inputStream) throws Exception {
+    public static String inputStreamToString(InputStream inputStream) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] content = new byte[65535];
         int length = 0;

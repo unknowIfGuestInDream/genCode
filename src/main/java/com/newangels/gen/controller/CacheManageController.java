@@ -1,6 +1,5 @@
 package com.newangels.gen.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
@@ -43,7 +42,7 @@ public class CacheManageController {
      */
     @GetMapping("selectCaches")
     @Log
-    public Map<String, Object> selectCaches() throws JsonProcessingException {
+    public Map<String, Object> selectCaches() {
         List<Map<String, Object>> list = new ArrayList<>();
         for (Cache cache : CACHE_MAP.values()) {
             Map<String, Object> map = cache.getMap();
@@ -52,7 +51,6 @@ public class CacheManageController {
                 String mapKey = (String) entry.getKey();
                 Object mapValue = entry.getValue();
                 result.put("key", mapKey);
-                //String text = objectMapper.writeValueAsString(mapValue);
                 result.put("value", mapValue);
                 list.add(result);
             }
