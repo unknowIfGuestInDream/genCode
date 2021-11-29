@@ -1,6 +1,5 @@
 package com.newangels.gen.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
 import com.newangels.gen.factory.DataSourceUtilFactory;
@@ -27,7 +26,6 @@ import static com.newangels.gen.base.CacheManage.CACHE_MAP;
 @RestController
 @RequiredArgsConstructor
 public class CacheManageController {
-    private final ObjectMapper objectMapper;
 
     /**
      * 缓存管理页
