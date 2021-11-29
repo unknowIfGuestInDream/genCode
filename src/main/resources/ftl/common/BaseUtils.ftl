@@ -702,7 +702,7 @@ public class BaseUtils {
     }
 
     /**
-     * 返回成功信息(用于jdbc的结果返回)
+     * 返回成功信息(用于JdbcTemplate的结果返回)
      *
      * @param list 数据集
      * @return java.util.Map
@@ -712,6 +712,19 @@ public class BaseUtils {
         result.put("data", list);
         result.put("success", true);
         return result;
+    }
+
+    /**
+     * 返回成功信息(用于JdbcTemplate的结果返回)
+     *
+     * @param list  数据集
+     * @param total 数据集总数
+     * @return java.util.Map
+     */
+     public static Map<String, Object> success(List<Map<String, Object>> list, int total) {
+         Map<String, Object> result = success(list);
+         result.put("total", total);
+         return result;
     }
 
     /**
