@@ -707,7 +707,7 @@ public class BaseUtils {
      * @param list 数据集
      * @return java.util.Map
      */
-    public static Map<String, Object> success(List list) {
+    public static <T> Map<String, Object> success(List<T> list) {
         Map<String, Object> result = new HashMap<>(4);
         result.put("data", list);
         result.put("success", true);
@@ -721,7 +721,7 @@ public class BaseUtils {
      * @param total 数据集总数
      * @return java.util.Map
      */
-     public static Map<String, Object> success(List<Map<String, Object>> list, int total) {
+     public static <T> Map<String, Object> success(List<T> list, int total) {
          Map<String, Object> result = success(list);
          result.put("total", total);
          return result;
