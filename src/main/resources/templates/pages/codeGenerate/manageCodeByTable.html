@@ -171,7 +171,7 @@
                 xtype: 'button',
                 text: '生成',
                 icon: 'public/image/btn/add.png',
-                handler: _genProceduresByTable,
+                handler: _genCodeByTable,
             }, {
                 xtype: 'button',
                 text: '生成自增主键',
@@ -189,14 +189,14 @@
                 id: 'moduleDesc',
                 beforeLabelTextTpl: required,
                 fieldLabel: '模块描述'
-            },{
+            }, {
                 xtype: 'textfield',
                 id: 'packageName',
                 beforeLabelTextTpl: required,
                 fieldLabel: '包名',
                 value: 'cn.newangels.',
                 emptyText: '如: cn.newangels.gen'
-            },{
+            }, {
                 xtype: 'textfield',
                 id: 'author',
                 fieldLabel: '作者',
@@ -211,7 +211,7 @@
                 fieldLabel: '规范名称',
                 forceSelection: true,
                 value: '3'
-            },{
+            }, {
                 xtype: 'radiogroup',
                 id: 'hasDelBatch',
                 fieldLabel: '包含批量删除',
@@ -271,6 +271,7 @@
                     //连续两次点击同一个表名 只执行一次查询
                     if (record.data.TABLE_NAME !== TABLE_NAME) {
                         _selectTableInfo(record.data.TABLE_NAME);
+                        Ext.getCmp('moduleDesc').setValue(record.data.COMMENTS);
                         TABLE_NAME = record.data.TABLE_NAME;
                     }
                 }
@@ -564,7 +565,7 @@
         }
 
         _selectdataSource();
-        //_selectTable();
+        _initCodeFormParam();
         Ext.getBody().unmask();
     }
 
@@ -653,19 +654,41 @@
     }
 
     //生成
-    function _genProceduresByTable() {
+    function _genCodeByTable() {
         //选择的数据校验
         var records = Ext.getCmp('tablePanel').getSelectionModel().getSelection();
         if (records.length === 0) {
-            Ext.MessageBox.alert('警告', '请选择要生成存储过程的表', Ext.MessageBox.WARNING);
+            Ext.MessageBox.alert('警告', '请选择要生成代码的表', Ext.MessageBox.WARNING);
+            return;
+        }
+        //模块名称验证
+        if (Ext.getCmp('moduleName').getValue() === "") {
+            Ext.MessageBox.alert('警告', '模块名称不能为空', Ext.MessageBox.WARNING);
+            return;
+        }
+        if (Ext.getCmp('moduleName').getValue().length <= 1) {
+            Ext.MessageBox.alert('警告', '模块名称长度不能为1', Ext.MessageBox.WARNING);
+            return;
+        }
+        if (Ext.getCmp('moduleDesc').getValue() === "") {
+            Ext.MessageBox.alert('警告', '模块描述不能为空', Ext.MessageBox.WARNING);
+            return;
+        }
+        //包名验证
+        if (Ext.getCmp('packageName').getValue() === "") {
+            Ext.MessageBox.alert('警告', '包名不能为空', Ext.MessageBox.WARNING);
+            return;
+        }
+        if (Ext.getCmp('packageName').getValue().length - Ext.getCmp('packageName').getValue().lastIndexOf('.') <= 2) {
+            Ext.MessageBox.alert('警告', '包名格式错误\n格式如: cn.newangels.gen', Ext.MessageBox.WARNING);
             return;
         }
 
-        _genProceduresByTableAjax(records[0].data.TABLE_NAME, records[0].data.COMMENTS);
+        _genCodeByTableAjax(records[0].data.TABLE_NAME, records[0].data.COMMENTS);
     }
 
-    //调用表生成存储过程接口
-    function _genProceduresByTableAjax(tableName, tableDesc) {
+    //调用表生成代码接口
+    function _genCodeByTableAjax(tableName, tableDesc) {
         var params = [];
         var paramDescs = [];
         var paramJavaClass = [];
@@ -780,6 +803,7 @@
                         });
 
                         win.add(codeTabPanel);
+                        _recordCodeFormParam();
                     } else {
                         Ext.MessageBox.alert('错误', data.message, Ext.MessageBox.ERROR);
                     }
@@ -932,6 +956,23 @@
         }
 
         form.dom.submit();
+    }
+
+    //记录本地历史formPanel的值
+    function _recordCodeFormParam() {
+        if (!window.localStorage) return;
+        localStorage.setItem("code.packageName", Ext.getCmp('packageName').getValue());
+        localStorage.setItem("code.author", Ext.getCmp('author').getValue());
+        localStorage.setItem("code.genCodeModelType", Ext.getCmp('genCodeModelType').getValue());
+    }
+
+    //初始化为历史值
+    function _initCodeFormParam() {
+        if (!window.localStorage) return;
+        if (!localStorage.hasOwnProperty("code.packageName")) return;
+        Ext.getCmp('packageName').setValue(localStorage.getItem("code.packageName"));
+        Ext.getCmp('author').setValue(localStorage.getItem("code.author"));
+        Ext.getCmp('genCodeModelType').setValue(localStorage.getItem("code.genCodeModelType"));
     }
 </script>
 </body>

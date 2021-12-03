@@ -76,7 +76,6 @@ public class GenCodeController {
 
     /**
      * 生成代码下载
-     * //TODO
      */
     @GetMapping("downloadCodeByTable")
     @Log

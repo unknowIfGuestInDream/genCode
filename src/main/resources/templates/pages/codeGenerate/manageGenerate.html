@@ -341,6 +341,7 @@
         }
 
         _selectdataSource();
+        _initGenFormParam();
         Ext.getBody().unmask();
     }
 
@@ -578,6 +579,7 @@
                         });
 
                         win.add(codeTabPanel);
+                        _recordGenFormParam();
                     } else {
                         Ext.MessageBox.alert('错误', data.message, Ext.MessageBox.ERROR);
                     }
@@ -661,6 +663,25 @@
         Ext.getCmp('procedureInfo').setWidth(_getprocedureInfoWidth());
         Ext.getCmp('procedureInfo').setHeight(_getprocedureInfoHeight());
     };
+
+    //记录本地历史formPanel的值
+    function _recordGenFormParam() {
+        if (!window.localStorage) return;
+        localStorage.setItem("gen.packageName", Ext.getCmp('packageName').getValue());
+        localStorage.setItem("gen.author", Ext.getCmp('author').getValue());
+        localStorage.setItem("gen.genProcedureModelType", Ext.getCmp('genProcedureModelType').getValue());
+        localStorage.setItem("gen.nameConventType", Ext.getCmp('nameConventType').getValue());
+    }
+
+    //初始化为历史值
+    function _initGenFormParam() {
+        if (!window.localStorage) return;
+        if (!localStorage.hasOwnProperty("gen.packageName")) return;
+        Ext.getCmp('packageName').setValue(localStorage.getItem("gen.packageName"));
+        Ext.getCmp('author').setValue(localStorage.getItem("gen.author"));
+        Ext.getCmp('genProcedureModelType').setValue(localStorage.getItem("gen.genProcedureModelType"));
+        Ext.getCmp('nameConventType').setValue(localStorage.getItem("gen.nameConventType"));
+    }
 </script>
 </body>
 </html>
