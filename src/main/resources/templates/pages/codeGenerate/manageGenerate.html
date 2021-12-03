@@ -671,6 +671,7 @@
         localStorage.setItem("gen.author", Ext.getCmp('author').getValue());
         localStorage.setItem("gen.genProcedureModelType", Ext.getCmp('genProcedureModelType').getValue());
         localStorage.setItem("gen.nameConventType", Ext.getCmp('nameConventType').getValue());
+        localStorage.setItem("gen.dataSource", Ext.getCmp('dataSource').getValue());
     }
 
     //初始化为历史值
@@ -681,6 +682,10 @@
         Ext.getCmp('author').setValue(localStorage.getItem("gen.author"));
         Ext.getCmp('genProcedureModelType').setValue(localStorage.getItem("gen.genProcedureModelType"));
         Ext.getCmp('nameConventType').setValue(localStorage.getItem("gen.nameConventType"));
+        //方便平滑升级，提高用户体验，防止因为新增功能带来的datasource初始化问题
+        if (localStorage.hasOwnProperty("gen.dataSource")) {
+            Ext.getCmp('dataSource').setValue(localStorage.getItem("gen.dataSource"));
+        }
     }
 </script>
 </body>

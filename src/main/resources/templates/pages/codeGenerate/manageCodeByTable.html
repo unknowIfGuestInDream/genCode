@@ -964,6 +964,7 @@
         localStorage.setItem("code.packageName", Ext.getCmp('packageName').getValue());
         localStorage.setItem("code.author", Ext.getCmp('author').getValue());
         localStorage.setItem("code.genCodeModelType", Ext.getCmp('genCodeModelType').getValue());
+        localStorage.setItem("code.dataSource", Ext.getCmp('dataSource').getValue());
     }
 
     //初始化为历史值
@@ -973,6 +974,10 @@
         Ext.getCmp('packageName').setValue(localStorage.getItem("code.packageName"));
         Ext.getCmp('author').setValue(localStorage.getItem("code.author"));
         Ext.getCmp('genCodeModelType').setValue(localStorage.getItem("code.genCodeModelType"));
+        //方便平滑升级，提高用户体验，防止因为新增功能带来的datasource初始化问题
+        if (localStorage.hasOwnProperty("code.dataSource")) {
+            Ext.getCmp('dataSource').setValue(localStorage.getItem("code.dataSource"));
+        }
     }
 </script>
 </body>
