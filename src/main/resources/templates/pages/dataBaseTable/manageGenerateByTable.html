@@ -810,6 +810,7 @@
     function _recordGenFormParam() {
         if (!window.localStorage) return;
         localStorage.setItem("gendbt.nameConventType", Ext.getCmp('nameConventType').getValue());
+        localStorage.setItem("gendbt.dataSource", Ext.getCmp('dataSource').getValue());
     }
 
     //初始化为历史值
@@ -817,6 +818,10 @@
         if (!window.localStorage) return;
         if (!localStorage.hasOwnProperty("gendbt.nameConventType")) return;
         Ext.getCmp('nameConventType').setValue(localStorage.getItem("gendbt.nameConventType"));
+        //方便平滑升级，提高用户体验，防止因为新增功能带来的datasource初始化问题
+        if (localStorage.hasOwnProperty("gendbt.dataSource")) {
+            Ext.getCmp('dataSource').setValue(localStorage.getItem("gendbt.dataSource"));
+        }
     }
 </script>
 </body>
