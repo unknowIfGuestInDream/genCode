@@ -2,17 +2,9 @@ package com.newangels.gen.controller;
 
 import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
-import com.newangels.gen.enums.DataBaseType;
-import com.newangels.gen.enums.GenProcedureModelType;
-import com.newangels.gen.enums.NameConventType;
-import com.newangels.gen.factory.AbstractGenProcedureModelFactory;
-import com.newangels.gen.factory.DataBaseProcedureFactory;
-import com.newangels.gen.factory.DataSourceUtilFactory;
-import com.newangels.gen.factory.NameConventFactory;
-import com.newangels.gen.service.AbstractGenProcedureModel;
-import com.newangels.gen.service.DataBaseProcedureService;
-import com.newangels.gen.service.NameConventService;
-import com.newangels.gen.util.dataSource.DataSourceUtil;
+import com.newangels.gen.enums.GenCodeModelType;
+import com.newangels.gen.factory.AbstractGenCodeModelFactory;
+import com.newangels.gen.service.AbstractGenCodeModel;
 import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +17,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -52,41 +45,32 @@ public class GenCodeController {
 
     /**
      * 生成后台代码
-     * //TODO
      *
-     * @param moduleName            模块名称
-     * @param genProcedureModelType 生成代码模版类型
-     * @param nameConventType       命名规范类型
-     * @param packageName           包名
-     * @param url                   数据库url 用于获取数据库连接
-     * @param driver                数据库驱动 用于获取存储过程sql
-     * @param userName              数据库账户
-     * @param password              数据库密码
-     * @param author                作者
-     * @param tableName             表名
-     * @param tableDesc             表描述
-     * @param params                表所有字段
-     * @param paramTypes            表所有字段的类型
-     * @param paramDescs            表所有字段的类型
-     * @param priParamIndex         主键列索引
-     * @param selParamsIndex        查询条件列索引
-     * @param selType               查询条件类型
-     * @param insParamIndex         新增列索引
-     * @param updParamIndex         修改列索引
+     * @param tableName        表名
+     * @param tableDesc        表描述
+     * @param moduleName       模块名称
+     * @param moduleDesc       模块描述
+     * @param packageName      包名
+     * @param hasDelBatch      是否包含批量删除
+     * @param genCodeModelType 生成代码模版类型
+     * @param driver           数据库驱动 用于获取存储过程sql
+     * @param author           作者
+     * @param params           表所有字段
+     * @param paramJavaClass   参数对应java类
+     * @param paramDescs       表所有字段的类型
+     * @param priParamIndex    主键列索引
+     * @param selParamsIndex   查询条件列索引
+     * @param selType          查询条件类型
+     * @param insParamIndex    新增列索引
+     * @param updParamIndex    修改列索引
      */
     @PostMapping("genCodeByTable")
     @Log
-    public Map<String, Object> genCodeByTable(String moduleName, String genProcedureModelType, String nameConventType, String packageName, String url, String driver, String userName, String password, @RequestParam(required = false, defaultValue = "admin") String author, String tableName, String tableDesc, @RequestParam("params") List<String> params, @RequestParam("paramTypes") List<String> paramTypes, @RequestParam("paramDescs") List<String> paramDescs, @RequestParam("priParamIndex") List<Integer> priParamIndex, @RequestParam("selParamsIndex") List<Integer> selParamsIndex, @RequestParam("selType") List<Integer> selType, @RequestParam("insParamIndex") List<Integer> insParamIndex, @RequestParam("updParamIndex") List<Integer> updParamIndex) {
+    public Map<String, Object> genCodeByTable(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, boolean hasDelBatch, String genCodeModelType, String driver, @RequestParam(required = false, defaultValue = "admin") String author, @RequestParam("params") List<String> params, @RequestParam("paramJavaClass") List<String> paramJavaClass, @RequestParam("paramDescs") List<String> paramDescs, @RequestParam("priParamIndex") List<Integer> priParamIndex, @RequestParam(value = "selParamsIndex", required = false) List<Integer> selParamsIndex, @RequestParam(value = "selType", required = false) List<Integer> selType, @RequestParam("insParamIndex") List<Integer> insParamIndex, @RequestParam("updParamIndex") List<Integer> updParamIndex) {
         moduleName = BaseUtils.toUpperCase4Index(moduleName);
-        //获取数据库连接，为空则创建
-        DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
         //获取生成代码模版
-        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromCode(genProcedureModelType));
-        //获取命名规范
-        NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromCode(nameConventType));
-        //获取数据库过程sql
-        DataBaseProcedureService dbProcedure = DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
-        Map<String, Object> result = genProcedureModel.genCode(moduleName, packageName, userName, null, author, nameConvent, dbProcedure, dataSourceUtil, freeMarkerConfigurer.getConfiguration());
+        AbstractGenCodeModel codeModel = AbstractGenCodeModelFactory.getGenCodeModel(GenCodeModelType.fromCode(genCodeModelType));
+        Map<String, Object> result = codeModel.genCodeByTable(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, driver, params, paramDescs, paramJavaClass, priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex, freeMarkerConfigurer.getConfiguration());
         return BaseUtils.success(result);
     }
 
@@ -96,12 +80,11 @@ public class GenCodeController {
      */
     @GetMapping("downloadCodeByTable")
     @Log
-    public void downloadCodeByTable(String moduleName, String genProcedureModelType, String nameConventType, String packageName, String url, String driver, String userName, String password, @RequestParam("procedureNameList") List<String> procedureNameList, String author, HttpServletRequest request, HttpServletResponse response) {
+    public void downloadCodeByTable(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, boolean hasDelBatch, String genCodeModelType, String driver, @RequestParam(required = false, defaultValue = "admin") String author, @RequestParam("params") List<String> params, @RequestParam("paramJavaClass") List<String> paramJavaClass, @RequestParam("paramDescs") List<String> paramDescs, @RequestParam("priParamIndex") List<Integer> priParamIndex, @RequestParam(value = "selParamsIndex", required = false) List<Integer> selParamsIndex, @RequestParam(value = "selType", required = false) List<Integer> selType, @RequestParam("insParamIndex") List<Integer> insParamIndex, @RequestParam("updParamIndex") List<Integer> updParamIndex, HttpServletRequest request, HttpServletResponse response) {
         try {
             String zipName = moduleName + ".zip";
             moduleName = BaseUtils.toUpperCase4Index(moduleName);
-            //获取数据库连接，为空则创建
-            DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
+
             response.reset();
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/x-msdownload");
@@ -109,23 +92,20 @@ public class GenCodeController {
 
             ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
             //获取生成代码模版
-            AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory.getGenProcedureModel(GenProcedureModelType.fromCode(genProcedureModelType));
-            //获取命名规范
-            NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromCode(nameConventType));
-            //获取数据库过程sql
-            DataBaseProcedureService dbProcedure = DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
-            Map<String, Object> map = genProcedureModel.genCode(moduleName, packageName, userName, procedureNameList, author, nameConvent, dbProcedure, dataSourceUtil, freeMarkerConfigurer.getConfiguration());
+            AbstractGenCodeModel codeModel = AbstractGenCodeModelFactory.getGenCodeModel(GenCodeModelType.fromCode(genCodeModelType));
+            Map<String, Object> map = codeModel.genCodeByTable(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, driver, params, paramDescs, paramJavaClass, priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex, freeMarkerConfigurer.getConfiguration());
             List<String> list = (List<String>) map.get("list");
 
             for (String name : list) {
                 String fileName;
-                if ("BaseUtils".equals(name) || "ProcedureUtils".equals(name)) {
-                    //fileName = name + ".java";
+                if ("BaseUtils".equals(name) || "BaseSqlCriteria".equals(name)) {
                     continue;
-                } else {
+                } else if ("controller".equals(name) || "service".equals(name) || "serviceImpl".equals(name)) {
                     fileName = moduleName + BaseUtils.toUpperCase4Index(name) + ".java";
+                } else {
+                    fileName = moduleName + BaseUtils.toUpperCase4Index(name);
                 }
-                @Cleanup InputStream inputStream = new ByteArrayInputStream(map.get(name).toString().getBytes("UTF-8"));
+                @Cleanup InputStream inputStream = new ByteArrayInputStream(map.get(name).toString().getBytes(StandardCharsets.UTF_8));
                 //创建输入流读取文件
                 @Cleanup BufferedInputStream bis = new BufferedInputStream(inputStream);
                 //将文件写入zip内，即将文件进行打包

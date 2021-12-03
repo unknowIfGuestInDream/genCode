@@ -28,6 +28,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -160,7 +161,7 @@ public class GenProcedureController {
                 } else {
                     fileName = moduleName + BaseUtils.toUpperCase4Index(name) + ".java";
                 }
-                @Cleanup InputStream inputStream = new ByteArrayInputStream(map.get(name).toString().getBytes("UTF-8"));
+                @Cleanup InputStream inputStream = new ByteArrayInputStream(map.get(name).toString().getBytes(StandardCharsets.UTF_8));
                 //创建输入流读取文件
                 @Cleanup BufferedInputStream bis = new BufferedInputStream(inputStream);
                 //将文件写入zip内，即将文件进行打包

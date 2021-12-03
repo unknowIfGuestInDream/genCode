@@ -350,4 +350,19 @@ public class BaseUtils {
         }
         return chars;
     }
+
+    /**
+     * 根据容量获取map初始大小
+     * 参考JDK8中putAll方法中的实现以及
+     * guava的newHashMapWithExpectedSize方法
+     *
+     * @param expectedSize 容量大小
+     */
+    public static int newHashMapWithExpectedSize(int expectedSize) {
+        if (expectedSize < 3) {
+            return 4;
+        } else {
+            return expectedSize < 1073741824 ? (int) ((float) expectedSize / 0.75F + 1.0F) : 2147483647;
+        }
+    }
 }

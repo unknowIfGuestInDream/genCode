@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.InputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +36,7 @@ public class ${module}Controller {
     @Log
     public Map<String, Object> load${module}(${loadInParams}) {
         Map<String, Object> result = new HashMap<>(4);
-        result.put("result", ${module?uncap_first}Service.load${module}(${loadSqlParams}))
+        result.put("result", ${module?uncap_first}Service.load${module}(${loadSqlParams}));
         return BaseUtils.success(result);
     }
 
@@ -44,15 +46,12 @@ public class ${module}Controller {
     @GetMapping("select${module}")
     @Log
     public Map<String, Object> select${module}(${selInParams}, Integer page, Integer limit) {
-        Map<String, Object> result = new HashMap<>(4);
         List<Map<String, Object>> list = ${module?uncap_first}Service.select${module}(${selSqlParams}, page, limit);
         int total = 0;
         if (limit != null && limit > 0) {
             total = ${module?uncap_first}Service.count${module}(${selSqlParams});
         }
-        result.put("result", list);
-        result.put("total", total);
-        return BaseUtils.success(result);
+        return BaseUtils.success(list, total);
     }
 
     /**
@@ -61,7 +60,6 @@ public class ${module}Controller {
     @PostMapping("insert${module}")
     @Log
     public Map<String, Object> insert${module}(${insInParams}) {
-        String id = BaseUtils.getUuid();
         if (${module?uncap_first}Service.insert${module}(${insSqlParams}) == 0) {
             return BaseUtils.failed("新增${moduleDesc}失败");
         }
@@ -98,8 +96,11 @@ public class ${module}Controller {
      */
     @PostMapping("delete${module}Batch")
     @Log
-    public Map<String, Object> delete${module}Batch(${delBatchInParams}) {
-        return BaseUtils.success(orgProductRelService.deleteOrgProductRelBatch(${delBatchSqlParams}));
+    public Map<String, Object> delete${module}Batch(${delBatchControllerParams}) {
+        if (${module?uncap_first}Service.delete${module}Batch(${delBatchSqlParams}) == 0) {
+            return BaseUtils.failed("批量删除${moduleDesc}失败");
+        }
+        return BaseUtils.success();
     }
 </#if>
 

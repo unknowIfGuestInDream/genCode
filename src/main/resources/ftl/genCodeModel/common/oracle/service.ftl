@@ -1,5 +1,6 @@
 package ${package}.service;
 
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ public interface ${module}Service {
      * 加载${moduleDesc}
 <#if loadNote! != ''>
      *
-    ${loadNote}
+     * ${loadNote}
 </#if>
      */
     Map<String, Object> load${module}(${loadInParams});
@@ -26,7 +27,7 @@ public interface ${module}Service {
      * 查询${moduleDesc}
 <#if selNote! != ''>
      *
-     ${selNote}
+     * ${selNote}
 </#if>
      * @param page  当前页数
      * @param limit  每次显示数量
@@ -37,7 +38,7 @@ public interface ${module}Service {
      * 查询数量
 <#if selNote! != ''>
      *
-    ${selNote}
+     * ${selNote}
 </#if>
      */
     int count${module}(${selInParams});
@@ -46,38 +47,38 @@ public interface ${module}Service {
      * 新增${moduleDesc}
 <#if insNote! != ''>
      *
-    ${insNote}
+     * ${insNote}
 </#if>
      */
-    Map<String, Object> insert${module}(${insInParams});
+    int insert${module}(${insInParams});
 
     /**
      * 修改${moduleDesc}
 <#if updNote! != ''>
      *
-    ${updNote}
+     * ${updNote}
 </#if>
      */
-    Map<String, Object> update${module}(${updInParams});
+    int update${module}(${updInParams});
 
     /**
      * 删除${moduleDesc}
 <#if delNote! != ''>
      *
-    ${delNote}
+     * ${delNote}
 </#if>
      */
-    Map<String, Object> delete${module}(${delInParams});
+    int delete${module}(${delInParams});
 
 <#if hasDelBatch>
     /**
     * 批量删除${moduleDesc}
     <#if delBatchNote! != ''>
-        *
-        ${delBatchNote}
+    *
+    * ${delBatchNote}
     </#if>
     */
-    Map<String, Object> delete${module}Batch(${delBatchInParams});
+    int delete${module}Batch(${delBatchInParams});
 
 </#if>
 }

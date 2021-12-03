@@ -11,9 +11,10 @@
     <script type="text/javascript" src="public/js/ext-all.js"></script>
     <script type="text/javascript" src="public/js/ext-lang-zh_CN.js"></script>
     <script type="text/javascript" src="public/js/base.js"></script>
-    <script type="text/javascript" src="public/js/store/nameConventType.js"></script>
+    <script type="text/javascript" src="public/js/store/genCodeModelType.js"></script>
     <script type="text/javascript" src="public/js/store/yesNoStore.js"></script>
     <script type="text/javascript" src="public/js/store/selTypeStore.js"></script>
+    <script type="text/javascript" src="public/js/store/javaClassStore.js"></script>
     <script type="text/javascript" src="public/js/ajax/clearCaches.js"></script>
 </head>
 <body>
@@ -64,7 +65,7 @@
             autoLoad: false,//true为自动加载
             loading: false,//自动加载时必须为true
             pageSize: -1,
-            fields: ['COLUMN_NAME', 'DATA_TYPE', 'DATA_LENGTH', 'NULLABLE', 'DATA_DEFAULT', 'NUM_DISTINCT', 'LOW_VALUE', 'HIGH_VALUE', 'NUM_NULLS', 'LAST_ANALYZED', 'AVG_COL_LEN', 'COMMENTS', 'COLUMN_ID', 'IS_PRIMARY', 'IS_SEL', 'SELTYPE', 'IS_INS', 'IS_UPD'],
+            fields: ['COLUMN_NAME', 'DATA_TYPE', 'DATA_LENGTH', 'NULLABLE', 'DATA_DEFAULT', 'NUM_DISTINCT', 'LOW_VALUE', 'HIGH_VALUE', 'NUM_NULLS', 'LAST_ANALYZED', 'AVG_COL_LEN', 'COMMENTS', 'COLUMN_ID', 'IS_PRIMARY', 'IS_SEL', 'SELTYPE', 'IS_INS', 'IS_UPD', 'JAVA_CLASS'],
             proxy: {
                 url: '/gen/selectTableInfo',
                 type: 'ajax',
@@ -93,6 +94,7 @@
                             record.set('SELTYPE', '0');
                         }
                         record.set('IS_INS', 'Y');
+                        record.set('JAVA_CLASS', _getJavaClassByDbType(record.get("DATA_TYPE")));
                     })
                 }
             }
@@ -176,17 +178,58 @@
                 icon: 'public/image/btn/add.png',
                 handler: _genAutoInsKey
             }, {
+                xtype: 'textfield',
+                id: 'moduleName',
+                beforeLabelTextTpl: required,
+                fieldLabel: '模块名称',
+                style: 'clear:both',
+                emptyText: '符合驼峰规范， 如: codeInfo'
+            }, {
+                xtype: 'textfield',
+                id: 'moduleDesc',
+                beforeLabelTextTpl: required,
+                fieldLabel: '模块描述'
+            },{
+                xtype: 'textfield',
+                id: 'packageName',
+                beforeLabelTextTpl: required,
+                fieldLabel: '包名',
+                value: 'cn.newangels.',
+                emptyText: '如: cn.newangels.gen'
+            },{
+                xtype: 'textfield',
+                id: 'author',
+                fieldLabel: '作者',
+                emptyText: '如: admin'
+            }, {
                 xtype: 'combo',
                 queryMode: 'local',
-                store: nameConventTypeStore,
-                labelWidth: 70,
-                inputWidth: 140,
-                id: 'nameConventType',
+                store: genCodeModelTypeStore,
+                id: 'genCodeModelType',
                 valueField: 'CODE_',
                 displayField: 'NAME_',
                 fieldLabel: '规范名称',
                 forceSelection: true,
-                value: '2'
+                value: '3'
+            },{
+                xtype: 'radiogroup',
+                id: 'hasDelBatch',
+                fieldLabel: '包含批量删除',
+                layout: 'hbox',
+                defaults: {
+                    boxLabelAlign: 'before',
+                    width: 50
+                },
+                items: [{
+                    boxLabel: '是',
+                    name: 'hasDelBatch',
+                    inputValue: true
+                }, {
+                    boxLabel: '否',
+                    name: 'hasDelBatch',
+                    checked: true,
+                    inputValue: false
+                }]
             }]
         });
 
@@ -320,6 +363,18 @@
                 text: '数据类型',
                 width: 120,
                 dataIndex: 'DATA_TYPE'
+            }, {
+                text: 'java类对象',
+                width: 100,
+                dataIndex: 'JAVA_CLASS',
+                editor: {
+                    xtype: 'combo',
+                    store: javaClassStore,
+                    queryMode: 'local',
+                    valueField: 'CODE_',
+                    displayField: 'NAME_',
+                    forceSelection: true
+                }
             }, {
                 text: '是主键',
                 width: 70,
@@ -611,10 +666,9 @@
 
     //调用表生成存储过程接口
     function _genProceduresByTableAjax(tableName, tableDesc) {
-
         var params = [];
-        var paramTypes = [];
         var paramDescs = [];
+        var paramJavaClass = [];
         var priParamIndex = [];
         var selParamsIndex = [];
         var selType = [];
@@ -629,8 +683,8 @@
 
         for (let i = 0; i < records.length; i++) {
             params.push(records[i].data.COLUMN_NAME);
-            paramTypes.push(records[i].data.DATA_TYPE);
             paramDescs.push(records[i].data.COMMENTS);
+            paramJavaClass.push(records[i].data.JAVA_CLASS);
             records[i].data.IS_PRIMARY === "Y" ? priParamIndex.push(records[i].data.COLUMN_ID - 1) : 0;
             records[i].data.IS_SEL === "Y" ? selParamsIndex.push(records[i].data.COLUMN_ID - 1) : 0;
             records[i].data.SELTYPE !== "" ? selType.push(records[i].data.SELTYPE) : 0;
@@ -644,22 +698,27 @@
         }
 
         Ext.Ajax.request({
-            url: '/gen/genProceduresByTable',
+            url: '/gen/genCodeByTable',
             async: false,
             method: 'POST',
             params: {
-                'nameConventType': Ext.getCmp('nameConventType').getValue(),//命名规范类型
+                'genCodeModelType': Ext.getCmp('genCodeModelType').getValue(),
                 'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
                 'tableName': tableName,
                 'tableDesc': tableDesc,
                 'params': params,
-                'paramTypes': paramTypes,
                 'paramDescs': paramDescs,
+                'paramJavaClass': paramJavaClass,
                 'priParamIndex': priParamIndex,
                 'selParamsIndex': selParamsIndex,
                 'selType': selType,
                 'insParamIndex': insParamIndex,
-                'updParamIndex': updParamIndex
+                'updParamIndex': updParamIndex,
+                'moduleName': Ext.getCmp('moduleName').getValue(),
+                'moduleDesc': Ext.getCmp('moduleDesc').getValue(),
+                'packageName': Ext.getCmp('packageName').getValue(),
+                'hasDelBatch': Ext.getCmp('hasDelBatch').getChecked()[0].inputValue,
+                'author': Ext.getCmp('author').getValue()
             },
             callback: function (options, success, response) {
                 if (success) {
@@ -668,7 +727,7 @@
                         var codeList = data.list;
 
                         var win = Ext.create('Ext.window.Window', {
-                            title: '存储过程',
+                            title: '后台代码',
                             modal: true,
                             autoShow: true,
                             maximized: true,
@@ -684,12 +743,8 @@
                             items: [],
                             listeners: {
                                 beforetabchange: function (tabs, newTab, oldTab) {
-                                    if (newTab.id === 'copy') {
-                                        var text = '';
-                                        for (var i = 0; i < codeList.length; i++) {
-                                            text += Ext.getCmp('tab_' + codeList[i]).items.items[0].value + '\n\n';
-                                        }
-                                        copyText(text);
+                                    if (newTab.id === 'download') {
+                                        _downloadCodeByTable(tableName, tableDesc, params, paramDescs, paramJavaClass, priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex);
                                     }
                                     if (newTab.id === 'close') {
                                         win.close();
@@ -716,8 +771,8 @@
                             codeTabPanel.add(codeTab);
                         }
                         codeTabPanel.add({
-                            id: 'copy',
-                            title: '复制到剪切板'
+                            id: 'download',
+                            title: '下载'
                         });
                         codeTabPanel.add({
                             id: 'close',
@@ -806,16 +861,77 @@
         })
     }
 
-    //复制内容到剪切板
-    function copyText(text) {
-        var tag = document.createElement('textarea');
-        tag.setAttribute('id', 'cp_hgz_textarea');
-        tag.value = text;
-        document.getElementsByTagName('body')[0].appendChild(tag);
-        document.getElementById('cp_hgz_textarea').select();
-        document.execCommand('copy');
-        document.getElementById('cp_hgz_textarea').remove();
-        Toast.alert('信息', '已复制到剪切板', 2000);
+    //根据数据库类型获取java类对象(默认oracle)
+    function _getJavaClassByDbType(type) {
+        if (type === 'VARCHAR2' || type === 'VARCHAR') {
+            return "String";
+        } else if (type === 'NUMBER') {
+            return "Integer";
+        } else if (type === 'BLOB') {
+            return "InputStream";
+        } else if (type === 'INT') {
+            return "Integer";
+        } else if (type === 'DATE' || type === 'TIMESTAMP') {
+            return "Date";
+        } else {
+            return "String";
+        }
+    }
+
+    //下载代码
+    function _downloadCodeByTable(tableName, tableDesc, paramsList, paramDescs, paramJavaClass, priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex) {
+        var params = {
+            'genCodeModelType': Ext.getCmp('genCodeModelType').getValue(),
+            'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
+            'tableName': tableName,
+            'tableDesc': tableDesc,
+            'params': paramsList,
+            'paramDescs': paramDescs,
+            'paramJavaClass': paramJavaClass,
+            'priParamIndex': priParamIndex,
+            'selParamsIndex': selParamsIndex,
+            'selType': selType,
+            'insParamIndex': insParamIndex,
+            'updParamIndex': updParamIndex,
+            'moduleName': Ext.getCmp('moduleName').getValue(),
+            'moduleDesc': Ext.getCmp('moduleDesc').getValue(),
+            'packageName': Ext.getCmp('packageName').getValue(),
+            'hasDelBatch': Ext.getCmp('hasDelBatch').getChecked()[0].inputValue,
+            'author': Ext.getCmp('author').getValue()
+        };
+
+        var body = Ext.getBody();
+        var form = body.createChild({
+            tag: 'form',
+            cls: 'x-hidden',
+            action: "/gen/downloadCodeByTable",
+            method: "get",
+            target: '_blank'
+        });
+
+        for (var key in params) {
+            if (!Ext.isArray(params[key])) {
+                form.createChild({
+                    tag: 'input',
+                    type: 'text',
+                    cls: 'x-hidden',
+                    name: key,
+                    value: params[key]
+                });
+            } else {
+                for (var i = 0; i < params[key].length; i++) {
+                    form.createChild({
+                        tag: 'input',
+                        type: 'text',
+                        cls: 'x-hidden',
+                        name: key,
+                        value: params[key][i]
+                    });
+                }
+            }
+        }
+
+        form.dom.submit();
     }
 </script>
 </body>

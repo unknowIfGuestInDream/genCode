@@ -3,10 +3,7 @@ package com.newangels.gen.controller;
 import cn.smallbun.screw.core.engine.EngineFileType;
 import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
-import com.newangels.gen.enums.DataBaseType;
-import com.newangels.gen.enums.GenCodeModelType;
-import com.newangels.gen.enums.GenProcedureModelType;
-import com.newangels.gen.enums.NameConventType;
+import com.newangels.gen.enums.*;
 import com.newangels.gen.util.cache.SimpleCache;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -116,6 +113,26 @@ public class CommonController {
                 list.add(result);
             }
             SimpleCache.put(SimpleCache.NAMECONVENTTYPE, list);
+        }
+        return BaseUtils.success(list);
+    }
+
+    /**
+     * 获取JavaClass的数据
+     */
+    @GetMapping("selectJavaClass")
+    @Log
+    public Map<String, Object> selectJavaClass() {
+        List<Map<String, Object>> list = SimpleCache.get(SimpleCache.JAVACLASS);
+        if (list == null) {
+            list = new ArrayList<>();
+            for (JavaClass javaClass : JavaClass.values()) {
+                Map<String, Object> result = new HashMap<>(4);
+                result.put("CODE_", javaClass.getCode());
+                result.put("NAME_", javaClass.toString());
+                list.add(result);
+            }
+            SimpleCache.put(SimpleCache.JAVACLASS, list);
         }
         return BaseUtils.success(list);
     }
