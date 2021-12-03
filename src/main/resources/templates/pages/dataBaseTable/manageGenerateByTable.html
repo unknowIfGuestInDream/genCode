@@ -185,8 +185,7 @@
                 valueField: 'CODE_',
                 displayField: 'NAME_',
                 fieldLabel: '规范名称',
-                forceSelection: true,
-                value: '2'
+                forceSelection: true
             }]
         });
 
@@ -509,7 +508,7 @@
         }
 
         _selectdataSource();
-        //_selectTable();
+        _initGenFormParam();
         Ext.getBody().unmask();
     }
 
@@ -725,6 +724,7 @@
                         });
 
                         win.add(codeTabPanel);
+                        _recordGenFormParam();
                     } else {
                         Ext.MessageBox.alert('错误', data.message, Ext.MessageBox.ERROR);
                     }
@@ -804,6 +804,19 @@
             record.set('IS_SEL', 'N');
             record.set('SELTYPE', '');
         })
+    }
+
+    //记录本地历史formPanel的值
+    function _recordGenFormParam() {
+        if (!window.localStorage) return;
+        localStorage.setItem("gendbt.nameConventType", Ext.getCmp('nameConventType').getValue());
+    }
+
+    //初始化为历史值
+    function _initGenFormParam() {
+        if (!window.localStorage) return;
+        if (!localStorage.hasOwnProperty("gendbt.nameConventType")) return;
+        Ext.getCmp('nameConventType').setValue(localStorage.getItem("gendbt.nameConventType"));
     }
 </script>
 </body>

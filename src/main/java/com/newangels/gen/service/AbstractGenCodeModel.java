@@ -336,13 +336,27 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
         dealInsCode(insParams, insParamDescs, insParamJavaClass, objectMap);
         dealUpdCode(primarys, primaryDesc, primaryJavaClass, updParams, updParamDescs, updParamJavaClass, objectMap);
         dealDelBatchCode(primarys, primaryDesc, primaryJavaClass, objectMap, hasDelBatch);
+        dealOtherCode(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, primarys, primaryDesc, primaryJavaClass, selParams, selParamDescs, selParamJavaClass, selType, insParams, insParamDescs, insParamJavaClass, updParams, updParamDescs, updParamJavaClass, objectMap);
+        //返回结果
+        return getResult(driver, objectMap, configuration);
+    }
+
+    /**
+     * 交给子类实现，方便子类实现别的代码
+     */
+    protected void dealOtherCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, List<String> primarys, List<String> primaryDesc, List<String> primaryJavaClass, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType, List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, List<String> updParams, List<String> updParamDescs, List<String> updParamJavaClass, Map<String, Object> objectMap) {
+    }
+
+    /**
+     * 处理返回结果，方便子类重写
+     */
+    protected Map<String, Object> getResult(String driver, Map<String, Object> objectMap, Configuration configuration) {
         //返回结果
         Map<String, Object> result = new HashMap<>(16);
         //tab页集合, 保证返回顺序
         result.put("list", getTabList());
         result.put("BaseUtils", FreeMarkerUtil.getTemplateContent(configuration, objectMap, "common/BaseUtils.ftl"));
-        result.put("BaseSqlCriteria", FreeMarkerUtil.getTemplateContent(configuration, objectMap, "common/BaseUtils.ftl"));
-        result.put("base.js", FreeMarkerUtil.getTemplateContent(configuration, objectMap, "common/basejs.ftl"));
+        result.put("BaseSqlCriteria", FreeMarkerUtil.getTemplateContent(configuration, objectMap, "common/BaseSqlCriteria.ftl"));
         result.put("controller", getController(configuration, objectMap, driver));
         result.put("service", getService(configuration, objectMap, driver));
         result.put("serviceImpl", getServiceImpl(configuration, objectMap, driver));
@@ -353,7 +367,7 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
      * 获取前台tab的list集合
      */
     protected List<String> getTabList() {
-        return new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "BaseUtils", "BaseSqlCriteria", "base.js"));
+        return new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "BaseUtils", "BaseSqlCriteria"));
     }
 
     /**
