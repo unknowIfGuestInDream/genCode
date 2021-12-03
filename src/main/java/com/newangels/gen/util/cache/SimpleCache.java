@@ -19,6 +19,8 @@ public class SimpleCache {
     public static String GENPROCEDUREMODELTYPE = "genProcedureModelType";
     public static String NAMECONVENTTYPE = "nameConventType";
     public static String ENGINEFILETYPE = "engineFileType";
+    public static String GENCODEMODELTYPE = "genCodeModelType";
+    public static String JAVACLASS = "javaClass";
 
     private static Map<String, List<Map<String, Object>>> map = new ConcurrentHashMap<>();
 

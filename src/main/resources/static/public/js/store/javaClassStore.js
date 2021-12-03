@@ -1,16 +1,15 @@
 /**
- * 驱动类
+ * java类对象
  *
  * @author TangLiang
- * @private
  */
-var driverStore = Ext.create("Ext.data.Store", {
-    storeId: 'driverStore',
+var javaClassStore = Ext.create("Ext.data.Store", {
+    storeId: 'javaClassStore',
     fields: ['NAME_', 'CODE_'],
     autoLoad: true,
     loading: true,
     proxy: {
-        url: '/gen/selectDataBaseType',
+        url: '/gen/selectJavaClass',
         type: 'ajax',
         async: true,//false=同步.
         actionMethods: {
@@ -29,4 +28,5 @@ var driverStore = Ext.create("Ext.data.Store", {
     }
 });
 
-Ext.data.StoreManager.register(driverStore);
+
+Ext.data.StoreManager.register(javaClassStore);

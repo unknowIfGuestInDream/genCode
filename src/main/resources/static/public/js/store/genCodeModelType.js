@@ -1,16 +1,16 @@
 /**
- * 驱动类
+ * 生成后台代码模板
  *
  * @author TangLiang
  * @private
  */
-var driverStore = Ext.create("Ext.data.Store", {
-    storeId: 'driverStore',
+var genCodeModelTypeStore = Ext.create("Ext.data.Store", {
+    storeId: 'genCodeModelTypeStore',
     fields: ['NAME_', 'CODE_'],
     autoLoad: true,
     loading: true,
     proxy: {
-        url: '/gen/selectDataBaseType',
+        url: '/gen/selectGenCodeModelType',
         type: 'ajax',
         async: true,//false=同步.
         actionMethods: {
@@ -29,4 +29,4 @@ var driverStore = Ext.create("Ext.data.Store", {
     }
 });
 
-Ext.data.StoreManager.register(driverStore);
+Ext.data.StoreManager.register(genCodeModelTypeStore);

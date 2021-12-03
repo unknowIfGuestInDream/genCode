@@ -154,7 +154,7 @@ public abstract class AbstractTableToProcedure extends AbstractFreeMarkerTemplat
         //一个集合包含所有字段，以及其它相关的存储集合的索引（0开始）
         //通过遍历所有字段集合来为相关集合赋值
         int priLength = priParamIndex.size();
-        int selLength = selParamsIndex.size();
+        int selLength = selParamsIndex == null ? 0 : selParamsIndex.size();
         int insLength = insParamIndex.size();
         int updLength = updParamIndex.size();
         List<String> primarys = new ArrayList<>(priLength);
@@ -191,7 +191,7 @@ public abstract class AbstractTableToProcedure extends AbstractFreeMarkerTemplat
                 updParamTypes.add(paramTypes.get(updParamIndex.get(i)));
                 updParamDescs.add(paramDescs.get(updParamIndex.get(i)));
             }
-            if (i >= priParamIndex.size() && i >= selParamsIndex.size() && i >= insParamIndex.size() && i >= updParamIndex.size()) {
+            if (i >= priLength && i >= selLength && i >= insLength && i >= updLength) {
                 break;
             }
         }
