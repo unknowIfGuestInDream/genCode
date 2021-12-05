@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>修改数据源</title>
+    <title>修改${moduleDesc}</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -11,7 +11,6 @@
     <script type="text/javascript" src="public/js/ext-all.js"></script>
     <script type="text/javascript" src="public/js/ext-lang-zh_CN.js"></script>
     <script type="text/javascript" src="public/js/base.js"></script>
-    <script type="text/javascript" src="public/js/store/driver.js"></script>
 </head>
 <body>
 <script>
@@ -20,13 +19,13 @@
         var parameters = Ext.urlDecode(location.href.split('?')[1]);
         (parameters.ID !== undefined) ? ID = parameters.ID : 0;
     }
-    var dataBase;//被修改对象
+    var ${module?uncap_first};//被修改对象
 
     Ext.onReady(function () {
         Ext.getBody().mask('加载中...');//加载时页面遮盖
 
         Ext.Ajax.request({//加载被修改对象
-            url: '/gen/loadDataBaseInfo',
+            url: '/${package?substring(package?last_index_of(".")+1)?lower_case}/load${module}',
             async: false,//同步加载
             method: 'GET',
             params: {
@@ -35,8 +34,8 @@
             callback: function (options, success, response) {
                 if (success) {
                     var data = Ext.decode(response.responseText);
-                    if (data.success === true && !Ext.isEmpty(data.ID)) {
-                        dataBase = data;
+                    if (data.success === true) {
+                        ${module?uncap_first} = data.result;
                     }
                 }
             }
@@ -52,12 +51,7 @@
                 xtype: 'button',
                 text: '保存',
                 icon: 'public/image/btn/save.png',
-                handler: _updateDataBaseInfo
-            }, {
-                xtype: 'button',
-                text: '连接测试',
-                icon: 'public/image/btn/association.png',
-                handler: _testConnect
+                handler: _update${module}
             }, {
                 xtype: 'button',
                 text: '关闭',
@@ -79,7 +73,7 @@
             },
             items: [{
                 xtype: 'hidden',
-                name: 'ID'
+                name: 'ID',
             }, {
                 xtype: 'textfield',
                 name: 'NAME',
@@ -96,35 +90,7 @@
                 fieldLabel: '驱动类名称',
                 allowBlank: false,
                 forceSelection: true,
-                style: 'clear:both',
-                listeners: {
-                    select: function (combo, records) {
-                        if (dataBase['DRIVER'] === records[0].data.CODE_) {
-                            Ext.getCmp('URL').setValue(dataBase['URL']);
-                            return;
-                        }
-                        switch (records[0].data.CODE_) {
-                            case "com.mysql.cj.jdbc.Driver":
-                                Ext.getCmp('URL').setValue('jdbc:mysql://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
-                                break;
-                            case "com.mysql.jdbc.Driver":
-                                Ext.getCmp('URL').setValue('jdbc:mysql://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
-                                break;
-                            case "oracle.jdbc.OracleDriver":
-                                Ext.getCmp('URL').setValue('jdbc:oracle:thin:@10.18.26.86:1521:SID');
-                                break;
-                            case "org.mariadb.jdbc.Driver":
-                                Ext.getCmp('URL').setValue('jdbc:mariadb://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
-                                break;
-                            case "com.microsoft.sqlserver.jdbc.SQLServerDriver":
-                                Ext.getCmp('URL').setValue('jdbc:sqlserver://ip:1433;DatabaseName=db');
-                                break;
-                            default:
-                                Ext.getCmp('URL').setValue('');
-                                break;
-                        }
-                    }
-                }
+                style: 'clear:both'
             }, {
                 xtype: 'textfield',
                 id: 'URL',
@@ -182,54 +148,28 @@
             }
         }
 
-        if (dataBase == null) {
-            Toast.alert('警告', '无当前数据源, 请刷新页面重新选择', 5000);
+        if (${module?uncap_first} == null) {
+            Toast.alert('警告', '无当前${moduleDesc}, 请刷新页面重新选择', 5000);
             setTimeout(_close, 5000);
             return;
         }
         var formPanel = Ext.getCmp('formPanel').getForm();
-        for (var key in dataBase) {//装载被修改数据到页面
-            (formPanel.findField(key) != null) ? formPanel.findField(key).setValue(dataBase[key]) : 0;
+        for (var key in ${module?uncap_first}) {//装载被修改数据到页面
+            (formPanel.findField(key) != null) ? formPanel.findField(key).setValue(${module?uncap_first}[key]) : 0;
         }
         Ext.getBody().unmask();//取消页面遮盖
     }
 
-    //修改数据源
-    function _updateDataBaseInfo() {
+    //修改${moduleDesc}
+    function _update${module}() {
         Ext.getCmp('formPanel').getForm().submit({//提交表单
-            url: '/gen/updateDataBaseInfo',
+            url: '/${package?substring(package?last_index_of(".")+1)?lower_case}/update${module}',
             submitEmptyText: false,
             waitMsg: '进行中',
             success: function (form, action) {
                 var data = action.result;
                 parent.returnValue = data.success;
                 _close();
-            },
-            failure: function (form, action) {
-                switch (action.failureType) {
-                    case Ext.form.action.Action.CLIENT_INVALID:
-                        Ext.MessageBox.alert('错误', '请填写必填项', Ext.MessageBox.ERROR);
-                        break;
-                    case Ext.form.action.Action.SERVER_INVALID:
-                        Ext.MessageBox.alert('错误', action.result.message, Ext.MessageBox.ERROR);
-                        break;
-                    case Ext.form.action.Action.CONNECT_FAILURE:
-                        Ext.MessageBox.alert('错误', '服务器错误', Ext.MessageBox.ERROR);
-                }
-            }
-        });
-    }
-
-    //测试连接
-    function _testConnect() {
-        Ext.getCmp('formPanel').getForm().submit({//提交表单
-            url: '/gen/testConnect',
-            submitEmptyText: false,
-            waitMsg: '进行中',
-            success: function (form, action) {
-                if (action.result.success) {
-                    Ext.MessageBox.alert('信息', '连接成功', Ext.MessageBox.INFO);
-                }
             },
             failure: function (form, action) {
                 switch (action.failureType) {

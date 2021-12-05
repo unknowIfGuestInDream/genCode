@@ -354,7 +354,7 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
         //返回结果
         Map<String, Object> result = new HashMap<>(16);
         //tab页集合, 保证返回顺序
-        result.put("list", getTabList());
+        result.put("list", getTabList(objectMap));
         result.put("BaseUtils", FreeMarkerUtil.getTemplateContent(configuration, objectMap, "common/BaseUtils.ftl"));
         result.put("BaseSqlCriteria", FreeMarkerUtil.getTemplateContent(configuration, objectMap, "common/BaseSqlCriteria.ftl"));
         result.put("controller", getController(configuration, objectMap, driver));
@@ -366,7 +366,7 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
     /**
      * 获取前台tab的list集合
      */
-    protected List<String> getTabList() {
+    protected List<String> getTabList(Map<String, Object> objectMap) {
         return new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "BaseUtils", "BaseSqlCriteria"));
     }
 

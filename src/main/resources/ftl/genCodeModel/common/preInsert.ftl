@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>新增数据源</title>
+    <title>新增${moduleDesc}</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -11,8 +11,6 @@
     <script type="text/javascript" src="public/js/ext-all.js"></script>
     <script type="text/javascript" src="public/js/ext-lang-zh_CN.js"></script>
     <script type="text/javascript" src="public/js/base.js"></script>
-    <script type="text/javascript" src="public/js/util/allowBlank.js"></script>
-    <script type="text/javascript" src="public/js/store/driver.js"></script>
 </head>
 <body>
 <script>
@@ -29,12 +27,7 @@
                 xtype: 'button',
                 text: '保存',
                 icon: 'public/image/btn/save.png',
-                handler: _insertDataBaseInfo
-            }, {
-                xtype: 'button',
-                text: '连接测试',
-                icon: 'public/image/btn/association.png',
-                handler: _testConnect
+                handler: _insert${module}
             }, {
                 xtype: 'button',
                 text: '关闭',
@@ -51,7 +44,7 @@
             defaults: {
                 labelAlign: 'right',
                 labelWidth: 150,
-                inputWidth: 300
+                inputWidth: 300,
             },
             items: [{
                 xtype: 'textfield',
@@ -69,31 +62,7 @@
                 fieldLabel: '驱动类名称',
                 allowBlank: false,
                 forceSelection: true,
-                style: 'clear:both',
-                listeners: {
-                    select: function (combo, records) {
-                        switch (records[0].data.CODE_) {
-                            case "com.mysql.cj.jdbc.Driver":
-                                Ext.getCmp('URL').setValue('jdbc:mysql://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
-                                break;
-                            case "com.mysql.jdbc.Driver":
-                                Ext.getCmp('URL').setValue('jdbc:mysql://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
-                                break;
-                            case "oracle.jdbc.OracleDriver":
-                                Ext.getCmp('URL').setValue('jdbc:oracle:thin:@10.18.26.86:1521:SID');
-                                break;
-                            case "org.mariadb.jdbc.Driver":
-                                Ext.getCmp('URL').setValue('jdbc:mariadb://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
-                                break;
-                            case "com.microsoft.sqlserver.jdbc.SQLServerDriver":
-                                Ext.getCmp('URL').setValue('jdbc:sqlserver://ip:1433;DatabaseName=db');
-                                break;
-                            default:
-                                Ext.getCmp('URL').setValue('');
-                                break;
-                        }
-                    }
-                }
+                style: 'clear:both'
             }, {
                 xtype: 'textfield',
                 id: 'URL',
@@ -157,42 +126,16 @@
         Ext.getBody().unmask();
     }
 
-    //新增数据源
-    function _insertDataBaseInfo() {
+    //新增${moduleDesc}
+    function _insert${module}() {
         Ext.getCmp('formPanel').getForm().submit({//提交表单
-            url: '/gen/insertDataBaseInfo',
+            url: '/${package?substring(package?last_index_of(".")+1)?lower_case}/insert${module}',
             submitEmptyText: false,
             waitMsg: '进行中',
             success: function (form, action) {
                 var data = action.result;
                 parent.returnValue = data.success;
                 _close();
-            },
-            failure: function (form, action) {
-                switch (action.failureType) {
-                    case Ext.form.action.Action.CLIENT_INVALID:
-                        Ext.MessageBox.alert('错误', '请填写必填项', Ext.MessageBox.ERROR);
-                        break;
-                    case Ext.form.action.Action.SERVER_INVALID:
-                        Ext.MessageBox.alert('错误', action.result.message, Ext.MessageBox.ERROR);
-                        break;
-                    case Ext.form.action.Action.CONNECT_FAILURE:
-                        Ext.MessageBox.alert('错误', '服务器错误', Ext.MessageBox.ERROR);
-                }
-            }
-        });
-    }
-
-    //测试连接
-    function _testConnect() {
-        Ext.getCmp('formPanel').getForm().submit({//提交表单
-            url: '/gen/testConnect',
-            submitEmptyText: false,
-            waitMsg: '进行中',
-            success: function (form, action) {
-                if (action.result.success) {
-                    Ext.MessageBox.alert('信息', '连接成功', Ext.MessageBox.INFO);
-                }
             },
             failure: function (form, action) {
                 switch (action.failureType) {

@@ -94,7 +94,7 @@ public class GenCodeController {
             AbstractGenCodeModel codeModel = AbstractGenCodeModelFactory.getGenCodeModel(GenCodeModelType.fromCode(genCodeModelType));
             Map<String, Object> map = codeModel.genCodeByTable(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, driver, params, paramDescs, paramJavaClass, priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex, freeMarkerConfigurer.getConfiguration());
             List<String> list = (List<String>) map.get("list");
-
+            //BaseUtils，BaseSqlCriteria不下载，公用后台代码补充.java后缀，其他自定义文件名称无操作
             for (String name : list) {
                 String fileName;
                 if ("BaseUtils".equals(name) || "BaseSqlCriteria".equals(name)) {
