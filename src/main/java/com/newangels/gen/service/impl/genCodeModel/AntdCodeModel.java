@@ -24,6 +24,10 @@ public class AntdCodeModel extends AbstractGenCodeModel {
     }
 
     @Override
+    protected void dealOtherCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> primaryDesc, List<String> primaryJavaClass, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType, List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, List<String> updParams, List<String> updParamDescs, List<String> updParamJavaClass, Map<String, Object> objectMap) {
+    }
+
+    @Override
     public void afterPropertiesSet() throws Exception {
         AbstractGenCodeModelFactory.register(GenCodeModelType.ANTD, this);
     }
