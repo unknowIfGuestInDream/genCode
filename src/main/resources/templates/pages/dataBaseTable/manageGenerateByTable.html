@@ -81,7 +81,7 @@
             listeners: {
                 load: function (store, records, successful, eOpts) {
                     store.each(function (record) {
-                        if (record.get("COLUMN_ID") === 1 && record.get("COLUMN_NAME").indexOf("ID") > 0) {
+                        if (record.get("COLUMN_ID") === 1 && record.get("COLUMN_NAME").indexOf("ID") >= 0) {
                             record.set('IS_PRIMARY', 'Y');
                             record.set('IS_SEL', 'N');
                             record.set('IS_UPD', 'N');
@@ -658,7 +658,8 @@
                 'selParamsIndex': selParamsIndex,
                 'selType': selType,
                 'insParamIndex': insParamIndex,
-                'updParamIndex': updParamIndex
+                'updParamIndex': updParamIndex,
+                'random': Math.random()
             },
             callback: function (options, success, response) {
                 if (success) {

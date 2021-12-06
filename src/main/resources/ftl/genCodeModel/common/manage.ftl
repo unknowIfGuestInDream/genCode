@@ -21,10 +21,10 @@
             storeId: '${module?uncap_first}Store',
             autoLoad: false,//true为自动加载
             loading: false,//自动加载时必须为true
-            pageSize: -1,
-            fields: ['ID', 'NAME', 'URL', 'DRIVER', 'USERNAME', 'PASSWORD', 'UPDATE_TIME', 'CREATE_TIME'],
+            pageSize: 20,
+            fields: [${storeParams!}],
             proxy: {
-                url: '/${package?substring(package?last_index_of(".")+1)?lower_case}/select${module}',
+                url: AppUrl + '/${package?substring(package?last_index_of(".")+1)?lower_case}/select${module}',
                 type: 'ajax',
                 async: true,//false=同步.
                 actionMethods: {
@@ -33,7 +33,8 @@
                 extraParams: {},
                 reader: {
                     type: 'json',
-                    root: 'result'
+                    root: 'result',
+                    totalProperty: 'total'
                 }
             }
         });
@@ -62,8 +63,21 @@
                 xtype: 'button',
                 text: '删除',
                 icon: 'public/image/btn/delete.png',
-                handler: _delete${module}
+                handler: <#if hasDelBatch>_delete${module}Batch<#else>_delete${module}</#if>
             }]
+        });
+
+        var formPanel = Ext.create('Ext.Panel', {
+            id: 'formPanel',
+            layout: 'column',
+            frame: true,
+            defaults: {
+                labelAlign: 'right',
+                labelWidth: 100,
+                inputWidth: 140,
+                margin: '4,0,0,0'
+            },
+            items: [${selForm}]
         });
 
         var ${module?uncap_first}Panel = Ext.create('Ext.grid.Panel', {
@@ -72,45 +86,24 @@
             columnLines: true,
             selModel: {
                 selType: 'checkboxmodel',
-                mode: 'SINGLE'
+                mode: <#if hasDelBatch!'SINGLE'>'SIMPLE'<#else>'SINGLE'</#if>
             },
             frame: true,
             columns: [{
                 xtype: 'rownumberer',
                 align: 'center',
                 width: 50
-            }, {
-                text: '数据源名称',
-                dataIndex: 'NAME',
-                flex: 1,
-                minWidth: 150
-            }, {
-                text: '驱动类名称',
-                dataIndex: 'DRIVER',
-                flex: 2,
-                minWidth: 200
-            }, {
-                text: '链接',
-                dataIndex: 'URL',
-                flex: 2,
-                minWidth: 200
-            }, {
-                text: '用户名',
-                dataIndex: 'USERNAME',
-                width: 150
-            }, {
-                text: '创建日期',
-                dataIndex: 'CREATE_TIME',
-                width: 150
-            }, {
-                text: '更新日期',
-                dataIndex: 'UPDATE_TIME',
-                width: 150
-            }],
+            }, ${gridParams!}],
             viewConfig: {
                 emptyText: '<div style="text-align: center; padding-top: 50px; font: italic bold 20px Microsoft YaHei;">没有数据</div>',
                 enableTextSelection: true
-            }
+            },
+            dockedItems: [{
+                xtype: 'pagingtoolbar',
+                store: ${module?uncap_first}Store,
+                dock: 'bottom',
+                displayInfo: true
+            }]
         });
 
         Ext.create('Ext.container.Viewport', {
@@ -128,7 +121,7 @@
             },
             items: [{
                 region: 'north',
-                items: [buttonPanel]
+                items: [buttonPanel, formPanel]
             }, {
                 region: 'center',
                 layout: 'fit',
@@ -153,10 +146,15 @@
     //查询${moduleDesc}
     function _select${module}() {
         var ${module?uncap_first}Store = Ext.data.StoreManager.lookup('${module?uncap_first}Store');
-        ${module?uncap_first}Store.proxy.extraParams = {};
+        <#if selExtraParams?? && selExtraParams?length gt 0>
+        ${module?uncap_first}Store.proxy.extraParams = {
+            ${selExtraParams}
+        };
+        </#if>
         ${module?uncap_first}Store.load();
     }
 
+    //新增${moduleDesc}页
     function _preInsert${module}() {
         returnValue = null;
         win = Ext.create('Ext.window.Window', {
@@ -182,13 +180,14 @@
         });
     }
 
+    //修改${moduleDesc}页
     function _preUpdate${module}() {
         var records = Ext.getCmp('${module?uncap_first}Panel').getSelectionModel().getSelection();
         if (records.length !== 1) {
             Ext.MessageBox.alert('警告', '请选择一条待修改数据', Ext.MessageBox.WARNING);
             return;
         }
-
+        var urlParam = <#if primarys?? && primarys?size gt 0><#list primarys as item>'<#if item_index = 0>?</#if>${item}=' + records[0].get('${item}')<#if item_has_next> + <#else>;</#if></#list><#else>'';</#if>
         returnValue = null;
         win = Ext.create('Ext.window.Window', {
             title: '修改${moduleDesc}',
@@ -198,7 +197,7 @@
             maximizable: true,
             width: document.documentElement.clientWidth * 0.6,
             height: document.documentElement.clientHeight * 0.8,
-            html: '<iframe src="/${package?substring(package?last_index_of(".")+1)?lower_case}/preUpdate${module}?ID=' + records[0].get('ID') + '" style="width: 100%; height: 100%;" frameborder="0"></iframe>',
+            html: '<iframe src="/${package?substring(package?last_index_of(".")+1)?lower_case}/preUpdate${module}' + urlParam + '" style="width: 100%; height: 100%;" frameborder="0"></iframe>',
             listeners: {
                 close: function (panel, eOpts) {
                     if (returnValue != null) {//更新页面数据
@@ -214,6 +213,7 @@
         });
     }
 
+    //删除${moduleDesc}
     function _delete${module}() {
         var records = Ext.getCmp('${module?uncap_first}Panel').getSelectionModel().getSelection();
         if (records.length !== 1) {
@@ -229,17 +229,17 @@
             fn: function (btn) {
                 if (btn === 'yes') {
                     Ext.Ajax.request({
-                        url: '/${package?substring(package?last_index_of(".")+1)?lower_case}/delete${module}',
+                        url: AppUrl + '/${package?substring(package?last_index_of(".")+1)?lower_case}/delete${module}',
                         async: false,
                         params: {
-                            'ID': records[0].get('ID'),
-                            'URL': records[0].get('URL'),
-                            'USERNAME': records[0].get('USERNAME')
+                            <#list primarys as item>
+                            '${item}': records[0].get('${item}')<#if item_has_next>,</#if>
+                            </#list>
                         },
                         callback: function (options, success, response) {
                             if (success) {
                                 var data = Ext.decode(response.responseText);
-                                if (data.success === true) {
+                                if (data.success) {
                                     _select${module}();
                                     Toast.alert('信息', '删除成功', 2000);
                                 } else {
@@ -254,6 +254,57 @@
             }
         });
     }
+    <#if hasDelBatch>
+
+    //批量删除${moduleDesc}
+    function _delete${module}Batch() {
+        var records = Ext.getCmp('${module?uncap_first}Panel').getSelectionModel().getSelection();
+        if (records.length === 0) {
+            Ext.MessageBox.alert('警告', '请选择待删除数据', Ext.MessageBox.WARNING);
+            return;
+        }
+        <#list primarys as item>
+        var ${item}LIST = [];
+        </#list>
+        for (var i = 0, length = records.length; i < length; i++) {
+            <#list primarys as item>
+            ${item}LIST.push(records[i].data.${item});
+            </#list>
+        }
+        Ext.MessageBox.show({
+            title: '请确认',
+            msg: '是否删除',
+            buttons: Ext.MessageBox.YESNO,
+            icon: Ext.MessageBox.QUESTION,
+            fn: function (btn) {
+                if (btn === 'yes') {
+                    Ext.Ajax.request({
+                        url: AppUrl + '/${package?substring(package?last_index_of(".")+1)?lower_case}/delete${module}Batch',
+                        async: false,
+                        params: {
+                            <#list primarys as item>
+                            '${item}LIST': ${item}LIST<#if item_has_next>,</#if>
+                            </#list>
+                        },
+                        callback: function (options, success, response) {
+                            if (success) {
+                                var data = Ext.decode(response.responseText);
+                                if (data.success) {
+                                    _select${module}();
+                                    Toast.alert('信息', '删除成功', 2000);
+                                } else {
+                                    Ext.MessageBox.alert('错误', '删除失败', Ext.MessageBox.ERROR);
+                                }
+                            } else {
+                                Ext.MessageBox.alert('错误', '服务器错误', Ext.MessageBox.ERROR);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+    </#if>
 </script>
 </body>
 </html>

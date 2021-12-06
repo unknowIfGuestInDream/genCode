@@ -14,27 +14,32 @@
 </head>
 <body>
 <script>
-    var ID = null;
+    <#list primarys as item>
+    var ${item} = null;
+    </#list>
     if (location.href.split('?')[1] !== undefined) {
         var parameters = Ext.urlDecode(location.href.split('?')[1]);
-        (parameters.ID !== undefined) ? ID = parameters.ID : 0;
+        <#list primarys as item>
+        (parameters.${item} !== undefined) ? ${item} = parameters.${item} : 0;
+        </#list>
     }
     var ${module?uncap_first};//被修改对象
-
     Ext.onReady(function () {
         Ext.getBody().mask('加载中...');//加载时页面遮盖
 
         Ext.Ajax.request({//加载被修改对象
-            url: '/${package?substring(package?last_index_of(".")+1)?lower_case}/load${module}',
+            url: gatewayUrl + '/${package?substring(package?last_index_of(".")+1)?lower_case}/load${module}',
             async: false,//同步加载
             method: 'GET',
             params: {
-                'ID': ID
+                <#list primarys as item>
+                '${item}': ${item}<#if item_has_next>,</#if>
+                </#list>
             },
             callback: function (options, success, response) {
                 if (success) {
                     var data = Ext.decode(response.responseText);
-                    if (data.success === true) {
+                    if (data.success) {
                         ${module?uncap_first} = data.result;
                     }
                 }
@@ -71,47 +76,7 @@
                 inputWidth: 300,
                 margin: '4'
             },
-            items: [{
-                xtype: 'hidden',
-                name: 'ID',
-            }, {
-                xtype: 'textfield',
-                name: 'NAME',
-                fieldLabel: '数据源名称',
-                allowBlank: false
-            }, {
-                xtype: 'combo',
-                queryMode: 'local',
-                store: driverStore,
-                valueField: 'CODE_',
-                displayField: 'NAME_',
-                id: 'DRIVER',
-                name: 'DRIVER',
-                fieldLabel: '驱动类名称',
-                allowBlank: false,
-                forceSelection: true,
-                style: 'clear:both'
-            }, {
-                xtype: 'textfield',
-                id: 'URL',
-                name: 'URL',
-                inputWidth: 600,
-                fieldLabel: '链接',
-                allowBlank: false,
-                style: 'clear:both'
-            }, {
-                xtype: 'textfield',
-                name: 'USERNAME',
-                fieldLabel: '用户名',
-                allowBlank: false,
-                style: 'clear:both'
-            }, {
-                xtype: 'textfield',
-                name: 'PASSWORD',
-                fieldLabel: '密码',
-                allowBlank: false,
-                style: 'clear:both'
-            }]
+            items: [${updForm}]
         });
 
         Ext.create('Ext.container.Viewport', {//整体布局
@@ -149,7 +114,7 @@
         }
 
         if (${module?uncap_first} == null) {
-            Toast.alert('警告', '无当前${moduleDesc}, 请刷新页面重新选择', 5000);
+            Toast.alert('警告', '当前无${moduleDesc}, 请刷新页面重新选择', 5000);
             setTimeout(_close, 5000);
             return;
         }
@@ -163,7 +128,7 @@
     //修改${moduleDesc}
     function _update${module}() {
         Ext.getCmp('formPanel').getForm().submit({//提交表单
-            url: '/${package?substring(package?last_index_of(".")+1)?lower_case}/update${module}',
+            url: AppUrl + '/${package?substring(package?last_index_of(".")+1)?lower_case}/update${module}',
             submitEmptyText: false,
             waitMsg: '进行中',
             success: function (form, action) {

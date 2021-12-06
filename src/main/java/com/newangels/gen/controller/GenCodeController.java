@@ -102,7 +102,7 @@ public class GenCodeController {
                 } else if ("controller".equals(name) || "service".equals(name) || "serviceImpl".equals(name)) {
                     fileName = moduleName + BaseUtils.toUpperCase4Index(name) + ".java";
                 } else {
-                    fileName = moduleName + BaseUtils.toUpperCase4Index(name);
+                    fileName = name;
                 }
                 @Cleanup InputStream inputStream = new ByteArrayInputStream(map.get(name).toString().getBytes(StandardCharsets.UTF_8));
                 //创建输入流读取文件

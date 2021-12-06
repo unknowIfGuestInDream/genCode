@@ -46,44 +46,7 @@
                 labelWidth: 150,
                 inputWidth: 300,
             },
-            items: [{
-                xtype: 'textfield',
-                name: 'NAME',
-                fieldLabel: '数据源名称',
-                allowBlank: false
-            }, {
-                xtype: 'combo',
-                queryMode: 'local',
-                store: driverStore,
-                valueField: 'CODE_',
-                displayField: 'NAME_',
-                id: 'DRIVER',
-                name: 'DRIVER',
-                fieldLabel: '驱动类名称',
-                allowBlank: false,
-                forceSelection: true,
-                style: 'clear:both'
-            }, {
-                xtype: 'textfield',
-                id: 'URL',
-                name: 'URL',
-                inputWidth: 600,
-                fieldLabel: '链接',
-                allowBlank: false,
-                style: 'clear:both'
-            }, {
-                xtype: 'textfield',
-                name: 'USERNAME',
-                fieldLabel: '用户名',
-                allowBlank: false,
-                style: 'clear:both'
-            }, {
-                xtype: 'textfield',
-                name: 'PASSWORD',
-                fieldLabel: '密码',
-                allowBlank: false,
-                style: 'clear:both'
-            }]
+            items: [${insForm}]
         });
 
         Ext.create('Ext.container.Viewport', {//整体布局
@@ -119,17 +82,13 @@
             }
         }
 
-        //默认为oracle驱动
-        Ext.getCmp('DRIVER').setValue('oracle.jdbc.OracleDriver');
-        Ext.getCmp('URL').setValue('jdbc:oracle:thin:@10.18.26.86:1521:SID');
-
         Ext.getBody().unmask();
     }
 
     //新增${moduleDesc}
     function _insert${module}() {
         Ext.getCmp('formPanel').getForm().submit({//提交表单
-            url: '/${package?substring(package?last_index_of(".")+1)?lower_case}/insert${module}',
+            url: AppUrl + '/${package?substring(package?last_index_of(".")+1)?lower_case}/insert${module}',
             submitEmptyText: false,
             waitMsg: '进行中',
             success: function (form, action) {

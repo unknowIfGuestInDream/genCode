@@ -56,8 +56,9 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
      * @param author      作者
      * @param hasDelBatch 是否包含批量删除
      * @param objectMap   代码模版值
+     * @param primarys    主键参数集合
      */
-    protected void dealCommonCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, Map<String, Object> objectMap) {
+    protected void dealCommonCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, List<String> primarys, Map<String, Object> objectMap) {
         objectMap.put("tableName", tableName);
         objectMap.put("tableDesc", tableDesc);
         objectMap.put("module", moduleName);
@@ -65,6 +66,7 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
         objectMap.put("package", packageName);
         objectMap.put("author", author);
         objectMap.put("hasDelBatch", hasDelBatch);
+        objectMap.put("primarys", primarys);
         objectMap.put("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
     }
 
@@ -100,6 +102,7 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
 
     /**
      * 生成查询代码值
+     * //todo 区间查询时参树会修改
      *
      * @param selParams         参数
      * @param selParamDescs     字段描述
@@ -145,7 +148,7 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
         } else if (selType == 1) {
             selBuildParams.add("            sql += \" and " + selParam + " like '%' || :" + selParam + " || '%'\";");
         } else if (selType == 2) {
-            //区间查询暂时未实现
+            //todo 区间查询暂时未实现
             selBuildParams.add("            sql += \" and " + selParam + " = :" + selParam + "\";");
         }
         selBuildParams.add("            paramMap.put(\"" + selParam + "\", " + selParam + ");");
@@ -154,25 +157,38 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
 
     /**
      * 生成新增代码值
+     * 规定主键在controller中生成
      *
      * @param insParams         新增代码参数
      * @param insParamDescs     新增代码字段描述
      * @param insParamJavaClass 参数对应类对象
+     * @param primarys          主键参数集合
      * @param objectMap         代码模版值
      */
-    protected void dealInsCode(List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, Map<String, Object> objectMap) {
+    protected void dealInsCode(List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, List<String> primarys, Map<String, Object> objectMap) {
         StringJoiner insInParams = new StringJoiner(", ");
+        StringJoiner insConInParams = new StringJoiner(", ");
         StringJoiner insSqlParams = new StringJoiner(", ");
+        StringJoiner insConSqlParams = new StringJoiner(", ");
         StringJoiner insNote = new StringJoiner(noteJoiner);
         StringJoiner insSqlMark = new StringJoiner(", ");
         for (int i = 0, length = insParams.size(); i < length; i++) {
             insInParams.add(insParamJavaClass.get(i) + " " + insParams.get(i));
+            //主键在controller中生成，无需前台传参
+            if (!primarys.contains(insParams.get(i))) {
+                insConInParams.add(insParamJavaClass.get(i) + " " + insParams.get(i));
+                insConSqlParams.add(insParams.get(i));
+            } else {
+                insConSqlParams.add("BaseUtils.getUuid()");
+            }
             insSqlParams.add(insParams.get(i));
             insNote.add("@param " + insParams.get(i) + " " + insParamDescs.get(i));
             insSqlMark.add("?");
         }
         objectMap.put("insInParams", insInParams.toString());
+        objectMap.put("insConInParams", insConInParams.toString());
         objectMap.put("insSqlParams", insSqlParams.toString());
+        objectMap.put("insConSqlParams", insConSqlParams.toString());
         objectMap.put("insSqlMark", insSqlMark.toString());
         objectMap.put("insNote", insNote.toString());
     }
@@ -236,7 +252,6 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
             objectMap.put("delBatchSqlParams", "");
             objectMap.put("delBatchNote", "");
             objectMap.put("delBatchWhere", "");
-            objectMap.put("primarys", Collections.emptyList());
             objectMap.put("delBatchMapSize", "4");
             return;
         }
@@ -257,7 +272,6 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
         objectMap.put("delBatchSqlParams", delBatchSqlParams.toString());
         objectMap.put("delBatchNote", delBatchNote.toString());
         objectMap.put("delBatchWhere", delBatchWhere.toString());
-        objectMap.put("primarys", primarys);
         objectMap.put("delBatchMapSize", BaseUtils.newHashMapWithExpectedSize(primarys.size()));
     }
 
@@ -329,14 +343,14 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
         }
 
         //模版值
-        Map<String, Object> objectMap = new HashMap<>(64);
-        dealCommonCode(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, objectMap);
+        Map<String, Object> objectMap = new HashMap<>(128);
+        dealCommonCode(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, primarys, objectMap);
         dealLoadCode(primarys, primaryDesc, primaryJavaClass, objectMap);
         dealSelCode(selParams, selParamDescs, selParamJavaClass, selType, objectMap);
-        dealInsCode(insParams, insParamDescs, insParamJavaClass, objectMap);
+        dealInsCode(insParams, insParamDescs, insParamJavaClass, primarys, objectMap);
         dealUpdCode(primarys, primaryDesc, primaryJavaClass, updParams, updParamDescs, updParamJavaClass, objectMap);
         dealDelBatchCode(primarys, primaryDesc, primaryJavaClass, objectMap, hasDelBatch);
-        dealOtherCode(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, primarys, primaryDesc, primaryJavaClass, selParams, selParamDescs, selParamJavaClass, selType, insParams, insParamDescs, insParamJavaClass, updParams, updParamDescs, updParamJavaClass, objectMap);
+        dealOtherCode(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, params, paramDescs, paramJavaClass, primarys, primaryDesc, primaryJavaClass, selParams, selParamDescs, selParamJavaClass, selType, insParams, insParamDescs, insParamJavaClass, updParams, updParamDescs, updParamJavaClass, objectMap);
         //返回结果
         return getResult(driver, objectMap, configuration);
     }
@@ -344,7 +358,7 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
     /**
      * 交给子类实现，方便子类实现别的代码
      */
-    protected void dealOtherCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, List<String> primarys, List<String> primaryDesc, List<String> primaryJavaClass, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType, List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, List<String> updParams, List<String> updParamDescs, List<String> updParamJavaClass, Map<String, Object> objectMap) {
+    protected void dealOtherCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> primaryDesc, List<String> primaryJavaClass, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType, List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, List<String> updParams, List<String> updParamDescs, List<String> updParamJavaClass, Map<String, Object> objectMap) {
     }
 
     /**

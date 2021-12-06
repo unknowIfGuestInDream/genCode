@@ -82,7 +82,7 @@
             listeners: {
                 load: function (store, records, successful, eOpts) {
                     store.each(function (record) {
-                        if (record.get("COLUMN_ID") === 1 && record.get("COLUMN_NAME").indexOf("ID") > 0) {
+                        if (record.get("COLUMN_ID") === 1 && record.get("COLUMN_NAME").indexOf("ID") >= 0) {
                             record.set('IS_PRIMARY', 'Y');
                             record.set('IS_SEL', 'N');
                             record.set('IS_UPD', 'N');
@@ -741,7 +741,8 @@
                 'moduleDesc': Ext.getCmp('moduleDesc').getValue(),
                 'packageName': Ext.getCmp('packageName').getValue(),
                 'hasDelBatch': Ext.getCmp('hasDelBatch').getChecked()[0].inputValue,
-                'author': Ext.getCmp('author').getValue()
+                'author': Ext.getCmp('author').getValue(),
+                'random': Math.random()
             },
             callback: function (options, success, response) {
                 if (success) {
