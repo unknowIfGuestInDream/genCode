@@ -2,6 +2,7 @@ package com.newangels.gen.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
@@ -29,6 +30,7 @@ public class GitInfoController {
      * 获取git信息
      */
     @GetMapping("getGitInfo")
+    @Log
     public Map<String, Object> getGitInfo() throws IOException {
         Resource resource = new ClassPathResource("git.properties");
         if (!resource.exists()) {
