@@ -67,7 +67,7 @@ public class AntdCodeModel extends AbstractGenCodeModel {
     }
 
     /**
-     * 获取index.tsx
+     * 获取update.tsx
      */
     private String getUpdateTsx(Configuration configuration, Map<String, Object> objectMap) {
         return getFtlModel(configuration, objectMap, "update.ftl");

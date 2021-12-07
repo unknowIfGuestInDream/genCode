@@ -46,7 +46,7 @@ const UpdateSpecialEquMove = (props: any) => {
     setEquMove({...response.data[0]});
     Object.keys(equMoveData);
     Object.values(equMoveData);
-    Object.keys(equMoveData).forEach(key => formObj.setFieldsValue({[`${key}`]: equMoveData[key]}));
+    Object.keys(equMoveData).forEach(key => formObj.setFieldsValue({[`${r"${key}"}`]: equMoveData[key]}));
 
 	//给form表单中name为V_EQUCODE的赋值
     formObj.setFieldsValue({['V_EQUCODE']: equMoveData.V_EQUNAME});
