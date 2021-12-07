@@ -518,7 +518,8 @@
                 'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
                 'userName': Ext.getCmp('dataSource').valueModels[0].data.USERNAME,
                 'password': Ext.getCmp('dataSource').valueModels[0].data.PASSWORD,
-                'procedureNameList': procedureNameList //存储过程名称集合
+                'procedureNameList': procedureNameList, //存储过程名称集合
+                'random': Math.random()
             },
             callback: function (options, success, response) {
                 if (success) {

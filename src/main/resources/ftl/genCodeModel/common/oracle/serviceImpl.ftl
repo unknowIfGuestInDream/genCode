@@ -41,8 +41,8 @@ public class ${module}ServiceImpl implements ${module}Service {
     }
 
     @Override
-    public List<Map<String, Object>> select${module}(${selInParams}, Integer page, Integer limit) {
-        BaseSqlCriteria baseSqlCriteria = buildSqlCriteria${module}(false, ${selSqlParams});
+    public List<Map<String, Object>> select${module}(${selInParams}<#if selInParams?length gt 1>, </#if>Integer page, Integer limit) {
+        BaseSqlCriteria baseSqlCriteria = buildSqlCriteria${module}(false<#if selSqlParams?length gt 1>, </#if>${selSqlParams});
         String sql = baseSqlCriteria.getSql();
         Map<String, Object> paramMap = baseSqlCriteria.getParamMap();
         if (page != null && limit != null && limit > 0) {
@@ -55,7 +55,7 @@ public class ${module}ServiceImpl implements ${module}Service {
 
     @Override
     public int count${module}(${selInParams}) {
-        BaseSqlCriteria baseSqlCriteria = buildSqlCriteria${module}(true, ${selSqlParams});// 根据查询条件组装总数统计SQL语句
+        BaseSqlCriteria baseSqlCriteria = buildSqlCriteria${module}(true<#if selSqlParams?length gt 1>, </#if>${selSqlParams});// 根据查询条件组装总数统计SQL语句
         String sql = baseSqlCriteria.getSql();
         Map<String, Object> paramMap = baseSqlCriteria.getParamMap();
         return namedParameterJdbcTemplate.queryForObject(sql, paramMap, Integer.class);
@@ -91,7 +91,7 @@ public class ${module}ServiceImpl implements ${module}Service {
     }
 
 </#if>
-    private BaseSqlCriteria buildSqlCriteria${module}(boolean count, ${selInParams}) {
+    private BaseSqlCriteria buildSqlCriteria${module}(boolean count<#if selInParams?length gt 1>, </#if>${selInParams}) {
         String sql;
         Map<String, Object> paramMap = new HashMap<>(${selMapSize});
         if (count) {
