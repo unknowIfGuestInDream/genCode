@@ -45,8 +45,8 @@ public class ${module}Controller {
      */
     @GetMapping("select${module}")
     @Log
-    public Map<String, Object> select${module}(${selInParams}, Integer current, Integer pageSize) {
-        List<Map<String, Object>> list = ${module?uncap_first}Service.select${module}(${selSqlParams}, current, pageSize);
+    public Map<String, Object> select${module}(${selInParams}<#if selInParams?length gt 1>, </#if>Integer current, Integer limit) {
+        List<Map<String, Object>> list = ${module?uncap_first}Service.select${module}(${selSqlParams}<#if selSqlParams?length gt 1>, </#if>current, pageSize);
         int total = 0;
         if (pageSize != null && pageSize > 0) {
             total = ${module?uncap_first}Service.count${module}(${selSqlParams});
@@ -59,8 +59,8 @@ public class ${module}Controller {
      */
     @PostMapping("insert${module}")
     @Log
-    public Map<String, Object> insert${module}(${insInParams}) {
-        if (${module?uncap_first}Service.insert${module}(${insSqlParams}) == 0) {
+    public Map<String, Object> insert${module}(${insConInParams}) {
+        if (${module?uncap_first}Service.insert${module}(${insConSqlParams}) == 0) {
             return BaseUtils.failed("新增${moduleDesc}失败");
         }
         return BaseUtils.success();
