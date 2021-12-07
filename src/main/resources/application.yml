@@ -3,6 +3,9 @@ server:
   servlet:
     context-path: /gen
   undertow:
+    accesslog:
+      enabled: true # 是否打开 undertow 日志，默认为 false
+      dir: logs/gen # 设置访问日志所在目录
     threads:
       io: 8
       worker: 256

@@ -9,21 +9,21 @@
     <property name="LOG_FILE_PATH" value="logs"/>
     <contextName>${APP_NAME}</contextName>
     <!--每天记录日志到文件appender-->
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>ERROR</level>
-            <onMatch>DENY</onMatch>
-            <onMismatch>ACCEPT</onMismatch>
-        </filter>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>logs/gen/info/${APP_NAME}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-            <maxHistory>30</maxHistory>
-            <maxFileSize>2GB</maxFileSize>
-        </rollingPolicy>
-        <encoder>
-            <pattern>${FILE_LOG_PATTERN}</pattern>
-        </encoder>
-    </appender>
+    <!--    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+    <!--        <filter class="ch.qos.logback.classic.filter.LevelFilter">-->
+    <!--            <level>ERROR</level>-->
+    <!--            <onMatch>DENY</onMatch>-->
+    <!--            <onMismatch>ACCEPT</onMismatch>-->
+    <!--        </filter>-->
+    <!--        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">-->
+    <!--            <fileNamePattern>logs/gen/info/${APP_NAME}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>-->
+    <!--            <maxHistory>30</maxHistory>-->
+    <!--            <maxFileSize>2GB</maxFileSize>-->
+    <!--        </rollingPolicy>-->
+    <!--        <encoder>-->
+    <!--            <pattern>${FILE_LOG_PATTERN}</pattern>-->
+    <!--        </encoder>-->
+    <!--    </appender>-->
 
     <appender name="FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -44,7 +44,7 @@
         <discardingThreshold>0</discardingThreshold>
         <queueSize>512</queueSize>
         <neverBlock>true</neverBlock>
-        <appender-ref ref="FILE"/>
+        <!--        <appender-ref ref="FILE"/>-->
         <appender-ref ref="FILE_ERROR"/>
     </appender>
 
