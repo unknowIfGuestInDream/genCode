@@ -100,6 +100,11 @@ public class ${module}ServiceImpl implements ${module}Service {
             sql = "select * from ${tableName} where 1 = 1";
         }
 ${selBuildParams}
+<#if orderBy??>
+        if (!count) {
+            sql += " order by ${orderBy}";
+        }
+</#if>
         return new BaseSqlCriteria(sql, paramMap);
     }
 }

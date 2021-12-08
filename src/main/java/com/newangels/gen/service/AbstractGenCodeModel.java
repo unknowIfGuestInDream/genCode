@@ -129,6 +129,22 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
     }
 
     /**
+     * 构建排序sql
+     *
+     * @param orderParams     排序参数
+     * @param orderParamTypes 排序类型（DESC/ASC）
+     * @param objectMap       过程模版值
+     */
+    protected void dealSelOrderBy(List<String> orderParams, List<String> orderParamTypes, Map<String, Object> objectMap) {
+        if (orderParams.size() == 0) return;
+        StringJoiner orderBy = new StringJoiner(", ");
+        for (int i = 0, length = orderParams.size(); i < length; i++) {
+            orderBy.add(orderParams.get(i) + " " + orderParamTypes.get(i));
+        }
+        objectMap.put("orderBy", orderBy.toString());
+    }
+
+    /**
      * 组装查询代码
      *
      * @param selBuildParams    StringJoiner
@@ -278,31 +294,34 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
     /**
      * 根据表生成后台代码
      *
-     * @param tableName      表名
-     * @param tableDesc      表描述
-     * @param moduleName     模块名称
-     * @param moduleDesc     模块描述
-     * @param packageName    包名
-     * @param author         作者
-     * @param hasDelBatch    是否包含批量删除
-     * @param driver         数据库驱动
-     * @param params         参数
-     * @param paramDescs     字段描述
-     * @param paramJavaClass 参数对应类对象
-     * @param priParamIndex  主键列索引
-     * @param selParamsIndex 查询列索引
-     * @param selType        查询类型(0精确/1模糊/2区间查询)
-     * @param insParamIndex  新增列索引
-     * @param updParamIndex  修改列索引
-     * @param configuration  ftl模板引擎配置
+     * @param tableName       表名
+     * @param tableDesc       表描述
+     * @param moduleName      模块名称
+     * @param moduleDesc      模块描述
+     * @param packageName     包名
+     * @param author          作者
+     * @param hasDelBatch     是否包含批量删除
+     * @param driver          数据库驱动
+     * @param params          参数
+     * @param paramDescs      字段描述
+     * @param paramJavaClass  参数对应类对象
+     * @param priParamIndex   主键列索引
+     * @param selParamsIndex  查询列索引
+     * @param selType         查询类型(0精确/1模糊/2区间查询)
+     * @param insParamIndex   新增列索引
+     * @param updParamIndex   修改列索引
+     * @param orderParamIndex 排序列索引
+     * @param orderParamTypes 排序类型
+     * @param configuration   ftl模板引擎配置
      */
-    public Map<String, Object> genCodeByTable(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, String driver, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<Integer> priParamIndex, List<Integer> selParamsIndex, List<Integer> selType, List<Integer> insParamIndex, List<Integer> updParamIndex, Configuration configuration) {
+    public Map<String, Object> genCodeByTable(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, String driver, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<Integer> priParamIndex, List<Integer> selParamsIndex, List<Integer> selType, List<Integer> insParamIndex, List<Integer> updParamIndex, List<Integer> orderParamIndex, List<String> orderParamTypes, Configuration configuration) {
         //一个集合包含所有字段，以及其它相关的存储集合的索引（0开始）
         //通过遍历所有字段集合来为相关集合赋值
         int priLength = priParamIndex.size();
         int selLength = selParamsIndex == null ? 0 : selParamsIndex.size();
         int insLength = insParamIndex.size();
         int updLength = updParamIndex.size();
+        int orderLength = orderParamIndex == null ? 0 : orderParamIndex.size();
         List<String> primarys = new ArrayList<>(priLength);
         List<String> primaryDesc = new ArrayList<>(priLength);
         List<String> primaryJavaClass = new ArrayList<>(priLength);
@@ -315,6 +334,7 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
         List<String> updParams = new ArrayList<>(updLength);
         List<String> updParamDescs = new ArrayList<>(updLength);
         List<String> updParamJavaClass = new ArrayList<>(updLength);
+        List<String> orderParams = new ArrayList<>(orderLength);
 
         for (int i = 0, length = params.size(); i < length; i++) {
             if (i < priLength) {
@@ -337,7 +357,10 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
                 updParamDescs.add(paramDescs.get(updParamIndex.get(i)));
                 updParamJavaClass.add(paramJavaClass.get(updParamIndex.get(i)));
             }
-            if (i >= priLength && i >= selLength && i >= insLength && i >= updLength) {
+            if (i < orderLength) {
+                orderParams.add(params.get(orderParamIndex.get(i)));
+            }
+            if (i >= priLength && i >= selLength && i >= insLength && i >= updLength && i >= orderLength) {
                 break;
             }
         }
@@ -347,6 +370,7 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
         dealCommonCode(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, primarys, objectMap);
         dealLoadCode(primarys, primaryDesc, primaryJavaClass, objectMap);
         dealSelCode(selParams, selParamDescs, selParamJavaClass, selType, objectMap);
+        dealSelOrderBy(orderParams, orderParamTypes, objectMap);
         dealInsCode(insParams, insParamDescs, insParamJavaClass, primarys, objectMap);
         dealUpdCode(primarys, primaryDesc, primaryJavaClass, updParams, updParamDescs, updParamJavaClass, objectMap);
         dealDelBatchCode(primarys, primaryDesc, primaryJavaClass, objectMap, hasDelBatch);

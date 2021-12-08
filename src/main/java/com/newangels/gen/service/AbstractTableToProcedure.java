@@ -137,26 +137,29 @@ public abstract class AbstractTableToProcedure extends AbstractFreeMarkerTemplat
     /**
      * 根据表生成存储过程
      *
-     * @param tableName      表名
-     * @param tableDesc      表描述
-     * @param params         参数
-     * @param paramTypes     参数类型
-     * @param paramDescs     字段描述
-     * @param priParamIndex  主键列索引
-     * @param selParamsIndex 查询列索引
-     * @param selType        查询类型(0精确/1模糊/2区间查询)
-     * @param insParamIndex  新增列索引
-     * @param updParamIndex  修改列索引
-     * @param nameConvent    命名规范
-     * @param configuration  ftl模板引擎配置
+     * @param tableName       表名
+     * @param tableDesc       表描述
+     * @param params          参数
+     * @param paramTypes      参数类型
+     * @param paramDescs      字段描述
+     * @param priParamIndex   主键列索引
+     * @param selParamsIndex  查询列索引
+     * @param selType         查询类型(0精确/1模糊/2区间查询)
+     * @param insParamIndex   新增列索引
+     * @param updParamIndex   修改列索引
+     * @param orderParamIndex 排序列索引
+     * @param orderParamTypes 排序类型
+     * @param nameConvent     命名规范
+     * @param configuration   ftl模板引擎配置
      */
-    public Map<String, Object> genProceduresByTable(String tableName, String tableDesc, List<String> params, List<String> paramTypes, List<String> paramDescs, List<Integer> priParamIndex, List<Integer> selParamsIndex, List<Integer> selType, List<Integer> insParamIndex, List<Integer> updParamIndex, NameConventService nameConvent, Configuration configuration) {
+    public Map<String, Object> genProceduresByTable(String tableName, String tableDesc, List<String> params, List<String> paramTypes, List<String> paramDescs, List<Integer> priParamIndex, List<Integer> selParamsIndex, List<Integer> selType, List<Integer> insParamIndex, List<Integer> updParamIndex, List<Integer> orderParamIndex, List<String> orderParamTypes, NameConventService nameConvent, Configuration configuration) {
         //一个集合包含所有字段，以及其它相关的存储集合的索引（0开始）
         //通过遍历所有字段集合来为相关集合赋值
         int priLength = priParamIndex.size();
         int selLength = selParamsIndex == null ? 0 : selParamsIndex.size();
         int insLength = insParamIndex.size();
         int updLength = updParamIndex.size();
+        int orderLength = orderParamIndex == null ? 0 : orderParamIndex.size();
         List<String> primarys = new ArrayList<>(priLength);
         List<String> primaryTypes = new ArrayList<>(priLength);
         List<String> primaryDesc = new ArrayList<>(priLength);
@@ -169,6 +172,7 @@ public abstract class AbstractTableToProcedure extends AbstractFreeMarkerTemplat
         List<String> updParams = new ArrayList<>(updLength);
         List<String> updParamTypes = new ArrayList<>(updLength);
         List<String> updParamDescs = new ArrayList<>(updLength);
+        List<String> orderParams = new ArrayList<>(orderLength);
 
         for (int i = 0, length = params.size(); i < length; i++) {
             if (i < priLength) {
@@ -191,7 +195,10 @@ public abstract class AbstractTableToProcedure extends AbstractFreeMarkerTemplat
                 updParamTypes.add(paramTypes.get(updParamIndex.get(i)));
                 updParamDescs.add(paramDescs.get(updParamIndex.get(i)));
             }
-            if (i >= priLength && i >= selLength && i >= insLength && i >= updLength) {
+            if (i < orderLength) {
+                orderParams.add(params.get(orderParamIndex.get(i)));
+            }
+            if (i >= priLength && i >= selLength && i >= insLength && i >= updLength && i >= orderLength) {
                 break;
             }
         }
@@ -202,6 +209,7 @@ public abstract class AbstractTableToProcedure extends AbstractFreeMarkerTemplat
         dealGetProcedure(tableName, primarys, primaryTypes, primaryDesc, nameConvent, objectMap);
         dealSelProcedure(tableName, selParams, selParamTypes, selParamDescs, selType, nameConvent, objectMap);
         dealSelWithPageProcedure(tableName, selParams, selParamTypes, selParamDescs, selType, nameConvent, objectMap);
+        dealSelOrderBy(orderParams, orderParamTypes, objectMap);
         dealInsProcedure(tableName, insParams, insParamTypes, insParamDescs, nameConvent, objectMap);
         dealUpdProcedure(tableName, primarys, primaryTypes, primaryDesc, updParams, updParamTypes, updParamDescs, nameConvent, objectMap);
         dealSaveProcedure(tableName, insParams, insParamTypes, insParamDescs, primarys, primaryTypes, primaryDesc, updParams, updParamTypes, updParamDescs, nameConvent, objectMap);
@@ -219,6 +227,25 @@ public abstract class AbstractTableToProcedure extends AbstractFreeMarkerTemplat
         result.put("save", getSaveProcedure(configuration, objectMap));
         result.put("delete", getDelProcedure(configuration, objectMap));
         return result;
+    }
+
+    /**
+     * 构建排序sql
+     *
+     * @param orderParams     排序参数
+     * @param orderParamTypes 排序类型（DESC/ASC）
+     * @param objectMap       过程模版值
+     */
+    protected void dealSelOrderBy(List<String> orderParams, List<String> orderParamTypes, Map<String, Object> objectMap) {
+        if (orderParams.size() == 0) return;
+        StringBuilder orderBy = new StringBuilder();
+        StringJoiner sj = new StringJoiner(", ");
+        orderBy.append("\n      ORDER BY ");
+        for (int i = 0, length = orderParams.size(); i < length; i++) {
+            sj.add(orderParams.get(i) + " " + orderParamTypes.get(i));
+        }
+        orderBy.append(sj.toString());
+        objectMap.put("orderBy", orderBy.toString());
     }
 
     /**
