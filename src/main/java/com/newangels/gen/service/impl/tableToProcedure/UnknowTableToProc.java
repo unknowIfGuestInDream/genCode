@@ -63,7 +63,7 @@ public class UnknowTableToProc extends AbstractTableToProcedure {
     }
 
     @Override
-    public Map<String, Object> genProceduresByTable(String tableName, String tableDesc, List<String> params, List<String> paramTypes, List<String> paramDescs, List<Integer> priParamIndex, List<Integer> selParamsIndex, List<Integer> selType, List<Integer> insParamIndex, List<Integer> updParamIndex, NameConventService nameConvent, Configuration configuration) {
+    public Map<String, Object> genProceduresByTable(String tableName, String tableDesc, List<String> params, List<String> paramTypes, List<String> paramDescs, List<Integer> priParamIndex, List<Integer> selParamsIndex, List<Integer> selType, List<Integer> insParamIndex, List<Integer> updParamIndex, List<Integer> orderParamIndex, List<String> orderParamTypes, NameConventService nameConvent, Configuration configuration) {
         throw new UnSupportedDataSourceException("未知数据库, 不支持当前数据库生成存储过程");
     }
 

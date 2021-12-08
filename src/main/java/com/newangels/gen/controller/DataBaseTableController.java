@@ -127,15 +127,17 @@ public class DataBaseTableController {
      * @param selType         查询条件类型
      * @param insParamIndex   新增列索引
      * @param updParamIndex   修改列索引
+     * @param orderParamIndex 排序列索引
+     * @param orderParamTypes 排序类型
      */
     @PostMapping("genProceduresByTable")
     @Log
-    public Map<String, Object> genProceduresByTable(String nameConventType, String driver, String tableName, String tableDesc, @RequestParam("params") List<String> params, @RequestParam("paramTypes") List<String> paramTypes, @RequestParam("paramDescs") List<String> paramDescs, @RequestParam("priParamIndex") List<Integer> priParamIndex, @RequestParam(value = "selParamsIndex", required = false) List<Integer> selParamsIndex, @RequestParam(value = "selType", required = false) List<Integer> selType, @RequestParam("insParamIndex") List<Integer> insParamIndex, @RequestParam("updParamIndex") List<Integer> updParamIndex) {
+    public Map<String, Object> genProceduresByTable(String nameConventType, String driver, String tableName, String tableDesc, @RequestParam("params") List<String> params, @RequestParam("paramTypes") List<String> paramTypes, @RequestParam("paramDescs") List<String> paramDescs, @RequestParam("priParamIndex") List<Integer> priParamIndex, @RequestParam(value = "selParamsIndex", required = false) List<Integer> selParamsIndex, @RequestParam(value = "selType", required = false) List<Integer> selType, @RequestParam("insParamIndex") List<Integer> insParamIndex, @RequestParam("updParamIndex") List<Integer> updParamIndex, @RequestParam(value = "orderParamIndex", required = false) List<Integer> orderParamIndex, @RequestParam(value = "orderParamTypes", required = false) List<String> orderParamTypes) {
         //获取命名规范
         NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromCode(nameConventType));
         //获取表生成存储过程实现类
         AbstractTableToProcedure tableToProcedure = AbstractTableToProcedureFactory.getTableToProcedure(DataBaseType.fromTypeName(driver));
-        return BaseUtils.success(tableToProcedure.genProceduresByTable(tableName, tableDesc, params, paramTypes, paramDescs, priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex, nameConvent, freeMarkerConfigurer.getConfiguration()));
+        return BaseUtils.success(tableToProcedure.genProceduresByTable(tableName, tableDesc, params, paramTypes, paramDescs, priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex, orderParamIndex, orderParamTypes, nameConvent, freeMarkerConfigurer.getConfiguration()));
     }
 
     /**

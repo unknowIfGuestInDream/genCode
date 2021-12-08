@@ -63,14 +63,16 @@ public class GenCodeController {
      * @param selType          查询条件类型
      * @param insParamIndex    新增列索引
      * @param updParamIndex    修改列索引
+     * @param orderParamIndex  排序列索引
+     * @param orderParamTypes  排序类型
      */
     @PostMapping("genCodeByTable")
     @Log
-    public Map<String, Object> genCodeByTable(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, boolean hasDelBatch, String genCodeModelType, String driver, @RequestParam(required = false, defaultValue = "admin") String author, @RequestParam("params") List<String> params, @RequestParam("paramJavaClass") List<String> paramJavaClass, @RequestParam("paramDescs") List<String> paramDescs, @RequestParam("priParamIndex") List<Integer> priParamIndex, @RequestParam(value = "selParamsIndex", required = false) List<Integer> selParamsIndex, @RequestParam(value = "selType", required = false) List<Integer> selType, @RequestParam("insParamIndex") List<Integer> insParamIndex, @RequestParam("updParamIndex") List<Integer> updParamIndex) {
+    public Map<String, Object> genCodeByTable(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, boolean hasDelBatch, String genCodeModelType, String driver, @RequestParam(required = false, defaultValue = "admin") String author, @RequestParam("params") List<String> params, @RequestParam("paramJavaClass") List<String> paramJavaClass, @RequestParam("paramDescs") List<String> paramDescs, @RequestParam("priParamIndex") List<Integer> priParamIndex, @RequestParam(value = "selParamsIndex", required = false) List<Integer> selParamsIndex, @RequestParam(value = "selType", required = false) List<Integer> selType, @RequestParam("insParamIndex") List<Integer> insParamIndex, @RequestParam("updParamIndex") List<Integer> updParamIndex, @RequestParam(value = "orderParamIndex", required = false) List<Integer> orderParamIndex, @RequestParam(value = "orderParamTypes", required = false) List<String> orderParamTypes) {
         moduleName = BaseUtils.toUpperCase4Index(moduleName);
         //获取生成代码模版
         AbstractGenCodeModel codeModel = AbstractGenCodeModelFactory.getGenCodeModel(GenCodeModelType.fromCode(genCodeModelType));
-        Map<String, Object> result = codeModel.genCodeByTable(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, driver, params, paramDescs, paramJavaClass, priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex, freeMarkerConfigurer.getConfiguration());
+        Map<String, Object> result = codeModel.genCodeByTable(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, driver, params, paramDescs, paramJavaClass, priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex, orderParamIndex, orderParamTypes, freeMarkerConfigurer.getConfiguration());
         return BaseUtils.success(result);
     }
 
@@ -79,7 +81,7 @@ public class GenCodeController {
      */
     @GetMapping("downloadCodeByTable")
     @Log
-    public void downloadCodeByTable(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, boolean hasDelBatch, String genCodeModelType, String driver, @RequestParam(required = false, defaultValue = "admin") String author, @RequestParam("params") List<String> params, @RequestParam("paramJavaClass") List<String> paramJavaClass, @RequestParam("paramDescs") List<String> paramDescs, @RequestParam("priParamIndex") List<Integer> priParamIndex, @RequestParam(value = "selParamsIndex", required = false) List<Integer> selParamsIndex, @RequestParam(value = "selType", required = false) List<Integer> selType, @RequestParam("insParamIndex") List<Integer> insParamIndex, @RequestParam("updParamIndex") List<Integer> updParamIndex, HttpServletRequest request, HttpServletResponse response) {
+    public void downloadCodeByTable(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, boolean hasDelBatch, String genCodeModelType, String driver, @RequestParam(required = false, defaultValue = "admin") String author, @RequestParam("params") List<String> params, @RequestParam("paramJavaClass") List<String> paramJavaClass, @RequestParam("paramDescs") List<String> paramDescs, @RequestParam("priParamIndex") List<Integer> priParamIndex, @RequestParam(value = "selParamsIndex", required = false) List<Integer> selParamsIndex, @RequestParam(value = "selType", required = false) List<Integer> selType, @RequestParam("insParamIndex") List<Integer> insParamIndex, @RequestParam("updParamIndex") List<Integer> updParamIndex, @RequestParam(value = "orderParamIndex", required = false) List<Integer> orderParamIndex, @RequestParam(value = "orderParamTypes", required = false) List<String> orderParamTypes, HttpServletRequest request, HttpServletResponse response) {
         try {
             String zipName = moduleName + ".zip";
             moduleName = BaseUtils.toUpperCase4Index(moduleName);
@@ -92,7 +94,7 @@ public class GenCodeController {
             ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
             //获取生成代码模版
             AbstractGenCodeModel codeModel = AbstractGenCodeModelFactory.getGenCodeModel(GenCodeModelType.fromCode(genCodeModelType));
-            Map<String, Object> map = codeModel.genCodeByTable(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, driver, params, paramDescs, paramJavaClass, priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex, freeMarkerConfigurer.getConfiguration());
+            Map<String, Object> map = codeModel.genCodeByTable(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, driver, params, paramDescs, paramJavaClass, priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex, orderParamIndex, orderParamTypes, freeMarkerConfigurer.getConfiguration());
             List<String> list = (List<String>) map.get("list");
             //BaseUtils，BaseSqlCriteria不下载，公用后台代码补充.java后缀，其他自定义文件名称无操作
             for (String name : list) {

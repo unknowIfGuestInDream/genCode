@@ -5,7 +5,7 @@ ${selectInParams}
 BEGIN
   OPEN ${result} FOR
     SELECT *
-      FROM ${tableName}${selectSqlWhere};
+      FROM ${tableName}${selectSqlWhere}${orderBy!};
   ${message} := 'success';
 EXCEPTION
   WHEN OTHERS THEN

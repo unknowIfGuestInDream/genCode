@@ -14,6 +14,7 @@
     <script type="text/javascript" src="public/js/store/nameConventType.js"></script>
     <script type="text/javascript" src="public/js/store/yesNoStore.js"></script>
     <script type="text/javascript" src="public/js/store/selTypeStore.js"></script>
+    <script type="text/javascript" src="public/js/store/orderTypeStore.js"></script>
     <script type="text/javascript" src="public/js/ajax/clearCaches.js"></script>
 </head>
 <body>
@@ -64,7 +65,7 @@
             autoLoad: false,//true为自动加载
             loading: false,//自动加载时必须为true
             pageSize: -1,
-            fields: ['COLUMN_NAME', 'DATA_TYPE', 'DATA_LENGTH', 'NULLABLE', 'DATA_DEFAULT', 'NUM_DISTINCT', 'LOW_VALUE', 'HIGH_VALUE', 'NUM_NULLS', 'LAST_ANALYZED', 'AVG_COL_LEN', 'COMMENTS', 'COLUMN_ID', 'IS_PRIMARY', 'IS_SEL', 'SELTYPE', 'IS_INS', 'IS_UPD'],
+            fields: ['COLUMN_NAME', 'DATA_TYPE', 'DATA_LENGTH', 'NULLABLE', 'DATA_DEFAULT', 'NUM_DISTINCT', 'LOW_VALUE', 'HIGH_VALUE', 'NUM_NULLS', 'LAST_ANALYZED', 'AVG_COL_LEN', 'COMMENTS', 'COLUMN_ID', 'IS_PRIMARY', 'IS_SEL', 'SELTYPE', 'IS_INS', 'IS_UPD', 'ORDERTYPE'],
             proxy: {
                 url: '/gen/selectTableInfo',
                 type: 'ajax',
@@ -93,6 +94,7 @@
                             record.set('SELTYPE', '0');
                         }
                         record.set('IS_INS', 'Y');
+                        record.set('ORDERTYPE', '');
                     })
                 }
             }
@@ -365,6 +367,18 @@
                     forceSelection: true
                 }
             }, {
+                text: '排序类型',
+                width: 80,
+                dataIndex: 'ORDERTYPE',
+                editor: {
+                    xtype: 'combo',
+                    store: orderTypeStore,
+                    queryMode: 'local',
+                    valueField: 'CODE_',
+                    displayField: 'NAME_',
+                    forceSelection: true
+                }
+            }, {
                 text: '是新增字段',
                 width: 100,
                 dataIndex: 'IS_INS',
@@ -619,6 +633,8 @@
         var selType = [];
         var insParamIndex = [];
         var updParamIndex = [];
+        var orderParamIndex = [];
+        var orderParamTypes = [];
 
         var records = Ext.getCmp('tableInfoPanel').store.data.items;
 
@@ -635,6 +651,8 @@
             records[i].data.SELTYPE !== "" ? selType.push(records[i].data.SELTYPE) : 0;
             records[i].data.IS_INS === "Y" ? insParamIndex.push(records[i].data.COLUMN_ID - 1) : 0;
             records[i].data.IS_UPD === "Y" ? updParamIndex.push(records[i].data.COLUMN_ID - 1) : 0;
+            records[i].data.ORDERTYPE !== "" ? orderParamIndex.push(records[i].data.COLUMN_ID - 1) : 0;
+            records[i].data.ORDERTYPE !== "" ? orderParamTypes.push(records[i].data.ORDERTYPE) : 0;
         }
 
         if (params.length === 0) {
@@ -659,6 +677,8 @@
                 'selType': selType,
                 'insParamIndex': insParamIndex,
                 'updParamIndex': updParamIndex,
+                'orderParamIndex': orderParamIndex,
+                'orderParamTypes': orderParamTypes,
                 'random': Math.random()
             },
             callback: function (options, success, response) {
