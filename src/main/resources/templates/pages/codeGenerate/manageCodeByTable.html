@@ -737,6 +737,10 @@
             Ext.MessageBox.alert('警告', '不支持当前数据库表生成过程', Ext.MessageBox.WARNING);
             return;
         }
+        if (priParamIndex.length === 0) {
+            Ext.MessageBox.alert('警告', '缺少主键, 无法生成代码', Ext.MessageBox.WARNING);
+            return;
+        }
 
         Ext.Ajax.request({
             url: '/gen/genCodeByTable',
