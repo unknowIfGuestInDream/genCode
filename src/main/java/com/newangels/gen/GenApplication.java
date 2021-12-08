@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class GenApplication {
 
     private static final String TIPS = "\n\n" +
-            "******************** 代码生成3.0启动成功 ********************\n";
+            "******************** 代码生成3.2启动成功 ********************\n";
 
     public static void main(String[] args) {
         SpringApplication.run(GenApplication.class, args);
