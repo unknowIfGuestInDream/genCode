@@ -102,7 +102,6 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
 
     /**
      * 生成查询代码值
-     * //todo 区间查询时参树会修改
      *
      * @param selParams         参数
      * @param selParamDescs     字段描述
@@ -116,9 +115,19 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
         StringJoiner selNote = new StringJoiner(noteJoiner);
         StringJoiner selBuildParams = new StringJoiner("\n");
         for (int i = 0, length = selParams.size(); i < length; i++) {
-            selInParams.add(selParamJavaClass.get(i) + " " + selParams.get(i));
-            selSqlParams.add(selParams.get(i));
-            selNote.add("@param " + selParams.get(i) + " " + selParamDescs.get(i));
+            //为区间查询
+            if (selType.get(i) == 2) {
+                selInParams.add(selParamJavaClass.get(i) + " START_" + selParams.get(i));
+                selInParams.add(selParamJavaClass.get(i) + " END_" + selParams.get(i));
+                selSqlParams.add("START_" + selParams.get(i));
+                selSqlParams.add("END_" + selParams.get(i));
+                selNote.add("@param START_" + selParams.get(i) + " 开始" + selParamDescs.get(i));
+                selNote.add("@param END_" + selParams.get(i) + " 结束" + selParamDescs.get(i));
+            } else {
+                selInParams.add(selParamJavaClass.get(i) + " " + selParams.get(i));
+                selSqlParams.add(selParams.get(i));
+                selNote.add("@param " + selParams.get(i) + " " + selParamDescs.get(i));
+            }
             buildSelParam(selBuildParams, selParams.get(i), selParamJavaClass.get(i), selType.get(i));
         }
         objectMap.put("selInParams", selInParams.toString());
@@ -153,22 +162,42 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
      * @param selType           查询类型(0精确/1模糊/2区间查询)
      */
     protected void buildSelParam(StringJoiner selBuildParams, String selParam, String selParamJavaClass, Integer selType) {
-        //为String时调用StringUtils.isNotEmpty判空
-        if (JavaClass.fromCode(selParamJavaClass) == JavaClass.String) {
-            selBuildParams.add("        if (StringUtils.isNotEmpty(" + selParam + ")) {");
+        //为区间查询
+        if (selType == 2) {
+            //为String时调用StringUtils.isNotEmpty判空
+            if (JavaClass.fromCode(selParamJavaClass) == JavaClass.String) {
+                selBuildParams.add("        if (StringUtils.isNotEmpty(START_" + selParam + ")) {");
+            } else {
+                selBuildParams.add("        if (START_" + selParam + " != null)) {");
+            }
+            selBuildParams.add("            sql += \" and " + selParam + " >= :START_" + selParam + "\";");
+            selBuildParams.add("            paramMap.put(\"START_" + selParam + "\", START_" + selParam + ");");
+            selBuildParams.add("        }");
+
+            if (JavaClass.fromCode(selParamJavaClass) == JavaClass.String) {
+                selBuildParams.add("        if (StringUtils.isNotEmpty(END_" + selParam + ")) {");
+            } else {
+                selBuildParams.add("        if (END_" + selParam + " != null)) {");
+            }
+            selBuildParams.add("            sql += \" and " + selParam + " <= :END_" + selParam + "\";");
+            selBuildParams.add("            paramMap.put(\"END_" + selParam + "\", END_" + selParam + ");");
+            selBuildParams.add("        }");
         } else {
-            selBuildParams.add("        if (" + selParam + " != null)) {");
+            //为String时调用StringUtils.isNotEmpty判空
+            if (JavaClass.fromCode(selParamJavaClass) == JavaClass.String) {
+                selBuildParams.add("        if (StringUtils.isNotEmpty(" + selParam + ")) {");
+            } else {
+                selBuildParams.add("        if (" + selParam + " != null)) {");
+            }
+            if (selType == 0) {
+                selBuildParams.add("            sql += \" and " + selParam + " = :" + selParam + "\";");
+            } else if (selType == 1) {
+                selBuildParams.add("            sql += \" and " + selParam + " like '%' || :" + selParam + " || '%'\";");
+            }
+            selBuildParams.add("            paramMap.put(\"" + selParam + "\", " + selParam + ");");
+            selBuildParams.add("        }");
         }
-        if (selType == 0) {
-            selBuildParams.add("            sql += \" and " + selParam + " = :" + selParam + "\";");
-        } else if (selType == 1) {
-            selBuildParams.add("            sql += \" and " + selParam + " like '%' || :" + selParam + " || '%'\";");
-        } else if (selType == 2) {
-            //todo 区间查询暂时未实现
-            selBuildParams.add("            sql += \" and " + selParam + " = :" + selParam + "\";");
-        }
-        selBuildParams.add("            paramMap.put(\"" + selParam + "\", " + selParam + ");");
-        selBuildParams.add("        }");
+
     }
 
     /**
