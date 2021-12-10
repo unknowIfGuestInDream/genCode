@@ -86,19 +86,55 @@ public class CommonCodeModel extends AbstractGenCodeModel {
      */
     private void dealSelFormAndParam(StringJoiner selForm, StringJoiner selExtraParams, String moduleName, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType) {
         for (int i = 0, length = selParams.size(); i < length; i++) {
-            selExtraParams.add("'" + selParams.get(i) + "': Ext.getCmp('" + selParams.get(i) + "').getValue()");
-            selForm.add("{\n" +
-                    "                xtype: '" + getFormXtype(JavaClass.fromCode(selParamJavaClass.get(i))) + "',\n" +
-                    "                id: '" + selParams.get(i) + "',\n" +
-                    "                fieldLabel: '" + selParamDescs.get(i) + "',\n" +
-                    "                listeners: {\n" +
-                    "                    specialKey: function (field, e) {\n" +
-                    "                        if (e.getKey() === Ext.EventObject.ENTER) {\n" +
-                    "                            _select" + moduleName + "();\n" +
-                    "                        }\n" +
-                    "                    }\n" +
-                    "                }\n" +
-                    "            }");
+            //为区间查询
+            if (selType.get(i) == 2) {
+                selExtraParams.add("'START_" + selParams.get(i) + "': Ext.getCmp('START_" + selParams.get(i) + "').getValue()");
+                selExtraParams.add("'END_" + selParams.get(i) + "': Ext.getCmp('END_" + selParams.get(i) + "').getValue()");
+                selForm.add("{\n" +
+                        "                xtype: '" + getFormXtype(JavaClass.fromCode(selParamJavaClass.get(i))) + "',\n" +
+                        "                id: 'START_" + selParams.get(i) + "',\n" +
+                        "                fieldLabel: '开始" + selParamDescs.get(i) + "',\n" +
+                        "                listeners: {\n" +
+                        "                    specialKey: function (field, e) {\n" +
+                        "                        if (e.getKey() === Ext.EventObject.ENTER) {\n" +
+                        "                            _select" + moduleName + "();\n" +
+                        "                        }\n" +
+                        "                    },\n" +
+                        "                    change: function (combo, records) {\n" +
+                        "                        Ext.getCmp('END_" + selParams.get(i) + "').setMinValue(Ext.getCmp('START_" + selParams.get(i) + "').getValue());" +
+                        "                    },\n" +
+                        "                }\n" +
+                        "            }");
+                selForm.add("{\n" +
+                        "                xtype: '" + getFormXtype(JavaClass.fromCode(selParamJavaClass.get(i))) + "',\n" +
+                        "                id: 'END_" + selParams.get(i) + "',\n" +
+                        "                fieldLabel: '结束" + selParamDescs.get(i) + "',\n" +
+                        "                listeners: {\n" +
+                        "                    specialKey: function (field, e) {\n" +
+                        "                        if (e.getKey() === Ext.EventObject.ENTER) {\n" +
+                        "                            _select" + moduleName + "();\n" +
+                        "                        }\n" +
+                        "                    },\n" +
+                        "                    change: function (combo, records) {\n" +
+                        "                        Ext.getCmp('START_" + selParams.get(i) + "').setMaxValue(Ext.getCmp('END_" + selParams.get(i) + "').getValue());" +
+                        "                    },\n" +
+                        "                }\n" +
+                        "            }");
+            } else {
+                selExtraParams.add("'" + selParams.get(i) + "': Ext.getCmp('" + selParams.get(i) + "').getValue()");
+                selForm.add("{\n" +
+                        "                xtype: '" + getFormXtype(JavaClass.fromCode(selParamJavaClass.get(i))) + "',\n" +
+                        "                id: '" + selParams.get(i) + "',\n" +
+                        "                fieldLabel: '" + selParamDescs.get(i) + "',\n" +
+                        "                listeners: {\n" +
+                        "                    specialKey: function (field, e) {\n" +
+                        "                        if (e.getKey() === Ext.EventObject.ENTER) {\n" +
+                        "                            _select" + moduleName + "();\n" +
+                        "                        }\n" +
+                        "                    }\n" +
+                        "                }\n" +
+                        "            }");
+            }
         }
     }
 
