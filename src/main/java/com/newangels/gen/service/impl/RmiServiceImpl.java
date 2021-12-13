@@ -1,8 +1,10 @@
 package com.newangels.gen.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newangels.gen.base.BaseUtils;
+import com.newangels.gen.domain.GenProperty;
 import com.newangels.gen.service.RmiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
@@ -22,6 +24,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class RmiServiceImpl implements RmiService {
     private final ObjectMapper objectMapper;
+    private final GenProperty genProperty;
 
     @Override
     public Map<String, Object> getGitInfo() throws IOException {
@@ -33,5 +36,10 @@ public class RmiServiceImpl implements RmiService {
         Map<String, Object> map = objectMapper.readValue(versionJson, new TypeReference<Map<String, Object>>() {
         });
         return BaseUtils.success(map);
+    }
+
+    @Override
+    public String getGenProperty() throws JsonProcessingException {
+        return objectMapper.writeValueAsString(genProperty);
     }
 }

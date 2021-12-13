@@ -1,5 +1,7 @@
 package com.newangels.gen.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -16,4 +18,9 @@ public interface RmiService {
      * 获取git信息
      */
     Map<String, Object> getGitInfo() throws IOException;
+
+    /**
+     * 获取项目自定义配置
+     */
+    String getGenProperty() throws JsonProcessingException;
 }

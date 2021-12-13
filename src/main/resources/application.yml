@@ -83,6 +83,7 @@ logging:
     root: info
 ## 定时任务线程池
 schedule:
+  enabled: true
   poolSize: 2 #线程池核心线程数
   removeOnCancelPolicy: true #取消时删除策略
   threadNamePrefix: genSchedulTask- #线程前缀名
@@ -96,3 +97,8 @@ thread:
 ##配置项目是否有数据库，默认有数据库
 gen:
   isdb: true
+  version: @version@
+  author: TangLiang
+  email: tang97155@163.com
+  gitee: https://gitee.com/tanglchen/gen
+  github: https://github.com/TaCheJW/genCode
