@@ -2,7 +2,10 @@ package com.newangels.gen.config;
 
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
@@ -15,7 +18,9 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @date: 2020/7/10 9:17
  * @since: 1.0
  */
-//@Configuration
+@Configuration
+@EnableAsync
+@ConditionalOnProperty(prefix = "thread", name = "enabled", havingValue = "true")
 public class AsyncConfig implements AsyncConfigurer {
 
     /**

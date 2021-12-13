@@ -86,9 +86,10 @@ schedule:
   enabled: true
   poolSize: 2 #线程池核心线程数
   removeOnCancelPolicy: true #取消时删除策略
-  threadNamePrefix: genSchedulTask- #线程前缀名
+  threadNamePrefix: genSchedul- #线程前缀名
 ##线程池配置
 thread:
+  enabled: false
   corePoolSize: 10 #核心线程数
   maxPoolSize: 50 #设置最大线程数
   queueCapacity: 200 #队列容量
