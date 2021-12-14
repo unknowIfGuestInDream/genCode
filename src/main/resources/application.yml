@@ -110,5 +110,5 @@ gen:
   author: TangLiang
   rpc:
     enabled: true
-    rmi: true
+    rmi: false
     httpInvoker: true
