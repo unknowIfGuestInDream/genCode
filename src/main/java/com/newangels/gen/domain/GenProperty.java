@@ -16,9 +16,17 @@ import org.springframework.stereotype.Component;
 @Data
 public class GenProperty {
     private Boolean isdb;
-    private Boolean rmi;
     private String version;
     private String author;
     private Boolean schedule;
     private Boolean async;
+    private GenRpc rpc = new GenRpc();
+
+    @Data
+    public class GenRpc {
+        private Boolean enabled;
+        private Boolean rmi;
+        private Boolean httpInvoker;
+    }
+
 }

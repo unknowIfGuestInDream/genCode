@@ -12,7 +12,7 @@ import java.util.Map;
  * @date: 2021/12/13 13:45
  * @since: 1.0
  */
-public interface RmiService {
+public interface RpcService {
 
     /**
      * 获取git信息

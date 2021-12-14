@@ -97,13 +97,18 @@ thread:
   threadNamePrefix: genAsync- #默认线程名称
 ## 项目自定义配置
 ## isdb: 配置项目是否有数据库，默认有数据库，false为内存存储
-## rmi: true启动RMI远程调用
 ## schedule: 定时任务开关
 ## async: 异步开关
+## rpc: enabled rpc开关
+## rpc: rmi RMI远程调用开关
+## rpc: httpInvoker HttpInvoker开关
 gen:
   isdb: true
-  rmi: true
   schedule: ${schedule.enabled}
   async: ${thread.enabled}
   version: @version@
   author: TangLiang
+  rpc:
+    enabled: true
+    rmi: true
+    httpInvoker: true

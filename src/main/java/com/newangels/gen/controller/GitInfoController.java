@@ -2,7 +2,7 @@ package com.newangels.gen.controller;
 
 import com.newangels.gen.annotation.Log;
 import com.newangels.gen.base.BaseUtils;
-import com.newangels.gen.service.RmiService;
+import com.newangels.gen.service.RpcService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +20,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 public class GitInfoController {
-    private final RmiService rmiService;
+    private final RpcService rpcService;
 
     /**
      * 获取git信息
@@ -28,7 +28,7 @@ public class GitInfoController {
     @GetMapping("getGitInfo")
     @Log
     public Map<String, Object> getGitInfo() throws IOException {
-        return BaseUtils.success(rmiService.getGitInfo());
+        return BaseUtils.success(rpcService.getGitInfo());
     }
 
 }

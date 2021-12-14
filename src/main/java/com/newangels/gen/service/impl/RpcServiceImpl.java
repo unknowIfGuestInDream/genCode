@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newangels.gen.base.BaseUtils;
 import com.newangels.gen.domain.GenProperty;
-import com.newangels.gen.service.RmiService;
+import com.newangels.gen.service.RpcService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @Service
 @RequiredArgsConstructor
-public class RmiServiceImpl implements RmiService {
+public class RpcServiceImpl implements RpcService {
     private final ObjectMapper objectMapper;
     private final GenProperty genProperty;
 
