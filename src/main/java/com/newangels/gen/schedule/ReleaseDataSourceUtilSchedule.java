@@ -1,6 +1,6 @@
 package com.newangels.gen.schedule;
 
-import com.newangels.gen.config.SchedulingConfig;
+import com.newangels.gen.domain.GenProperty;
 import com.newangels.gen.factory.DataSourceUtilFactory;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +21,12 @@ import java.time.format.DateTimeFormatter;
 @Component
 @AllArgsConstructor
 public class ReleaseDataSourceUtilSchedule {
-    private final SchedulingConfig schedulingConfig;
+    private final GenProperty genProperty;
 
     //每周五23点执行
     @Scheduled(cron = "0 0 23 ? * FRI")
     public void dataSourceUtilScheduled() {
-        if (!schedulingConfig.getEnabled()) return;
+        if (!genProperty.getSchedule()) return;
         DataSourceUtilFactory.removeAll();
         log.info("[{}]清除数据源工厂数据", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH时mm分ss秒")));
     }

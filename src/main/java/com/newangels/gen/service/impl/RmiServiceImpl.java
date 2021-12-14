@@ -42,4 +42,14 @@ public class RmiServiceImpl implements RmiService {
     public String getGenProperty() throws JsonProcessingException {
         return objectMapper.writeValueAsString(genProperty);
     }
+
+    @Override
+    public void startSchedule() {
+        genProperty.setSchedule(true);
+    }
+
+    @Override
+    public void stopSchedule() {
+        genProperty.setSchedule(false);
+    }
 }

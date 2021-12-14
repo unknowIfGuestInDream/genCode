@@ -95,11 +95,13 @@ thread:
   queueCapacity: 200 #队列容量
   keepAliveSeconds: 30 #线程活跃时间（秒）
   threadNamePrefix: genAsync- #默认线程名称
-##配置项目是否有数据库，默认有数据库
+##项目自定义配置
+##isdb: 配置项目是否有数据库，默认有数据库，false为内存存储
+##schedule: 定时任务开关
+##async: 异步开关
 gen:
   isdb: true
+  schedule: ${schedule.enabled}
+  async: ${thread.enabled}
   version: @version@
   author: TangLiang
-  email: tang97155@163.com
-  gitee: https://gitee.com/tanglchen/gen
-  github: https://github.com/TaCheJW/genCode

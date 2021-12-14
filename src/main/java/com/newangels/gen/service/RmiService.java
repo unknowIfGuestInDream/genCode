@@ -23,4 +23,14 @@ public interface RmiService {
      * 获取项目自定义配置
      */
     String getGenProperty() throws JsonProcessingException;
+
+    /**
+     * 开启定时
+     */
+    void startSchedule();
+
+    /**
+     * 关闭定时
+     */
+    void stopSchedule();
 }

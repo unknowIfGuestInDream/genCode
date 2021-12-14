@@ -18,7 +18,6 @@ public class GenProperty {
     private Boolean isdb;
     private String version;
     private String author;
-    private String email;
-    private String gitee;
-    private String github;
+    private Boolean schedule;
+    private Boolean async;
 }
