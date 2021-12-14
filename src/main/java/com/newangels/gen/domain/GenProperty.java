@@ -23,7 +23,7 @@ public class GenProperty {
     private GenRpc rpc = new GenRpc();
 
     @Data
-    public class GenRpc {
+    private static class GenRpc {
         private Boolean enabled;
         private Boolean rmi;
         private Boolean httpInvoker;
