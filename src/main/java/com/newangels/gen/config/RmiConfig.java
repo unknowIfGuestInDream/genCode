@@ -2,11 +2,14 @@ package com.newangels.gen.config;
 
 import com.newangels.gen.service.RmiService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.remoting.rmi.RmiServiceExporter;
 
 /**
+ * RMI远程调用配置
+ *
  * <p>
  * 客户端代码
  * <blockquote><pre>
@@ -39,6 +42,7 @@ import org.springframework.remoting.rmi.RmiServiceExporter;
  */
 @Configuration
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "gen.rmi", havingValue = "true")
 public class RmiConfig {
     private final RmiService rmiService;
 

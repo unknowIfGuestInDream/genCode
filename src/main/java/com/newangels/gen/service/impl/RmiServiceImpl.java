@@ -35,7 +35,7 @@ public class RmiServiceImpl implements RmiService {
         String versionJson = BaseUtils.inputStreamToString(resource.getInputStream());
         Map<String, Object> map = objectMapper.readValue(versionJson, new TypeReference<Map<String, Object>>() {
         });
-        return BaseUtils.success(map);
+        return map;
     }
 
     @Override

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 @Data
 public class GenProperty {
     private Boolean isdb;
+    private Boolean rmi;
     private String version;
     private String author;
     private Boolean schedule;
