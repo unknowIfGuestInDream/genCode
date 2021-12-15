@@ -4,6 +4,8 @@ import com.newangels.gen.factory.DataSourceUtilFactory;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.stereotype.Component;
 
+import static com.newangels.gen.base.CacheManage.CACHE_MAP;
+
 /**
  * 项目关闭时清空DataSourceUtilFactory
  *
@@ -22,6 +24,7 @@ public class ProLifeStyle implements SmartLifecycle {
 
     @Override
     public void stop() {
+        CACHE_MAP.forEach((s, cache) -> cache.clear());
         DataSourceUtilFactory.removeAll();
         this.running = false;
     }
