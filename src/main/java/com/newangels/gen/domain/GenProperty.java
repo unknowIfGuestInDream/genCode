@@ -21,12 +21,19 @@ public class GenProperty {
     private Boolean schedule;
     private Boolean async;
     private GenRpc rpc = new GenRpc();
+    private GenShutDown shutdown = new GenShutDown();
 
     @Data
     private static class GenRpc {
         private Boolean enabled;
         private Boolean rmi;
         private Boolean httpInvoker;
+    }
+
+    @Data
+    private static class GenShutDown {
+        private Boolean enabled;
+        private String password;
     }
 
 }

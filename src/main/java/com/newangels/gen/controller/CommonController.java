@@ -6,10 +6,6 @@ import com.newangels.gen.base.BaseUtils;
 import com.newangels.gen.enums.*;
 import com.newangels.gen.util.cache.SimpleCache;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,8 +24,7 @@ import java.util.Map;
  */
 @RestController
 @RequiredArgsConstructor
-public class CommonController implements ApplicationContextAware {
-    private ApplicationContext context;
+public class CommonController {
 
     /**
      * 目录
@@ -37,22 +32,6 @@ public class CommonController implements ApplicationContextAware {
     @GetMapping("/")
     public ModelAndView index() {
         return new ModelAndView("pages/index");
-    }
-
-    /**
-     * 关闭项目
-     */
-    @GetMapping("shutDown")
-    public Map<String, Object> shutDownContext(String password) {
-        if (password == null) {
-            return BaseUtils.failed("请携带密码");
-        }
-        if (!"gen".equals(password)) {
-            return BaseUtils.failed("密码错误");
-        }
-        ConfigurableApplicationContext ctx = (ConfigurableApplicationContext) context;
-        ctx.close();
-        return BaseUtils.success();
     }
 
     /**
@@ -178,8 +157,4 @@ public class CommonController implements ApplicationContextAware {
         return BaseUtils.success(list);
     }
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        context = applicationContext;
-    }
 }
