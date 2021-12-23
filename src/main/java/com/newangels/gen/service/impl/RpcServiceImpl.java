@@ -7,6 +7,7 @@ import com.newangels.gen.base.BaseUtils;
 import com.newangels.gen.domain.GenProperty;
 import com.newangels.gen.service.RpcService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,9 @@ public class RpcServiceImpl implements RpcService {
     private final ObjectMapper objectMapper;
     private final GenProperty genProperty;
 
+    @Value("${schedule.enabled}")
+    private Boolean enabled;
+
     @Override
     public Map<String, Object> getGitInfo() throws IOException {
         Resource resource = new ClassPathResource("git.properties");
@@ -44,12 +48,26 @@ public class RpcServiceImpl implements RpcService {
     }
 
     @Override
-    public void startSchedule() {
+    public String startSchedule() {
+        if (!enabled) {
+            return "定时任务模块未初始化，无法进行启动停止操作";
+        }
+        if (genProperty.getSchedule()) {
+            return "定时任务已启动";
+        }
         genProperty.setSchedule(true);
+        return "定时任务成功启动";
     }
 
     @Override
-    public void stopSchedule() {
+    public String stopSchedule() {
+        if (!enabled) {
+            return "定时任务模块未初始化，无法进行启动停止操作";
+        }
+        if (!genProperty.getSchedule()) {
+            return "定时任务已停止";
+        }
         genProperty.setSchedule(false);
+        return "定时任务成功停止";
     }
 }

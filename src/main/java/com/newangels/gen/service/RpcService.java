@@ -27,10 +27,10 @@ public interface RpcService {
     /**
      * 开启定时
      */
-    void startSchedule();
+    String startSchedule();
 
     /**
      * 关闭定时
      */
-    void stopSchedule();
+    String stopSchedule();
 }

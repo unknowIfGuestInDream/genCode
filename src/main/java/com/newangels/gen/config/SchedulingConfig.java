@@ -22,8 +22,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 @Data
 public class SchedulingConfig {
 
-    @Value("${schedule.enabled}")
-    private Boolean enabled;
     @Value("${schedule.poolSize}")//设置核心线程数
     private int poolSize;
     @Value("${schedule.removeOnCancelPolicy}") //设置最大线程数

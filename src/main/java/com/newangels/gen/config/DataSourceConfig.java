@@ -26,12 +26,12 @@ public class DataSourceConfig {
     @Bean(name = "genDataSource")
     @Qualifier("genDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.druid")
-    public DataSource mpDefault() {
+    public DataSource genDataSource() {
         return new DruidDataSource();
     }
 
     @Bean(name = "genJdbcTemplate")
-    public JdbcTemplate safeJdbcTemplate(@Qualifier("genDataSource") DataSource dataSource) {
+    public JdbcTemplate genJdbcTemplate(@Qualifier("genDataSource") DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 
