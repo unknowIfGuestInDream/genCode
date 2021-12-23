@@ -119,6 +119,8 @@ gen:
   rpc:
     enabled: true
     rmi: false
+    rmiPort: 8769
+    rmiServiceName: rpcService
     httpInvoker: true
   shutdown:
     enabled: true

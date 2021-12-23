@@ -27,6 +27,8 @@ public class GenProperty {
     private static class GenRpc {
         private Boolean enabled;
         private Boolean rmi;
+        private int rmiPort;
+        private String rmiServiceName;
         private Boolean httpInvoker;
     }
 

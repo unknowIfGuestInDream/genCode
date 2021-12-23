@@ -2,6 +2,7 @@ package com.newangels.gen.config;
 
 import com.newangels.gen.service.RpcService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,14 +57,19 @@ import org.springframework.remoting.rmi.RmiServiceExporter;
 public class RpcConfig {
     private final RpcService rpcService;
 
+    @Value("${gen.rpc.rmiPort}")
+    private int rmiPort;
+    @Value("${gen.rpc.rmiServiceName}")
+    private String rmiServiceName;
+
     @Bean
     @ConditionalOnProperty(name = "gen.rpc.rmi", havingValue = "true")
     public RmiServiceExporter getRmiServiceExporter() {
         RmiServiceExporter rmiServiceExporter = new RmiServiceExporter();
-        rmiServiceExporter.setServiceName("rpcService");
+        rmiServiceExporter.setServiceName(rmiServiceName);
         rmiServiceExporter.setService(rpcService);
         rmiServiceExporter.setServiceInterface(RpcService.class);
-        rmiServiceExporter.setRegistryPort(8769);
+        rmiServiceExporter.setRegistryPort(rmiPort);
         return rmiServiceExporter;
     }
 
@@ -73,7 +79,7 @@ public class RpcConfig {
      */
     @Bean("/invoker")
     @ConditionalOnProperty(name = "gen.rpc.httpInvoker", havingValue = "true")
-    public HttpInvokerServiceExporter testService() {
+    public HttpInvokerServiceExporter getHttpInvokerServiceExporter() {
         HttpInvokerServiceExporter httpInvokerServiceExporter = new HttpInvokerServiceExporter();
         httpInvokerServiceExporter.setService(rpcService);
         httpInvokerServiceExporter.setServiceInterface(RpcService.class);
