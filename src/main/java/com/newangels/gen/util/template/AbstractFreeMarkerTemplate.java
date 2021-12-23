@@ -9,6 +9,9 @@ import java.util.Map;
 /**
  * FreeMarker模版引擎
  * 处理资源路径下的ftl模版
+ * <p>
+ * 可以考虑复用FreeMarkerTemplateUtils类
+ * </p>
  *
  * @author: TangLiang
  * @date: 2021/9/10 10:31

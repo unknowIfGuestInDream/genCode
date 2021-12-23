@@ -11,12 +11,18 @@ server:
       worker: 256
     buffer-size: 1024
     direct-buffers: true
+    allow-encoded-slash: true
 spring:
   application:
     name: gen
   jackson:
     date-format: yyyy/MM/dd HH:mm:ss
     time-zone: GMT+8
+  mvc:
+    format:
+      date: yyyy-MM-dd
+      date-time: yyyy-MM-dd HH:mm:ss
+      time: HH:mm:ss
   thymeleaf:
     mode: HTML
     encoding: UTF-8
@@ -83,16 +89,37 @@ logging:
     root: info
 ## 定时任务线程池
 schedule:
+  enabled: true
   poolSize: 2 #线程池核心线程数
   removeOnCancelPolicy: true #取消时删除策略
-  threadNamePrefix: genSchedulTask- #线程前缀名
+  threadNamePrefix: genSchedul- #线程前缀名
 ##线程池配置
 thread:
+  enabled: false
   corePoolSize: 10 #核心线程数
   maxPoolSize: 50 #设置最大线程数
   queueCapacity: 200 #队列容量
   keepAliveSeconds: 30 #线程活跃时间（秒）
   threadNamePrefix: genAsync- #默认线程名称
-##配置项目是否有数据库，默认有数据库
+## 项目自定义配置
+## isdb: 配置项目是否有数据库，默认有数据库，false为内存存储
+## schedule: 定时任务开关
+## async: 异步开关
+## rpc: enabled rpc开关
+## rpc: rmi RMI远程调用开关
+## rpc: httpInvoker HttpInvoker开关
+## shutdown: enabled shutdown接口开关，用于通过请求关闭项目
+## shutdown: password shutdown接口请求密钥
 gen:
   isdb: true
+  schedule: ${schedule.enabled}
+  async: ${thread.enabled}
+  version: @version@
+  author: TangLiang
+  rpc:
+    enabled: true
+    rmi: false
+    httpInvoker: true
+  shutdown:
+    enabled: true
+    password: gen

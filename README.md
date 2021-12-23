@@ -11,7 +11,7 @@
 后台使用springBoot, druid连接池, 前台使用thymeleaf + extjs4.0, 代码模版使用freemarker引擎
 
 ## 项目启动
-数据库sql文件在 database文件下  
+数据库sql文件在 docs/database文件下  
 可以通过配置 gen.isdb来决定数据源是数据库版本还是内存存储
 gen.isdb=true数据源为数据库版本，也是默认配置  
 数据源为内存版本无需配置数据库，可以直接启动，数据存储在内存中，不可持久化
@@ -24,6 +24,8 @@ java -Dgen.isdb=false -jar jar包
 有数据库版本无需配置参数, 默认为有数据库版本
 ```shell script
 java -jar jar包
+nohup java -jar jar包  >msg.log 2>&1 &  ## 后台启动(有日志)
+nohup java -jar jar包  >/dev/null 2>&1 &  ## 后台启动(无日志)
 ```
 
 druid监控账号密码默认都为admin
@@ -80,6 +82,9 @@ druid监控账号密码默认都为admin
 2. maven集成git相关插件，新增git信息接口
 3. 前台新增form数据缓存，提高用户体验
 4. 修复表生成过程功能问题
+5. 新增RPC远程调用接口
+6. 新增shutdown关闭接口
+7. 增强异步线程池
 
 ### 3.1
 1. 修复使用中发现的问题

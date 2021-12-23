@@ -56,6 +56,8 @@ public class LogAspect {
         try {
             result = (Map<String, Object>) pjd.proceed();
         } catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
             return BaseUtils.failed(e.getMessage());
         }
         return result;

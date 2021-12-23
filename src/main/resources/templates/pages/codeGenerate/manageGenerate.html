@@ -518,8 +518,7 @@
                 'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
                 'userName': Ext.getCmp('dataSource').valueModels[0].data.USERNAME,
                 'password': Ext.getCmp('dataSource').valueModels[0].data.PASSWORD,
-                'procedureNameList': procedureNameList, //存储过程名称集合
-                'random': Math.random()
+                'procedureNameList': procedureNameList //存储过程名称集合
             },
             callback: function (options, success, response) {
                 if (success) {
@@ -603,7 +602,8 @@
             'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
             'userName': Ext.getCmp('dataSource').valueModels[0].data.USERNAME,
             'password': Ext.getCmp('dataSource').valueModels[0].data.PASSWORD,
-            'procedureNameList': procedureNameList //存储过程名称集合
+            'procedureNameList': procedureNameList, //存储过程名称集合
+            'random': Math.random()
         };
 
         var body = Ext.getBody();
