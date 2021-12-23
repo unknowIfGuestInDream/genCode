@@ -12,6 +12,10 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * 定时清除数据源工厂数据
+ * <p>
+ * 使用GenProperty获取gen.schedul而非@Value获取
+ * 主要是gen.schedul属性可以通过远程调用方式修改
+ * 保证定时可以随时开关
  *
  * @author: TangLiang
  * @date: 2021/7/6 8:49
