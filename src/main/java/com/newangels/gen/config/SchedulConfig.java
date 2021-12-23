@@ -1,6 +1,5 @@
 package com.newangels.gen.config;
 
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +18,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 @Configuration
 @EnableScheduling
 @ConditionalOnProperty(prefix = "schedule", name = "enabled", havingValue = "true")
-@Data
-public class SchedulingConfig {
+public class SchedulConfig {
 
     @Value("${schedule.poolSize}")//设置核心线程数
     private int poolSize;
