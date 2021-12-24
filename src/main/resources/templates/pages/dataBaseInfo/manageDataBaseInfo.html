@@ -11,32 +11,12 @@
     <script type="text/javascript" src="public/js/ext-all.js"></script>
     <script type="text/javascript" src="public/js/ext-lang-zh_CN.js"></script>
     <script type="text/javascript" src="public/js/base.js"></script>
+    <script type="text/javascript" src="public/js/store/dataBaseStore.js"></script>
 </head>
 <body>
 <script>
     Ext.onReady(function () {
         Ext.getBody().mask('加载中...');
-
-        var dataBaseStore = Ext.create('Ext.data.Store', {
-            storeId: 'dataBaseStore',
-            autoLoad: false,//true为自动加载
-            loading: false,//自动加载时必须为true
-            pageSize: -1,
-            fields: ['ID', 'NAME', 'URL', 'DRIVER', 'USERNAME', 'PASSWORD', 'UPDATE_TIME', 'CREATE_TIME'],
-            proxy: {
-                url: '/gen/selectDataBaseInfo',
-                type: 'ajax',
-                async: true,//false=同步.
-                actionMethods: {
-                    read: 'GET'
-                },
-                extraParams: {},
-                reader: {
-                    type: 'json',
-                    root: 'result'
-                }
-            }
-        });
 
         var buttonPanel = Ext.create('Ext.Panel', {
             id: 'buttonPanel',
@@ -220,12 +200,6 @@
 
         _selectDataBaseInfo();
         Ext.getBody().unmask();
-    }
-
-    function _selectDataBaseInfo() {
-        var dataBaseStore = Ext.data.StoreManager.lookup('dataBaseStore');
-        dataBaseStore.proxy.extraParams = {};
-        dataBaseStore.load();
     }
 
     function _loadDataBaseInfo() {

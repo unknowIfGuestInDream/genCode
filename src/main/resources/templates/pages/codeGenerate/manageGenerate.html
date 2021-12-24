@@ -15,6 +15,7 @@
     <script type="text/javascript" src="public/js/store/genProcedureModelType.js"></script>
     <script type="text/javascript" src="public/js/store/nameConventType.js"></script>
     <script type="text/javascript" src="public/js/store/temporaryStorageStore.js"></script>
+    <script type="text/javascript" src="public/js/store/dataBaseStore.js"></script>
     <script type="text/javascript" src="public/js/ajax/clearCaches.js"></script>
     <script type="text/javascript" src="public/js/util/changeRowClass.js"></script>
 </head>
@@ -22,33 +23,6 @@
 <script>
     Ext.onReady(function () {
         Ext.getBody().mask('加载中...');
-
-        //数据源名称
-        var dataSourceStore = Ext.create('Ext.data.Store', {
-            storeId: 'dataSourceStore',
-            autoLoad: false,//true为自动加载
-            loading: false,//自动加载时必须为true
-            pageSize: -1,
-            fields: ['ID', 'URL', 'DRIVER', 'USERNAME', 'PASSWORD', 'NAME'],
-            proxy: {
-                url: '/gen/selectDataBaseInfo',
-                type: 'ajax',
-                async: false,
-                actionMethods: {
-                    read: 'GET'
-                },
-                extraParams: {},
-                reader: {
-                    type: 'json',
-                    root: 'result'
-                }
-            },
-            listeners: {
-                load: function (store, records, successful, eOpts) {
-                    Ext.getCmp('dataSource').select(store.first());
-                }
-            }
-        });
 
         //存储过程名称Store
         var proceduresStore = Ext.create('Ext.data.Store', {
@@ -113,7 +87,7 @@
             }, {
                 xtype: 'combo',
                 queryMode: 'local',
-                store: dataSourceStore,
+                store: dataBaseStore,
                 id: 'dataSource',
                 valueField: 'NAME',
                 displayField: 'NAME',
@@ -340,15 +314,10 @@
             }
         }
 
-        _selectdataSource();
+        _addDataSourceLoad();
+        _selectDataBaseInfo();
         _initGenFormParam();
         Ext.getBody().unmask();
-    }
-
-    //查询数据源
-    function _selectdataSource() {
-        var dataSourceStore = Ext.data.StoreManager.lookup('dataSourceStore');
-        dataSourceStore.load();
     }
 
     //查询存储过程名称
