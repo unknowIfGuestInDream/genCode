@@ -46,8 +46,8 @@ public class ${module}ServiceImpl implements ${module}Service {
         String sql = baseSqlCriteria.getSql();
         Map<String, Object> paramMap = baseSqlCriteria.getParamMap();
         if (current != null && pageSize != null && pageSize > 0) {
-            int start = (page - 1) * limit;
-            sql = sql + " limit " + start + ", " + limit;
+            int start = (current - 1) * pageSize;
+            sql = sql + " limit " + start + ", " + pageSize;
         }
         return namedParameterJdbcTemplate.queryForList(sql, paramMap);
     }
