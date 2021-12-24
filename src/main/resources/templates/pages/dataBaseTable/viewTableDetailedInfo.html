@@ -35,6 +35,20 @@
     Ext.onReady(function () {
         Ext.getBody().mask('加载中...');
 
+        //按钮栏
+        var buttonPanel = Ext.create('Ext.Panel', {
+            id: 'buttonPanel',
+            defaults: {
+                style: 'margin: 2px;'
+            },
+            items: [{
+                xtype: 'button',
+                text: '关闭',
+                icon: 'public/image/btn/close.png',
+                handler: _close
+            }]
+        });
+
         var tableDetailedInfoFromPanel = Ext.create('Ext.form.Panel', {
             id: 'tableDetailedInfoFromPanel',
             layout: 'column',
@@ -296,6 +310,9 @@
                 border: false
             },
             items: [{
+                region: 'north',
+                items: [buttonPanel]
+            }, {
                 region: 'center',
                 layout: 'fit',
                 items: [tableDetailedInfoFromPanel]
