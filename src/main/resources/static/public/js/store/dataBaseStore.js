@@ -52,3 +52,22 @@ function _getSchema() {
     }
     return schema;
 }
+
+//获取数据库类型
+//根据驱动判断
+function _getDatabaseType() {
+    var driver = Ext.getCmp('dataSource').valueModels[0].data.DRIVER;
+    if (driver.indexOf('oracle') >= 0) {
+        return 'oracle';
+    }
+    if (driver.indexOf('mysql') >= 0) {
+        return 'mysql';
+    }
+    if (driver.indexOf('mariadb') >= 0) {
+        return 'mariadb';
+    }
+    if (driver.indexOf('microsoft') >= 0) {
+        return 'microsoft';
+    }
+    return 'unknow';
+}

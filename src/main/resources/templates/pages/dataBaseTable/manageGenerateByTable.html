@@ -17,6 +17,7 @@
     <script type="text/javascript" src="public/js/store/orderTypeStore.js"></script>
     <script type="text/javascript" src="public/js/store/dataBaseStore.js"></script>
     <script type="text/javascript" src="public/js/ajax/clearCaches.js"></script>
+    <script type="text/javascript" src="public/js/view/preViewTableDetailedInfo.js"></script>
 </head>
 <body>
 <script>
@@ -185,7 +186,11 @@
                 minWidth: 200,
                 dataIndex: 'TABLE_NAME',
                 renderer: function (value, metaData, record, rowIdx, colIdx, store, view) {
-                    return '<a href=javascript:_viewTableDetailedInfo(\'' + value + '\',\'' + encodeURIComponent(record.data.COMMENTS) + '\')>' + value + '</a>'
+                    if (_getDatabaseType() === 'oracle') {
+                        return '<a href=javascript:_preViewTableDetailedInfo(\'' + value + '\',\'' + encodeURIComponent(record.data.COMMENTS) + '\')>' + value + '</a>';
+                    } else {
+                        return value;
+                    }
                 }
             }, {
                 text: '备注',
@@ -548,22 +553,6 @@
             tableInfoStore.removeAll();
             Toast.alert('错误', result.jsonData.message, 3000);
         }
-    }
-
-    //查看表详细信息
-    function _viewTableDetailedInfo(name, comment) {
-        returnValue = null;
-        win = Ext.create('Ext.window.Window', {
-            title: '表详细信息',
-            modal: true,
-            autoShow: true,
-            maximized: false,
-            maximizable: true,
-            autoScroll: true,
-            width: document.documentElement.clientWidth * 0.7,
-            height: document.documentElement.clientHeight * 0.8,
-            html: '<iframe src="/gen/viewTableDetailedInfo?name=' + name + '&url=' + Ext.getCmp('dataSource').valueModels[0].data.URL + '&driver=' + Ext.getCmp('dataSource').valueModels[0].data.DRIVER + '&userName=' + Ext.getCmp('dataSource').valueModels[0].data.USERNAME + '&password=' + Ext.getCmp('dataSource').valueModels[0].data.PASSWORD + '&comment=' + comment + '" style="width: 100%; height: 99%;" frameborder="0"></iframe>'
-        });
     }
 
     //清除缓存 清除后进行一次查询
