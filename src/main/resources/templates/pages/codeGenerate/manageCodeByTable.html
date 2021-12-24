@@ -57,7 +57,7 @@
             listeners: {
                 load: function (store, records, successful, eOpts) {
                     store.each(function (record) {
-                        if (record.get("COLUMN_ID") === 1 && record.get("COLUMN_NAME").indexOf("ID") >= 0) {
+                        if (record.get("COLUMN_ID") === 1 && record.get("COLUMN_NAME").toUpperCase().indexOf("ID") >= 0) {
                             record.set('IS_PRIMARY', 'Y');
                             record.set('IS_SEL', 'N');
                             record.set('IS_UPD', 'N');
@@ -70,7 +70,7 @@
                         }
                         record.set('IS_INS', 'Y');
                         record.set('ORDERTYPE', '');
-                        record.set('JAVA_CLASS', _getJavaClassByDbType(record.get("DATA_TYPE")));
+                        record.set('JAVA_CLASS', _getJavaClassByDbType(record.get("DATA_TYPE").toUpperCase()));
                     })
                 }
             }
@@ -560,24 +560,17 @@
 
     //查询表数据
     function _selectTable() {
-        var jdbcUrl = Ext.getCmp('dataSource').valueModels[0].data.URL;
-        var schema = "";
-        if (jdbcUrl.startsWith("jdbc:mysql") || jdbcUrl.startsWith("jdbc:mariadb")) {
-            var endIndex = jdbcUrl.indexOf('?');
-            var startIndex = jdbcUrl.substring(0, endIndex).lastIndexOf('/');
-            schema = jdbcUrl.substring(startIndex + 1, endIndex);
-        }
         Ext.Ajax.request({
             url: '/gen/selectTables',
             async: false,
             method: 'GET',
             params: {
-                'url': jdbcUrl,
+                'url': Ext.getCmp('dataSource').valueModels[0].data.URL,
                 'driver': Ext.getCmp('dataSource').valueModels[0].data.DRIVER,
                 'userName': Ext.getCmp('dataSource').valueModels[0].data.USERNAME,
                 'password': Ext.getCmp('dataSource').valueModels[0].data.PASSWORD,
                 'name': Ext.getCmp('tableName').getValue(),
-                'schema': schema
+                'schema': _getSchema()
             },
             callback: function (options, success, response) {
                 var data = Ext.decode(response.responseText);
@@ -605,6 +598,7 @@
             'userName': Ext.getCmp('dataSource').valueModels[0].data.USERNAME,
             'password': Ext.getCmp('dataSource').valueModels[0].data.PASSWORD,
             'name': name,
+            'schema': _getSchema()
         };
         var result = tableInfoStore.load().getProxy().getReader();
         if (!result.jsonData.success) {
@@ -880,13 +874,13 @@
 
     //根据数据库类型获取java类对象(默认oracle)
     function _getJavaClassByDbType(type) {
-        if (type === 'VARCHAR2' || type === 'VARCHAR') {
+        if (type === 'VARCHAR2' || type === 'VARCHAR' || type === 'CHAR') {
             return "String";
         } else if (type === 'NUMBER') {
             return "Integer";
         } else if (type === 'BLOB') {
             return "InputStream";
-        } else if (type === 'INT') {
+        } else if (type === 'INT' || type.indexOf('INT') > 0) {
             return "Integer";
         } else if (type === 'DATE' || type === 'TIMESTAMP') {
             return "Date";

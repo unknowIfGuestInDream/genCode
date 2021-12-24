@@ -40,3 +40,15 @@ function _addDataSourceLoad() {
         Ext.getCmp('dataSource').select(dataBaseStore.first());
     })
 }
+
+//获取数据库空间名称
+function _getSchema() {
+    var jdbcUrl = Ext.getCmp('dataSource').valueModels[0].data.URL;
+    var schema = "";
+    if (jdbcUrl.startsWith("jdbc:mysql") || jdbcUrl.startsWith("jdbc:mariadb")) {
+        var endIndex = jdbcUrl.indexOf('?');
+        var startIndex = jdbcUrl.substring(0, endIndex).lastIndexOf('/');
+        schema = jdbcUrl.substring(startIndex + 1, endIndex);
+    }
+    return schema;
+}

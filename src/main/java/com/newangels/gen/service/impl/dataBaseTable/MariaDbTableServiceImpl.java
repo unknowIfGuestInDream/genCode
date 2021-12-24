@@ -42,12 +42,12 @@ public class MariaDbTableServiceImpl implements DataBaseTableService {
     }
 
     @Override
-    public String selectTableInfo(@NonNull String name) {
+    public String selectTableInfo(@NonNull String name, String schema) {
         throw new UnSupportedDataSourceException("暂时不支持mariaDb数据库表信息查询");
     }
 
     @Override
-    public List<Map<String, Object>> selectTableInfo(@NonNull String name, @NonNull DataSourceUtil dataSourceUtil) {
+    public List<Map<String, Object>> selectTableInfo(@NonNull String name, String schema, @NonNull DataSourceUtil dataSourceUtil) {
         throw new UnSupportedDataSourceException("暂时不支持mariaDb数据库表信息查询");
     }
 

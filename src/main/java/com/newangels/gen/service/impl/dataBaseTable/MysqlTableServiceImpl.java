@@ -48,15 +48,19 @@ public class MysqlTableServiceImpl implements DataBaseTableService {
         return dataSourceUtil.executeQuery(selectTables(name, schema));
     }
 
-    //show full columns from daily_person;
     @Override
-    public String selectTableInfo(@NonNull String name) {
-        throw new UnSupportedDataSourceException("暂时不支持mysql数据库表信息查询");
+    public String selectTableInfo(@NonNull String name, String schema) {
+        String sql = "SELECT T.COLUMN_NAME, T.DATA_TYPE, T.CHARACTER_MAXIMUM_LENGTH as DATA_LENGTH, (case when T.IS_NULLABLE = 'YES' then 'Y' else 'N' end) as NULLABLE, T.ORDINAL_POSITION as COLUMN_ID, T.COLUMN_DEFAULT as DATA_DEFAULT, '' as NUM_DISTINCT, '' as NUM_NULLS, P.CHECK_TIME as LAST_ANALYZED, '' as AVG_COL_LEN, T.COLUMN_COMMENT as COMMENTS FROM INFORMATION_SCHEMA.columns T LEFT JOIN INFORMATION_SCHEMA.TABLES P ON T.TABLE_NAME = P.TABLE_NAME AND T.TABLE_SCHEMA = P.TABLE_SCHEMA WHERE T.TABLE_SCHEMA = '" + schema.toLowerCase() + "'";
+        if (StringUtils.isNotEmpty(name)) {
+            sql += " and T.TABLE_NAME = '" + name.toLowerCase() + "' ";
+        }
+        sql += " ORDER BY T.ORDINAL_POSITION";
+        return sql;
     }
 
     @Override
-    public List<Map<String, Object>> selectTableInfo(@NonNull String name, @NonNull DataSourceUtil dataSourceUtil) {
-        return dataSourceUtil.executeQuery(selectTableInfo(name));
+    public List<Map<String, Object>> selectTableInfo(@NonNull String name, String schema, @NonNull DataSourceUtil dataSourceUtil) {
+        return dataSourceUtil.executeQuery(selectTableInfo(name, schema));
     }
 
     @Override

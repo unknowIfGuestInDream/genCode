@@ -106,10 +106,10 @@ public class DataBaseTableController {
      */
     @GetMapping("selectTableInfo")
     @Log
-    public Map<String, Object> selectTableInfo(String name, String url, String driver, String userName, String password) {
+    public Map<String, Object> selectTableInfo(String name, String schema, String url, String driver, String userName, String password) {
         DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
         DataBaseTableService dataBaseTable = DataBaseTableFactory.getDataBaseTable(DataBaseType.fromTypeName(driver));
-        return BaseUtils.success(dataBaseTable.selectTableInfo(name, dataSourceUtil));
+        return BaseUtils.success(dataBaseTable.selectTableInfo(name, schema, dataSourceUtil));
     }
 
     /**

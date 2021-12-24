@@ -51,15 +51,17 @@ public interface DataBaseTableService extends InitializingBean {
     /**
      * 查询数据库某表字段相关的详细信息的sql
      *
-     * @param name 表名
+     * @param name   表名
+     * @param schema 表空间
      */
-    String selectTableInfo(@NonNull String name);
+    String selectTableInfo(@NonNull String name, String schema);
 
     /**
      * 查询数据库某表字段相关的详细信息的结果集
      *
      * @param name           表名
+     * @param schema         表空间
      * @param dataSourceUtil 数据库连接工具类
      */
-    List<Map<String, Object>> selectTableInfo(@NonNull String name, @NonNull DataSourceUtil dataSourceUtil);
+    List<Map<String, Object>> selectTableInfo(@NonNull String name, String schema, @NonNull DataSourceUtil dataSourceUtil);
 }

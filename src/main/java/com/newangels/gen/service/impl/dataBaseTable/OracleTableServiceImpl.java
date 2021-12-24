@@ -55,7 +55,7 @@ public class OracleTableServiceImpl implements DataBaseTableService {
     }
 
     @Override
-    public String selectTableInfo(@NonNull String name) {
+    public String selectTableInfo(@NonNull String name, String schema) {
         String sql = "SELECT T.COLUMN_NAME, T.DATA_TYPE, T.DATA_LENGTH, T.NULLABLE, T.COLUMN_ID, T.DATA_DEFAULT, T.NUM_DISTINCT, T.NUM_NULLS, T.LAST_ANALYZED, T.AVG_COL_LEN, P.COMMENTS FROM USER_TAB_COLUMNS T LEFT JOIN USER_COL_COMMENTS P ON T.TABLE_NAME = P.TABLE_NAME AND T.COLUMN_NAME = P.COLUMN_NAME ";
         if (StringUtils.isNotEmpty(name)) {
             sql += "WHERE T.TABLE_NAME = '" + name.toUpperCase() + "' ";
@@ -65,8 +65,8 @@ public class OracleTableServiceImpl implements DataBaseTableService {
     }
 
     @Override
-    public List<Map<String, Object>> selectTableInfo(@NonNull String name, @NonNull DataSourceUtil dataSourceUtil) {
-        return dataSourceUtil.executeQuery(selectTableInfo(name));
+    public List<Map<String, Object>> selectTableInfo(@NonNull String name, String schema, @NonNull DataSourceUtil dataSourceUtil) {
+        return dataSourceUtil.executeQuery(selectTableInfo(name, schema));
     }
 
     @Override
