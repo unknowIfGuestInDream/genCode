@@ -12,6 +12,7 @@ server:
     buffer-size: 1024
     direct-buffers: true
     allow-encoded-slash: true
+  shutdown: graceful
 spring:
   application:
     name: gen
