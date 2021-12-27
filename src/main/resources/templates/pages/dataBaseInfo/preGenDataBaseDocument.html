@@ -135,7 +135,7 @@
             }
         }
 
-        Ext.getCmp('engineFileType').setValue(['WORD']);
+        Ext.getCmp('engineFileType').setValue(['HTML']);
         Ext.getCmp('version').setValue('1.0.0');
         Ext.getCmp('description').setValue('数据库文档');
         Ext.getCmp('fileName').setValue(NAME + '数据库文档');
@@ -158,7 +158,7 @@
             'description': Ext.getCmp('description').getValue(),
             'fileName': Ext.getCmp('fileName').getValue(),
             'engineFileTypes': Ext.getCmp('engineFileType').getValue(),
-            't': new Date().getTime()
+            'random': Math.random()
         };
 
         var body = Ext.getBody();
