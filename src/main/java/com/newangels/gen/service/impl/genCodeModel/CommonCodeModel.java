@@ -74,7 +74,6 @@ public class CommonCodeModel extends AbstractGenCodeModel {
 
     /**
      * 返回extjs管理页formPanel items值和store查询条件extraParams属性值
-     * //todo 为区间查询时formPanel值会改
      *
      * @param selForm           管理页formPanel的items值
      * @param selExtraParams    管理页store的extraParams值
