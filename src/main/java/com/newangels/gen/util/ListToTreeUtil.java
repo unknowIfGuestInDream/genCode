@@ -21,11 +21,11 @@ public class ListToTreeUtil {
     /**
      * 并发除法阈值，容器大于此值走并发流提高性能
      */
-    private static int FILL_PALL = 100;
+    private static final int FILL_PALL = 100;
     /**
      * 默认是否进行深拷贝，false不进行深拷贝
      */
-    private static boolean DEFAULT_DEEP = false;
+    private static final boolean DEFAULT_DEEP = false;
 
     /**
      * list转换为tree结构数据
@@ -51,9 +51,9 @@ public class ListToTreeUtil {
             List<Map<String, Object>> finalCloneList = Collections.synchronizedList(cloneList);
             cloneList.parallelStream()
                     .filter(isRoot).forEachOrdered(s -> {
-                children.add(s);
-                fillChild(s, finalCloneList, idFun, pidFun);
-            });
+                        children.add(s);
+                        fillChild(s, finalCloneList, idFun, pidFun);
+                    });
         } else {
             children = new ArrayList<>();
             for (Map<String, Object> child : cloneList) {
@@ -91,15 +91,11 @@ public class ListToTreeUtil {
     /**
      * 递归生成树节点
      *
-     * @param child    每个元素
-     * @param list     数据集
-     * @param idField  id字段
-     * @param pidField 上级id字段
+     * @param child  每个元素
+     * @param list   数据集
+     * @param idFun  id函数
+     * @param pidFun 上级id函数
      */
-    private static void fillChild(Map<String, Object> child, List<Map<String, Object>> list, String idField, String pidField) {
-        fillChild(child, list, (m) -> m.get(idField), (n) -> n.get(pidField));
-    }
-
     private static void fillChild(Map<String, Object> child, List<Map<String, Object>> list, Function<Map<String, Object>, ?> idFun, Function<Map<String, Object>, ?> pidFun) {
         List<Map<String, Object>> children;
         if (list.size() > FILL_PALL) {
