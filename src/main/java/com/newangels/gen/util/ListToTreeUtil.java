@@ -37,7 +37,7 @@ public class ListToTreeUtil {
      * @param deepClone 是否进行深克隆，默认为否
      */
     public static List<Map<String, Object>> listToTree(List<Map<String, Object>> list, Predicate<Map<String, Object>> isRoot, Function<Map<String, Object>, ?> idFun, Function<Map<String, Object>, ?> pidFun, boolean deepClone) {
-        if (Objects.isNull(list) || Objects.isNull(idFun) || Objects.isNull(pidFun)) {
+        if (Objects.isNull(list) || Objects.isNull(isRoot) || Objects.isNull(idFun) || Objects.isNull(pidFun)) {
             return new ArrayList<>();
         }
         List<Map<String, Object>> cloneList = list;
@@ -51,9 +51,9 @@ public class ListToTreeUtil {
             List<Map<String, Object>> finalCloneList = Collections.synchronizedList(cloneList);
             cloneList.parallelStream()
                     .filter(isRoot).forEachOrdered(s -> {
-                        children.add(s);
-                        fillChild(s, finalCloneList, idFun, pidFun);
-                    });
+                children.add(s);
+                fillChild(s, finalCloneList, idFun, pidFun);
+            });
         } else {
             children = new ArrayList<>();
             for (Map<String, Object> child : cloneList) {
