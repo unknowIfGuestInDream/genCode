@@ -21,7 +21,7 @@ public class ListToTreeUtil {
     /**
      * 并发除法阈值，容器大于此值走并发流提高性能
      */
-    private static final int FILL_PALL = 100;
+    private static final int FILL_PALL = 500;
     /**
      * 默认是否进行深拷贝，false不进行深拷贝
      */
