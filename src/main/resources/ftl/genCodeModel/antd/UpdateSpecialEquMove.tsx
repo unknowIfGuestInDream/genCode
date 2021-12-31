@@ -2,8 +2,7 @@ import {useEffect, useState} from 'react';
 import {message} from 'antd';
 import ProForm, {ModalForm, ProFormDatePicker, ProFormText,} from '@ant-design/pro-form';
 import 'antd/dist/antd.css';
-import {
-  load${module},update${module}} from "././service";
+import {load${module}, update${module}} from "././service";
 import moment from "moment";
 import ProFormSelect from "@ant-design/pro-form/lib/components/Select";
 
@@ -11,8 +10,8 @@ const Update${module} = (props: any) => {
   const {isModalVisible} = props; // 模态框是否显示
   const {isShowModal} = props; // 操作模态框显示隐藏的方法
   const {actionRef} = props; // 父组件传过来的表格的引用, 可以用来操作表格, 比如刷新表格
-  const {equMoveId} = props; // 要编辑的ID, 添加的时候是undefined, 只有编辑才有
-  const [equMove, set${module}] = useState(undefined);// 将表单初始化的值设置成状态, 在编辑的时候, 使用这个状态
+  const {${module?uncap_first}Id} = props; // 要编辑的ID, 添加的时候是undefined, 只有编辑才有
+  const [${module?uncap_first}, set${module}] = useState(undefined);// 将表单初始化的值设置成状态, 在编辑的时候, 使用这个状态
   const [formObj] = ProForm.useForm(); // 定义Form实例, 用来操作表单
   const [orgName, setOrgName] = useState(undefined);
   const [orgNewName, setOrgNewName] = useState(undefined);
@@ -23,24 +22,24 @@ const Update${module} = (props: any) => {
   const [deptCode, setDeptCode] = useState(undefined);
 
   const get${module} = async () => {
-    const response = await load${module}({I_ID: equMoveId});
-    const equMoveData = response.data[0];
+    const response = await load${module}({I_ID: ${module?uncap_first}Id});
+    const ${module?uncap_first}Data = response.data[0];
 
     initOrg();
-    onChangeDept(equMoveData.V_ORGCODE, equMoveData.V_ORGNAME);
-    onChangeEquType(equMoveData.V_DEPTCODE, equMoveData.V_DEPTNAME);
-    onChangeEqpCode(equMoveData.V_EQUTYPECODE, equMoveData.V_EQUTYPENAME, equMoveData.V_DEPTCODE);
+    onChangeDept(${module?uncap_first}Data.V_ORGCODE, ${module?uncap_first}Data.V_ORGNAME);
+    onChangeEquType(${module?uncap_first}Data.V_DEPTCODE, ${module?uncap_first}Data.V_DEPTNAME);
+    onChangeEqpCode(${module?uncap_first}Data.V_EQUTYPECODE, ${module?uncap_first}Data.V_EQUTYPENAME, ${module?uncap_first}Data.V_DEPTCODE);
     initOrgNew();
-    onChangeDeptNew(equMoveData.V_NEWORGCODE, equMoveData.V_NEWORGNAME);
-    onChangeNewDept(equMoveData.V_NEWDEPTNAME);
+    onChangeDeptNew(${module?uncap_first}Data.V_NEWORGCODE, ${module?uncap_first}Data.V_NEWORGNAME);
+    onChangeNewDept(${module?uncap_first}Data.V_NEWDEPTNAME);
 
     set${module}({...response.data[0]});
-    Object.keys(equMoveData);
-    Object.values(equMoveData);
-    Object.keys(equMoveData).forEach(key => formObj.setFieldsValue({[`${key}`]: equMoveData[key]}));
+    Object.keys(${module?uncap_first}Data);
+    Object.values(${module?uncap_first}Data);
+    Object.keys(${module?uncap_first}Data).forEach(key => formObj.setFieldsValue({[`${key}`]: ${module?uncap_first}Data[key]}));
 
-    formObj.setFieldsValue({['V_EQUCODE']: equMoveData.V_EQUNAME}); //给form表单中name为V_EQUCODE的赋值
-    setEqpName(equMoveData.V_EQUNAME);
+    formObj.setFieldsValue({['V_EQUCODE']: ${module?uncap_first}Data.V_EQUNAME}); //给form表单中name为V_EQUCODE的赋值
+    setEqpName(${module?uncap_first}Data.V_EQUNAME);
   };
 
   //厂矿
@@ -158,7 +157,7 @@ const Update${module} = (props: any) => {
 
   //初始化
   useEffect(() => {
-    if (equMoveId !== undefined) {
+    if (${module?uncap_first}Id !== undefined) {
       get${module}();
     } else {
       initOrg();
@@ -183,10 +182,10 @@ const Update${module} = (props: any) => {
       newFields['V_NEWORGNAME'] = orgNewName;
       newFields['V_NEWDEPTNAME'] = deptNewName;
       newFields['V_PERSONCODE'] = 'qxzhangzf';
-      if (equMove === undefined) {
+      if (${module?uncap_first} === undefined) {
         response = await update${module}({...newFields});
       } else {
-        response = await update${module}({I_ID: (equMove as any).I_ID, ...newFields})
+        response = await update${module}({I_ID: (${module?uncap_first} as any).I_ID, ...newFields})
       }
       hide();
       if (response.success) {
@@ -205,7 +204,7 @@ const Update${module} = (props: any) => {
   return (
     <ModalForm
       form={formObj} //const [formObj] = ProForm.useForm(); // 定义Form实例, 用来操作表单
-      title={(equMove !== undefined ? "修改" : "新增")} //加载数据给equMove赋值，判断是否是新增/修改
+      title={(${module?uncap_first} !== undefined ? "修改" : "新增")} //加载数据给${module?uncap_first}赋值，判断是否是新增/修改
       width="800px"
       labelAlign={"right"} //文本框前面名称的位置
       visible={isModalVisible} //显示或隐藏
