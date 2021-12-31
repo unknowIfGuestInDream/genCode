@@ -30,6 +30,8 @@ public class AntdCodeModel extends AbstractGenCodeModel {
         super.dealCommonCode(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, primarys, objectMap);
         //antd前台默认不支持批量删除
         objectMap.replace("hasDelBatch", true, false);
+        //antd table默认只有一个主键
+        objectMap.put("primary", primarys.size() > 0 ? primarys.get(0) : "");
     }
 
     @Override

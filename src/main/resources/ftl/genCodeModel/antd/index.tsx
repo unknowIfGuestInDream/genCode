@@ -9,18 +9,11 @@ import {select${module}, delete${module}} from './service';
 import 'moment/locale/zh-cn'
 import Update${module} from "./components/Update${module}";
 import moment from "moment";
-import {DownloadOutlined} from "@ant-design/icons/lib";
 
 /* React.FC<>的在typescript使用的一个泛型，FC就是FunctionComponent的缩写，是函数组件，在这个泛型里面可以使用useState */
 export const Applications = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [${module?uncap_first}Id, set${module}Id] = useState(undefined);
-  const [deptCode, setDeptCode] = useState(undefined);
-  const [eqpTypeCode, setEqpTypeCode] = useState(undefined);
-  const [eqpCode, setEqpCode] = useState(undefined);
-  const [beginDate, setBeginDate] = useState(undefined);
-  const [endDate, setEndDate] = useState(undefined);
-  const [orgCode, setOrgCode] = useState(undefined);
   const actionRef = useRef<ActionType>();
 
   /**
@@ -37,7 +30,7 @@ export const Applications = () => {
     if (!I_PLANID) return true;
     try {
       await delete${module}({
-        I_ID: I_PLANID
+        ${primary}: I_PLANID
       });
       hide();
       message.success('删除成功，即将刷新');
@@ -169,7 +162,7 @@ export const Applications = () => {
             columns={columns}  // 上面定义的
             headerTitle="${moduleDesc}"  // 表头
             actionRef={actionRef}  // 用于触发刷新操作等，看api
-            rowKey="I_PLANID"        // 表格行 key 的取值，可以是字符串或一个函数
+            rowKey="${primary}"        // 表格行 key 的取值，可以是字符串或一个函数
             manualRequest={false} //是否需要手动触发首次请求
             options={{
               density: true, // 密度
@@ -189,23 +182,6 @@ export const Applications = () => {
                     isShowModal(true);
                   }}>
                 新建
-              </Button>,
-              <Button
-                  icon={<DownloadOutlined/>}
-                  key="export"
-                  onClick={() => {
-                    window.location.href = '/pmnew-specequ/equMove/exportEquMove?'
-                        + 'V_PERSONCODE=' + 'qxzhangzf'
-                        + '&V_DEPTCODE=' + orgCode
-                        + '&V_DEPTCODENEXT=' + (deptCode === '' || deptCode === undefined ? encodeURIComponent('%') : (deptCode === '%' ? encodeURIComponent('%') : deptCode))
-                        + '&V_EQUTYPECODE=' + (eqpTypeCode === '' || eqpTypeCode === undefined ? encodeURIComponent('%') : eqpTypeCode)
-                        + '&V_EQUTYPENAME=' + (eqpTypeCode === '' || eqpTypeCode === undefined ? encodeURIComponent('%') : eqpTypeCode)
-                        + '&V_EQUCODE=' + (eqpCode === '' || eqpCode === undefined ? encodeURIComponent('%') : eqpCode)
-                        + '&V_BDATE=' + beginDate
-                        + '&V_EDATE=' + endDate
-                        + '&V_STATUS=' + '';
-                  }}>
-                导出
               </Button>
             ]}
 
