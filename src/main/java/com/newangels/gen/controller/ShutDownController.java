@@ -28,7 +28,7 @@ public class ShutDownController implements ApplicationContextAware {
     private ApplicationContext context;
 
     /**
-     * 设置默认线程名称
+     * 关闭接口密钥
      */
     @Value("${gen.shutdown.password}")
     private String password;
