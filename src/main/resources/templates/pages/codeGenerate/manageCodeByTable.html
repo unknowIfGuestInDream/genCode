@@ -871,7 +871,7 @@
             return "InputStream";
         } else if (type === 'INT' || type.indexOf('INT') > 0) {
             return "Integer";
-        } else if (type === 'DATE' || type === 'TIMESTAMP') {
+        } else if (type === 'DATE' || type.indexOf('TIMESTAMP') >= 0) {
             return "Date";
         } else {
             return "String";

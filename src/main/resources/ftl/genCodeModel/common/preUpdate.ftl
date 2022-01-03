@@ -76,7 +76,7 @@
                 inputWidth: 300,
                 margin: '4'
             },
-            items: [${updForm}]
+            items: [${common_updForm}]
         });
 
         Ext.create('Ext.container.Viewport', {//整体布局
@@ -97,7 +97,7 @@
                 items: [buttonPanel]
             }, {
                 region: 'center',
-                layout: 'fit',//充满
+                layout: 'fit',
                 items: [formPanel]
             }]
         });

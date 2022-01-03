@@ -6,10 +6,7 @@ import com.newangels.gen.service.AbstractGenCodeModel;
 import freemarker.template.Configuration;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 大连ANTD模版
@@ -31,11 +28,39 @@ public class AntdCodeModel extends AbstractGenCodeModel {
         //antd前台默认不支持批量删除
         objectMap.replace("hasDelBatch", true, false);
         //antd table默认只有一个主键
-        objectMap.put("primary", primarys.size() > 0 ? primarys.get(0) : "");
+        objectMap.put("antd_primary", primarys.size() > 0 ? primarys.get(0) : "");
     }
 
     @Override
     protected void dealOtherCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> primaryDesc, List<String> primaryJavaClass, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType, List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, List<String> updParams, List<String> updParamDescs, List<String> updParamJavaClass, Map<String, Object> objectMap) {
+        StringJoiner storeParams = new StringJoiner(", ");
+        StringJoiner tableParams = new StringJoiner(", ");
+
+        dealTableParam(storeParams, tableParams, params, paramDescs, primarys);
+    }
+
+    private void dealTableParam(StringJoiner storeParams, StringJoiner tableParams, List<String> params, List<String> paramDescs, List<String> primarys) {
+        for (int i = 0, length = params.size(); i < length; i++) {
+            //store参数
+            storeParams.add("'" + params.get(i) + "'");
+            //主键不显示在table中
+            if (primarys.contains(params.get(i))) {
+                continue;
+            }
+            tableParams.add("{\n" +
+                    "                text: '" + paramDescs.get(i) + "',\n" +
+                    "                dataIndex: '" + params.get(i) + "',\n" +
+                    "                flex: 1,\n" +
+                    "                minWidth: 150\n" +
+                    "            }");
+            tableParams.add("{\n" +
+                    "      title: '"+paramDescs.get(i)+"',\n" +
+                    "      dataIndex: '" + params.get(i) + "',\n" +
+                    "      width: 150,\n" +
+                    "      hideInSearch: true\n" +
+                    "      hideInTable: false\n" +
+                    "    }");
+        }
     }
 
     @Override

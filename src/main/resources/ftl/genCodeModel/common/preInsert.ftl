@@ -36,7 +36,7 @@
             }]
         });
 
-        var formPanel = Ext.create('Ext.form.Panel', {//表单
+        var formPanel = Ext.create('Ext.form.Panel', {
             id: 'formPanel',
             layout: 'column',
             frame: true,
@@ -46,7 +46,7 @@
                 labelWidth: 150,
                 inputWidth: 300,
             },
-            items: [${insForm}]
+            items: [${common_insForm}]
         });
 
         Ext.create('Ext.container.Viewport', {//整体布局
@@ -67,7 +67,7 @@
                 items: [buttonPanel]
             }, {
                 region: 'center',
-                layout: 'fit',//充满
+                layout: 'fit',
                 items: [formPanel]
             }]
         });
@@ -87,7 +87,7 @@
 
     //新增${moduleDesc}
     function _insert${module}() {
-        Ext.getCmp('formPanel').getForm().submit({//提交表单
+        Ext.getCmp('formPanel').getForm().submit({
             url: AppUrl + '/${package?substring(package?last_index_of(".")+1)?lower_case}/insert${module}',
             submitEmptyText: false,
             waitMsg: '进行中',

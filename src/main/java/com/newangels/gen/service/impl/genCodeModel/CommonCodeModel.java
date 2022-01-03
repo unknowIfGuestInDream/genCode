@@ -38,12 +38,12 @@ public class CommonCodeModel extends AbstractGenCodeModel {
         dealInsFormPanel(insForm, insParams, insParamDescs, insParamJavaClass, primarys);
         dealUpdFormPanel(updForm, updParams, updParamDescs, updParamJavaClass, primarys);
         dealControllerPageHandler(moduleName, moduleDesc, packageName, objectMap);
-        objectMap.put("storeParams", storeParams.toString());
-        objectMap.put("gridParams", gridParams.toString());
-        objectMap.put("insForm", insForm.toString());
-        objectMap.put("updForm", updForm.toString());
-        objectMap.put("selForm", selForm.toString());
-        objectMap.put("selExtraParams", selExtraParams.toString());
+        objectMap.put("common_storeParams", storeParams.toString());
+        objectMap.put("common_gridParams", gridParams.toString());
+        objectMap.put("common_insForm", insForm.toString());
+        objectMap.put("common_updForm", updForm.toString());
+        objectMap.put("common_selForm", selForm.toString());
+        objectMap.put("common_selExtraParams", selExtraParams.toString());
     }
 
     /**
