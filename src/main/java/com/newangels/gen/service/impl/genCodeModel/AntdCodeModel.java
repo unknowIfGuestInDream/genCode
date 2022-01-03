@@ -34,7 +34,7 @@ public class AntdCodeModel extends AbstractGenCodeModel {
     @Override
     protected void dealOtherCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, boolean hasExport, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> primaryDesc, List<String> primaryJavaClass, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType, List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, List<String> updParams, List<String> updParamDescs, List<String> updParamJavaClass, Map<String, Object> objectMap) {
         StringJoiner tableParams = new StringJoiner(", ");
-        dealTableParam(tableParams, params, paramDescs, primarys, selParams, selType);
+        dealTableParam(tableParams, params, paramDescs, paramJavaClass, primarys, selParams, selType);
         objectMap.put("antd_tableParams", tableParams.toString());
     }
 
@@ -49,13 +49,18 @@ public class AntdCodeModel extends AbstractGenCodeModel {
         objectMap.put("antd_exportParamUrl", exportParamUrl.toString());
     }
 
-    private void dealTableParam(StringJoiner tableParams, List<String> params, List<String> paramDescs, List<String> primarys, List<String> selParams, List<Integer> selType) {
+    private void dealTableParam(StringJoiner tableParams, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> selParams, List<Integer> selType) {
         for (int i = 0, length = params.size(); i < length; i++) {
             //主键不显示在table中
             if (primarys.contains(params.get(i))) {
                 continue;
             }
             int position = selParams.indexOf(params.get(i));
+            //todo 根据类型返回valueType  https://procomponents.ant.design/components/table?current=1&pageSize=5
+            //判断java类型是否为Date
+//            JavaClass javaClass = JavaClass.fromCode(paramJavaClass.get(i));
+//            boolean paramIsDate = javaClass == JavaClass.Date;
+
             //是查询条件且查询类型为区间查询
             if (position > -1 && selType.get(position) == 2) {
                 tableParams.add("{\n" +
