@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.InputStream;
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
@@ -101,6 +102,23 @@ public class ${module}Controller {
             return BaseUtils.failed("批量删除${moduleDesc}失败");
         }
         return BaseUtils.success();
+    }
+</#if>
+<#if hasExport>
+
+    /**
+     * 导出${moduleDesc}
+     */
+    @GetMapping("export${module}")
+    @Log
+    public void export${module}(${selInParams}<#if selInParams?length gt 1>, </#if>HttpServletRequest request, HttpServletResponse response) throws IOException {
+        List<Map<String, Object>> list = ${module?uncap_first}Service.select${module}(${selSqlParams}<#if selSqlParams?length gt 1>, </#if>null, null);
+        HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFSheet sheet = wb.createSheet();
+        LinkedHashMap<String, String> linkedHashMap = new LinkedHashMap<>(${mapSize});
+        ${exportLinkHashMap}
+        BaseUtils.dealCommonExcel(wb, sheet, list, linkedHashMap);
+        BaseUtils.download(wb, "${moduleDesc}.xls", request, response);
     }
 </#if>
 

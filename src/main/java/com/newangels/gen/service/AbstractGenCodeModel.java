@@ -323,6 +323,35 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
     }
 
     /**
+     * 处理导出接口所需参数
+     * 子类可能需要重写以实现前台导出路径
+     *
+     * @param params     参数
+     * @param paramDescs 字段描述
+     * @param primarys   主键参数
+     * @param selParams  查询参数
+     * @param hasExport  是否包含导出接口
+     * @param objectMap  代码模版值
+     */
+    protected void dealExportCode(List<String> params, List<String> paramDescs, List<String> primarys, List<String> selParams, List<String> selParamJavaClass, List<Integer> selType, boolean hasExport, Map<String, Object> objectMap) {
+        if (!hasExport) {
+            objectMap.put("mapSize", "");
+            objectMap.put("exportLinkHashMap", "");
+            return;
+        }
+        StringJoiner exportLinkHashMap = new StringJoiner("\n        ");
+        for (int i = 0, length = params.size(); i < length; i++) {
+            //主键默认不显示在导出数据中
+            if (primarys.contains(params.get(i))) {
+                continue;
+            }
+            exportLinkHashMap.add("linkedHashMap.put(\"" + paramDescs.get(i) + "\", \"" + params.get(i) + "\");");
+        }
+        objectMap.put("mapSize", BaseUtils.newHashMapWithExpectedSize(params.size()));
+        objectMap.put("exportLinkHashMap", exportLinkHashMap.toString());
+    }
+
+    /**
      * 根据表生成后台代码
      *
      * @param tableName       表名
@@ -406,6 +435,7 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
         dealInsCode(insParams, insParamDescs, insParamJavaClass, primarys, objectMap);
         dealUpdCode(primarys, primaryDesc, primaryJavaClass, updParams, updParamDescs, updParamJavaClass, objectMap);
         dealDelBatchCode(primarys, primaryDesc, primaryJavaClass, objectMap, hasDelBatch);
+        dealExportCode(params, paramDescs, primarys, selParams, selParamJavaClass, selType, hasExport, objectMap);
         dealOtherCode(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, hasExport, params, paramDescs, paramJavaClass, primarys, primaryDesc, primaryJavaClass, selParams, selParamDescs, selParamJavaClass, selType, insParams, insParamDescs, insParamJavaClass, updParams, updParamDescs, updParamJavaClass, objectMap);
         //返回结果
         return getResult(driver, objectMap, configuration);

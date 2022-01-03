@@ -64,7 +64,12 @@
                 text: '删除',
                 icon: 'public/image/btn/delete.png',
                 handler: <#if hasDelBatch>_delete${module}Batch<#else>_delete${module}</#if>
-            }]
+            }<#if hasExport>, {
+                xtype: 'button',
+                text: '导出',
+                icon: 'public/image/btn/download.png',
+                handler: _export${module}
+            }</#if>]
         });
 
         var formPanel = Ext.create('Ext.Panel', {
@@ -303,6 +308,14 @@
                 }
             }
         });
+    }
+    </#if>
+    <#if hasExport>
+
+    //导出${moduleDesc}
+    function _export${module}() {
+        document.location.href = AppUrl + '/${package?substring(package?last_index_of(".")+1)?lower_case}/export${module}<#if common_exportParamUrl?? && common_exportParamUrl?length gt 0>?' +
+            ${common_exportParamUrl};<#else>';</#if>
     }
     </#if>
 </script>
