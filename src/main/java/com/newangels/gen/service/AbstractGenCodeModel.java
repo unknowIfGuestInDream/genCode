@@ -55,10 +55,11 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
      * @param packageName 包名
      * @param author      作者
      * @param hasDelBatch 是否包含批量删除
-     * @param objectMap   代码模版值
+     * @param hasExport   是否包含导出接口
      * @param primarys    主键参数集合
+     * @param objectMap   代码模版值
      */
-    protected void dealCommonCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, List<String> primarys, Map<String, Object> objectMap) {
+    protected void dealCommonCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, boolean hasExport, List<String> primarys, Map<String, Object> objectMap) {
         objectMap.put("tableName", tableName);
         objectMap.put("tableDesc", tableDesc);
         objectMap.put("module", moduleName);
@@ -66,6 +67,7 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
         objectMap.put("package", packageName);
         objectMap.put("author", author);
         objectMap.put("hasDelBatch", hasDelBatch);
+        objectMap.put("hasExport", hasExport);
         objectMap.put("primarys", primarys);
         objectMap.put("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
     }
@@ -330,6 +332,7 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
      * @param packageName     包名
      * @param author          作者
      * @param hasDelBatch     是否包含批量删除
+     * @param hasExport       是否包含导出接口
      * @param driver          数据库驱动
      * @param params          参数
      * @param paramDescs      字段描述
@@ -343,7 +346,7 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
      * @param orderParamTypes 排序类型
      * @param configuration   ftl模板引擎配置
      */
-    public Map<String, Object> genCodeByTable(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, String driver, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<Integer> priParamIndex, List<Integer> selParamsIndex, List<Integer> selType, List<Integer> insParamIndex, List<Integer> updParamIndex, List<Integer> orderParamIndex, List<String> orderParamTypes, Configuration configuration) {
+    public Map<String, Object> genCodeByTable(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, boolean hasExport, String driver, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<Integer> priParamIndex, List<Integer> selParamsIndex, List<Integer> selType, List<Integer> insParamIndex, List<Integer> updParamIndex, List<Integer> orderParamIndex, List<String> orderParamTypes, Configuration configuration) {
         //一个集合包含所有字段，以及其它相关的存储集合的索引（0开始）
         //通过遍历所有字段集合来为相关集合赋值
         int priLength = priParamIndex.size();
@@ -396,14 +399,14 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
 
         //模版值
         Map<String, Object> objectMap = new HashMap<>(128);
-        dealCommonCode(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, primarys, objectMap);
+        dealCommonCode(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, hasExport, primarys, objectMap);
         dealLoadCode(primarys, primaryDesc, primaryJavaClass, objectMap);
         dealSelCode(selParams, selParamDescs, selParamJavaClass, selType, objectMap);
         dealSelOrderBy(orderParams, orderParamTypes, objectMap);
         dealInsCode(insParams, insParamDescs, insParamJavaClass, primarys, objectMap);
         dealUpdCode(primarys, primaryDesc, primaryJavaClass, updParams, updParamDescs, updParamJavaClass, objectMap);
         dealDelBatchCode(primarys, primaryDesc, primaryJavaClass, objectMap, hasDelBatch);
-        dealOtherCode(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, params, paramDescs, paramJavaClass, primarys, primaryDesc, primaryJavaClass, selParams, selParamDescs, selParamJavaClass, selType, insParams, insParamDescs, insParamJavaClass, updParams, updParamDescs, updParamJavaClass, objectMap);
+        dealOtherCode(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, hasExport, params, paramDescs, paramJavaClass, primarys, primaryDesc, primaryJavaClass, selParams, selParamDescs, selParamJavaClass, selType, insParams, insParamDescs, insParamJavaClass, updParams, updParamDescs, updParamJavaClass, objectMap);
         //返回结果
         return getResult(driver, objectMap, configuration);
     }
@@ -411,7 +414,7 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
     /**
      * 交给子类实现，方便子类实现别的代码
      */
-    protected void dealOtherCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> primaryDesc, List<String> primaryJavaClass, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType, List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, List<String> updParams, List<String> updParamDescs, List<String> updParamJavaClass, Map<String, Object> objectMap) {
+    protected void dealOtherCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, boolean hasExport, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> primaryDesc, List<String> primaryJavaClass, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType, List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, List<String> updParams, List<String> updParamDescs, List<String> updParamJavaClass, Map<String, Object> objectMap) {
     }
 
     /**

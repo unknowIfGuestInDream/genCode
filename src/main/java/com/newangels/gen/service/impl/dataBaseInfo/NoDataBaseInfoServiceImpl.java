@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @ConditionalOnProperty(name = "gen.isdb", havingValue = "false")
 public class NoDataBaseInfoServiceImpl implements DataBaseInfoService {
     //数据源集合
-    private static List<Map<String, Object>> DataBaseInfoList = new ArrayList<>();
+    private static final List<Map<String, Object>> DataBaseInfoList = new ArrayList<>();
 
     @PostConstruct
     public void initDataBaseInfoList() {
