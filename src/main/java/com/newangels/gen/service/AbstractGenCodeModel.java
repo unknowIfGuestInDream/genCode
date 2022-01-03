@@ -25,6 +25,8 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
 
     //service注释所用的StringJoiner间隔
     protected String noteJoiner = "\n     * ";
+    //DateTimeFormat注解pattern参数
+    protected String dateTimeFormat = "yyyy-MM-dd";
 
     @Override
     protected String getRootPackageName() {
@@ -113,26 +115,34 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
      */
     protected void dealSelCode(List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType, Map<String, Object> objectMap) {
         StringJoiner selInParams = new StringJoiner(", ");
+        StringJoiner selConInParams = new StringJoiner(", ");
         StringJoiner selSqlParams = new StringJoiner(", ");
         StringJoiner selNote = new StringJoiner(noteJoiner);
         StringJoiner selBuildParams = new StringJoiner("\n");
         for (int i = 0, length = selParams.size(); i < length; i++) {
+            //判断参数类型，如果是Date需要加注解@DateTimeFormat
+            JavaClass javaClass = JavaClass.fromCode(selParamJavaClass.get(i));
+            boolean paramIsDate = javaClass == JavaClass.Date;
             //为区间查询
             if (selType.get(i) == 2) {
                 selInParams.add(selParamJavaClass.get(i) + " START_" + selParams.get(i));
                 selInParams.add(selParamJavaClass.get(i) + " END_" + selParams.get(i));
+                selConInParams.add((paramIsDate ? "@DateTimeFormat(pattern = \"" + dateTimeFormat + "\") " : "") + selParamJavaClass.get(i) + " START_" + selParams.get(i));
+                selConInParams.add((paramIsDate ? "@DateTimeFormat(pattern = \"" + dateTimeFormat + "\") " : "") + selParamJavaClass.get(i) + " END_" + selParams.get(i));
                 selSqlParams.add("START_" + selParams.get(i));
                 selSqlParams.add("END_" + selParams.get(i));
                 selNote.add("@param START_" + selParams.get(i) + " 开始" + selParamDescs.get(i));
                 selNote.add("@param END_" + selParams.get(i) + " 结束" + selParamDescs.get(i));
             } else {
                 selInParams.add(selParamJavaClass.get(i) + " " + selParams.get(i));
+                selConInParams.add((paramIsDate ? "@DateTimeFormat(pattern = \"" + dateTimeFormat + "\") " : "") + selParamJavaClass.get(i) + " " + selParams.get(i));
                 selSqlParams.add(selParams.get(i));
                 selNote.add("@param " + selParams.get(i) + " " + selParamDescs.get(i));
             }
             buildSelParam(selBuildParams, selParams.get(i), selParamJavaClass.get(i), selType.get(i));
         }
         objectMap.put("selInParams", selInParams.toString());
+        objectMap.put("selConInParams", selConInParams.toString());
         objectMap.put("selSqlParams", selSqlParams.toString());
         objectMap.put("selNote", selNote.toString());
         objectMap.put("selMapSize", BaseUtils.newHashMapWithExpectedSize(selParams.size()));
@@ -323,17 +333,16 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
     }
 
     /**
-     * 处理导出接口所需参数
+     * 处理导出接口后台代码所需参数
      * 子类可能需要重写以实现前台导出路径
      *
      * @param params     参数
      * @param paramDescs 字段描述
      * @param primarys   主键参数
-     * @param selParams  查询参数
      * @param hasExport  是否包含导出接口
      * @param objectMap  代码模版值
      */
-    protected void dealExportCode(List<String> params, List<String> paramDescs, List<String> primarys, List<String> selParams, List<String> selParamJavaClass, List<Integer> selType, boolean hasExport, Map<String, Object> objectMap) {
+    protected void dealExportCode(List<String> params, List<String> paramDescs, List<String> primarys, boolean hasExport, Map<String, Object> objectMap) {
         if (!hasExport) {
             objectMap.put("mapSize", "");
             objectMap.put("exportLinkHashMap", "");
@@ -349,6 +358,18 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
         }
         objectMap.put("mapSize", BaseUtils.newHashMapWithExpectedSize(params.size()));
         objectMap.put("exportLinkHashMap", exportLinkHashMap.toString());
+    }
+
+    /**
+     * 导出接口的前台路径生成
+     *
+     * @param selParams         查询参数
+     * @param selParamJavaClass 字段对应java对象
+     * @param selType           查询类型(0精确/1模糊/2区间查询)
+     * @param hasExport         是否包含导出接口
+     * @param objectMap         代码模版值
+     */
+    protected void dealExportUrl(List<String> selParams, List<String> selParamJavaClass, List<Integer> selType, boolean hasExport, Map<String, Object> objectMap) {
     }
 
     /**
@@ -435,7 +456,8 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
         dealInsCode(insParams, insParamDescs, insParamJavaClass, primarys, objectMap);
         dealUpdCode(primarys, primaryDesc, primaryJavaClass, updParams, updParamDescs, updParamJavaClass, objectMap);
         dealDelBatchCode(primarys, primaryDesc, primaryJavaClass, objectMap, hasDelBatch);
-        dealExportCode(params, paramDescs, primarys, selParams, selParamJavaClass, selType, hasExport, objectMap);
+        dealExportCode(params, paramDescs, primarys, hasExport, objectMap);
+        dealExportUrl(selParams, selParamJavaClass, selType, hasExport, objectMap);
         dealOtherCode(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, hasExport, params, paramDescs, paramJavaClass, primarys, primaryDesc, primaryJavaClass, selParams, selParamDescs, selParamJavaClass, selType, insParams, insParamDescs, insParamJavaClass, updParams, updParamDescs, updParamJavaClass, objectMap);
         //返回结果
         return getResult(driver, objectMap, configuration);

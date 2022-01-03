@@ -34,9 +34,19 @@ public class AntdCodeModel extends AbstractGenCodeModel {
     @Override
     protected void dealOtherCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, boolean hasExport, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> primaryDesc, List<String> primaryJavaClass, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType, List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, List<String> updParams, List<String> updParamDescs, List<String> updParamJavaClass, Map<String, Object> objectMap) {
         StringJoiner tableParams = new StringJoiner(", ");
-
         dealTableParam(tableParams, params, paramDescs, primarys, selParams, selType);
         objectMap.put("antd_tableParams", tableParams.toString());
+    }
+
+    @Override
+    protected void dealExportUrl(List<String> selParams, List<String> selParamJavaClass, List<Integer> selType, boolean hasExport, Map<String, Object> objectMap) {
+        if (!hasExport) {
+            objectMap.put("antd_exportParamUrl", "");
+            return;
+        }
+        //todo
+        StringJoiner exportParamUrl = new StringJoiner(" +\n            ");
+        objectMap.put("antd_exportParamUrl", exportParamUrl.toString());
     }
 
     private void dealTableParam(StringJoiner tableParams, List<String> params, List<String> paramDescs, List<String> primarys, List<String> selParams, List<Integer> selType) {

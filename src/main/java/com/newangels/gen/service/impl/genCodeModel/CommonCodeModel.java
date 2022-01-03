@@ -47,11 +47,11 @@ public class CommonCodeModel extends AbstractGenCodeModel {
     }
 
     @Override
-    protected void dealExportCode(List<String> params, List<String> paramDescs, List<String> primarys, List<String> selParams, List<String> selParamJavaClass, List<Integer> selType, boolean hasExport, Map<String, Object> objectMap) {
+    protected void dealExportUrl(List<String> selParams, List<String> selParamJavaClass, List<Integer> selType, boolean hasExport, Map<String, Object> objectMap) {
         if (!hasExport) {
             objectMap.put("common_exportParamUrl", "");
+            return;
         }
-        super.dealExportCode(params, paramDescs, primarys, selParams, selParamJavaClass, selType, hasExport, objectMap);
         StringJoiner exportParamUrl = new StringJoiner(" +\n            ");
         for (int i = 0, length = selParams.size(); i < length; i++) {
             //java类型为date的前台获取值的方法为getSubmitValue
