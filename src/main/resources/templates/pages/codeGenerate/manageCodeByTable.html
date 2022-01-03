@@ -189,24 +189,11 @@
                 forceSelection: true,
                 value: '1'
             }, {
-                xtype: 'radiogroup',
-                id: 'hasDelBatch',
+                xtype: 'checkboxgroup',
                 fieldLabel: '包含批量删除',
-                layout: 'hbox',
-                defaults: {
-                    boxLabelAlign: 'before',
-                    width: 50
-                },
-                items: [{
-                    boxLabel: '是',
-                    name: 'hasDelBatch',
-                    inputValue: true
-                }, {
-                    boxLabel: '否',
-                    name: 'hasDelBatch',
-                    checked: true,
-                    inputValue: false
-                }]
+                items: [
+                    {id: 'hasDelBatch', name: 'hasDelBatch', checked: false}
+                ]
             }]
         });
 
@@ -716,7 +703,7 @@
                 'moduleName': Ext.getCmp('moduleName').getValue(),
                 'moduleDesc': Ext.getCmp('moduleDesc').getValue(),
                 'packageName': Ext.getCmp('packageName').getValue(),
-                'hasDelBatch': Ext.getCmp('hasDelBatch').getChecked()[0].inputValue,
+                'hasDelBatch': Ext.getCmp('hasDelBatch').checked,
                 'author': Ext.getCmp('author').getValue()
             },
             callback: function (options, success, response) {
@@ -898,7 +885,7 @@
             'moduleName': Ext.getCmp('moduleName').getValue(),
             'moduleDesc': Ext.getCmp('moduleDesc').getValue(),
             'packageName': Ext.getCmp('packageName').getValue(),
-            'hasDelBatch': Ext.getCmp('hasDelBatch').getChecked()[0].inputValue,
+            'hasDelBatch': Ext.getCmp('hasDelBatch').checked,
             'author': Ext.getCmp('author').getValue(),
             'random': Math.random()
         };

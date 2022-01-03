@@ -33,33 +33,43 @@ public class AntdCodeModel extends AbstractGenCodeModel {
 
     @Override
     protected void dealOtherCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> primaryDesc, List<String> primaryJavaClass, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType, List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, List<String> updParams, List<String> updParamDescs, List<String> updParamJavaClass, Map<String, Object> objectMap) {
-        StringJoiner storeParams = new StringJoiner(", ");
         StringJoiner tableParams = new StringJoiner(", ");
 
-        dealTableParam(storeParams, tableParams, params, paramDescs, primarys);
+        dealTableParam(tableParams, params, paramDescs, primarys, selParams, selType);
+        objectMap.put("antd_tableParams", tableParams.toString());
     }
 
-    private void dealTableParam(StringJoiner storeParams, StringJoiner tableParams, List<String> params, List<String> paramDescs, List<String> primarys) {
+    private void dealTableParam(StringJoiner tableParams, List<String> params, List<String> paramDescs, List<String> primarys, List<String> selParams, List<Integer> selType) {
         for (int i = 0, length = params.size(); i < length; i++) {
-            //store参数
-            storeParams.add("'" + params.get(i) + "'");
             //主键不显示在table中
             if (primarys.contains(params.get(i))) {
                 continue;
             }
-            tableParams.add("{\n" +
-                    "                text: '" + paramDescs.get(i) + "',\n" +
-                    "                dataIndex: '" + params.get(i) + "',\n" +
-                    "                flex: 1,\n" +
-                    "                minWidth: 150\n" +
-                    "            }");
-            tableParams.add("{\n" +
-                    "      title: '"+paramDescs.get(i)+"',\n" +
-                    "      dataIndex: '" + params.get(i) + "',\n" +
-                    "      width: 150,\n" +
-                    "      hideInSearch: true\n" +
-                    "      hideInTable: false\n" +
-                    "    }");
+            int position = selParams.indexOf(params.get(i));
+            //是查询条件且查询类型为区间查询
+            if (position > -1 && selType.get(position) == 2) {
+                tableParams.add("{\n" +
+                        "      title: '开始" + paramDescs.get(i) + "',\n" +
+                        "      dataIndex: 'START_" + params.get(i) + "',\n" +
+                        "      valueType: 'date',   //定义时间类型，用于Search中\n" +
+                        "      hideInTable: true,  //在Protable中隐藏，不显示\n" +
+                        "      initialValue: moment(moment().year() + '-01-01').format('YYYY-MM-DD')   //设置默认值\n" +
+                        "    }, {\n" +
+                        "      title: '结束" + paramDescs.get(i) + "',\n" +
+                        "      dataIndex: 'END_" + params.get(i) + "',\n" +
+                        "      valueType: 'date',\n" +
+                        "      hideInTable: true,\n" +
+                        "      initialValue: moment(moment().year() + '-12-31').format('YYYY-MM-DD')\n" +
+                        "    }");
+            } else {
+                tableParams.add("{\n" +
+                        "      title: '" + paramDescs.get(i) + "',\n" +
+                        "      dataIndex: '" + params.get(i) + "',\n" +
+                        "      width: 150,\n" +
+                        "      hideInSearch: " + (position > -1 ? "true" : "false") + "\n" +
+                        "      hideInTable: false\n" +
+                        "    }");
+            }
         }
     }
 
