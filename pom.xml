@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.newangels</groupId>
     <artifactId>gen</artifactId>
-    <version>3.2</version>
+    <version>3.3</version>
     <packaging>jar</packaging>
     <name>gen</name>
     <description>存储过程生成</description>
