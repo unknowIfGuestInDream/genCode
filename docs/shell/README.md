@@ -19,10 +19,4 @@ ctrl+D 退出
 chmod u+x gen.sh
 ```
 
-或者可以修改gen.sh脚本 将起重命令运行修改为echo输出
-
-### 版本迭代，需要修改脚本
-例如：3.2版本 -> 3.3版本
-```shell script
-sed -i 's|gen-3.2.jar|gen-3.3.jar|' gen.sh
-```
+或者可以修改gen.sh脚本 将起动命令运行修改为echo输出
