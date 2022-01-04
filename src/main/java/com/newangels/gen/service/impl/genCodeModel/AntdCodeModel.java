@@ -1,6 +1,7 @@
 package com.newangels.gen.service.impl.genCodeModel;
 
 import com.newangels.gen.enums.GenCodeModelType;
+import com.newangels.gen.enums.JavaClass;
 import com.newangels.gen.factory.AbstractGenCodeModelFactory;
 import com.newangels.gen.service.AbstractGenCodeModel;
 import freemarker.template.Configuration;
@@ -44,8 +45,19 @@ public class AntdCodeModel extends AbstractGenCodeModel {
             objectMap.put("antd_exportParamUrl", "");
             return;
         }
-        //todo
-        StringJoiner exportParamUrl = new StringJoiner(" +\n            ");
+        StringJoiner exportParamUrl = new StringJoiner(" +\n                  ");
+        for (int i = 0, length = selParams.size(); i < length; i++) {
+            //java类型为date的前台获取值的方法为getSubmitValue
+            JavaClass javaClass = JavaClass.fromCode(selParamJavaClass.get(i));
+            boolean paramIsDate = javaClass == JavaClass.Date;
+            //为区间查询时
+            if (selType.get(i) == 2) {
+                exportParamUrl.add("'" + (i == 0 ? "" : "&") + "START_" + selParams.get(i) + "=' + encodeURIComponent(" + (paramIsDate ? "(typeof (formProps.form?.getFieldValue('START_" + selParams.get(i) + "')) == 'string') ? formProps.form?.getFieldValue('START_" + selParams.get(i) + "') : formProps.form?.getFieldValue('START_" + selParams.get(i) + "').format('YYYY-MM-DD')" : "formProps.form?.getFieldValue('START_" + selParams.get(i) + "')") + ")");
+                exportParamUrl.add("'&END_" + selParams.get(i) + "=' + encodeURIComponent(" + (paramIsDate ? "(typeof (formProps.form?.getFieldValue('END_" + selParams.get(i) + "')) == 'string') ? formProps.form?.getFieldValue('END_" + selParams.get(i) + "') : formProps.form?.getFieldValue('END_" + selParams.get(i) + "').format('YYYY-MM-DD')" : "formProps.form?.getFieldValue('END_" + selParams.get(i) + "')") + ")");
+            } else {
+                exportParamUrl.add("'" + (i == 0 ? "" : "&") + selParams.get(i) + "=' + encodeURIComponent(" + (paramIsDate ? "(typeof (formProps.form?.getFieldValue('" + selParams.get(i) + "')) == 'string') ? formProps.form?.getFieldValue('" + selParams.get(i) + "') : formProps.form?.getFieldValue('" + selParams.get(i) + "').format('YYYY-MM-DD')" : "formProps.form?.getFieldValue('" + selParams.get(i) + "')") + ")");
+            }
+        }
         objectMap.put("antd_exportParamUrl", exportParamUrl.toString());
     }
 
@@ -56,36 +68,54 @@ public class AntdCodeModel extends AbstractGenCodeModel {
                 continue;
             }
             int position = selParams.indexOf(params.get(i));
-            //todo 根据类型返回valueType  https://procomponents.ant.design/components/table?current=1&pageSize=5
             //判断java类型是否为Date
-//            JavaClass javaClass = JavaClass.fromCode(paramJavaClass.get(i));
-//            boolean paramIsDate = javaClass == JavaClass.Date;
-
+            JavaClass javaClass = JavaClass.fromCode(paramJavaClass.get(i));
+            boolean paramIsDate = javaClass == JavaClass.Date;
+            String valueType = getValueType(javaClass);
             //是查询条件且查询类型为区间查询
             if (position > -1 && selType.get(position) == 2) {
                 tableParams.add("{\n" +
                         "      title: '开始" + paramDescs.get(i) + "',\n" +
                         "      dataIndex: 'START_" + params.get(i) + "',\n" +
-                        "      valueType: 'date',   //定义时间类型，用于Search中\n" +
-                        "      hideInTable: true,  //在Protable中隐藏，不显示\n" +
-                        "      initialValue: moment(moment().year() + '-01-01').format('YYYY-MM-DD')   //设置默认值\n" +
+                        "      valueType: '" + valueType + "',\n" +
+                        "      hideInTable: true" + (paramIsDate ? "," : "") + "  //在Protable中隐藏，不显示\n" +
+                        (paramIsDate ? "      initialValue: moment(moment().year() + '-01-01').format('YYYY-MM-DD') //设置默认值\n" : "") +
                         "    }, {\n" +
                         "      title: '结束" + paramDescs.get(i) + "',\n" +
                         "      dataIndex: 'END_" + params.get(i) + "',\n" +
-                        "      valueType: 'date',\n" +
-                        "      hideInTable: true,\n" +
-                        "      initialValue: moment(moment().year() + '-12-31').format('YYYY-MM-DD')\n" +
+                        "      valueType: '" + valueType + "',\n" +
+                        "      hideInTable: true" + (paramIsDate ? "," : "") + "\n" +
+                        (paramIsDate ? "      initialValue: moment(moment().year() + '-12-31').format('YYYY-MM-DD') //设置默认值\n" : "") +
                         "    }");
             } else {
                 tableParams.add("{\n" +
                         "      title: '" + paramDescs.get(i) + "',\n" +
                         "      dataIndex: '" + params.get(i) + "',\n" +
+                        (paramIsDate ? "      valueType: 'date',\n" : "") +
                         "      width: 150,\n" +
-                        "      hideInSearch: " + (position > -1 ? "true" : "false") + "\n" +
+                        "      hideInSearch: " + (position > -1 ? "true" : "false") + ",\n" +
                         "      hideInTable: false\n" +
                         "    }");
             }
         }
+    }
+
+    /**
+     * 根据对应java类获取valueType的值
+     *
+     * @param javaClass 参数对应java类
+     */
+    private String getValueType(JavaClass javaClass) {
+        if (javaClass == JavaClass.String) {
+            return "text";
+        } else if (javaClass == JavaClass.Double) {
+            return "digit";
+        } else if (javaClass == JavaClass.Integer) {
+            return "digit";
+        } else if (javaClass == JavaClass.Date) {
+            return "date";
+        }
+        return "select";
     }
 
     @Override

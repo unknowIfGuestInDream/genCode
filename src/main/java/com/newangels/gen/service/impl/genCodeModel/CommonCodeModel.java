@@ -59,8 +59,8 @@ public class CommonCodeModel extends AbstractGenCodeModel {
             boolean paramIsDate = javaClass == JavaClass.Date;
             //为区间查询时
             if (selType.get(i) == 2) {
-                exportParamUrl.add("'START_" + (i == 0 ? "" : "&") + selParams.get(i) + "=' + encodeURIComponent(Ext.getCmp(\"" + selParams.get(i) + "\")." + (paramIsDate ? "getSubmitValue()" : "getValue()") + ")");
-                exportParamUrl.add("'END_" + (i == 0 ? "" : "&") + selParams.get(i) + "=' + encodeURIComponent(Ext.getCmp(\"" + selParams.get(i) + "\")." + (paramIsDate ? "getSubmitValue()" : "getValue()") + ")");
+                exportParamUrl.add("'" + (i == 0 ? "" : "&") + "START_" + selParams.get(i) + "=' + encodeURIComponent(Ext.getCmp(\"START_" + selParams.get(i) + "\")." + (paramIsDate ? "getSubmitValue()" : "getValue()") + ")");
+                exportParamUrl.add("'&END_" + selParams.get(i) + "=' + encodeURIComponent(Ext.getCmp(\"END_" + selParams.get(i) + "\")." + (paramIsDate ? "getSubmitValue()" : "getValue()") + ")");
             } else {
                 exportParamUrl.add("'" + (i == 0 ? "" : "&") + selParams.get(i) + "=' + encodeURIComponent(Ext.getCmp(\"" + selParams.get(i) + "\")." + (paramIsDate ? "getSubmitValue()" : "getValue()") + ")");
             }
