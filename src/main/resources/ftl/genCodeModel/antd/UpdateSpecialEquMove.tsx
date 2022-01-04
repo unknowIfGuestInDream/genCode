@@ -78,6 +78,7 @@ const Update${module} = (props: any) => {
         }
       }}
     >
+      ${antd_updateForm}
       <ProForm.Group>
         <ProFormText
           label="新使用地点"

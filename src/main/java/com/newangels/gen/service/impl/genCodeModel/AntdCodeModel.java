@@ -35,8 +35,11 @@ public class AntdCodeModel extends AbstractGenCodeModel {
     @Override
     protected void dealOtherCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, boolean hasExport, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> primaryDesc, List<String> primaryJavaClass, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType, List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, List<String> updParams, List<String> updParamDescs, List<String> updParamJavaClass, Map<String, Object> objectMap) {
         StringJoiner tableParams = new StringJoiner(", ");
+        StringJoiner updateForm = new StringJoiner("\n      ");
         dealTableParam(tableParams, params, paramDescs, paramJavaClass, primarys, selParams, selType);
+        dealUpdateForm(updateForm, params, paramDescs, paramJavaClass, insParams, updParams, objectMap);
         objectMap.put("antd_tableParams", tableParams.toString());
+        objectMap.put("antd_updateForm", tableParams.toString());
     }
 
     @Override
@@ -111,7 +114,18 @@ public class AntdCodeModel extends AbstractGenCodeModel {
         }
     }
 
-    private void dealUpdateForm() {
+    /**
+     * 处理新增修改页的Form代码
+     *
+     * @param updateForm
+     * @param params
+     * @param paramDescs
+     * @param paramJavaClass
+     * @param insParams
+     * @param updParams
+     * @param objectMap
+     */
+    private void dealUpdateForm(StringJoiner updateForm, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> insParams, List<String> updParams, Map<String, Object> objectMap) {
 
     }
 
