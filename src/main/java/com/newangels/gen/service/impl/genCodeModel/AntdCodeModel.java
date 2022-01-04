@@ -61,6 +61,17 @@ public class AntdCodeModel extends AbstractGenCodeModel {
         objectMap.put("antd_exportParamUrl", exportParamUrl.toString());
     }
 
+    /**
+     * index.tsx页table的代码
+     *
+     * @param tableParams    StringJoiner
+     * @param params         参数
+     * @param paramDescs     参数描述
+     * @param paramJavaClass 参数对应java类
+     * @param primarys       主键参数
+     * @param selParams      查询参数
+     * @param selType        查询类型
+     */
     private void dealTableParam(StringJoiner tableParams, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> selParams, List<Integer> selType) {
         for (int i = 0, length = params.size(); i < length; i++) {
             //主键不显示在table中
@@ -98,6 +109,10 @@ public class AntdCodeModel extends AbstractGenCodeModel {
                         "    }");
             }
         }
+    }
+
+    private void dealUpdateForm() {
+
     }
 
     /**
