@@ -38,7 +38,7 @@ public class CommonCodeModel extends AbstractGenCodeModel {
         dealSelFormAndParam(selForm, selExtraParams, moduleName, selParams, selParamDescs, selParamJavaClass, selType);
         dealInsFormPanel(insForm, insParams, insParamDescs, insParamJavaClass, primarys);
         dealUpdFormPanel(updForm, updParams, updParamDescs, updParamJavaClass, primarys);
-        dealViewFormPanel(viewForm, params, paramDescs, paramJavaClass, primarys);
+        dealViewFormPanel(viewForm, params, paramDescs, paramJavaClass, primarys, hasView);
         dealControllerPageHandler(moduleName, moduleDesc, packageName, objectMap);
         objectMap.put("common_storeParams", storeParams.toString());
         objectMap.put("common_gridParams", gridParams.toString());
@@ -233,7 +233,10 @@ public class CommonCodeModel extends AbstractGenCodeModel {
      * @param paramJavaClass 参数对应java类
      * @param primarys       主键参数
      */
-    private void dealViewFormPanel(StringJoiner viewForm, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys) {
+    private void dealViewFormPanel(StringJoiner viewForm, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, boolean hasView) {
+        if (!hasView) {
+            return;
+        }
         for (int i = 0, length = params.size(); i < length; i++) {
             //为主键不显示
             if (primarys.contains(params.get(i))) {

@@ -1,5 +1,6 @@
 package com.newangels.gen.service.impl.genCodeModel;
 
+import com.newangels.gen.base.BaseUtils;
 import com.newangels.gen.enums.GenCodeModelType;
 import com.newangels.gen.enums.JavaClass;
 import com.newangels.gen.factory.AbstractGenCodeModelFactory;
@@ -35,11 +36,16 @@ public class AntdCodeModel extends AbstractGenCodeModel {
     @Override
     protected void dealOtherCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, boolean hasExport, boolean hasView, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> primaryDesc, List<String> primaryJavaClass, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType, List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, List<String> updParams, List<String> updParamDescs, List<String> updParamJavaClass, Map<String, Object> objectMap) {
         StringJoiner tableParams = new StringJoiner(", ");
+        StringJoiner viewForm = new StringJoiner("\n          ");
         StringJoiner updateForm = new StringJoiner("\n      ");
+        StringJoiner dataSourceType = new StringJoiner("\n    ");
         dealTableParam(tableParams, params, paramDescs, paramJavaClass, primarys, selParams, selType);
         dealUpdateForm(updateForm, params, paramDescs, paramJavaClass, insParams, updParams, objectMap);
+        dealViewForm(viewForm, dataSourceType, moduleName, params, paramDescs, paramJavaClass, primarys, hasView);
         objectMap.put("antd_tableParams", tableParams.toString());
-        objectMap.put("antd_updateForm", tableParams.toString());
+        objectMap.put("antd_updateForm", updateForm.toString());
+        objectMap.put("antd_viewForm", viewForm.toString());
+        objectMap.put("antd_dataSourceType", dataSourceType.toString());
     }
 
     @Override
@@ -128,6 +134,30 @@ public class AntdCodeModel extends AbstractGenCodeModel {
     private void dealUpdateForm(StringJoiner updateForm, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> insParams, List<String> updParams, Map<String, Object> objectMap) {
         for (int i = 0, length = params.size(); i < length; i++) {
             //todo
+        }
+    }
+
+    /**
+     * 处理查看页的代码
+     *
+     * @param viewForm       StringJoiner
+     * @param dataSourceType 查看页DataSourceType
+     * @param params         参数
+     * @param paramDescs     参数描述
+     * @param paramJavaClass 参数对应java类
+     * @param primarys       主键参数
+     */
+    private void dealViewForm(StringJoiner viewForm, StringJoiner dataSourceType, String moduleName, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, boolean hasView) {
+        if (!hasView) {
+            return;
+        }
+        for (int i = 0, length = params.size(); i < length; i++) {
+            //为主键不显示
+            if (primarys.contains(params.get(i))) {
+                continue;
+            }
+            dataSourceType.add(params.get(i) + "?: string;");
+            viewForm.add("<Descriptions.Item label=\"" + paramDescs.get(i) + "\">{" + BaseUtils.toLowerCase4Index(moduleName) + "." + params.get(i) + "}</Descriptions.Item>");
         }
     }
 

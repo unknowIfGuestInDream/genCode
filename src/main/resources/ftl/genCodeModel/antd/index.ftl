@@ -9,11 +9,13 @@ import {select${module}, delete${module}} from './service';
 import 'moment/locale/zh-cn'
 import Update${module} from "./components/Update${module}";
 import moment from "moment";
+import View${module} from './components/View${module}';
 import { ProFormInstance } from '@ant-design/pro-form';
 
 /* React.FC<>的在typescript使用的一个泛型，FC就是FunctionComponent的缩写，是函数组件，在这个泛型里面可以使用useState */
 export const Applications = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);<#if hasView>
+  const [isView${module}ModalVisible, setIsView${module}ModalVisible] = useState(false);</#if>
   const [${module?uncap_first}Id, set${module}Id] = useState(undefined);
   const actionRef = useRef<ActionType>();
   const formRef = useRef<ProFormInstance>();
@@ -25,6 +27,16 @@ export const Applications = () => {
         set${module}Id(id);
         setIsModalVisible(show);
   };
+<#if hasView>
+
+  /**
+   * 查看模态框显示和隐藏
+   */
+  const is${module}ShowModal = (show: boolean | ((prevState: boolean) => boolean), id = undefined) => {
+        set${module}Id(id);
+        setIsView${module}ModalVisible(show);
+    };
+</#if>
 
   //useEffect参数为空数组时仅初始化执行一次
   useEffect(() => {
@@ -146,6 +158,21 @@ export const Applications = () => {
           />
         )
       }
+<#if hasView>
+
+      {
+        !isView${module}ModalVisible ? (
+          ''
+        ) : (
+          <View${module}
+            isView${module}ModalVisible={isView${module}ModalVisible}
+            is${module}ShowModal={is${module}ShowModal}
+            actionRef={actionRef}
+            ${module?uncap_first}Id={${module?uncap_first}Id}
+          />
+        )
+      }
+</#if>
     </PageHeaderWrapper>
   );
 };
