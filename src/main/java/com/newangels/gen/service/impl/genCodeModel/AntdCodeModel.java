@@ -24,8 +24,8 @@ public class AntdCodeModel extends AbstractGenCodeModel {
     }
 
     @Override
-    protected void dealCommonCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, boolean hasExport, List<String> primarys, Map<String, Object> objectMap) {
-        super.dealCommonCode(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, hasExport, primarys, objectMap);
+    protected void dealCommonCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, boolean hasExport, boolean hasView, List<String> primarys, Map<String, Object> objectMap) {
+        super.dealCommonCode(tableName, tableDesc, moduleName, moduleDesc, packageName, author, hasDelBatch, hasExport, hasView, primarys, objectMap);
         //antd前台默认不支持批量删除
         objectMap.replace("hasDelBatch", true, false);
         //antd table默认只有一个主键
@@ -33,7 +33,7 @@ public class AntdCodeModel extends AbstractGenCodeModel {
     }
 
     @Override
-    protected void dealOtherCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, boolean hasExport, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> primaryDesc, List<String> primaryJavaClass, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType, List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, List<String> updParams, List<String> updParamDescs, List<String> updParamJavaClass, Map<String, Object> objectMap) {
+    protected void dealOtherCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, boolean hasExport, boolean hasView, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> primaryDesc, List<String> primaryJavaClass, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType, List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, List<String> updParams, List<String> updParamDescs, List<String> updParamJavaClass, Map<String, Object> objectMap) {
         StringJoiner tableParams = new StringJoiner(", ");
         StringJoiner updateForm = new StringJoiner("\n      ");
         dealTableParam(tableParams, params, paramDescs, paramJavaClass, primarys, selParams, selType);
@@ -117,16 +117,18 @@ public class AntdCodeModel extends AbstractGenCodeModel {
     /**
      * 处理新增修改页的Form代码
      *
-     * @param updateForm
-     * @param params
-     * @param paramDescs
-     * @param paramJavaClass
-     * @param insParams
-     * @param updParams
-     * @param objectMap
+     * @param updateForm     StringJoiner
+     * @param params         参数
+     * @param paramDescs     参数描述
+     * @param paramJavaClass 参数对应java类
+     * @param insParams      新增参数
+     * @param updParams      修改参数
+     * @param objectMap      代码模版值
      */
     private void dealUpdateForm(StringJoiner updateForm, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> insParams, List<String> updParams, Map<String, Object> objectMap) {
-
+        for (int i = 0, length = params.size(); i < length; i++) {
+            //todo
+        }
     }
 
     /**
@@ -154,13 +156,14 @@ public class AntdCodeModel extends AbstractGenCodeModel {
         result.put("index.tsx", getIndex(configuration, objectMap));
         result.put("service.ts", getServiceTs(configuration, objectMap));
         result.put("Update" + module + ".tsx", getUpdateTsx(configuration, objectMap));
+        result.put("View" + module + ".tsx", getViewTsx(configuration, objectMap));
         return result;
     }
 
     @Override
     protected List<String> getTabList(Map<String, Object> objectMap) {
         String module = objectMap.get("module").toString();
-        return new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "index.tsx", "service.ts", "Update" + module + ".tsx", "BaseUtils", "BaseSqlCriteria"));
+        return new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "index.tsx", "service.ts", "Update" + module + ".tsx", "View" + module + ".tsx", "BaseUtils", "BaseSqlCriteria"));
     }
 
     /**
@@ -182,6 +185,13 @@ public class AntdCodeModel extends AbstractGenCodeModel {
      */
     private String getUpdateTsx(Configuration configuration, Map<String, Object> objectMap) {
         return getFtlModel(configuration, objectMap, "update.ftl");
+    }
+
+    /**
+     * 获取view.tsx
+     */
+    private String getViewTsx(Configuration configuration, Map<String, Object> objectMap) {
+        return getFtlModel(configuration, objectMap, "view.ftl");
     }
 
     @Override

@@ -200,6 +200,12 @@
                 items: [
                     {id: 'hasExport', name: 'hasExport', checked: false}
                 ]
+            }, {
+                xtype: 'checkboxgroup',
+                fieldLabel: '包含详情查看',
+                items: [
+                    {id: 'hasView', name: 'hasView', checked: false}
+                ]
             }]
         });
 
@@ -711,6 +717,7 @@
                 'packageName': Ext.getCmp('packageName').getValue(),
                 'hasDelBatch': Ext.getCmp('hasDelBatch').checked,
                 'hasExport': Ext.getCmp('hasExport').checked,
+                'hasView': Ext.getCmp('hasView').checked,
                 'author': Ext.getCmp('author').getValue()
             },
             callback: function (options, success, response) {
@@ -894,6 +901,7 @@
             'packageName': Ext.getCmp('packageName').getValue(),
             'hasDelBatch': Ext.getCmp('hasDelBatch').checked,
             'hasExport': Ext.getCmp('hasExport').checked,
+            'hasView': Ext.getCmp('hasView').checked,
             'author': Ext.getCmp('author').getValue(),
             'random': Math.random()
         };
