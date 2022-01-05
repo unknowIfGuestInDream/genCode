@@ -37,10 +37,10 @@ public class AntdCodeModel extends AbstractGenCodeModel {
     protected void dealOtherCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, boolean hasExport, boolean hasView, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> primaryDesc, List<String> primaryJavaClass, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType, List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, List<String> updParams, List<String> updParamDescs, List<String> updParamJavaClass, Map<String, Object> objectMap) {
         StringJoiner tableParams = new StringJoiner(", ");
         StringJoiner viewForm = new StringJoiner("\n          ");
-        StringJoiner updateForm = new StringJoiner("\n      ");
+        StringBuilder updateForm = new StringBuilder(params.size() * 100);
         StringJoiner dataSourceType = new StringJoiner("\n    ");
         dealTableParam(tableParams, params, paramDescs, paramJavaClass, primarys, selParams, selType);
-        dealUpdateForm(updateForm, params, paramDescs, paramJavaClass, insParams, updParams, objectMap);
+        dealUpdateForm(updateForm, moduleName, params, paramDescs, paramJavaClass, primarys, insParams, updParams, objectMap);
         dealViewForm(viewForm, dataSourceType, moduleName, params, paramDescs, paramJavaClass, primarys, hasView);
         objectMap.put("antd_tableParams", tableParams.toString());
         objectMap.put("antd_updateForm", updateForm.toString());
@@ -124,16 +124,46 @@ public class AntdCodeModel extends AbstractGenCodeModel {
      * 处理新增修改页的Form代码
      *
      * @param updateForm     StringJoiner
+     * @param moduleName     模块名
      * @param params         参数
      * @param paramDescs     参数描述
      * @param paramJavaClass 参数对应java类
+     * @param primarys       主键参数
      * @param insParams      新增参数
      * @param updParams      修改参数
      * @param objectMap      代码模版值
      */
-    private void dealUpdateForm(StringJoiner updateForm, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> insParams, List<String> updParams, Map<String, Object> objectMap) {
+    private void dealUpdateForm(StringBuilder updateForm, String moduleName, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> insParams, List<String> updParams, Map<String, Object> objectMap) {
+        //主键数量
+        int priNum = 0;
         for (int i = 0, length = params.size(); i < length; i++) {
-            //todo
+            if (primarys.contains(params.get(i))) {
+                priNum++;
+                continue;
+            }
+            boolean paramIsIns = insParams.contains(params.get(i));
+            boolean paramIsUpd = updParams.contains(params.get(i));
+            JavaClass javaClass = JavaClass.fromCode(paramJavaClass.get(i));
+            if ((i + priNum) % 2 == 0) {
+                updateForm.append("      <ProForm.Group>\n");
+            }
+            updateForm.append("        <" + getProFormType(javaClass) + "\n" +
+                    "          label=\"" + paramDescs.get(i) + "\"\n" +
+                    "          width=\"lg\"\n" +
+                    "          name=\"" + params.get(i) + "\"\n" +
+                    getProFormDisabled(moduleName, paramIsIns, paramIsUpd) +
+                    getProFormOther(javaClass) +
+                    "          rules={[\n" +
+                    "            {\n" +
+                    "              required: false,\n" +
+                    "              message: '" + paramDescs.get(i) + "为必填项'\n" +
+                    "            }\n" +
+                    "          ]}\n" +
+                    "        />\n");
+            if (i == length - 1 || (i + priNum) % 2 == 1) {
+                updateForm.append("      </ProForm.Group>\n");
+            }
+
         }
     }
 
@@ -177,6 +207,69 @@ public class AntdCodeModel extends AbstractGenCodeModel {
             return "date";
         }
         return "select";
+    }
+
+    /**
+     * 据对应java类获取ProForm类型
+     *
+     * @param javaClass 参数对应java类
+     */
+    private String getProFormType(JavaClass javaClass) {
+        if (javaClass == JavaClass.String) {
+            return "ProFormText";
+        } else if (javaClass == JavaClass.Double) {
+            return "ProFormDigit";
+        } else if (javaClass == JavaClass.Integer) {
+            return "ProFormDigit";
+        } else if (javaClass == JavaClass.Date) {
+            return "ProFormDatePicker";
+        }
+        return "ProFormText";
+    }
+
+    /**
+     * 据对应java类返回各自属性
+     *
+     * @param javaClass 参数对应java类
+     */
+    private String getProFormOther(JavaClass javaClass) {
+        if (javaClass == JavaClass.String) {
+            return "";
+        } else if (javaClass == JavaClass.Double) {
+            return "          //min={0}\n" +
+                    "          //max={99999}\n" +
+                    "          fieldProps={{ precision: 2 }}// 小数位数\n";
+        } else if (javaClass == JavaClass.Integer) {
+            return "          //min={0}\n" +
+                    "          //max={99999}\n" +
+                    "          fieldProps={{ precision: 0 }}// 小数位数\n";
+        } else if (javaClass == JavaClass.Date) {
+            return "";
+        }
+        return "";
+    }
+
+    /**
+     * 返回字段的disabled属性
+     *
+     * @param moduleName 模块名
+     * @param paramIsIns 是新增字段
+     * @param paramIsUpd 是修改字段
+     */
+    private String getProFormDisabled(String moduleName, boolean paramIsIns, boolean paramIsUpd) {
+        if (paramIsIns && paramIsUpd) {
+            //既是新增又是修改字段
+            return "";
+        } else if (paramIsIns && !paramIsUpd) {
+            //是新增不是修改字段
+            return "          disabled={" + BaseUtils.toLowerCase4Index(moduleName) + " !== undefined}\n";
+        } else if (!paramIsIns && paramIsUpd) {
+            //是修改不是新增字段
+            return "          disabled={" + BaseUtils.toLowerCase4Index(moduleName) + " === undefined}\n";
+        } else {
+            //不是新增不是修改字段
+            return "";
+        }
     }
 
     @Override
