@@ -4,12 +4,14 @@ import ${package}.annotation.Log;
 import ${package}.base.BaseUtils;
 import ${package}.service.${module}Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.InputStream;
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
@@ -45,7 +47,7 @@ public class ${module}Controller {
      */
     @GetMapping("select${module}")
     @Log
-    public Map<String, Object> select${module}(${selInParams}, Integer page, Integer limit) {
+    public Map<String, Object> select${module}(${selConInParams}<#if selConInParams?length gt 1>, </#if>Integer page, Integer limit) {
         List<Map<String, Object>> list = ${module?uncap_first}Service.select${module}(${selSqlParams}, page, limit);
         int total = 0;
         if (limit != null && limit > 0) {
@@ -101,6 +103,23 @@ public class ${module}Controller {
             return BaseUtils.failed("批量删除${moduleDesc}失败");
         }
         return BaseUtils.success();
+    }
+</#if>
+<#if hasExport>
+
+    /**
+     * 导出${moduleDesc}
+     */
+    @GetMapping("export${module}")
+    @Log
+    public void export${module}(${selConInParams}<#if selConInParams?length gt 1>, </#if>HttpServletRequest request, HttpServletResponse response) throws IOException {
+        List<Map<String, Object>> list = ${module?uncap_first}Service.select${module}(${selSqlParams}<#if selSqlParams?length gt 1>, </#if>null, null);
+        HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFSheet sheet = wb.createSheet();
+        LinkedHashMap<String, String> linkedHashMap = new LinkedHashMap<>(${mapSize});
+        ${exportLinkHashMap}
+        BaseUtils.dealCommonExcel(wb, sheet, list, linkedHashMap);
+        BaseUtils.download(wb, "${moduleDesc}.xls", request, response);
     }
 </#if>
 

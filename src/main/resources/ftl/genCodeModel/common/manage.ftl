@@ -22,7 +22,7 @@
             autoLoad: false,//true为自动加载
             loading: false,//自动加载时必须为true
             pageSize: 20,
-            fields: [${storeParams!}],
+            fields: [${common_storeParams!}],
             proxy: {
                 url: AppUrl + '/${package?substring(package?last_index_of(".")+1)?lower_case}/select${module}',
                 type: 'ajax',
@@ -64,7 +64,12 @@
                 text: '删除',
                 icon: 'public/image/btn/delete.png',
                 handler: <#if hasDelBatch>_delete${module}Batch<#else>_delete${module}</#if>
-            }]
+            }<#if hasExport>, {
+                xtype: 'button',
+                text: '导出',
+                icon: 'public/image/btn/download.png',
+                handler: _export${module}
+            }</#if>]
         });
 
         var formPanel = Ext.create('Ext.Panel', {
@@ -77,7 +82,7 @@
                 inputWidth: 140,
                 margin: '4,0,0,0'
             },
-            items: [${selForm}]
+            items: [${common_selForm}]
         });
 
         var ${module?uncap_first}Panel = Ext.create('Ext.grid.Panel', {
@@ -93,7 +98,15 @@
                 xtype: 'rownumberer',
                 align: 'center',
                 width: 50
-            }, ${gridParams!}],
+            }, ${common_gridParams!}<#if hasView>, {
+                text: '详情',
+                width: 80,
+                style: 'text-align: center;',
+                align: 'center',
+                renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
+                    return '<a href=javascript:_preView${module}(<#if primarys?? && primarys?size gt 0>\'' + <#list primarys as item>record.data.${item}<#if item_has_next> + '\',\'' + </#if></#list> + '\'</#if>)>查看详情</a>';
+                }
+            }</#if>],
             viewConfig: {
                 emptyText: '<div style="text-align: center; padding-top: 50px; font: italic bold 20px Microsoft YaHei;">没有数据</div>',
                 enableTextSelection: true
@@ -103,7 +116,12 @@
                 store: ${module?uncap_first}Store,
                 dock: 'bottom',
                 displayInfo: true
-            }]
+            }]<#if hasView>,
+            listeners: {
+                'itemdblclick': function (view, record, item, index, e, eOpts) {
+                    _preView${module}(<#if primarys?? && primarys?size gt 0><#list primarys as item>record.data.${item}<#if item_has_next>, </#if></#list></#if>);
+                }
+            }</#if>
         });
 
         Ext.create('Ext.container.Viewport', {
@@ -146,9 +164,9 @@
     //查询${moduleDesc}
     function _select${module}() {
         var ${module?uncap_first}Store = Ext.data.StoreManager.lookup('${module?uncap_first}Store');
-        <#if selExtraParams?? && selExtraParams?length gt 0>
+        <#if common_selExtraParams?? && common_selExtraParams?length gt 0>
         ${module?uncap_first}Store.proxy.extraParams = {
-            ${selExtraParams}
+            ${common_selExtraParams}
         };
         </#if>
         ${module?uncap_first}Store.load();
@@ -187,7 +205,7 @@
             Ext.MessageBox.alert('警告', '请选择一条待修改数据', Ext.MessageBox.WARNING);
             return;
         }
-        var urlParam = <#if primarys?? && primarys?size gt 0><#list primarys as item>'<#if item_index = 0>?</#if>${item}=' + records[0].get('${item}')<#if item_has_next> + <#else>;</#if></#list><#else>'';</#if>
+        var urlParam = <#if primarys?? && primarys?size gt 0><#list primarys as item>'<#if item_index = 0>?<#else>&</#if>${item}=' + encodeURIComponent(records[0].get('${item}'))<#if item_has_next> + <#else>;</#if></#list><#else>'';</#if>
         returnValue = null;
         win = Ext.create('Ext.window.Window', {
             title: '修改${moduleDesc}',
@@ -303,6 +321,32 @@
                 }
             }
         });
+    }
+    </#if>
+    <#if hasView>
+
+    //查看${moduleDesc}
+    function _preView${module}(<#if primarys?? && primarys?size gt 0><#list primarys as item>${item}<#if item_has_next>, </#if></#list></#if>) {
+        var urlParam = <#if primarys?? && primarys?size gt 0><#list primarys as item>'<#if item_index = 0>?<#else>&</#if>${item}=' + encodeURIComponent(${item})<#if item_has_next> + <#else>;</#if></#list><#else>'';</#if>
+        win = Ext.create('Ext.window.Window', {
+            title: '详情查看',
+            //header: false,
+            modal: true,
+            autoShow: true,
+            maximized: true,
+            maximizable: true,
+            width: document.documentElement.clientWidth * 0.6,
+            height: document.documentElement.clientHeight * 0.8,
+            html: '<iframe src="/${package?substring(package?last_index_of(".")+1)?lower_case}/viewRider' + urlParam + '" style="width: 100%; height: 100%;" frameborder="0"></iframe>'
+        });
+    }
+    </#if>
+    <#if hasExport>
+
+    //导出${moduleDesc}
+    function _export${module}(<#list primarys as item>${item}</#list>) {
+        document.location.href = AppUrl + '/${package?substring(package?last_index_of(".")+1)?lower_case}/export${module}<#if common_exportParamUrl?? && common_exportParamUrl?length gt 0>?' +
+            ${common_exportParamUrl};<#else>';</#if>
     }
     </#if>
 </script>

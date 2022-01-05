@@ -1,6 +1,6 @@
 #!/bin/bash
 
-APP_NAME=gen-3.2.jar
+APP_NAME=gen.jar
 
 usage() {
   echo "Usage: sh gen.sh [start|stop|restart|status]"

@@ -25,17 +25,17 @@ import java.util.stream.Collectors;
 @ConditionalOnProperty(name = "gen.isdb", havingValue = "false")
 public class NoDataBaseInfoServiceImpl implements DataBaseInfoService {
     //数据源集合
-    private static List<Map<String, Object>> DataBaseInfoList = new ArrayList<>();
+    private static final List<Map<String, Object>> DataBaseInfoList = new ArrayList<>();
 
     @PostConstruct
     public void initDataBaseInfoList() {
         Map<String, Object> map = new HashMap<>();
         map.put("ID", BaseUtils.getUuid());
         map.put("NAME", "MYSQL_TEST");
-        map.put("URL", "jdbc:mysql://121.4.62.212:3306/sunyu?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true");
+        map.put("URL", "jdbc:mysql://127.0.0.1:3306/mydb?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true");
         map.put("DRIVER", "com.mysql.jdbc.Driver");
-        map.put("USERNAME", "tangliang");
-        map.put("PASSWORD", "tangliang");
+        map.put("USERNAME", "root");
+        map.put("PASSWORD", "mysql");
         map.put("CREATE_TIME", LocalDateTime.now());
         map.put("UPDATE_TIME", LocalDateTime.now());
         DataBaseInfoList.add(map);

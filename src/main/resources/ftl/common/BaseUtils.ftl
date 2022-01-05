@@ -154,9 +154,8 @@ public class BaseUtils {
             if (object != null) {
                 objectOutputStream.writeObject(object);
             }
-
             ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
-            return (Serializable) objectInputStream.readObject();
+            return objectInputStream.readObject();
         } catch (Exception e) {
             return null;
         }
@@ -966,4 +965,29 @@ public class BaseUtils {
             return expectedSize < 1073741824 ? (int) ((float) expectedSize / 0.75F + 1.0F) : 2147483647;
         }
     }
+
+    /**
+     * 将java.util.Date对象转化为String字符串
+     *
+     * @param date      要格式的java.util.Date对象
+     * @param strFormat 输出的String字符串格式的限定（如："yyyy-MM-dd HH:mm:ss"）
+     * @return 表示日期的字符串
+     */
+    public static String dateToStr(Date date, String strFormat) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(strFormat);
+        String str = simpleDateFormat.format(date);
+        return str;
+    }
+
+    /**
+     * 从map中取一列数据
+     */
+    public static <T> List<T> collect(List<Map<String, Object>> data, String key) {
+        List<T> result = new ArrayList<>();
+        for (Map<String, Object> datum : data) {
+            result.add((T) datum.get(key));
+        }
+        return result;
+    }
+
 }

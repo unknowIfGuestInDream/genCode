@@ -3,7 +3,7 @@ package com.newangels.gen.enums;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * 命名规范
+ * java类
  *
  * @author: TangLiang
  * @date: 2021/6/20 10:12

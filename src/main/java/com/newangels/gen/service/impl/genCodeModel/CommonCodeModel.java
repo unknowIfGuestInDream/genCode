@@ -26,24 +26,49 @@ public class CommonCodeModel extends AbstractGenCodeModel {
     }
 
     @Override
-    protected void dealOtherCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> primaryDesc, List<String> primaryJavaClass, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType, List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, List<String> updParams, List<String> updParamDescs, List<String> updParamJavaClass, Map<String, Object> objectMap) {
+    protected void dealOtherCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, boolean hasExport, boolean hasView, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> primaryDesc, List<String> primaryJavaClass, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType, List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, List<String> updParams, List<String> updParamDescs, List<String> updParamJavaClass, Map<String, Object> objectMap) {
         StringJoiner storeParams = new StringJoiner(", ");
         StringJoiner gridParams = new StringJoiner(", ");
         StringJoiner insForm = new StringJoiner(", ");
         StringJoiner updForm = new StringJoiner(", ");
+        StringJoiner viewForm = new StringJoiner(", ");
         StringJoiner selForm = new StringJoiner(", ");
         StringJoiner selExtraParams = new StringJoiner(",\n            ");
-        dealStoreParam(storeParams, gridParams, params, paramDescs, primarys);
+        dealStoreParam(storeParams, gridParams, params, paramDescs, paramJavaClass, primarys);
         dealSelFormAndParam(selForm, selExtraParams, moduleName, selParams, selParamDescs, selParamJavaClass, selType);
         dealInsFormPanel(insForm, insParams, insParamDescs, insParamJavaClass, primarys);
         dealUpdFormPanel(updForm, updParams, updParamDescs, updParamJavaClass, primarys);
+        dealViewFormPanel(viewForm, params, paramDescs, paramJavaClass, primarys, hasView);
         dealControllerPageHandler(moduleName, moduleDesc, packageName, objectMap);
-        objectMap.put("storeParams", storeParams.toString());
-        objectMap.put("gridParams", gridParams.toString());
-        objectMap.put("insForm", insForm.toString());
-        objectMap.put("updForm", updForm.toString());
-        objectMap.put("selForm", selForm.toString());
-        objectMap.put("selExtraParams", selExtraParams.toString());
+        objectMap.put("common_storeParams", storeParams.toString());
+        objectMap.put("common_gridParams", gridParams.toString());
+        objectMap.put("common_insForm", insForm.toString());
+        objectMap.put("common_updForm", updForm.toString());
+        objectMap.put("common_viewForm", viewForm.toString());
+        objectMap.put("common_selForm", selForm.toString());
+        objectMap.put("common_selExtraParams", selExtraParams.toString());
+    }
+
+    @Override
+    protected void dealExportUrl(List<String> selParams, List<String> selParamJavaClass, List<Integer> selType, boolean hasExport, Map<String, Object> objectMap) {
+        if (!hasExport) {
+            objectMap.put("common_exportParamUrl", "");
+            return;
+        }
+        StringJoiner exportParamUrl = new StringJoiner(" +\n            ");
+        for (int i = 0, length = selParams.size(); i < length; i++) {
+            //java类型为date的前台获取值的方法为getSubmitValue
+            JavaClass javaClass = JavaClass.fromCode(selParamJavaClass.get(i));
+            boolean paramIsDate = javaClass == JavaClass.Date;
+            //为区间查询时
+            if (selType.get(i) == 2) {
+                exportParamUrl.add("'" + (i == 0 ? "" : "&") + "START_" + selParams.get(i) + "=' + encodeURIComponent(Ext.getCmp(\"START_" + selParams.get(i) + "\")." + (paramIsDate ? "getSubmitValue()" : "getValue()") + ")");
+                exportParamUrl.add("'&END_" + selParams.get(i) + "=' + encodeURIComponent(Ext.getCmp(\"END_" + selParams.get(i) + "\")." + (paramIsDate ? "getSubmitValue()" : "getValue()") + ")");
+            } else {
+                exportParamUrl.add("'" + (i == 0 ? "" : "&") + selParams.get(i) + "=' + encodeURIComponent(Ext.getCmp(\"" + selParams.get(i) + "\")." + (paramIsDate ? "getSubmitValue()" : "getValue()") + ")");
+            }
+        }
+        objectMap.put("common_exportParamUrl", exportParamUrl.toString());
     }
 
     /**
@@ -55,7 +80,7 @@ public class CommonCodeModel extends AbstractGenCodeModel {
      * @param paramDescs  参数描述
      * @param primarys    主键参数
      */
-    private void dealStoreParam(StringJoiner storeParams, StringJoiner gridParams, List<String> params, List<String> paramDescs, List<String> primarys) {
+    private void dealStoreParam(StringJoiner storeParams, StringJoiner gridParams, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys) {
         for (int i = 0, length = params.size(); i < length; i++) {
             //store参数
             storeParams.add("'" + params.get(i) + "'");
@@ -63,18 +88,25 @@ public class CommonCodeModel extends AbstractGenCodeModel {
             if (primarys.contains(params.get(i))) {
                 continue;
             }
+            //表头默认居左，数字类型内容居中
+            JavaClass javaClass = JavaClass.fromCode(paramJavaClass.get(i));
             gridParams.add("{\n" +
                     "                text: '" + paramDescs.get(i) + "',\n" +
                     "                dataIndex: '" + params.get(i) + "',\n" +
+                    "                style: 'text-align: left;',\n" +
+                    ((javaClass == JavaClass.Integer || javaClass == JavaClass.Double) ? "                align: 'right',\n" : "") +
                     "                flex: 1,\n" +
-                    "                minWidth: 150\n" +
+                    "                minWidth: 150" + ((javaClass == JavaClass.Date) ? "," : "") + "\n" +
+                    ((javaClass == JavaClass.Date) ?
+                            "                renderer: function (value, metaData, record, rowIdx, colIdx, store, view) {\n" +
+                                    "                    return (!Ext.isEmpty(value)) ? Ext.util.Format.date(value, 'Y-m-d H:i:s') : value;\n" +
+                                    "                }\n" : "") +
                     "            }");
         }
     }
 
     /**
      * 返回extjs管理页formPanel items值和store查询条件extraParams属性值
-     * //todo 为区间查询时formPanel值会改
      *
      * @param selForm           管理页formPanel的items值
      * @param selExtraParams    管理页store的extraParams值
@@ -86,12 +118,15 @@ public class CommonCodeModel extends AbstractGenCodeModel {
      */
     private void dealSelFormAndParam(StringJoiner selForm, StringJoiner selExtraParams, String moduleName, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType) {
         for (int i = 0, length = selParams.size(); i < length; i++) {
+            //java类型为date的前台获取值的方法为getSubmitValue
+            JavaClass javaClass = JavaClass.fromCode(selParamJavaClass.get(i));
+            boolean paramIsDate = javaClass == JavaClass.Date;
             //为区间查询
             if (selType.get(i) == 2) {
-                selExtraParams.add("'START_" + selParams.get(i) + "': Ext.getCmp('START_" + selParams.get(i) + "').getValue()");
-                selExtraParams.add("'END_" + selParams.get(i) + "': Ext.getCmp('END_" + selParams.get(i) + "').getValue()");
+                selExtraParams.add("'START_" + selParams.get(i) + "': Ext.getCmp('START_" + selParams.get(i) + "')." + (paramIsDate ? "getSubmitValue()" : "getValue()"));
+                selExtraParams.add("'END_" + selParams.get(i) + "': Ext.getCmp('END_" + selParams.get(i) + "')." + (paramIsDate ? "getSubmitValue()" : "getValue()"));
                 selForm.add("{\n" +
-                        "                xtype: '" + getFormXtype(JavaClass.fromCode(selParamJavaClass.get(i))) + "',\n" +
+                        "                xtype: '" + getFormXtype(javaClass) + "',\n" +
                         "                id: 'START_" + selParams.get(i) + "',\n" +
                         "                fieldLabel: '开始" + selParamDescs.get(i) + "',\n" +
                         "                listeners: {\n" +
@@ -106,7 +141,7 @@ public class CommonCodeModel extends AbstractGenCodeModel {
                         "                }\n" +
                         "            }");
                 selForm.add("{\n" +
-                        "                xtype: '" + getFormXtype(JavaClass.fromCode(selParamJavaClass.get(i))) + "',\n" +
+                        "                xtype: '" + getFormXtype(javaClass) + "',\n" +
                         "                id: 'END_" + selParams.get(i) + "',\n" +
                         "                fieldLabel: '结束" + selParamDescs.get(i) + "',\n" +
                         "                listeners: {\n" +
@@ -121,9 +156,9 @@ public class CommonCodeModel extends AbstractGenCodeModel {
                         "                }\n" +
                         "            }");
             } else {
-                selExtraParams.add("'" + selParams.get(i) + "': Ext.getCmp('" + selParams.get(i) + "').getValue()");
+                selExtraParams.add("'" + selParams.get(i) + "': Ext.getCmp('" + selParams.get(i) + "')." + (paramIsDate ? "getSubmitValue()" : "getValue()"));
                 selForm.add("{\n" +
-                        "                xtype: '" + getFormXtype(JavaClass.fromCode(selParamJavaClass.get(i))) + "',\n" +
+                        "                xtype: '" + getFormXtype(javaClass) + "',\n" +
                         "                id: '" + selParams.get(i) + "',\n" +
                         "                fieldLabel: '" + selParamDescs.get(i) + "',\n" +
                         "                listeners: {\n" +
@@ -185,6 +220,37 @@ public class CommonCodeModel extends AbstractGenCodeModel {
                     "                name: '" + updParams.get(i) + "',\n" +
                     "                fieldLabel: '" + updParamDescs.get(i) + "',\n" +
                     "                allowBlank: true\n" +
+                    "            }");
+        }
+    }
+
+    /**
+     * 生成extjs查看页的formPanel items属性参数
+     *
+     * @param viewForm       StringJoiner
+     * @param params         参数
+     * @param paramDescs     参数描述
+     * @param paramJavaClass 参数对应java类
+     * @param primarys       主键参数
+     */
+    private void dealViewFormPanel(StringJoiner viewForm, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, boolean hasView) {
+        if (!hasView) {
+            return;
+        }
+        for (int i = 0, length = params.size(); i < length; i++) {
+            //为主键不显示
+            if (primarys.contains(params.get(i))) {
+                continue;
+            }
+            JavaClass javaClass = JavaClass.fromCode(paramJavaClass.get(i));
+            boolean paramIsDate = javaClass == JavaClass.Date;
+            viewForm.add("{\n" +
+                    "                xtype: 'displayfield',\n" +
+                    "                name: '" + params.get(i) + "',\n" +
+                    "                fieldLabel: '" + paramDescs.get(i) + "'" + (paramIsDate ? "," : "") + "\n" +
+                    (paramIsDate ? "                renderer: function (value) {\n" +
+                            "                    return value.replace('.0', '');\n" +
+                            "                }\n" : "") +
                     "            }");
         }
     }
@@ -265,7 +331,7 @@ public class CommonCodeModel extends AbstractGenCodeModel {
                 "    public ModelAndView preUpdate" + module + "() {\n" +
                 "        return new ModelAndView(\"pages/" + frontPackage + "/" + lowModule + "/preUpdate" + module + "\");\n" +
                 "    }\n";
-        objectMap.put("pageHander", pageHander);
+        objectMap.put("common_pageHander", pageHander);
     }
 
     @Override
@@ -276,13 +342,14 @@ public class CommonCodeModel extends AbstractGenCodeModel {
         result.put("manage" + module + ".html", getExtjsManage(configuration, objectMap));
         result.put("preInsert" + module + ".html", getExtjsPreInsert(configuration, objectMap));
         result.put("preUpdate" + module + ".html", getExtjsPreUpdate(configuration, objectMap));
+        result.put("view" + module + ".html", getExtjsPreView(configuration, objectMap));
         return result;
     }
 
     @Override
     protected List<String> getTabList(Map<String, Object> objectMap) {
         String module = objectMap.get("module").toString();
-        return new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "manage" + module + ".html", "preInsert" + module + ".html", "preUpdate" + module + ".html", "base.js", "BaseUtils", "BaseSqlCriteria"));
+        return new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "manage" + module + ".html", "preInsert" + module + ".html", "preUpdate" + module + ".html", "view" + module + ".html", "base.js", "BaseUtils", "BaseSqlCriteria"));
     }
 
     /**
@@ -304,6 +371,13 @@ public class CommonCodeModel extends AbstractGenCodeModel {
      */
     private String getExtjsPreUpdate(Configuration configuration, Map<String, Object> objectMap) {
         return getFtlModel(configuration, objectMap, "preUpdate.ftl");
+    }
+
+    /**
+     * 获取查看页
+     */
+    private String getExtjsPreView(Configuration configuration, Map<String, Object> objectMap) {
+        return getFtlModel(configuration, objectMap, "view.ftl");
     }
 
     @Override
