@@ -47,7 +47,7 @@
                 xtype: 'button',
                 text: '查看',
                 icon: 'public/image/btn/view.png',
-                handler: _loadDataBaseInfo
+                handler: _viewDataBaseInfo
             }, {
                 xtype: 'button',
                 text: '生成数据库文档',
@@ -103,7 +103,7 @@
             },
             listeners: {
                 'itemdblclick': function (dataview, record, item, index, e) {
-                    _loadDataBaseInfo();
+                    _viewDataBaseInfo();
                 }
             }
         });
@@ -202,7 +202,7 @@
         Ext.getBody().unmask();
     }
 
-    function _loadDataBaseInfo() {
+    function _viewDataBaseInfo() {
         var records = Ext.getCmp('dataBasePanel').getSelectionModel().getSelection();
         if (records.length === 0) {
             Ext.MessageBox.alert('警告', '请选择数据源', Ext.MessageBox.WARNING);
@@ -225,7 +225,6 @@
             items: [viewDataBasePanel]
         });
         win.show();
-
     }
 
     function _preInsertDataBaseInfo() {

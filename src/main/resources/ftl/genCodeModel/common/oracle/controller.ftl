@@ -30,7 +30,17 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ${module}Controller {
     private final ${module}Service ${module?uncap_first}Service;
-${pageHander!}
+${common_pageHander!}
+<#if hasView && common_pageHander??>
+    /**
+     * ${moduleDesc}详情查看页
+     */
+    @GetMapping("/view${module}")
+    public ModelAndView view${module}() {
+        return new ModelAndView("pages/${module?uncap_first}/${module?uncap_first}/view${module}");
+    }
+
+</#if>
     /**
      * 加载${moduleDesc}
      */

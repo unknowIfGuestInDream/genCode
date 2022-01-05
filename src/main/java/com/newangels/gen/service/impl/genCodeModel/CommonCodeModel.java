@@ -31,17 +31,20 @@ public class CommonCodeModel extends AbstractGenCodeModel {
         StringJoiner gridParams = new StringJoiner(", ");
         StringJoiner insForm = new StringJoiner(", ");
         StringJoiner updForm = new StringJoiner(", ");
+        StringJoiner viewForm = new StringJoiner(", ");
         StringJoiner selForm = new StringJoiner(", ");
         StringJoiner selExtraParams = new StringJoiner(",\n            ");
         dealStoreParam(storeParams, gridParams, params, paramDescs, paramJavaClass, primarys);
         dealSelFormAndParam(selForm, selExtraParams, moduleName, selParams, selParamDescs, selParamJavaClass, selType);
         dealInsFormPanel(insForm, insParams, insParamDescs, insParamJavaClass, primarys);
         dealUpdFormPanel(updForm, updParams, updParamDescs, updParamJavaClass, primarys);
+        dealViewFormPanel(viewForm, params, paramDescs, paramJavaClass, primarys);
         dealControllerPageHandler(moduleName, moduleDesc, packageName, objectMap);
         objectMap.put("common_storeParams", storeParams.toString());
         objectMap.put("common_gridParams", gridParams.toString());
         objectMap.put("common_insForm", insForm.toString());
         objectMap.put("common_updForm", updForm.toString());
+        objectMap.put("common_viewForm", viewForm.toString());
         objectMap.put("common_selForm", selForm.toString());
         objectMap.put("common_selExtraParams", selExtraParams.toString());
     }
@@ -222,6 +225,34 @@ public class CommonCodeModel extends AbstractGenCodeModel {
     }
 
     /**
+     * 生成extjs查看页的formPanel items属性参数
+     *
+     * @param viewForm       StringJoiner
+     * @param params         参数
+     * @param paramDescs     参数描述
+     * @param paramJavaClass 参数对应java类
+     * @param primarys       主键参数
+     */
+    private void dealViewFormPanel(StringJoiner viewForm, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys) {
+        for (int i = 0, length = params.size(); i < length; i++) {
+            //为主键不显示
+            if (primarys.contains(params.get(i))) {
+                continue;
+            }
+            JavaClass javaClass = JavaClass.fromCode(paramJavaClass.get(i));
+            boolean paramIsDate = javaClass == JavaClass.Date;
+            viewForm.add("{\n" +
+                    "                xtype: 'displayfield',\n" +
+                    "                name: '" + params.get(i) + "',\n" +
+                    "                fieldLabel: '" + paramDescs.get(i) + "'" + (paramIsDate ? "," : "") + "\n" +
+                    (paramIsDate ? "                renderer: function (value) {\n" +
+                            "                    return value.replace('.0', '');\n" +
+                            "                }\n" : "") +
+                    "            }");
+        }
+    }
+
+    /**
      * 根据java类型返回extjs的新增修改formpanel
      *
      * @param paramJavaClass java类型
@@ -297,7 +328,7 @@ public class CommonCodeModel extends AbstractGenCodeModel {
                 "    public ModelAndView preUpdate" + module + "() {\n" +
                 "        return new ModelAndView(\"pages/" + frontPackage + "/" + lowModule + "/preUpdate" + module + "\");\n" +
                 "    }\n";
-        objectMap.put("pageHander", pageHander);
+        objectMap.put("common_pageHander", pageHander);
     }
 
     @Override
