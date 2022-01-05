@@ -33,12 +33,9 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
-      url: jdbc:mysql://42.192.10.174:3306/gen?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true
+      url: jdbc:mysql://127.0.0.1:3306/gen?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true
       username: gen
       password: gen
-      #      url: jdbc:oracle:thin:@10.18.26.86:1521:CG
-      #      username: CG
-      #      password: CG
       initialSize: 5
       maxActive: 20
       ## 配置获取连接等待超时的时间
