@@ -105,19 +105,19 @@
                         }
                         switch (records[0].data.CODE_) {
                             case "com.mysql.cj.jdbc.Driver":
-                                Ext.getCmp('URL').setValue('jdbc:mysql://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
+                                Ext.getCmp('URL').setValue('jdbc:mysql://<hostname>:3306/<dbname>?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
                                 break;
                             case "com.mysql.jdbc.Driver":
-                                Ext.getCmp('URL').setValue('jdbc:mysql://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
+                                Ext.getCmp('URL').setValue('jdbc:mysql://<hostname>:3306/<dbname>?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
                                 break;
                             case "oracle.jdbc.OracleDriver":
-                                Ext.getCmp('URL').setValue('jdbc:oracle:thin:@10.18.26.86:1521:SID');
+                                Ext.getCmp('URL').setValue('jdbc:oracle:thin:@<hostname>:1521:<SID>');
                                 break;
                             case "org.mariadb.jdbc.Driver":
-                                Ext.getCmp('URL').setValue('jdbc:mariadb://ip:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
+                                Ext.getCmp('URL').setValue('jdbc:mariadb://<hostname>:3306/<dbname>?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai&autoReconnect=true&useOldAliasMetadataBehavior=true');
                                 break;
                             case "com.microsoft.sqlserver.jdbc.SQLServerDriver":
-                                Ext.getCmp('URL').setValue('jdbc:sqlserver://ip:1433;DatabaseName=db');
+                                Ext.getCmp('URL').setValue('jdbc:sqlserver://<hostname>:1433;DatabaseName=<dbname>');
                                 break;
                             default:
                                 Ext.getCmp('URL').setValue('');
