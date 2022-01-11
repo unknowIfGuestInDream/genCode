@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * @author: TangLiang
@@ -26,7 +27,7 @@ import java.util.Collections;
 public class DataBaseDocumentServiceImpl implements DataBaseDocumentService {
 
     @Override
-    public String executeFile(String url, String driver, String userName, String password, String version, String description, String fileName, String engineFileType) {
+    public String executeFile(String url, String driver, String userName, String password, String version, String description, String fileName, String engineFileType, List<String> tableNames, List<String> tablePrefixs) {
         DataSource dataSource = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password, DataSourceUtilTypes.HIKARI).getDataSource();
         // 创建 screw 的配置
         Configuration config = Configuration.builder()
@@ -39,7 +40,7 @@ public class DataBaseDocumentServiceImpl implements DataBaseDocumentService {
                 // 引擎配置
                 .engineConfig(buildEngineConfig(EngineFileType.valueOf(engineFileType)))
                 // 处理配置
-                .produceConfig(buildProcessConfig())
+                .produceConfig(buildProcessConfig(tableNames, tablePrefixs))
                 .build();
         return new DocumentationExecute(config).executeFile();
     }
@@ -60,12 +61,12 @@ public class DataBaseDocumentServiceImpl implements DataBaseDocumentService {
      * 创建 screw 的处理配置，一般可忽略
      * 指定生成逻辑、当存在指定表、指定表前缀、指定表后缀时，将生成指定表，其余表不生成、并跳过忽略表配置
      */
-    private ProcessConfig buildProcessConfig() {
+    private ProcessConfig buildProcessConfig(List<String> tableNames, List<String> tablePrefixs) {
         return ProcessConfig.builder()
                 // 根据名称指定表生成
-                .designatedTableName(Collections.emptyList())
+                .designatedTableName(tableNames)
                 //根据表前缀生成
-                .designatedTablePrefix(Collections.emptyList())
+                .designatedTablePrefix(tablePrefixs)
                 // 根据表后缀生成
                 .designatedTableSuffix(Collections.emptyList())
                 // 忽略表名 可以传空串
