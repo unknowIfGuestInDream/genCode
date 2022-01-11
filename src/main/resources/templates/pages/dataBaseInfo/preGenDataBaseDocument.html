@@ -99,6 +99,22 @@
                 fieldLabel: '文档文件名称',
                 allowBlank: false,
                 style: 'clear:both'
+            }, {
+                xtype: 'textareafield',
+                id: 'tableNames',
+                name: 'tableNames',
+                fieldLabel: '指定表',
+                allowBlank: true,
+                emptyText: '批量指定表需要换行分隔',
+                style: 'clear:both'
+            }, {
+                xtype: 'textareafield',
+                id: 'tablePrefixs',
+                name: 'tablePrefixs',
+                fieldLabel: '指定表前缀',
+                allowBlank: true,
+                emptyText: '批量指定表前缀需要换行分隔',
+                style: 'clear:both'
             }]
         });
 
@@ -158,6 +174,8 @@
             'description': Ext.getCmp('description').getValue(),
             'fileName': Ext.getCmp('fileName').getValue(),
             'engineFileTypes': Ext.getCmp('engineFileType').getValue(),
+            'tableNames': Ext.getCmp('tableNames').getValue().split('\n').filter(item => item !== ''),
+            'tablePrefixs': Ext.getCmp('tablePrefixs').getValue().split('\n').filter(item => item !== ''),
             'random': Math.random()
         };
 

@@ -47,9 +47,9 @@ public class DataBaseDocumentController {
      */
     @GetMapping("genDataBaseDocument")
     @Log
-    public void genDataBaseDocument(String url, String driver, String userName, String password, @RequestParam(required = false, defaultValue = "1.0.0") String version, String description, @RequestParam(required = false, defaultValue = "数据库文档") String fileName, @RequestParam List<String> engineFileTypes, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void genDataBaseDocument(String url, String driver, String userName, String password, @RequestParam(required = false, defaultValue = "1.0.0") String version, String description, @RequestParam(required = false, defaultValue = "数据库文档") String fileName, @RequestParam List<String> engineFileTypes, @RequestParam(required = false, defaultValue = "") List<String> tableNames, @RequestParam(required = false, defaultValue = "") List<String> tablePrefixs, HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (engineFileTypes.size() == 1) {
-            String file = dataBaseDocumentService.executeFile(url, driver, userName, password, version, description, fileName, engineFileTypes.get(0));
+            String file = dataBaseDocumentService.executeFile(url, driver, userName, password, version, description, fileName, engineFileTypes.get(0), tableNames, tablePrefixs);
             @Cleanup InputStream inputStream = new ByteArrayInputStream(file.getBytes(StandardCharsets.UTF_8));
             BaseUtils.download(inputStream, fileName + EngineFileType.valueOf(engineFileTypes.get(0)).getFileSuffix(), request, response);
         } else {
@@ -59,7 +59,7 @@ public class DataBaseDocumentController {
             response.setHeader("Content-Disposition", "attachment;filename=" + BaseUtils.getFormatString(request, fileName + ".zip"));
             ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
             for (String engineFileType : engineFileTypes) {
-                String file = dataBaseDocumentService.executeFile(url, driver, userName, password, version, description, fileName, engineFileType);
+                String file = dataBaseDocumentService.executeFile(url, driver, userName, password, version, description, fileName, engineFileType, tableNames, tablePrefixs);
                 @Cleanup InputStream inputStream = new ByteArrayInputStream(file.getBytes(StandardCharsets.UTF_8));
                 //创建输入流读取文件
                 @Cleanup BufferedInputStream bis = new BufferedInputStream(inputStream);
