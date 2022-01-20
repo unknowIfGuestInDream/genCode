@@ -1,19 +1,16 @@
 import {PlusOutlined} from '@ant-design/icons';
 import {Button, message} from 'antd';
 import {useEffect, useRef, useState} from 'react';
-// @ts-ignore
-import {connect} from 'umi';
 import {PageHeaderWrapper} from '@ant-design/pro-layout';
 import ProTable, {ActionType, ProColumns} from '@ant-design/pro-table';
-import {select${module}, delete${module}} from './service';
 import 'moment/locale/zh-cn'
 import Update${module} from "./components/Update${module}";
 import moment from "moment";
-import View${module} from './components/View${module}';
+<#if hasView>import View${module} from './components/View${module}';</#if>
 import { ProFormInstance } from '@ant-design/pro-form';
 
 /* React.FC<>的在typescript使用的一个泛型，FC就是FunctionComponent的缩写，是函数组件，在这个泛型里面可以使用useState */
-export const Applications = () => {
+const Applications: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);<#if hasView>
   const [isView${module}ModalVisible, setIsView${module}ModalVisible] = useState(false);</#if>
   const [${module?uncap_first}Id, set${module}Id] = useState(undefined);
@@ -177,4 +174,4 @@ export const Applications = () => {
   );
 };
 
-export default connect()(Applications);
+export default Applications;

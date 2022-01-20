@@ -8,7 +8,10 @@ import com.newangels.gen.service.AbstractGenCodeModel;
 import freemarker.template.Configuration;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * 大连ANTD模版
@@ -277,7 +280,7 @@ public class AntdCodeModel extends AbstractGenCodeModel {
         String module = objectMap.get("module").toString();
         Map<String, Object> result = super.getResult(driver, objectMap, configuration);
         result.put("index.tsx", getIndex(configuration, objectMap));
-        result.put("service.ts", getServiceTs(configuration, objectMap));
+        result.put(module + ".ts", getServiceTs(configuration, objectMap));
         result.put("Update" + module + ".tsx", getUpdateTsx(configuration, objectMap));
         result.put("View" + module + ".tsx", getViewTsx(configuration, objectMap));
         return result;
@@ -286,7 +289,20 @@ public class AntdCodeModel extends AbstractGenCodeModel {
     @Override
     protected List<String> getTabList(Map<String, Object> objectMap) {
         String module = objectMap.get("module").toString();
-        return new ArrayList<>(Arrays.asList("controller", "service", "serviceImpl", "index.tsx", "service.ts", "Update" + module + ".tsx", "View" + module + ".tsx", "BaseUtils", "BaseSqlCriteria"));
+        boolean hasView = Boolean.parseBoolean(objectMap.get("hasView").toString());
+        List<String> list = new ArrayList<>();
+        list.add("controller");
+        list.add("service");
+        list.add("serviceImpl");
+        list.add("index.tsx");
+        list.add(module + ".ts");
+        list.add("Update" + module + ".tsx");
+        if (hasView) {
+            list.add("View" + module + ".tsx");
+        }
+        list.add("BaseUtils");
+        list.add("BaseSqlCriteria");
+        return list;
     }
 
     /**
