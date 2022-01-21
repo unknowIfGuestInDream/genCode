@@ -63,6 +63,8 @@ const Applications: React.FC = () => {
     {
       title: '序号',
       width: 50,
+      hideInSearch: true,
+      hideInTable: false,
       render:(text,record,index)=><#noparse>`${index+1}`</#noparse>
     }, ${antd_tableParams!}, {
       title: '操作',
