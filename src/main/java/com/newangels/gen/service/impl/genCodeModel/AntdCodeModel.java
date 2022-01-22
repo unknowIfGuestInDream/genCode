@@ -150,23 +150,30 @@ public class AntdCodeModel extends AbstractGenCodeModel {
             if ((i + priNum) % 2 == 0) {
                 updateForm.append("      <ProForm.Group>\n");
             }
-            updateForm.append("        <" + getProFormType(javaClass) + "\n" +
-                    "          label=\"" + paramDescs.get(i) + "\"\n" +
-                    "          width=\"lg\"\n" +
-                    "          name=\"" + params.get(i) + "\"\n" +
-                    getProFormDisabled(moduleName, paramIsIns, paramIsUpd) +
-                    getProFormOther(javaClass) +
-                    "          rules={[\n" +
-                    "            {\n" +
-                    "              required: false,\n" +
-                    "              message: '" + paramDescs.get(i) + "为必填项'\n" +
-                    "            }\n" +
-                    "          ]}\n" +
-                    "        />\n");
+            //非新增非修改时处理
+            if (paramIsIns || paramIsUpd) {
+                updateForm.append("        <" + getProFormType(javaClass) + "\n" +
+                        "          label=\"" + paramDescs.get(i) + "\"\n" +
+                        "          width=\"lg\"\n" +
+                        "          name=\"" + params.get(i) + "\"\n" +
+                        getProFormDisabled(moduleName, paramIsIns, paramIsUpd) +
+                        getProFormOther(javaClass) +
+                        "          rules={[\n" +
+                        "            {\n" +
+                        "              required: false,\n" +
+                        "              message: '" + paramDescs.get(i) + "为必填项'\n" +
+                        "            }\n" +
+                        "          ]}\n" +
+                        "        />\n");
+            }
+            //非新增非修改时对布局的处理
+            if (i != length - 1 && !paramIsIns && !paramIsUpd) {
+                priNum--;
+                continue;
+            }
             if (i == length - 1 || (i + priNum) % 2 == 1) {
                 updateForm.append("      </ProForm.Group>\n");
             }
-
         }
     }
 
@@ -273,7 +280,7 @@ public class AntdCodeModel extends AbstractGenCodeModel {
             return "          disabled={" + BaseUtils.toLowerCase4Index(moduleName) + " === undefined}\n";
         } else {
             //不是新增不是修改字段
-            return "";
+            return "          disabled={true}";
         }
     }
 
