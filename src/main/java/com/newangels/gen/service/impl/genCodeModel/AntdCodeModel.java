@@ -241,10 +241,12 @@ public class AntdCodeModel extends AbstractGenCodeModel {
         } else if (javaClass == JavaClass.Double) {
             return "          //min={0}\n" +
                     "          //max={99999}\n" +
+                    "          initialValue={0.00}\n" +
                     "          fieldProps={{ precision: 2 }}// 小数位数\n";
         } else if (javaClass == JavaClass.Integer) {
             return "          //min={0}\n" +
                     "          //max={99999}\n" +
+                    "          initialValue={0}\n" +
                     "          fieldProps={{ precision: 0 }}// 小数位数\n";
         } else if (javaClass == JavaClass.Date) {
             return "";

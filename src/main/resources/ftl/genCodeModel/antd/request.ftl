@@ -5,6 +5,7 @@
 import {Context, extend} from 'umi-request';
 import {notification} from 'antd';
 import {uuid} from "@/utils/uuid";
+import Qs from "qs";
 
 /**
  * 异常处理程序
@@ -32,6 +33,14 @@ const request = extend({
 // request拦截器, 改变url 或 options.
 // @ts-ignore
 request.interceptors.request.use(async (url, options) => {
+    //拦截request全局加入V_PERCODE值
+    const person = {V_PERCODE: 'admin'};
+    if (options.method === 'get') {
+      options.params = {...options.params, ...person};
+    } else {
+      const newFields = {...Qs.parse(options.data), ...person};
+      options.data = Qs.stringify(newFields);
+    }
     let id = uuid();
     const headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -55,7 +64,6 @@ request.interceptors.request.use(async (url, options) => {
 request.interceptors.response.use(async (response) => {
     try {
         const data = await response.clone().json();
-        console.log(data);
         if (data && data.status === 404) {
             notification.error({
                 message: '未找到当前服务',

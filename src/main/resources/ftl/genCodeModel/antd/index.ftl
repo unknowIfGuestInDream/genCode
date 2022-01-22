@@ -1,12 +1,12 @@
 import {PlusOutlined} from '@ant-design/icons';
-import {Button, message} from 'antd';
+import {Button, message, Popconfirm} from 'antd';
 import React, {useEffect, useRef, useState} from 'react';
 import {PageHeaderWrapper} from '@ant-design/pro-layout';
 import ProTable, {ActionType, ProColumns} from '@ant-design/pro-table';
 import 'moment/locale/zh-cn'
 import Update${module} from "./components/Update${module}";
-import moment from "moment";
-<#if hasView>import View${module} from './components/View${module}';</#if>
+import moment from "moment";<#if hasView>
+import View${module} from './components/View${module}';</#if>
 import { ProFormInstance } from '@ant-design/pro-form';
 
 /* React.FC<>的在typescript使用的一个泛型，FC就是FunctionComponent的缩写，是函数组件，在这个泛型里面可以使用useState */
