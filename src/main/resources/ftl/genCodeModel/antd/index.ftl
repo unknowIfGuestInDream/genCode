@@ -1,6 +1,6 @@
 import {PlusOutlined} from '@ant-design/icons';
 import {Button, message} from 'antd';
-import {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {PageHeaderWrapper} from '@ant-design/pro-layout';
 import ProTable, {ActionType, ProColumns} from '@ant-design/pro-table';
 import 'moment/locale/zh-cn'
@@ -42,21 +42,15 @@ const Applications: React.FC = () => {
 
   //删除${moduleDesc}
   const handleRemove = async (id: any) => {
-    const hide = message.loading('正在删除');
     if (!id) return true;
-    try {
+    const hide = message.loading('正在删除');
       await delete${module}({
         ${antd_primary}: id
       });
-      hide();
-      message.success('删除成功，即将刷新');
-      actionRef.current?.reloadAndRest?.(); //刷新Protable
-      return true;
-    } catch (error) {
-      hide();
-      message.error('删除失败，请重试');
-      return false;
-    }
+    hide();
+    message.success('删除成功，即将刷新');
+    actionRef.current?.reloadAndRest?.(); //刷新Protable
+    return true;
   };
 
   const columns: ProColumns[] = [  //定义 Protable的列 columns放在Protable
@@ -73,7 +67,9 @@ const Applications: React.FC = () => {
       valueType: 'option',  //操作列的类型
       render: (_, record) => [   //render渲染 record代表当前行
         <a key={record.${antd_primary}} onClick={() => isShowModal(true, record.${antd_primary})}>编辑</a>,
-        <a key={record.${antd_primary}} onClick={() => handleRemove(record.${antd_primary})}>删除</a>
+        <Popconfirm key={record.${antd_primary}} title="确认删除？" okText="确认" cancelText="取消" onConfirm={(e)=>{handleRemove(record.I_ID)}}>
+          <a href="#">删除</a>
+        </Popconfirm>
       ]
     }
   ];

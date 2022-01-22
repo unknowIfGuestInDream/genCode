@@ -1,6 +1,5 @@
-import {useEffect, useState} from 'react';
-import 'antd/dist/antd.css';
-import {selectChangeHis} from './../service';
+import React, {useEffect, useState} from 'react';
+import 'antd/dist/antd.min.css';
 import Modal from "antd/es/modal/Modal";
 import {Descriptions, Form} from "antd";
 

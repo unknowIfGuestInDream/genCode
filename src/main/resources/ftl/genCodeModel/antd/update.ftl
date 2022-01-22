@@ -1,8 +1,7 @@
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {message} from 'antd';
 import ProForm, {ModalForm, ProFormDatePicker, ProFormDigit, ProFormText, } from '@ant-design/pro-form';
-import 'antd/dist/antd.css';
-import {load${module}, update${module}, insert${module}} from "./../service";
+import 'antd/dist/antd.min.css';
 import moment from "moment";
 
 const Update${module} = (props: any) => {
@@ -16,9 +15,9 @@ const Update${module} = (props: any) => {
   //修改时初始化数据
   const init${module} = async () => {
     const response = await load${module}({I_ID: ${module?uncap_first}Id});
-    const ${module?uncap_first}Data = response.data[0];
+    const ${module?uncap_first}Data = response.data;
 
-    set${module}({...response.data[0]});
+    set${module}({...response.data});
     Object.keys(${module?uncap_first}Data);
     Object.values(${module?uncap_first}Data);
     Object.keys(${module?uncap_first}Data).forEach(key => formObj.setFieldsValue({[<#noparse>`${key}`</#noparse>]: ${module?uncap_first}Data[key]}));
@@ -37,27 +36,21 @@ const Update${module} = (props: any) => {
   const handleSubmit = async (fields: any) => {
     const hide = message.loading('处理中...');
     let response = [];
-    try {
-      // 对提交后端日期格式处理
-      const newFields = {};
-      Object.assign(newFields, fields);
-      if (${module?uncap_first} === undefined) {
-        response = await insert${module}({...newFields});
-      } else {
-        response = await update${module}({${antd_primary}: (${module?uncap_first} as any).${antd_primary}, ...newFields});
-      }
-      hide();
-      if (response.success) {
-        message.success("操作成功");
-      } else {
-        message.error('操作失败');
-      }
-      return true;
-    } catch (e) {
-      hide();
-      message.error('操作失败');
+      // 对提交后端数据处理
+    const newFields = {};
+    Object.assign(newFields, fields);
+    if (${module?uncap_first} === undefined) {
+      response = await insert${module}({...newFields});
+    } else {
+      response = await update${module}({${antd_primary}: (${module?uncap_first} as any).${antd_primary}, ...newFields});
+    }
+    hide();
+    if (response.success) {
+      message.success("操作成功");
+    } else {
       return false;
     }
+    return true;
   };
 
   return (

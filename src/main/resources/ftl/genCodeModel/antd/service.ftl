@@ -1,5 +1,5 @@
 import Qs from "qs";
-import request from "umi-request";
+import request from "@/utils/request";
 
 //加载${moduleDesc}
 export async function load${module}(params: any) {
@@ -27,10 +27,6 @@ export async function select${module}(params: any) {
 export async function insert${module}(params: any) {
   const res = request('/${package?substring(package?last_index_of(".")+1)?lower_case}/insert${module}', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    dataType: 'json',
     data: Qs.stringify(params),
   });
   return res;
@@ -40,10 +36,6 @@ export async function insert${module}(params: any) {
 export async function update${module}(params: any) {
   const res = request('/${package?substring(package?last_index_of(".")+1)?lower_case}/update${module}', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    dataType: 'json',
     data: Qs.stringify(params),
   });
   return res;
@@ -52,10 +44,7 @@ export async function update${module}(params: any) {
 //删除${moduleDesc}
 export async function delete${module}(params: any) {
   const res = request('/${package?substring(package?last_index_of(".")+1)?lower_case}/delete${module}', {
-    method: 'Post',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
+    method: 'POST',
     data: Qs.stringify(params)
   });
   return res;
@@ -65,10 +54,7 @@ export async function delete${module}(params: any) {
 //批量删除${moduleDesc}
 export async function delete${module}Batch(params: any) {
   const res = request('/${package?substring(package?last_index_of(".")+1)?lower_case}/delete${module}Batch', {
-    method: 'Post',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
+    method: 'POST',
     data: Qs.stringify(params)
   });
   return res;
