@@ -8,16 +8,17 @@ import {uuid} from "@/utils/uuid";
 
 /**
  * 异常处理程序
+ * 使用中发现参数全为undefined，当前errorHandler不能起到错误处理的作用
  */
-const errorHandler = (error: { response: any; }) => {
+const errorHandler = (error: any) => {
     const {response} = error;
-    if (response && !response.success) {
-        const errorText = response.message;
-        notification.error({
-            message: '请求错误:',
-            description: errorText,
-        });
-    }
+    // if (response && !response.success) {
+    //   const errorText = response.message;
+    //   notification.error({
+    //     message: '请求错误:',
+    //     description: errorText,
+    //   });
+    // }
 
     return response;
 };
@@ -39,7 +40,7 @@ request.interceptors.request.use(async (url, options) => {
     return (
         {
             url: url,
-            options: {...options, headers: headers},
+            options: {...options, headers: headers}
         }
     );
 }, {global: false});
@@ -54,9 +55,46 @@ request.interceptors.request.use(async (url, options) => {
 request.interceptors.response.use(async (response) => {
     try {
         const data = await response.clone().json();
-        if (data && !data.success) {
+        console.log(data);
+        if (data && data.status === 404) {
             notification.error({
-                message: '请求错误:',
+                message: '未找到当前服务',
+                description: data.path
+            });
+            return
+        } else if (data && data.status === 403) {
+            notification.error({
+                message: '请求失败, 访问被禁止',
+                description: data.error
+            });
+            return
+        } else if (data && data.status === 500) {
+            notification.error({
+                message: '服务器发生错误，请检查服务器。',
+                description: data.error
+            });
+            return
+        } else if (data && data.status === 502) {
+            notification.error({
+                message: '网关错误。',
+                description: data.error
+            });
+            return
+        } else if (data && data.status === 503) {
+            notification.error({
+                message: '服务不可用，服务器暂时过载或维护。',
+                description: data.error
+            });
+            return
+        } else if (data && data.status === 504) {
+            notification.error({
+                message: '网关超时, 请稍后再试或者联系系统管理员',
+                description: data.error
+            });
+            return
+        } else if (data && !data.success) {
+            notification.error({
+                message: '请求失败',
                 description: data.message,
             });
             return
