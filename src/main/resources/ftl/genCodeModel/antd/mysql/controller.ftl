@@ -37,9 +37,7 @@ public class ${module}Controller {
     @GetMapping("load${module}")
     @Log
     public Map<String, Object> load${module}(${loadInParams}) {
-        Map<String, Object> result = new HashMap<>(4);
-        result.put("data", ${module?uncap_first}Service.load${module}(${loadSqlParams}));
-        return BaseUtils.success(result);
+        return BaseUtils.loadSuccess(${module?uncap_first}Service.load${module}(${loadSqlParams}));
     }
 
     /**

@@ -38,6 +38,10 @@ public class BaseUtils {
      * 最大上传文件大小
      */
     public static long MAX_UPLOAD_SIZE = 1048576 * 30;
+    /**
+     * 返回结果集key值
+     */
+    public static String DATA = "data";
 
     /**
      * 类不能实例化
@@ -690,6 +694,18 @@ public class BaseUtils {
     }
 
     /**
+     * 返回成功信息(用于加载对象)
+     *
+     * @param result 加载对象数据
+     * @return java.util.Map
+     */
+    public static Map<String, Object> loadSuccess(Map<String, Object> result) {
+        Map<String, Object> data = new HashMap<>(4);
+        data.put(DATA, result);
+        return success(data);
+    }
+
+    /**
      * 返回成功信息(用于存储过程方式的结果返回)
      *
      * @param result 数据集
@@ -708,7 +724,7 @@ public class BaseUtils {
      */
     public static <T> Map<String, Object> success(List<T> list) {
         Map<String, Object> result = new HashMap<>(4);
-        result.put("data", list);
+        result.put(DATA, list);
         result.put("success", true);
         return result;
     }
