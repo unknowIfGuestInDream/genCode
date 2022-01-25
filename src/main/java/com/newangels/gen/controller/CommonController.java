@@ -6,10 +6,19 @@ import com.newangels.gen.base.BaseUtils;
 import com.newangels.gen.enums.*;
 import com.newangels.gen.util.cache.SimpleCache;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -155,6 +164,25 @@ public class CommonController {
             SimpleCache.put(SimpleCache.ENGINEFILETYPE, list);
         }
         return BaseUtils.success(list);
+    }
+
+    /**
+     * 获取file文件夹下的文件
+     */
+    @GetMapping("downloadFile/{fileName}")
+    @Log
+    public void downloadFile(@PathVariable String fileName, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //为空返回
+        if (StringUtils.isEmpty(fileName) || "favicon.ico".equals(fileName)) {
+            return;
+        }
+        Resource resource = new ClassPathResource("file/" + fileName);
+        if (!resource.exists()) {
+            throw new FileNotFoundException("文件未找到");
+        }
+        InputStream inputStream = resource.getInputStream();
+        BaseUtils.download(inputStream, fileName, request, response);
+
     }
 
 }
