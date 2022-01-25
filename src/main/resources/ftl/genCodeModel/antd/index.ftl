@@ -1,7 +1,7 @@
 import {PlusOutlined} from '@ant-design/icons';
 import {Button, message, Popconfirm} from 'antd';
 import React, {useEffect, useRef, useState} from 'react';
-import {PageHeaderWrapper} from '@ant-design/pro-layout';
+import {PageContainer} from '@ant-design/pro-layout';
 import ProTable, {ActionType, ProColumns} from '@ant-design/pro-table';
 import 'moment/locale/zh-cn'
 import Update${module} from "./components/Update${module}";
@@ -74,22 +74,9 @@ const Applications: React.FC = () => {
     }
   ];
 
-  const routes = [
-    {
-      path: '',
-      breadcrumbName: '一级'
-    }, {
-      path: '',
-      breadcrumbName: '二级'
-    }, {
-      path: '',
-      breadcrumbName: '${moduleDesc}'
-    }
-  ];
-
   return (
     // 布局标签
-    <PageHeaderWrapper className="site-page-header" title="${moduleDesc}" breadcrumb={{routes}}>
+    <PageContainer title={false} ghost>
       <ProTable
         columns={columns}// 上面定义的表格列
         headerTitle="${moduleDesc}列表" // 表头
@@ -168,7 +155,7 @@ const Applications: React.FC = () => {
         )
       }
 </#if>
-    </PageHeaderWrapper>
+    </PageContainer>
   );
 };
 
