@@ -28,7 +28,7 @@ const Update${module} = (props: any) => {
     if (${module?uncap_first}Id !== undefined) {
       init${module}();
     } else {
-
+${antd_initForm!}
     }
   }, []);
 

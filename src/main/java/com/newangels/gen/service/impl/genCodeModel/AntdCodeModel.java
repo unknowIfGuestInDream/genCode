@@ -67,7 +67,7 @@ public class AntdCodeModel extends AbstractGenCodeModel {
                 exportParamUrl.add("'" + (i == 0 ? "" : "&") + "START_" + selParams.get(i) + "=' + encodeURIComponent(" + (paramIsDate ? "(typeof (formProps.form?.getFieldValue('START_" + selParams.get(i) + "')) == 'string') ? formProps.form?.getFieldValue('START_" + selParams.get(i) + "') : formProps.form?.getFieldValue('START_" + selParams.get(i) + "').format('YYYY-MM-DD')" : "formProps.form?.getFieldValue('START_" + selParams.get(i) + "')") + ")");
                 exportParamUrl.add("'&END_" + selParams.get(i) + "=' + encodeURIComponent(" + (paramIsDate ? "(typeof (formProps.form?.getFieldValue('END_" + selParams.get(i) + "')) == 'string') ? formProps.form?.getFieldValue('END_" + selParams.get(i) + "') : formProps.form?.getFieldValue('END_" + selParams.get(i) + "').format('YYYY-MM-DD')" : "formProps.form?.getFieldValue('END_" + selParams.get(i) + "')") + ")");
             } else {
-                exportParamUrl.add("'" + (i == 0 ? "" : "&") + selParams.get(i) + "=' + encodeURIComponent(" + (paramIsDate ? "(typeof (formProps.form?.getFieldValue('" + selParams.get(i) + "')) == 'string') ? formProps.form?.getFieldValue('" + selParams.get(i) + "') : formProps.form?.getFieldValue('" + selParams.get(i) + "').format('YYYY-MM-DD')" : "formProps.form?.getFieldValue('" + selParams.get(i) + "')") + ")");
+                exportParamUrl.add("'" + (i == 0 ? "" : "&") + selParams.get(i) + "=' + encodeURIComponent(" + (paramIsDate ? "(typeof (formProps.form?.getFieldValue('" + selParams.get(i) + "')) == 'string') ? formProps.form?.getFieldValue('" + selParams.get(i) + "') : formProps.form?.getFieldValue('" + selParams.get(i) + "').format('YYYY-MM-DD')" : "formProps.form?.getFieldValue('" + selParams.get(i) + "') ? formProps.form?.getFieldValue('" + selParams.get(i) + "') : ''") + ")");
             }
         }
         objectMap.put("antd_exportParamUrl", exportParamUrl.toString());
@@ -137,6 +137,7 @@ public class AntdCodeModel extends AbstractGenCodeModel {
      * @param objectMap      代码模版值
      */
     private void dealUpdateForm(StringBuilder updateForm, String moduleName, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> insParams, List<String> updParams, Map<String, Object> objectMap) {
+        StringJoiner antd_initForm = new StringJoiner("\n      ");
         //主键数量
         int priNum = 0;
         for (int i = 0, length = params.size(); i < length; i++) {
@@ -157,7 +158,7 @@ public class AntdCodeModel extends AbstractGenCodeModel {
                         "          width=\"lg\"\n" +
                         "          name=\"" + params.get(i) + "\"\n" +
                         getProFormDisabled(moduleName, paramIsIns, paramIsUpd) +
-                        getProFormOther(javaClass) +
+                        getProFormOther(javaClass, params.get(i), antd_initForm) +
                         "          rules={[\n" +
                         "            {\n" +
                         "              required: false,\n" +
@@ -175,6 +176,7 @@ public class AntdCodeModel extends AbstractGenCodeModel {
                 updateForm.append("      </ProForm.Group>\n");
             }
         }
+        objectMap.put("antd_initForm", antd_initForm.toString());
     }
 
     /**
@@ -242,18 +244,20 @@ public class AntdCodeModel extends AbstractGenCodeModel {
      *
      * @param javaClass 参数对应java类
      */
-    private String getProFormOther(JavaClass javaClass) {
+    private String getProFormOther(JavaClass javaClass, String param, StringJoiner initForm) {
         if (javaClass == JavaClass.String) {
             return "";
         } else if (javaClass == JavaClass.Double) {
+            initForm.add("      formObj.setFieldsValue({" + param + ": 0.00});");
             return "          //min={0}\n" +
                     "          //max={99999}\n" +
-                    "          initialValue={0.00}\n" +
+                    //"          initialValue={0.00}\n" +
                     "          fieldProps={{ precision: 2 }}// 小数位数\n";
         } else if (javaClass == JavaClass.Integer) {
+            initForm.add("      formObj.setFieldsValue({" + param + ": 0});");
             return "          //min={0}\n" +
                     "          //max={99999}\n" +
-                    "          initialValue={0}\n" +
+                    //"          initialValue={0}\n" +
                     "          fieldProps={{ precision: 0 }}// 小数位数\n";
         } else if (javaClass == JavaClass.Date) {
             return "";
@@ -289,7 +293,7 @@ public class AntdCodeModel extends AbstractGenCodeModel {
         String module = objectMap.get("module").toString();
         Map<String, Object> result = super.getResult(driver, objectMap, configuration);
         result.put("index.tsx", getIndex(configuration, objectMap));
-        result.put(module + ".ts", getServiceTs(configuration, objectMap));
+        result.put(BaseUtils.toLowerCase4Index(module) + ".ts", getServiceTs(configuration, objectMap));
         result.put("Update" + module + ".tsx", getUpdateTsx(configuration, objectMap));
         result.put("View" + module + ".tsx", getViewTsx(configuration, objectMap));
         result.put("request.tx", getRequestTx(configuration, objectMap));
@@ -305,7 +309,7 @@ public class AntdCodeModel extends AbstractGenCodeModel {
         list.add("service");
         list.add("serviceImpl");
         list.add("index.tsx");
-        list.add(module + ".ts");
+        list.add(BaseUtils.toLowerCase4Index(module) + ".ts");
         list.add("Update" + module + ".tsx");
         if (hasView) {
             list.add("View" + module + ".tsx");

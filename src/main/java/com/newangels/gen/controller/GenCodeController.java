@@ -100,7 +100,7 @@ public class GenCodeController {
             //BaseUtils，BaseSqlCriteria不下载，公用后台代码补充.java后缀，其他自定义文件名称无操作
             for (String name : list) {
                 String fileName;
-                if ("BaseUtils".equals(name) || "BaseSqlCriteria".equals(name)) {
+                if ("BaseUtils".equals(name) || "BaseSqlCriteria".equals(name) || "request.tx".equals(name)) {
                     continue;
                 } else if ("controller".equals(name) || "service".equals(name) || "serviceImpl".equals(name)) {
                     fileName = moduleName + BaseUtils.toUpperCase4Index(name) + ".java";

@@ -1006,4 +1006,20 @@ public class BaseUtils {
         return result;
     }
 
+    /**
+     * 新增一天
+     *
+     * @param date 需要新增一天的日期
+     */
+    public static Date addOneDay(Date date) {
+        if (date == null) {
+            return date;
+        } else {
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+            c.add(Calendar.DAY_OF_MONTH, 1);
+            return c.getTime();
+        }
+    }
+
 }
