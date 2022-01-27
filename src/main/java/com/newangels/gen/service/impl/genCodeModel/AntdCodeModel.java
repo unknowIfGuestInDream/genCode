@@ -45,6 +45,7 @@ public class AntdCodeModel extends AbstractGenCodeModel {
         dealTableParam(tableParams, params, paramDescs, paramJavaClass, primarys, selParams, selType);
         dealUpdateForm(updateForm, moduleName, params, paramDescs, paramJavaClass, primarys, insParams, updParams, objectMap);
         dealViewForm(viewForm, dataSourceType, moduleName, params, paramDescs, paramJavaClass, primarys, hasView);
+        dealSelControllerDate(selParams, selParamJavaClass, selType, objectMap);
         objectMap.put("antd_tableParams", tableParams.toString());
         objectMap.put("antd_updateForm", updateForm.toString());
         objectMap.put("antd_viewForm", viewForm.toString());
@@ -121,6 +122,23 @@ public class AntdCodeModel extends AbstractGenCodeModel {
                         "    }");
             }
         }
+    }
+
+    /**
+     * 处理控制层查询中日期类型区间查询的处理
+     */
+    private void dealSelControllerDate(List<String> selParams, List<String> selParamJavaClass, List<Integer> selType, Map<String, Object> objectMap) {
+        StringJoiner selControllerDate = new StringJoiner("\n");
+        for (int i = 0, length = selParams.size(); i < length; i++) {
+            //判断参数类型
+            JavaClass javaClass = JavaClass.fromCode(selParamJavaClass.get(i));
+            boolean paramIsDate = javaClass == JavaClass.Date;
+            //为日期类型且是区间查询
+            if (paramIsDate && selType.get(i) == 2) {
+                selControllerDate.add("        END_" + selParams.get(i) + " = BaseUtils.addOneDay(END_" + selParams.get(i) + ");");
+            }
+        }
+        objectMap.put("antd_selControllerDate", selControllerDate.toString());
     }
 
     /**

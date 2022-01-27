@@ -45,7 +45,8 @@ public class ${module}Controller {
      */
     @GetMapping("select${module}")
     @Log
-    public Map<String, Object> select${module}(${selConInParams}<#if selConInParams?length gt 1>, </#if>Integer current, Integer pageSize) {
+    public Map<String, Object> select${module}(${selConInParams}<#if selConInParams?length gt 1>, </#if>Integer current, Integer pageSize) {<#if antd_selControllerDate?? && antd_selControllerDate?length gt 0>
+${antd_selControllerDate}</#if>
         List<Map<String, Object>> list = ${module?uncap_first}Service.select${module}(${selSqlParams}<#if selSqlParams?length gt 1>, </#if>current, pageSize);
         int total = 0;
         if (pageSize != null && pageSize > 0) {
