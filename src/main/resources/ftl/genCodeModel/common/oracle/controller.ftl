@@ -45,7 +45,7 @@ ${common_pageHander!}
      * 加载${moduleDesc}
      */
     @GetMapping("load${module}")
-    @Log
+    @Log(title = "${moduleDesc}管理", operateType = "加载${moduleDesc}")
     public Map<String, Object> load${module}(${loadInParams}) {
         return BaseUtils.loadSuccess(${module?uncap_first}Service.load${module}(${loadSqlParams}));
     }
@@ -54,7 +54,7 @@ ${common_pageHander!}
      * 查询${moduleDesc}
      */
     @GetMapping("select${module}")
-    @Log
+    @Log(title = "${moduleDesc}管理", operateType = "查询${moduleDesc}")
     public Map<String, Object> select${module}(${selConInParams}<#if selConInParams?length gt 1>, </#if>Integer page, Integer limit) {
         List<Map<String, Object>> list = ${module?uncap_first}Service.select${module}(${selSqlParams}<#if selSqlParams?length gt 1>, </#if>page, limit);
         int total = 0;
@@ -68,7 +68,7 @@ ${common_pageHander!}
      * 新增${moduleDesc}
      */
     @PostMapping("insert${module}")
-    @Log
+    @Log(title = "${moduleDesc}管理", operateType = "新增${moduleDesc}")
     public Map<String, Object> insert${module}(${insConInParams}) {
         if (${module?uncap_first}Service.insert${module}(${insConSqlParams}) == 0) {
             return BaseUtils.failed("新增${moduleDesc}失败");
@@ -80,7 +80,7 @@ ${common_pageHander!}
      * 修改${moduleDesc}
      */
     @PostMapping("update${module}")
-    @Log
+    @Log(title = "${moduleDesc}管理", operateType = "修改${moduleDesc}")
     public Map<String, Object> update${module}(${updInParams}) {
         if (${module?uncap_first}Service.update${module}(${updSqlParams}) == 0) {
             return BaseUtils.failed("修改${moduleDesc}失败");
@@ -92,7 +92,7 @@ ${common_pageHander!}
      * 删除${moduleDesc}
      */
     @PostMapping("delete${module}")
-    @Log
+    @Log(title = "${moduleDesc}管理", operateType = "删除${moduleDesc}")
     public Map<String, Object> delete${module}(${delInParams}) {
         if (${module?uncap_first}Service.delete${module}(${delSqlParams}) == 0) {
             return BaseUtils.failed("删除${moduleDesc}失败");
@@ -105,7 +105,7 @@ ${common_pageHander!}
      * 批量删除${moduleDesc}
      */
     @PostMapping("delete${module}Batch")
-    @Log
+    @Log(title = "${moduleDesc}管理", operateType = "批量删除${moduleDesc}")
     public Map<String, Object> delete${module}Batch(${delBatchControllerParams}) {
         if (${module?uncap_first}Service.delete${module}Batch(${delBatchSqlParams}) == 0) {
             return BaseUtils.failed("批量删除${moduleDesc}失败");
@@ -119,7 +119,7 @@ ${common_pageHander!}
      * 导出${moduleDesc}
      */
     @GetMapping("export${module}")
-    @Log
+    @Log(title = "${moduleDesc}管理", operateType = "导出${moduleDesc}")
     public void export${module}(${selConInParams}<#if selConInParams?length gt 1>, </#if>HttpServletRequest request, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = ${module?uncap_first}Service.select${module}(${selSqlParams}<#if selSqlParams?length gt 1>, </#if>null, null);
         HSSFWorkbook wb = new HSSFWorkbook();

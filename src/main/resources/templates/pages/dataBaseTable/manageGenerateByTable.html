@@ -297,6 +297,12 @@
                 minWidth: 210,
                 dataIndex: 'COLUMN_NAME'
             }, {
+                text: '注释',
+                flex: 1,
+                minWidth: 200,
+                dataIndex: 'COMMENTS',
+                renderer: _viewValueTip
+            }, {
                 text: '数据类型',
                 width: 120,
                 dataIndex: 'DATA_TYPE'
@@ -402,12 +408,6 @@
                 text: '默认值',
                 width: 100,
                 dataIndex: 'DATA_DEFAULT'
-            }, {
-                text: '注释',
-                flex: 1,
-                minWidth: 200,
-                dataIndex: 'COMMENTS',
-                renderer: _viewValueTip
             }, {
                 text: '不同值的数量',
                 width: 110,
