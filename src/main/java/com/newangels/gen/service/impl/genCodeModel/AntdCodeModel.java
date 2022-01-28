@@ -95,22 +95,50 @@ public class AntdCodeModel extends AbstractGenCodeModel {
             //判断java类型是否为Date
             JavaClass javaClass = JavaClass.fromCode(paramJavaClass.get(i));
             boolean paramIsDate = javaClass == JavaClass.Date;
+            boolean paramIsDigit = (javaClass == JavaClass.Integer || javaClass == JavaClass.Double);
             String valueType = getValueType(javaClass);
             //是查询条件且查询类型为区间查询
             if (position > -1 && selType.get(position) == 2) {
-                tableParams.add("{\n" +
-                        "      title: '开始" + paramDescs.get(i) + "',\n" +
-                        "      dataIndex: 'START_" + params.get(i) + "',\n" +
-                        "      valueType: '" + valueType + "',\n" +
-                        "      hideInTable: true" + (paramIsDate ? "," : "") + "  //在Protable中隐藏，不显示\n" +
-                        (paramIsDate ? "      initialValue: moment(moment().year() + '-01-01').format('YYYY-MM-DD') //设置默认值\n" : "") +
-                        "    }, {\n" +
-                        "      title: '结束" + paramDescs.get(i) + "',\n" +
-                        "      dataIndex: 'END_" + params.get(i) + "',\n" +
-                        "      valueType: '" + valueType + "',\n" +
-                        "      hideInTable: true" + (paramIsDate ? "," : "") + "\n" +
-                        (paramIsDate ? "      initialValue: moment(moment().year() + '-12-31').format('YYYY-MM-DD') //设置默认值\n" : "") +
-                        "    }");
+                //非数字和日期类型
+                if (!paramIsDate && !paramIsDigit) {
+                    tableParams.add("{\n" +
+                            "      title: '开始" + paramDescs.get(i) + "',\n" +
+                            "      dataIndex: 'START_" + params.get(i) + "',\n" +
+                            "      valueType: '" + valueType + "',\n" +
+                            "      hideInTable: true" + (paramIsDate ? "," : "") + "  //在Protable中隐藏，不显示\n" +
+                            (paramIsDate ? "      initialValue: moment(moment().year() + '-01-01').format('YYYY-MM-DD') //设置默认值\n" : "") +
+                            "    }, {\n" +
+                            "      title: '结束" + paramDescs.get(i) + "',\n" +
+                            "      dataIndex: 'END_" + params.get(i) + "',\n" +
+                            "      valueType: '" + valueType + "',\n" +
+                            "      hideInTable: true" + (paramIsDate ? "," : "") + "\n" +
+                            (paramIsDate ? "      initialValue: moment(moment().year() + '-12-31').format('YYYY-MM-DD') //设置默认值\n" : "") +
+                            "    }");
+                } else {
+                    //是日期类型或数字类型
+                    tableParams.add("{\n" +
+                            "      title: '" + paramDescs.get(i) + "',\n" +
+                            "      dataIndex: '" + params.get(i) + "',\n" +
+                            (paramIsDate ? "      valueType: 'date',\n" : "") +
+                            "      hideInTable: false,\n" +
+                            "      hideInSearch: true\n" +
+                            "    }, {\n" +
+                            "      title: '" + paramDescs.get(i) + "',\n" +
+                            "      dataIndex: '" + params.get(i) + "',\n" +
+                            "      valueType: '" + (paramIsDate ? "dateRange" : "digitRange") + "',\n" +
+                            "      order: 3,\n" +
+                            "      //initialValue: [" + (paramIsDate ? "getMonthFirstDay(), getDate()" : "1, 10") + "],\n" +
+                            "      search: {\n" +
+                            "        transform: (value) => {\n" +
+                            "          return {\n" +
+                            "            START_" + params.get(i) + ": value[0],\n" +
+                            "            END_" + params.get(i) + ": value[1],\n" +
+                            "          };\n" +
+                            "        },\n" +
+                            "      },\n" +
+                            "      hideInTable: true,\n" +
+                            "    }");
+                }
             } else {
                 tableParams.add("{\n" +
                         "      title: '" + paramDescs.get(i) + "',\n" +
