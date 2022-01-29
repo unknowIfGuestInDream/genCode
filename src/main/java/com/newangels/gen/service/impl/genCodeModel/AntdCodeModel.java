@@ -324,13 +324,13 @@ public class AntdCodeModel extends AbstractGenCodeModel {
             return "";
         } else if (paramIsIns && !paramIsUpd) {
             //是新增不是修改字段
-            return "          disabled={" + BaseUtils.toLowerCase4Index(moduleName) + " !== undefined}\n";
+            return "          disabled={" + BaseUtils.toLowerCase4Index(moduleName) + "}\n";
         } else if (!paramIsIns && paramIsUpd) {
             //是修改不是新增字段
-            return "          disabled={" + BaseUtils.toLowerCase4Index(moduleName) + " === undefined}\n";
+            return "          disabled={" + BaseUtils.toLowerCase4Index(moduleName) + "}\n";
         } else {
             //不是新增不是修改字段
-            return "          disabled={true}";
+            return "          disabled";
         }
     }
 
