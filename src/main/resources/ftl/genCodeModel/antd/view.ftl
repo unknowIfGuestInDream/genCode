@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import 'antd/dist/antd.min.css';
 import Modal from "antd/es/modal/Modal";
-import {Descriptions, Form} from "antd";
+import {Descriptions} from "antd";
 
 const View${module} = (props: any) => {
   const {isView${module}ModalVisible} = props; // 模态框是否显示
   const {is${module}ShowModal} = props; // 操作模态框显示隐藏的方法
   const {${module?uncap_first}Id} = props;
-  const [form] = Form.useForm();
   const [${module?uncap_first}, set${module}] = useState(DataSourceType)({});
 
   type DataSourceType = {
@@ -38,16 +37,9 @@ const View${module} = (props: any) => {
       footer={[]}
       onCancel={handleCancel}
     >
-      <Form
-        style={{height: '500px', width: '100%', overflow: 'auto'}}
-        labelCol={{span: 8}}
-        wrapperCol={{span: 16}}
-        form={form}
-      >
-        <Descriptions title="${moduleDesc}详情信息">
-          ${antd_viewForm}
-        </Descriptions>
-      </Form>
+      <Descriptions title="${moduleDesc}详情信息" bordered column={3}>
+        ${antd_viewForm}
+      </Descriptions>
     </Modal>
   );
 };
