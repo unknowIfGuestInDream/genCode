@@ -65,7 +65,8 @@ const Applications: React.FC = () => {
       width: 150,
       hideInSearch: true,
       valueType: 'option',  //操作列的类型
-      render: (_, record) => [   //render渲染 record代表当前行
+      render: (_, record) => [   //render渲染 record代表当前行<#if hasView>
+        <a key={record.I_ID} onClick={() => is${module}ShowModal(true, record.I_ID)}>查看</a>,</#if>
         <a key={record.${antd_primary}} onClick={() => isShowModal(true, record.${antd_primary})}>编辑</a>,
         <Popconfirm key={record.${antd_primary}} title="确认删除？" okText="确认" cancelText="取消" onConfirm={(e)=>{handleRemove(record.I_ID)}}>
           <a href="#">删除</a>
