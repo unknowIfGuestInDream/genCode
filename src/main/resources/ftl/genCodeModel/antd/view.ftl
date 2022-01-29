@@ -15,9 +15,7 @@ const View${module} = (props: any) => {
 
   const get${module} = async () => {
     const response = await load${module}({${antd_primary}: ${module?uncap_first}Id});
-    if (response.data != undefined && response.data != null && response.data.length > 0) {
-      set${module}(response.data);
-    }
+    set${module}(response.data);
   };
 
   const handleCancel = () => {
