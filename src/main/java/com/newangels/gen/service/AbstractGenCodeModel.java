@@ -182,7 +182,7 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
             if (JavaClass.fromCode(selParamJavaClass) == JavaClass.String) {
                 selBuildParams.add("        if (StringUtils.isNotEmpty(START_" + selParam + ")) {");
             } else {
-                selBuildParams.add("        if (START_" + selParam + " != null)) {");
+                selBuildParams.add("        if (START_" + selParam + " != null) {");
             }
             selBuildParams.add("            sql += \" and " + selParam + " >= :START_" + selParam + "\";");
             selBuildParams.add("            paramMap.put(\"START_" + selParam + "\", START_" + selParam + ");");
@@ -191,7 +191,7 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
             if (JavaClass.fromCode(selParamJavaClass) == JavaClass.String) {
                 selBuildParams.add("        if (StringUtils.isNotEmpty(END_" + selParam + ")) {");
             } else {
-                selBuildParams.add("        if (END_" + selParam + " != null)) {");
+                selBuildParams.add("        if (END_" + selParam + " != null) {");
             }
             selBuildParams.add("            sql += \" and " + selParam + " <= :END_" + selParam + "\";");
             selBuildParams.add("            paramMap.put(\"END_" + selParam + "\", END_" + selParam + ");");
@@ -201,7 +201,7 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
             if (JavaClass.fromCode(selParamJavaClass) == JavaClass.String) {
                 selBuildParams.add("        if (StringUtils.isNotEmpty(" + selParam + ")) {");
             } else {
-                selBuildParams.add("        if (" + selParam + " != null)) {");
+                selBuildParams.add("        if (" + selParam + " != null) {");
             }
             if (selType == 0) {
                 selBuildParams.add("            sql += \" and " + selParam + " = :" + selParam + "\";");
