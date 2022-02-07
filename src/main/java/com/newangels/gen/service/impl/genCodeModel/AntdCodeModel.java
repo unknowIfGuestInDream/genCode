@@ -194,7 +194,7 @@ public class AntdCodeModel extends AbstractGenCodeModel {
             boolean paramIsIns = insParams.contains(params.get(i));
             boolean paramIsUpd = updParams.contains(params.get(i));
             JavaClass javaClass = JavaClass.fromCode(paramJavaClass.get(i));
-            if ((i + priNum) % 2 == 0) {
+            if ((i + priNum) % 2 == 0 && (paramIsIns || paramIsUpd)) {
                 updateForm.append("      <ProForm.Group>\n");
             }
             //非新增非修改时处理
