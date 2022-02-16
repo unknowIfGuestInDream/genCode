@@ -39,15 +39,19 @@ public class AntdCodeModel extends AbstractGenCodeModel {
     @Override
     protected void dealOtherCode(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, String author, boolean hasDelBatch, boolean hasExport, boolean hasView, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, List<String> primaryDesc, List<String> primaryJavaClass, List<String> selParams, List<String> selParamDescs, List<String> selParamJavaClass, List<Integer> selType, List<String> insParams, List<String> insParamDescs, List<String> insParamJavaClass, List<String> updParams, List<String> updParamDescs, List<String> updParamJavaClass, Map<String, Object> objectMap) {
         StringJoiner tableParams = new StringJoiner(", ");
-        StringJoiner viewForm = new StringJoiner("\n          ");
+        StringJoiner view1Form = new StringJoiner("\n          ");
+        StringJoiner viewForm = new StringJoiner(", ");
         StringBuilder updateForm = new StringBuilder(params.size() * 100);
         StringJoiner dataSourceType = new StringJoiner("\n    ");
         dealTableParam(tableParams, params, paramDescs, paramJavaClass, primarys, selParams, selType);
         dealUpdateForm(updateForm, moduleName, params, paramDescs, paramJavaClass, primarys, insParams, updParams, objectMap);
-        dealViewForm(viewForm, dataSourceType, moduleName, params, paramDescs, paramJavaClass, primarys, hasView);
+        //view1.ftl生成 view1Form  dataSourceType
+        dealView1Form(view1Form, dataSourceType, moduleName, params, paramDescs, paramJavaClass, primarys, hasView);
+        dealViewForm(viewForm, params, paramDescs, paramJavaClass, primarys, hasView);
         dealSelControllerDate(selParams, selParamJavaClass, selType, objectMap);
         objectMap.put("antd_tableParams", tableParams.toString());
         objectMap.put("antd_updateForm", updateForm.toString());
+        objectMap.put("antd_view1Form", view1Form.toString());
         objectMap.put("antd_viewForm", viewForm.toString());
         objectMap.put("antd_dataSourceType", dataSourceType.toString());
     }
@@ -226,7 +230,7 @@ public class AntdCodeModel extends AbstractGenCodeModel {
     }
 
     /**
-     * 处理查看页的代码
+     * 处理view1查看页的代码
      *
      * @param viewForm       StringJoiner
      * @param dataSourceType 查看页DataSourceType
@@ -235,7 +239,7 @@ public class AntdCodeModel extends AbstractGenCodeModel {
      * @param paramJavaClass 参数对应java类
      * @param primarys       主键参数
      */
-    private void dealViewForm(StringJoiner viewForm, StringJoiner dataSourceType, String moduleName, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, boolean hasView) {
+    private void dealView1Form(StringJoiner viewForm, StringJoiner dataSourceType, String moduleName, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, boolean hasView) {
         if (!hasView) {
             return;
         }
@@ -246,6 +250,34 @@ public class AntdCodeModel extends AbstractGenCodeModel {
             }
             dataSourceType.add(params.get(i) + "?: string;");
             viewForm.add("<Descriptions.Item label=\"" + paramDescs.get(i) + "\">{" + BaseUtils.toLowerCase4Index(moduleName) + "." + params.get(i) + "}</Descriptions.Item>");
+        }
+    }
+
+    /**
+     * 处理view查看页的代码
+     *
+     * @param viewForm       StringJoiner
+     * @param params         参数
+     * @param paramDescs     参数描述
+     * @param paramJavaClass 参数对应java类
+     * @param primarys       主键参数
+     */
+    private void dealViewForm(StringJoiner viewForm, List<String> params, List<String> paramDescs, List<String> paramJavaClass, List<String> primarys, boolean hasView) {
+        if (!hasView) {
+            return;
+        }
+        for (int i = 0, length = params.size(); i < length; i++) {
+            //为主键不显示
+            if (primarys.contains(params.get(i))) {
+                continue;
+            }
+            JavaClass javaClass = JavaClass.fromCode(paramJavaClass.get(i));
+            boolean paramIsDate = javaClass == JavaClass.Date;
+            viewForm.add("{\n" +
+                    "            title: '" + paramDescs.get(i) + "',\n" +
+                    "            dataIndex: '" + params.get(i) + "',\n" +
+                    (paramIsDate ? "            valueType: 'date',\n" : "") +
+                    "          }");
         }
     }
 
@@ -342,6 +374,7 @@ public class AntdCodeModel extends AbstractGenCodeModel {
         result.put(BaseUtils.toLowerCase4Index(module) + ".ts", getServiceTs(configuration, objectMap));
         result.put("Update" + module + ".tsx", getUpdateTsx(configuration, objectMap));
         result.put("View" + module + ".tsx", getViewTsx(configuration, objectMap));
+        result.put("View" + module + "1.tsx", getView1Tsx(configuration, objectMap));
         result.put("request.tx", getRequestTx(configuration, objectMap));
         return result;
     }
@@ -359,6 +392,7 @@ public class AntdCodeModel extends AbstractGenCodeModel {
         list.add("Update" + module + ".tsx");
         if (hasView) {
             list.add("View" + module + ".tsx");
+            list.add("View" + module + "1.tsx");
         }
         list.add("request.tx");
         list.add("BaseUtils");
@@ -392,6 +426,13 @@ public class AntdCodeModel extends AbstractGenCodeModel {
      */
     private String getViewTsx(Configuration configuration, Map<String, Object> objectMap) {
         return getFtlModel(configuration, objectMap, "view.ftl");
+    }
+
+    /**
+     * 获取view1.tsx
+     */
+    private String getView1Tsx(Configuration configuration, Map<String, Object> objectMap) {
+        return getFtlModel(configuration, objectMap, "view1.ftl");
     }
 
     /**
