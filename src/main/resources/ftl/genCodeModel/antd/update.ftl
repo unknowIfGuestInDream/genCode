@@ -13,10 +13,7 @@ const Update${module} = (props: any) => {
   const init${module} = async () => {
     const response = await load${module}({I_ID: ${module?uncap_first}Id});
     const ${module?uncap_first}Data = response.data;
-
     set${module}({...response.data});
-    Object.keys(${module?uncap_first}Data);
-    Object.values(${module?uncap_first}Data);
     Object.keys(${module?uncap_first}Data).forEach(key => formObj.setFieldsValue({[<#noparse>`${key}`</#noparse>]: ${module?uncap_first}Data[key]}));
   };
 
