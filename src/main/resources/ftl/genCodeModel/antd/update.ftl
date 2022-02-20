@@ -5,10 +5,7 @@ import 'antd/dist/antd.min.css';
 import moment from "moment";
 
 const Update${module} = (props: any) => {
-  const {isModalVisible} = props; // 模态框是否显示
-  const {isShowModal} = props; // 操作模态框显示隐藏的方法
-  const {actionRef} = props; // 父组件传过来的表格的引用, 可以用来操作表格, 比如刷新表格
-  const {${module?uncap_first}Id} = props; // 要编辑的ID, 添加的时候是undefined, 只有编辑才有
+  const {isModalVisible, isShowModal, actionRef, ${module?uncap_first}Id} = props;
   const [${module?uncap_first}, set${module}] = useState(undefined);// 将表单初始化的值设置成状态, 在编辑的时候, 使用这个状态
   const [formObj] = ProForm.useForm(); // 定义Form实例, 用来操作表单
 

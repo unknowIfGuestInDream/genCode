@@ -5,9 +5,7 @@ import {Button} from 'antd';
 import ProDescriptions from '@ant-design/pro-descriptions';
 
 const View${module} = (props: any) => {
-  const {isView${module}ModalVisible} = props; // 模态框是否显示
-  const {is${module}ShowModal} = props; // 操作模态框显示隐藏的方法
-  const {${module?uncap_first}Id} = props;
+  const {isView${module}ModalVisible, is${module}ShowModal, ${module?uncap_first}Id} = props;
 
   const handleCancel = () => {
     is${module}ShowModal(false);
