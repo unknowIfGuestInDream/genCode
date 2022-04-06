@@ -13,19 +13,24 @@ public enum NameConventType {
     /**
      * 常用规范
      */
-    COMMON("1", "大连常用规范"),
+    COMMON("1", "大连常用规范", 1),
 
     /**
      * EAM3期常用规范
      */
-    EAM3("2", "EAM3期规范");
+    EAM3("2", "EAM3期规范", 1);
 
     private String code;
     private String desc;
+    /**
+     * 状态 1启用 0禁用
+     */
+    private int status;
 
-    NameConventType(String code, String desc) {
+    NameConventType(String code, String desc, int status) {
         this.code = code;
         this.desc = desc;
+        this.status = status;
     }
 
     //跟据规范编码获取规范
@@ -44,5 +49,9 @@ public enum NameConventType {
 
     public String getDesc() {
         return this.desc;
+    }
+
+    public int getStatus() {
+        return this.status;
     }
 }

@@ -13,17 +13,17 @@ public enum GenCodeModelType {
     /**
      * 大连常用模版
      */
-    COMMON("1", "大连常用模版"),
+    COMMON("1", "大连常用模版", 1),
 
     /**
      * 大连demo模版
      */
-    DEMO("2", "大连demo模版"),
+    DEMO("2", "大连demo模版", 1),
 
     /**
      * 大连ANTD模版
      */
-    ANTD("3", "大连ANTD模版");
+    ANTD("3", "大连ANTD模版", 1);
 
     /**
      * 模版编码/名称
@@ -35,9 +35,15 @@ public enum GenCodeModelType {
      */
     private String desc;
 
-    GenCodeModelType(String code, String desc) {
+    /**
+     * 状态 1启用 0禁用
+     */
+    private int status;
+
+    GenCodeModelType(String code, String desc, int status) {
         this.code = code;
         this.desc = desc;
+        this.status = status;
     }
 
     //跟据模板编码获取模板
@@ -56,5 +62,9 @@ public enum GenCodeModelType {
 
     public String getDesc() {
         return this.desc;
+    }
+
+    public int getStatus() {
+        return this.status;
     }
 }

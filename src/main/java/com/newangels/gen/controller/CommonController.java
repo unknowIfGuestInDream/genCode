@@ -76,6 +76,9 @@ public class CommonController {
         if (list == null) {
             list = new ArrayList<>();
             for (GenProcedureModelType genProcedureModelType : GenProcedureModelType.values()) {
+                if (genProcedureModelType.getStatus() == 0) {
+                    continue;
+                }
                 Map<String, Object> result = new HashMap<>(4);
                 result.put("CODE_", genProcedureModelType.getCode());
                 result.put("NAME_", genProcedureModelType.getDesc());
@@ -96,6 +99,9 @@ public class CommonController {
         if (list == null) {
             list = new ArrayList<>();
             for (GenCodeModelType genCodeModelType : GenCodeModelType.values()) {
+                if (genCodeModelType.getStatus() == 0) {
+                    continue;
+                }
                 Map<String, Object> result = new HashMap<>(4);
                 result.put("CODE_", genCodeModelType.getCode());
                 result.put("NAME_", genCodeModelType.getDesc());
@@ -116,6 +122,9 @@ public class CommonController {
         if (list == null) {
             list = new ArrayList<>();
             for (NameConventType nameConventType : NameConventType.values()) {
+                if (nameConventType.getStatus() == 0) {
+                    continue;
+                }
                 Map<String, Object> result = new HashMap<>(4);
                 result.put("CODE_", nameConventType.getCode());
                 result.put("NAME_", nameConventType.getDesc());
