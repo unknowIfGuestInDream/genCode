@@ -74,5 +74,6 @@ druid监控账号密码默认都为admin
   感谢 JetBrains 提供的免费开源 License**</a>
 
 ## 其它
+基于gradle构建的项目可以查看 [https://github.com/UnknownInTheDream/genCode-gradle](https://github.com/UnknownInTheDream/genCode-gradle)
 
 如果有问题或者需求可以发送邮件或者提交Issues
