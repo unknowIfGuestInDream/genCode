@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @since: 1.0
  */
 @Slf4j
-public class VisiableThreadPoolTaskExecutor extends ThreadPoolTaskExecutor {
+public class VisibleThreadPoolTaskExecutor extends ThreadPoolTaskExecutor {
 
     private void showThreadPoolInfo(String prefix) {
         ThreadPoolExecutor threadPoolExecutor = getThreadPoolExecutor();

@@ -13,7 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,17 +60,9 @@ public class DataBaseDocumentController {
             for (String engineFileType : engineFileTypes) {
                 String file = dataBaseDocumentService.executeFile(url, driver, userName, password, version, description, fileName, engineFileType, tableNames, tablePrefixs);
                 @Cleanup InputStream inputStream = new ByteArrayInputStream(file.getBytes(StandardCharsets.UTF_8));
-                //创建输入流读取文件
-                @Cleanup BufferedInputStream bis = new BufferedInputStream(inputStream);
                 //将文件写入zip内，即将文件进行打包
-                zos.putNextEntry(new ZipEntry(fileName + EngineFileType.valueOf(engineFileType).getFileSuffix()));
-                //写入文件的方法，同上
-                int size = 0;
-                byte[] buffer = new byte[4096];
-                //设置读取数据缓存大小
-                while ((size = bis.read(buffer)) > 0) {
-                    zos.write(buffer, 0, size);
-                }
+                zos.putNextEntry(new ZipEntry(fileName));
+                inputStream.transferTo(zos);
                 //关闭输入输出流
                 zos.closeEntry();
             }

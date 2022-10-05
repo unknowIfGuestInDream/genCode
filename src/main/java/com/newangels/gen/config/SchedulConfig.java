@@ -32,7 +32,7 @@ public class SchedulConfig {
         ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
         // 定时任务执行线程池核心线程数
         taskScheduler.setPoolSize(poolSize);
-        taskScheduler.setErrorHandler(new ScheduErrorHandler());
+        taskScheduler.setErrorHandler(new ScheduleErrorHandler());
         taskScheduler.setRemoveOnCancelPolicy(removeOnCancelPolicy);
         taskScheduler.setThreadNamePrefix(threadNamePrefix);
         return taskScheduler;

@@ -27,7 +27,9 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
@@ -162,36 +164,15 @@ public class GenProcedureController {
                     fileName = moduleName + BaseUtils.toUpperCase4Index(name) + ".java";
                 }
                 @Cleanup InputStream inputStream = new ByteArrayInputStream(map.get(name).toString().getBytes(StandardCharsets.UTF_8));
-                //创建输入流读取文件
-                @Cleanup BufferedInputStream bis = new BufferedInputStream(inputStream);
                 //将文件写入zip内，即将文件进行打包
                 zos.putNextEntry(new ZipEntry(fileName));
-                //写入文件的方法，同上
-                int size = 0;
-                byte[] buffer = new byte[4096];
-                //设置读取数据缓存大小
-                while ((size = bis.read(buffer)) > 0) {
-                    zos.write(buffer, 0, size);
-                }
+                inputStream.transferTo(zos);
                 //关闭输入输出流
                 zos.closeEntry();
             }
             zos.close();
         } catch (IOException e) {
-            e.printStackTrace();
-            response.setContentType("text/html;charset=utf-8");
-            @Cleanup PrintWriter out = null;
-            try {
-                out = response.getWriter();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            out.print("<span style=\"display:block;text-align: center;margin:0 auto;min-width: 150px;\">" + e.getMessage() + "</span><br/>");
-            out.print("<br/><button autocomplete=\"off\" onclick=\"javascript:window.history.back(-1);return false;\" autofocus=\"true\"\n" +
-                    "            style=\"display:block;margin:0 auto;min-width: 150px;background-color:rgb(0, 138, 203);color: rgb(255, 255, 255);\">\n" +
-                    "        返回上一个页面\n" +
-                    "    </button>");
-            out.flush();
+            BaseUtils.callbackNotFound(response, e);
         }
     }
 }

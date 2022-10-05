@@ -115,7 +115,7 @@ public class DataBaseInfoController {
         if (con != null) {
             return BaseUtils.success();
         } else {
-            String mes = "与数据库建立连接错误";
+            String mes = "Error establishing connection with database";
             return BaseUtils.failed(mes);
         }
     }

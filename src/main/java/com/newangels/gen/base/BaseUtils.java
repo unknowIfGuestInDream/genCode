@@ -44,7 +44,7 @@ public class BaseUtils {
         if (userAgent.indexOf("FIREFOX") > 0) {
             filename = new String(s.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1); // firefox浏览器
         } else if (userAgent.indexOf("MSIE") > 0) {
-            filename = URLEncoder.encode(s, "UTF-8");// IE浏览器
+            filename = URLEncoder.encode(s, StandardCharsets.UTF_8);// IE浏览器
         } else if (userAgent.indexOf("CHROME") > 0) {
             filename = new String(s.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);// 谷歌
         }
@@ -65,7 +65,7 @@ public class BaseUtils {
         response.setHeader("Content-Disposition", "attachment; filename=" + fileName);// 下载模式
         @Cleanup ServletOutputStream out = response.getOutputStream();
         byte[] content = new byte[65535];
-        int length = 0;
+        int length;
         while ((length = inputStream.read(content)) != -1) {
             out.write(content, 0, length);
             out.flush();
@@ -80,14 +80,9 @@ public class BaseUtils {
      * @throws Exception IOException
      */
     public static byte[] inputStreamToBytes(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        byte[] content = new byte[65535];
-        int length = 0;
-        while ((length = inputStream.read(content)) != -1) {
-            baos.write(content, 0, length);
-        }
-
-        return baos.toByteArray();
+        ByteArrayOutputStream bas = new ByteArrayOutputStream();
+        inputStream.transferTo(bas);
+        return bas.toByteArray();
     }
 
     /**
@@ -98,14 +93,9 @@ public class BaseUtils {
      * @throws Exception IOException
      */
     public static String inputStreamToString(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        byte[] content = new byte[65535];
-        int length = 0;
-        while ((length = inputStream.read(content)) != -1) {
-            baos.write(content, 0, length);
-        }
-
-        return baos.toString();
+        ByteArrayOutputStream bas = new ByteArrayOutputStream();
+        inputStream.transferTo(bas);
+        return bas.toString();
     }
 
     /**
@@ -236,7 +226,6 @@ public class BaseUtils {
         if (request.getQueryString() != null) {
             url += "?" + request.getQueryString();
         }
-
         return url;
     }
 
@@ -309,9 +298,6 @@ public class BaseUtils {
 
     /**
      * 首字母小写
-     *
-     * @param string
-     * @return
      */
     public static String toLowerCase4Index(String string) {
         if (Character.isLowerCase(string.charAt(0))) {
@@ -325,9 +311,6 @@ public class BaseUtils {
 
     /**
      * 首字母大写
-     *
-     * @param string
-     * @return
      */
     public static String toUpperCase4Index(String string) {
         char[] chars = string.toCharArray();
@@ -337,9 +320,6 @@ public class BaseUtils {
 
     /**
      * 字符转成大写
-     *
-     * @param chars
-     * @return
      */
     public static char toUpperCase(char chars) {
         if (97 <= chars && chars <= 122) {
@@ -377,6 +357,26 @@ public class BaseUtils {
             return objectInputStream.readObject();
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    /**
+     * 深度克隆
+     */
+    public static void callbackNotFound(HttpServletResponse response, Exception e) {
+        e.printStackTrace();
+        response.setContentType("text/html;charset=utf-8");
+        @Cleanup PrintWriter out = null;
+        try {
+            out = response.getWriter();
+            out.print("<span style=\"display:block;text-align: center;margin:0 auto;min-width: 150px;\">" + e.getMessage() + "</span><br/>");
+            out.print("<br/><button autocomplete=\"off\" onclick=\"javascript:window.history.back(-1);return false;\" autofocus=\"true\"\n" +
+                    "            style=\"display:block;margin:0 auto;min-width: 150px;background-color:rgb(0, 138, 203);color: rgb(255, 255, 255);\">\n" +
+                    "        返回上一个页面\n" +
+                    "    </button>");
+            out.flush();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 }

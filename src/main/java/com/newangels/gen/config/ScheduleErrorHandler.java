@@ -11,7 +11,7 @@ import org.springframework.util.ErrorHandler;
  * @since: 1.0
  */
 @Slf4j
-public class ScheduErrorHandler implements ErrorHandler {
+public class ScheduleErrorHandler implements ErrorHandler {
     @Override
     public void handleError(Throwable throwable) {
         log.error("Unexpected error occurred in scheduled task" + throwable);
