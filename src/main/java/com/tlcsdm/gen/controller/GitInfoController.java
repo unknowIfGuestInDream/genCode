@@ -26,7 +26,7 @@ public class GitInfoController {
      * 获取git信息
      */
     @GetMapping("getGitInfo")
-    @Log
+    @Log(title = "git信", operateType = "获取git信息")
     public Map<String, Object> getGitInfo() throws IOException {
         return BaseUtils.success(rpcService.getGitInfo());
     }

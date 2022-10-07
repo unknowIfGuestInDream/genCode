@@ -45,7 +45,7 @@ public class DataBaseDocumentController {
      * 生成数据库文档
      */
     @GetMapping("genDataBaseDocument")
-    @Log
+    @Log(title = "数据库文档", operateType = "生成数据库文档")
     public void genDataBaseDocument(String url, String driver, String userName, String password, @RequestParam(required = false, defaultValue = "1.0.0") String version, String description, @RequestParam(required = false, defaultValue = "数据库文档") String fileName, @RequestParam List<String> engineFileTypes, @RequestParam(required = false, defaultValue = "") List<String> tableNames, @RequestParam(required = false, defaultValue = "") List<String> tablePrefixs, HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (engineFileTypes.size() == 1) {
             String file = dataBaseDocumentService.executeFile(url, driver, userName, password, version, description, fileName, engineFileTypes.get(0), tableNames, tablePrefixs);
