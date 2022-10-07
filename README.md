@@ -36,7 +36,7 @@ nohup java -jar jar包  >/dev/null 2>&1 &  ## 后台启动(无日志)
 
 druid监控账号密码默认都为admin
 
-运行后访问 [http://localhost:8669/gen](http://localhost:8669/gen)
+运行后访问 [http://localhost:8669/gen/](http://localhost:8669/gen/)
 
 ## 数据库支持
 功能 | oracle | mysql | mariadb | sqlserver
@@ -74,8 +74,8 @@ druid监控账号密码默认都为admin
 
 ## 感谢
 
-- <a href="https://jb.gg/OpenSource"><img src="http://static.xkcoding.com/spring-boot-demo/064312.jpg" width="100px" alt="jetbrains">**
-  感谢 JetBrains 提供的免费开源 License**</a>
+- <a href="https://jb.gg/OpenSource"><img src="http://static.xkcoding.com/spring-boot-demo/064312.jpg" width="100px" alt="jetbrains">
+- **感谢 JetBrains 提供的免费开源 License**</a>
 
 ## 其它
 基于gradle构建的项目可以查看 [https://github.com/UnknownInTheDream/genCode-gradle](https://github.com/UnknownInTheDream/genCode-gradle)

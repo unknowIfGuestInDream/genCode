@@ -10,10 +10,10 @@
     </parent>
     <groupId>com.newangels</groupId>
     <artifactId>gen</artifactId>
-    <version>4.0</version>
+    <version>4.0.1</version>
     <packaging>jar</packaging>
-    <name>gen</name>
-    <description>存储过程生成</description>
+    <name>genCode</name>
+    <description>代码生成</description>
     <properties>
         <java.version>11</java.version>
         <log4j2.version>2.17.0</log4j2.version>
