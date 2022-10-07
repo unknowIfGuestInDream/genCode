@@ -1,5 +1,6 @@
 package com.tlcsdm.gen.config;
 
+import com.tlcsdm.common.config.AsyncExceptionHandler;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

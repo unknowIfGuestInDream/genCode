@@ -28,7 +28,7 @@ public class LogAspect {
     /**
      * 配置织入点
      */
-    @Pointcut("@annotation(com.tlcsdm.gen.annotation.Log)")
+    @Pointcut("@annotation(com.tlcsdm.common.annotation.Log)")
     public void logPointCut() {
     }
 

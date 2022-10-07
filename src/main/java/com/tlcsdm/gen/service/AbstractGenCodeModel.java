@@ -159,7 +159,9 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
      * @param objectMap       过程模版值
      */
     protected void dealSelOrderBy(List<String> orderParams, List<String> orderParamTypes, Map<String, Object> objectMap) {
-        if (orderParams.size() == 0) return;
+        if (orderParams.size() == 0) {
+            return;
+        }
         StringJoiner orderBy = new StringJoiner(", ");
         for (int i = 0, length = orderParams.size(); i < length; i++) {
             orderBy.add(orderParams.get(i) + " " + orderParamTypes.get(i));
