@@ -39,7 +39,7 @@ public class CacheManageController {
      * 查询项目缓存
      */
     @GetMapping("selectCaches")
-    @Log
+    @Log(title = "缓存管理", operateType = "查询项目缓存")
     public Map<String, Object> selectCaches() {
         List<Map<String, Object>> list = new ArrayList<>();
         for (Cache cache : CACHE_MAP.values()) {
@@ -61,7 +61,7 @@ public class CacheManageController {
      * 为空清除所有缓存，否则清除指定缓存
      */
     @DeleteMapping(value = {"clearCaches/{name}", "clearCaches/"})
-    @Log
+    @Log(title = "缓存管理", operateType = "清除缓存")
     public Map<String, Object> clearCaches(@PathVariable(required = false) String name) {
         if (StringUtils.isEmpty(name)) {
             CACHE_MAP.forEach((s, cache) -> cache.clear());
@@ -76,7 +76,7 @@ public class CacheManageController {
      * 获取CacheManage类下的缓存信息
      */
     @GetMapping(value = {"caches/{name}", "caches/", "caches"})
-    @Log
+    @Log(title = "缓存管理", operateType = "获取缓存信息")
     public Map<String, Object> getCaches(@PathVariable(required = false) String name) {
         List<Object> list = new ArrayList<>();
 
@@ -100,7 +100,7 @@ public class CacheManageController {
      * 获取数据库连接池DataSourceUtilFactory缓存信息
      */
     @GetMapping(value = {"dataSourceCaches/", "dataSourceCaches"})
-    @Log
+    @Log(title = "缓存管理", operateType = "获取数据库连接池缓存信息")
     public Map<String, Object> getDataSourceUtilCaches() {
         return BaseUtils.success(DataSourceUtilFactory.getDataSourceInfoList());
     }

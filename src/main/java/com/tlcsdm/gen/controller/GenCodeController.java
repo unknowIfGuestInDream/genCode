@@ -70,7 +70,7 @@ public class GenCodeController {
      * @param orderParamTypes  排序类型
      */
     @PostMapping("genCodeByTable")
-    @Log
+    @Log(title = "后台代码生成", operateType = "生成后台代码")
     public Map<String, Object> genCodeByTable(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, boolean hasDelBatch, boolean hasExport, boolean hasView, String genCodeModelType, String driver, @RequestParam(required = false, defaultValue = "admin") String author, @RequestParam("params") List<String> params, @RequestParam("paramJavaClass") List<String> paramJavaClass, @RequestParam("paramDescs") List<String> paramDescs, @RequestParam("priParamIndex") List<Integer> priParamIndex, @RequestParam(value = "selParamsIndex", required = false) List<Integer> selParamsIndex, @RequestParam(value = "selType", required = false) List<Integer> selType, @RequestParam("insParamIndex") List<Integer> insParamIndex, @RequestParam("updParamIndex") List<Integer> updParamIndex, @RequestParam(value = "orderParamIndex", required = false) List<Integer> orderParamIndex, @RequestParam(value = "orderParamTypes", required = false) List<String> orderParamTypes) {
         moduleName = BaseUtils.toUpperCase4Index(moduleName);
         //获取生成代码模版
@@ -83,7 +83,7 @@ public class GenCodeController {
      * 生成代码下载
      */
     @GetMapping("downloadCodeByTable")
-    @Log
+    @Log(title = "后台代码生成", operateType = "生成代码下载")
     public void downloadCodeByTable(String tableName, String tableDesc, String moduleName, String moduleDesc, String packageName, boolean hasDelBatch, boolean hasExport, boolean hasView, String genCodeModelType, String driver, @RequestParam(required = false, defaultValue = "admin") String author, @RequestParam("params") List<String> params, @RequestParam("paramJavaClass") List<String> paramJavaClass, @RequestParam("paramDescs") List<String> paramDescs, @RequestParam("priParamIndex") List<Integer> priParamIndex, @RequestParam(value = "selParamsIndex", required = false) List<Integer> selParamsIndex, @RequestParam(value = "selType", required = false) List<Integer> selType, @RequestParam("insParamIndex") List<Integer> insParamIndex, @RequestParam("updParamIndex") List<Integer> updParamIndex, @RequestParam(value = "orderParamIndex", required = false) List<Integer> orderParamIndex, @RequestParam(value = "orderParamTypes", required = false) List<String> orderParamTypes, HttpServletRequest request, HttpServletResponse response) {
         try {
             String zipName = moduleName + ".zip";

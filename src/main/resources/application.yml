@@ -113,7 +113,7 @@ gen:
   schedule: ${schedule.enabled}
   async: ${thread.enabled}
   version: @version@
-  author: TangLiang
+  author: unknowIfGuestInDream
   rpc:
     enabled: true
     rmi: false

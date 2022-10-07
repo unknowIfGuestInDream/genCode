@@ -65,7 +65,7 @@ public class DataBaseInfoController {
      * 查询数据源
      */
     @GetMapping("selectDataBaseInfo")
-    @Log
+    @Log(title = "数据源管理", operateType = "查询数据源")
     public Map<String, Object> selectDataBaseInfo() {
         return BaseUtils.success(dataBaseInfoService.selectDataBaseInfo());
     }
@@ -74,7 +74,7 @@ public class DataBaseInfoController {
      * 新增数据源
      */
     @PostMapping("insertDataBaseInfo")
-    @Log
+    @Log(title = "数据源管理", operateType = "新增数据源")
     public Map<String, Object> insertDataBaseInfo(String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) throws SQLException {
         return BaseUtils.success(dataBaseInfoService.insertDataBaseInfo(NAME, URL, DRIVER, USERNAME, PASSWORD));
     }
@@ -83,7 +83,7 @@ public class DataBaseInfoController {
      * 修改数据源
      */
     @PostMapping("updateDataBaseInfo")
-    @Log
+    @Log(title = "数据源管理", operateType = "修改数据源")
     public Map<String, Object> updateDataBaseInfo(String ID, String NAME, String URL, String DRIVER, String USERNAME, String PASSWORD) throws SQLException {
         DataSourceUtilFactory.remove(URL + USERNAME);
         return BaseUtils.success(dataBaseInfoService.updateDataBaseInfo(ID, NAME, URL, DRIVER, USERNAME, PASSWORD));
@@ -93,7 +93,7 @@ public class DataBaseInfoController {
      * 删除数据源
      */
     @PostMapping("deleteDataBaseInfo")
-    @Log
+    @Log(title = "数据源管理", operateType = "删除数据源")
     public Map<String, Object> deleteDataBaseInfo(String ID, String URL, String USERNAME) {
         DataSourceUtilFactory.remove(URL + USERNAME);
         return BaseUtils.success(dataBaseInfoService.deleteDataBaseInfo(ID));
@@ -103,7 +103,7 @@ public class DataBaseInfoController {
      * 数据源连接测试
      */
     @PostMapping("testConnect")
-    @Log
+    @Log(title = "数据源管理", operateType = "数据源连接测试")
     public Map<String, Object> testConnect(String URL, String DRIVER, String USERNAME, String PASSWORD) throws SQLException, ClassNotFoundException {
         @Cleanup Connection con = null;
         Class.forName(DRIVER);

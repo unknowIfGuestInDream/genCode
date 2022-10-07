@@ -64,7 +64,7 @@ public class DataBaseTableController {
      * @param password 数据库密码
      */
     @GetMapping("loadTable")
-    @Log
+    @Log(title = "数据库表管理", operateType = "加载表详细信息")
     public Map<String, Object> loadTable(String name, String url, String driver, String userName, String password) {
         DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
         DataBaseTableService dataBaseTable = DataBaseTableFactory.getDataBaseTable(DataBaseType.fromTypeName(driver));
@@ -81,7 +81,7 @@ public class DataBaseTableController {
      * @param password 数据库密码
      */
     @GetMapping("selectTables")
-    @Log
+    @Log(title = "数据库表管理", operateType = "获取数据库表数据")
     public Map<String, Object> selectTables(@RequestParam(required = false, defaultValue = "") String name, String schema, String url, String driver, String userName, String password) {
         List<Map<String, Object>> list = CacheManage.TABLES_CACHE.get(url.replaceAll("/", "") + userName + name + "tables");
         //缓存方案 url+用户名 + 查询条件为主键
@@ -105,7 +105,7 @@ public class DataBaseTableController {
      * @param password 数据库密码
      */
     @GetMapping("selectTableInfo")
-    @Log
+    @Log(title = "数据库表管理", operateType = "查询数据库某表字段相关的详细信息")
     public Map<String, Object> selectTableInfo(String name, String schema, String url, String driver, String userName, String password) {
         DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
         DataBaseTableService dataBaseTable = DataBaseTableFactory.getDataBaseTable(DataBaseType.fromTypeName(driver));
@@ -131,7 +131,7 @@ public class DataBaseTableController {
      * @param orderParamTypes 排序类型
      */
     @PostMapping("genProceduresByTable")
-    @Log
+    @Log(title = "数据库表管理", operateType = "根据数据库表生成存储过程")
     public Map<String, Object> genProceduresByTable(String nameConventType, String driver, String tableName, String tableDesc, @RequestParam("params") List<String> params, @RequestParam("paramTypes") List<String> paramTypes, @RequestParam("paramDescs") List<String> paramDescs, @RequestParam("priParamIndex") List<Integer> priParamIndex, @RequestParam(value = "selParamsIndex", required = false) List<Integer> selParamsIndex, @RequestParam(value = "selType", required = false) List<Integer> selType, @RequestParam("insParamIndex") List<Integer> insParamIndex, @RequestParam("updParamIndex") List<Integer> updParamIndex, @RequestParam(value = "orderParamIndex", required = false) List<Integer> orderParamIndex, @RequestParam(value = "orderParamTypes", required = false) List<String> orderParamTypes) {
         //获取命名规范
         NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromCode(nameConventType));
@@ -144,7 +144,7 @@ public class DataBaseTableController {
      * 生成主键id的sql
      */
     @PostMapping("genAutoInsKey")
-    @Log
+    @Log(title = "数据库表管理", operateType = "生成主键id的sql")
     public Map<String, Object> genAutoInsKey(String tableName, String primaryKey, String driver) {
         AbstractTableToProcedure tableToProcedure = AbstractTableToProcedureFactory.getTableToProcedure(DataBaseType.fromTypeName(driver));
         return BaseUtils.success(tableToProcedure.genAutoInsKey(tableName, primaryKey, freeMarkerConfigurer.getConfiguration()));

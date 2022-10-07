@@ -39,7 +39,7 @@ public class LogAspect {
      */
     @AfterThrowing(value = "logPointCut()", throwing = "e")
     public void doAfterThrowing(Exception e) {
-        log.error("异常信息:{}", e.getMessage());
+        log.error(e.getMessage());
         e.printStackTrace();
     }
 
@@ -56,8 +56,6 @@ public class LogAspect {
         try {
             result = (Map<String, Object>) pjd.proceed();
         } catch (Exception e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
             return BaseUtils.failed(e.getMessage());
         }
         return result;

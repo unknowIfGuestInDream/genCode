@@ -47,7 +47,7 @@ public class CommonController {
      * 获取DataBaseType的数据
      */
     @GetMapping("selectDataBaseType")
-    @Log
+    @Log(title = "通用模块", operateType = "获取数据库驱动名称")
     public Map<String, Object> selectDataBaseType() {
         List<Map<String, Object>> list = SimpleCache.get(SimpleCache.DATABASETYPE);
         if (list == null) {
@@ -70,7 +70,7 @@ public class CommonController {
      * 获取GenProcedureModelType的数据
      */
     @GetMapping("selectGenProcedureModelType")
-    @Log
+    @Log(title = "通用模块", operateType = "获取存储过程模板名称")
     public Map<String, Object> selectGenProcedureModelType() {
         List<Map<String, Object>> list = SimpleCache.get(SimpleCache.GENPROCEDUREMODELTYPE);
         if (list == null) {
@@ -93,7 +93,7 @@ public class CommonController {
      * 获取GenCodeModelType的数据
      */
     @GetMapping("selectGenCodeModelType")
-    @Log
+    @Log(title = "通用模块", operateType = "获取后台代码模板名称")
     public Map<String, Object> selectGenCodeModelType() {
         List<Map<String, Object>> list = SimpleCache.get(SimpleCache.GENCODEMODELTYPE);
         if (list == null) {
@@ -116,7 +116,7 @@ public class CommonController {
      * 获取NameConventType的数据
      */
     @GetMapping("selectNameConventType")
-    @Log
+    @Log(title = "通用模块", operateType = "获取命名规范")
     public Map<String, Object> selectNameConventType() {
         List<Map<String, Object>> list = SimpleCache.get(SimpleCache.NAMECONVENTTYPE);
         if (list == null) {
@@ -139,7 +139,7 @@ public class CommonController {
      * 获取JavaClass的数据
      */
     @GetMapping("selectJavaClass")
-    @Log
+    @Log(title = "通用模块", operateType = "获取数据库对应java类信息")
     public Map<String, Object> selectJavaClass() {
         List<Map<String, Object>> list = SimpleCache.get(SimpleCache.JAVACLASS);
         if (list == null) {
@@ -159,7 +159,7 @@ public class CommonController {
      * 获取EngineFileType的数据
      */
     @GetMapping("selectEngineFileType")
-    @Log
+    @Log(title = "通用模块", operateType = "获取数据库文档类型信息")
     public Map<String, Object> selectEngineFileType() {
         List<Map<String, Object>> list = SimpleCache.get(SimpleCache.ENGINEFILETYPE);
         if (list == null) {
@@ -179,7 +179,7 @@ public class CommonController {
      * 获取file文件夹下的文件
      */
     @GetMapping("downloadFile/{fileName}")
-    @Log
+    @Log(title = "通用模块", operateType = "获取静态文件")
     public void downloadFile(@PathVariable String fileName, HttpServletRequest request, HttpServletResponse response) throws IOException {
         //为空返回
         if (StringUtils.isEmpty(fileName) || "favicon.ico".equals(fileName)) {

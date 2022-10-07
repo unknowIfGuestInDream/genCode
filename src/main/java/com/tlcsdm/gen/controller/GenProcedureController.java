@@ -66,7 +66,7 @@ public class GenProcedureController {
      * @param name     过程名 模糊查询
      */
     @GetMapping("selectProcedures")
-    @Log
+    @Log(title = "存储过程代码生成", operateType = "查询数据库中的过程信息")
     public Map<String, Object> selectProcedures(String url, String driver, String userName, String password, @RequestParam(required = false, defaultValue = "") String name) {
         List<Map<String, Object>> list = CacheManage.PROCEDURES_CACHE.get(url.replaceAll("/", "") + userName + name + "procedures");
         //缓存方案 url+用户名+查询条件为主键
@@ -90,7 +90,7 @@ public class GenProcedureController {
      * @param name     存储过程名称
      */
     @GetMapping("loadProcedureInfo")
-    @Log
+    @Log(title = "存储过程代码生成", operateType = "加载过程信息")
     public Map<String, Object> loadProcedureInfo(String url, String driver, String userName, String password, String name) {
         //获取数据库连接
         DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
@@ -114,7 +114,7 @@ public class GenProcedureController {
      * @param procedureNameList     存储过程名称集合
      */
     @PostMapping("genProcedure")
-    @Log
+    @Log(title = "存储过程代码生成", operateType = "生成代码")
     public Map<String, Object> genProcedure(String moduleName, String genProcedureModelType, String nameConventType, String packageName, String url, String driver, String userName, String password, @RequestParam("procedureNameList") List<String> procedureNameList, @RequestParam(required = false, defaultValue = "admin") String author) {
         moduleName = BaseUtils.toUpperCase4Index(moduleName);
         //获取数据库连接，为空则创建
@@ -133,7 +133,7 @@ public class GenProcedureController {
      * 生成代码下载
      */
     @GetMapping("downloadCode")
-    @Log
+    @Log(title = "存储过程代码生成", operateType = "生成代码下载")
     public void downloadCode(String moduleName, String genProcedureModelType, String nameConventType, String packageName, String url, String driver, String userName, String password, @RequestParam("procedureNameList") List<String> procedureNameList, String author, HttpServletRequest request, HttpServletResponse response) {
         try {
             String zipName = moduleName + ".zip";
@@ -154,11 +154,9 @@ public class GenProcedureController {
             DataBaseProcedureService dbProcedure = DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
             Map<String, Object> map = genProcedureModel.genCode(moduleName, packageName, userName, procedureNameList, author, nameConvent, dbProcedure, dataSourceUtil, freeMarkerConfigurer.getConfiguration());
             List<String> list = (List<String>) map.get("list");
-
             for (String name : list) {
                 String fileName;
                 if ("BaseUtils".equals(name) || "ProcedureUtils".equals(name)) {
-                    //fileName = name + ".java";
                     continue;
                 } else {
                     fileName = moduleName + BaseUtils.toUpperCase4Index(name) + ".java";

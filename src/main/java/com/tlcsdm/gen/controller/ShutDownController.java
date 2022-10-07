@@ -1,5 +1,6 @@
 package com.tlcsdm.gen.controller;
 
+import com.tlcsdm.common.annotation.Log;
 import com.tlcsdm.gen.base.BaseUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeansException;
@@ -37,6 +38,7 @@ public class ShutDownController implements ApplicationContextAware {
      * 关闭项目
      */
     @GetMapping({"shutdown/{passwd}", "shutdown"})
+    @Log(title = "项目管理", operateType = "关闭项目")
     public Map<String, Object> shutDownContext(@PathVariable(required = false) String passwd) {
         if (passwd == null) {
             return BaseUtils.failed("请携带密钥");
