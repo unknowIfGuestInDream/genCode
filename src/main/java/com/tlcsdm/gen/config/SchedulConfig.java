@@ -1,5 +1,6 @@
 package com.tlcsdm.gen.config;
 
+import com.tlcsdm.common.config.ScheduErrorHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +33,7 @@ public class SchedulConfig {
         ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
         // 定时任务执行线程池核心线程数
         taskScheduler.setPoolSize(poolSize);
-        taskScheduler.setErrorHandler(new ScheduleErrorHandler());
+        taskScheduler.setErrorHandler(new ScheduErrorHandler());
         taskScheduler.setRemoveOnCancelPolicy(removeOnCancelPolicy);
         taskScheduler.setThreadNamePrefix(threadNamePrefix);
         return taskScheduler;

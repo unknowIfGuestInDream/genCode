@@ -241,7 +241,7 @@
 
         Ext.MessageBox.show({
             title: '请确认',
-            msg: '是否删除',
+            msg: '是否删除?',
             buttons: Ext.MessageBox.YESNO,
             icon: Ext.MessageBox.QUESTION,
             fn: function (btn) {
@@ -291,7 +291,7 @@
         }
         Ext.MessageBox.show({
             title: '请确认',
-            msg: '是否删除',
+            msg: '是否删除?',
             buttons: Ext.MessageBox.YESNO,
             icon: Ext.MessageBox.QUESTION,
             fn: function (btn) {

@@ -1,7 +1,7 @@
 package com.tlcsdm.gen.controller;
 
 import cn.smallbun.screw.core.engine.EngineFileType;
-import com.tlcsdm.gen.annotation.Log;
+import com.tlcsdm.common.annotation.Log;
 import com.tlcsdm.gen.base.BaseUtils;
 import com.tlcsdm.gen.enums.*;
 import com.tlcsdm.gen.util.cache.SimpleCache;

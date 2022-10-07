@@ -1,6 +1,6 @@
 package com.tlcsdm.gen.controller;
 
-import com.tlcsdm.gen.annotation.Log;
+import com.tlcsdm.common.annotation.Log;
 import com.tlcsdm.gen.base.BaseUtils;
 import com.tlcsdm.gen.base.CacheManage;
 import com.tlcsdm.gen.enums.DataBaseType;
