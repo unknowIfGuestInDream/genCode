@@ -17,6 +17,13 @@
     <properties>
         <java.version>11</java.version>
         <log4j2.version>2.17.0</log4j2.version>
+        <druid-spring-boot-starter.version>1.2.8</druid-spring-boot-starter.version>
+        <commons-lang3.version>3.0</commons-lang3.version>
+        <mysql-connector-java.version>5.1.35</mysql-connector-java.version>
+        <mariadb-java-client.version>2.1.2</mariadb-java-client.version>
+        <ojdbc7.version>12.1.0.2</ojdbc7.version>
+        <sqljdbc4.version>4.0</sqljdbc4.version>
+        <screw-core.version>1.0.6-SNAPSHOT</screw-core.version>
     </properties>
     <dependencies>
         <dependency>
@@ -48,7 +55,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.2.8</version>
+            <version>${druid-spring-boot-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -57,38 +64,38 @@
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc7</artifactId>
-            <version>12.1.0.2</version>
+            <version>${ojdbc7.version}</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/resources/lib/ojdbc7-12.1.0.2.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.0</version>
+            <version>${commons-lang3.version}</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.35</version>
+            <version>${mysql-connector-java.version}</version>
         </dependency>
         <!--for SqlServer-->
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>sqljdbc4</artifactId>
-            <version>4.0</version>
+            <version>${sqljdbc4.version}</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/resources/lib/sqljdbc4-4.0.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
-            <version>2.1.2</version>
+            <version>${mariadb-java-client.version}</version>
         </dependency>
         <!-- 在1.0.5版本基础上实现了excel文档 -->
         <dependency>
             <groupId>cn.smallbun.screw</groupId>
             <artifactId>screw-core</artifactId>
-            <version>1.0.6-SNAPSHOT</version>
+            <version>${screw-core.version}</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/resources/lib/screw-core-1.0.6-SNAPSHOT.jar</systemPath>
         </dependency>
@@ -110,7 +117,7 @@
     </dependencies>
 
     <build>
-        <finalName>gen</finalName>
+        <finalName>genCode</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

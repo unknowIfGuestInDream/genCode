@@ -10,7 +10,7 @@
 
 ## 技术框架
 
-后台使用springBoot, druid连接池, 前台使用thymeleaf + extjs4.0, 代码模版使用freemarker引擎
+后台使用java11, springBoot, druid, 前台使用thymeleaf + extjs4.0, 代码模版使用freemarker引擎
 
 ## 项目启动
 数据库sql文件在 docs/database文件下  
@@ -32,7 +32,7 @@ nohup java -jar jar包  >/dev/null 2>&1 &  ## 后台启动(无日志)
 
 druid监控账号密码默认都为admin
 
-运行后访问 [http://localhost:8669/gen](http://localhost:8669/gen)
+运行后访问 [http://localhost:8669/gen/](http://localhost:8669/gen/)
 
 ## 数据库支持
 功能 | oracle | mysql | mariadb | sqlserver
@@ -53,6 +53,7 @@ druid监控账号密码默认都为admin
 * AbstractTableToProcedure 表生成过程相关接口
 * AbstractGenCodeModel 表生成代码相关接口
 * DataBaseDocumentService 生成数据库文档
+* RpcService RMI远程调用服务(试验用)
 
 ## 新增规范，模板以及数据库
 * 如需要添加自己的命名规范则新增 NameConventService 的实现类并新增枚举类NameConventType参数,
@@ -70,9 +71,9 @@ druid监控账号密码默认都为admin
 
 ## 感谢
 
-- <a href="https://jb.gg/OpenSource"><img src="http://static.xkcoding.com/spring-boot-demo/064312.jpg" width="100px" alt="jetbrains">**
-  感谢 JetBrains 提供的免费开源 License**</a>
+<a href="https://jb.gg/OpenSource" target="_blank"><img src="http://static.xkcoding.com/spring-boot-demo/064312.jpg" width="100px" alt="jetbrains"></br>**
+感谢 JetBrains 提供的免费开源 License**</a>
 
 ## 其它
 
-如果有问题或者需求可以发送邮件或者提交Issues
+如果有问题或者需求可以发送邮件或者提交Issues tang97155@gmail.com或tang97155@163.com
