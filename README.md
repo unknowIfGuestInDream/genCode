@@ -72,6 +72,9 @@ druid监控账号密码默认都为admin
 5. 定时任务位于schedule文件夹下，目前任务只有每周五清空数据库连接池缓存
 6. SimpleCache类为简易缓存, 主要缓存一些不常变数据
 
+## 贡献者
+
+
 ## 感谢
 
 - <a href="https://jb.gg/OpenSource"><img src="http://static.xkcoding.com/spring-boot-demo/064312.jpg" width="100px" alt="jetbrains">
