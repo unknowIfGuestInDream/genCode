@@ -24,7 +24,7 @@
         <sqljdbc4.version>4.0</sqljdbc4.version>
         <screw-core.version>1.0.6-SNAPSHOT</screw-core.version>
         <tlcsdm-common.version>1.2</tlcsdm-common.version>
-        <spring.checkstyle.plugin>0.0.35</spring.checkstyle.plugin>
+        <spring-javaformat.version>0.0.35</spring-javaformat.version>
     </properties>
     <dependencies>
         <dependency>
@@ -120,11 +120,22 @@
     <build>
         <finalName>genCode</finalName>
         <plugins>
-            <plugin>
-                <groupId>io.spring.javaformat</groupId>
-                <artifactId>spring-javaformat-maven-plugin</artifactId>
-                <version>${spring.checkstyle.plugin}</version>
-            </plugin>     
+	   <plugin>
+	       <groupId>io.spring.javaformat</groupId>
+	       <artifactId>spring-javaformat-maven-plugin</artifactId>
+	       <version>${spring-javaformat.version}</version>
+                <executions>
+		  <execution>
+		      <phase>validate</phase>
+		      <configuration>
+			 <skip>true</skip>
+		      </configuration>
+		      <goals>
+		          <goal>validate</goal>
+		      </goals>
+		  </execution>
+	       </executions>
+	   </plugin>   
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
