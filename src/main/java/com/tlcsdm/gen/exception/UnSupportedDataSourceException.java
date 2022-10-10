@@ -8,18 +8,20 @@ package com.tlcsdm.gen.exception;
  * @since: 1.0
  */
 public class UnSupportedDataSourceException extends RuntimeException {
-    public UnSupportedDataSourceException() {
-    }
 
-    public UnSupportedDataSourceException(String message) {
-        super(message);
-    }
+	public UnSupportedDataSourceException() {
+	}
 
-    public UnSupportedDataSourceException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public UnSupportedDataSourceException(String message) {
+		super(message);
+	}
 
-    public UnSupportedDataSourceException(Throwable cause) {
-        super(cause);
-    }
+	public UnSupportedDataSourceException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public UnSupportedDataSourceException(Throwable cause) {
+		super(cause);
+	}
+
 }

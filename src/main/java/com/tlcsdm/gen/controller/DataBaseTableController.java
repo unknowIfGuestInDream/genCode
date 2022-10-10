@@ -36,117 +36,134 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 public class DataBaseTableController {
-    private final FreeMarkerConfigurer freeMarkerConfigurer;
 
-    /**
-     * 根据表生成存储过程
-     */
-    @GetMapping("/manageGenerateByTable")
-    public ModelAndView manageGenerateByTable() {
-        return new ModelAndView("pages/dataBaseTable/manageGenerateByTable");
-    }
+	private final FreeMarkerConfigurer freeMarkerConfigurer;
 
-    /**
-     * 表详细信息
-     */
-    @GetMapping("/viewTableDetailedInfo")
-    public ModelAndView viewTableDetailedInfo() {
-        return new ModelAndView("pages/dataBaseTable/viewTableDetailedInfo");
-    }
+	/**
+	 * 根据表生成存储过程
+	 */
+	@GetMapping("/manageGenerateByTable")
+	public ModelAndView manageGenerateByTable() {
+		return new ModelAndView("pages/dataBaseTable/manageGenerateByTable");
+	}
 
-    /**
-     * 加载表详细信息
-     *
-     * @param name     表名(精确查询)
-     * @param url      数据库url 用于获取数据库连接
-     * @param driver   数据库驱动 用于获取存储过程sql
-     * @param userName 数据库账户
-     * @param password 数据库密码
-     */
-    @GetMapping("loadTable")
-    @Log(title = "数据库表管理", operateType = "加载表详细信息")
-    public Map<String, Object> loadTable(String name, String url, String driver, String userName, String password) {
-        DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
-        DataBaseTableService dataBaseTable = DataBaseTableFactory.getDataBaseTable(DataBaseType.fromTypeName(driver));
-        return BaseUtils.success(dataBaseTable.loadTable(name, dataSourceUtil));
-    }
+	/**
+	 * 表详细信息
+	 */
+	@GetMapping("/viewTableDetailedInfo")
+	public ModelAndView viewTableDetailedInfo() {
+		return new ModelAndView("pages/dataBaseTable/viewTableDetailedInfo");
+	}
 
-    /**
-     * 获取数据库表数据
-     *
-     * @param name     表名(模糊查询)
-     * @param url      数据库url 用于获取数据库连接
-     * @param driver   数据库驱动 用于获取存储过程sql
-     * @param userName 数据库账户
-     * @param password 数据库密码
-     */
-    @GetMapping("selectTables")
-    @Log(title = "数据库表管理", operateType = "获取数据库表数据")
-    public Map<String, Object> selectTables(@RequestParam(required = false, defaultValue = "") String name, String schema, String url, String driver, String userName, String password) {
-        List<Map<String, Object>> list = CacheManage.TABLES_CACHE.get(url.replaceAll("/", "") + userName + name + "tables");
-        //缓存方案 url+用户名 + 查询条件为主键
-        //存储过程名称条件为空代表全查询一直缓存，否则30分钟
-        if (list == null) {
-            DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
-            DataBaseTableService dataBaseTable = DataBaseTableFactory.getDataBaseTable(DataBaseType.fromTypeName(driver));
-            list = dataBaseTable.selectTables(name, schema, dataSourceUtil);
-            CacheManage.TABLES_CACHE.put(url.replaceAll("/", "") + userName + name + "tables", list, StringUtils.isEmpty(name) ? Cache.CACHE_HOLD_FOREVER : Cache.CACHE_HOLD_30MINUTE);
-        }
-        return BaseUtils.success(list);
-    }
+	/**
+	 * 加载表详细信息
+	 * @param name 表名(精确查询)
+	 * @param url 数据库url 用于获取数据库连接
+	 * @param driver 数据库驱动 用于获取存储过程sql
+	 * @param userName 数据库账户
+	 * @param password 数据库密码
+	 */
+	@GetMapping("loadTable")
+	@Log(title = "数据库表管理", operateType = "加载表详细信息")
+	public Map<String, Object> loadTable(String name, String url, String driver, String userName, String password) {
+		DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
+		DataBaseTableService dataBaseTable = DataBaseTableFactory.getDataBaseTable(DataBaseType.fromTypeName(driver));
+		return BaseUtils.success(dataBaseTable.loadTable(name, dataSourceUtil));
+	}
 
-    /**
-     * 查询数据库某表字段相关的详细信息
-     *
-     * @param name     表名(精确查询)
-     * @param url      数据库url 用于获取数据库连接
-     * @param driver   数据库驱动 用于获取存储过程sql
-     * @param userName 数据库账户
-     * @param password 数据库密码
-     */
-    @GetMapping("selectTableInfo")
-    @Log(title = "数据库表管理", operateType = "查询数据库某表字段相关的详细信息")
-    public Map<String, Object> selectTableInfo(String name, String schema, String url, String driver, String userName, String password) {
-        DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
-        DataBaseTableService dataBaseTable = DataBaseTableFactory.getDataBaseTable(DataBaseType.fromTypeName(driver));
-        return BaseUtils.success(dataBaseTable.selectTableInfo(name, schema, dataSourceUtil));
-    }
+	/**
+	 * 获取数据库表数据
+	 * @param name 表名(模糊查询)
+	 * @param url 数据库url 用于获取数据库连接
+	 * @param driver 数据库驱动 用于获取存储过程sql
+	 * @param userName 数据库账户
+	 * @param password 数据库密码
+	 */
+	@GetMapping("selectTables")
+	@Log(title = "数据库表管理", operateType = "获取数据库表数据")
+	public Map<String, Object> selectTables(@RequestParam(required = false, defaultValue = "") String name,
+			String schema, String url, String driver, String userName, String password) {
+		List<Map<String, Object>> list = CacheManage.TABLES_CACHE
+				.get(url.replaceAll("/", "") + userName + name + "tables");
+		// 缓存方案 url+用户名 + 查询条件为主键
+		// 存储过程名称条件为空代表全查询一直缓存，否则30分钟
+		if (list == null) {
+			DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
+			DataBaseTableService dataBaseTable = DataBaseTableFactory
+					.getDataBaseTable(DataBaseType.fromTypeName(driver));
+			list = dataBaseTable.selectTables(name, schema, dataSourceUtil);
+			CacheManage.TABLES_CACHE.put(url.replaceAll("/", "") + userName + name + "tables", list,
+					StringUtils.isEmpty(name) ? Cache.CACHE_HOLD_FOREVER : Cache.CACHE_HOLD_30MINUTE);
+		}
+		return BaseUtils.success(list);
+	}
 
-    /**
-     * 根据数据库表生成存储过程
-     *
-     * @param nameConventType 命名规范
-     * @param driver          数据库驱动, 用于判断数据库类型
-     * @param tableName       表名
-     * @param tableDesc       表描述
-     * @param params          表所有字段
-     * @param paramTypes      表所有字段的类型
-     * @param paramDescs      表所有字段的类型
-     * @param priParamIndex   主键列索引
-     * @param selParamsIndex  查询条件列索引
-     * @param selType         查询条件类型
-     * @param insParamIndex   新增列索引
-     * @param updParamIndex   修改列索引
-     * @param orderParamIndex 排序列索引
-     * @param orderParamTypes 排序类型
-     */
-    @PostMapping("genProceduresByTable")
-    @Log(title = "数据库表管理", operateType = "根据数据库表生成存储过程")
-    public Map<String, Object> genProceduresByTable(String nameConventType, String driver, String tableName, String tableDesc, @RequestParam("params") List<String> params, @RequestParam("paramTypes") List<String> paramTypes, @RequestParam("paramDescs") List<String> paramDescs, @RequestParam("priParamIndex") List<Integer> priParamIndex, @RequestParam(value = "selParamsIndex", required = false) List<Integer> selParamsIndex, @RequestParam(value = "selType", required = false) List<Integer> selType, @RequestParam("insParamIndex") List<Integer> insParamIndex, @RequestParam("updParamIndex") List<Integer> updParamIndex, @RequestParam(value = "orderParamIndex", required = false) List<Integer> orderParamIndex, @RequestParam(value = "orderParamTypes", required = false) List<String> orderParamTypes) {
-        //获取命名规范
-        NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromCode(nameConventType));
-        //获取表生成存储过程实现类
-        AbstractTableToProcedure tableToProcedure = AbstractTableToProcedureFactory.getTableToProcedure(DataBaseType.fromTypeName(driver));
-        return BaseUtils.success(tableToProcedure.genProceduresByTable(tableName, tableDesc, params, paramTypes, paramDescs, priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex, orderParamIndex, orderParamTypes, nameConvent, freeMarkerConfigurer.getConfiguration()));
-    }
+	/**
+	 * 查询数据库某表字段相关的详细信息
+	 * @param name 表名(精确查询)
+	 * @param url 数据库url 用于获取数据库连接
+	 * @param driver 数据库驱动 用于获取存储过程sql
+	 * @param userName 数据库账户
+	 * @param password 数据库密码
+	 */
+	@GetMapping("selectTableInfo")
+	@Log(title = "数据库表管理", operateType = "查询数据库某表字段相关的详细信息")
+	public Map<String, Object> selectTableInfo(String name, String schema, String url, String driver, String userName,
+			String password) {
+		DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
+		DataBaseTableService dataBaseTable = DataBaseTableFactory.getDataBaseTable(DataBaseType.fromTypeName(driver));
+		return BaseUtils.success(dataBaseTable.selectTableInfo(name, schema, dataSourceUtil));
+	}
 
-    /**
-     * 生成主键id的sql
-     */
-    @PostMapping("genAutoInsKey")
-    @Log(title = "数据库表管理", operateType = "生成主键id的sql")
-    public Map<String, Object> genAutoInsKey(String tableName, String primaryKey, String driver) {
-        AbstractTableToProcedure tableToProcedure = AbstractTableToProcedureFactory.getTableToProcedure(DataBaseType.fromTypeName(driver));
-        return BaseUtils.success(tableToProcedure.genAutoInsKey(tableName, primaryKey, freeMarkerConfigurer.getConfiguration()));
-    }
+	/**
+	 * 根据数据库表生成存储过程
+	 * @param nameConventType 命名规范
+	 * @param driver 数据库驱动, 用于判断数据库类型
+	 * @param tableName 表名
+	 * @param tableDesc 表描述
+	 * @param params 表所有字段
+	 * @param paramTypes 表所有字段的类型
+	 * @param paramDescs 表所有字段的类型
+	 * @param priParamIndex 主键列索引
+	 * @param selParamsIndex 查询条件列索引
+	 * @param selType 查询条件类型
+	 * @param insParamIndex 新增列索引
+	 * @param updParamIndex 修改列索引
+	 * @param orderParamIndex 排序列索引
+	 * @param orderParamTypes 排序类型
+	 */
+	@PostMapping("genProceduresByTable")
+	@Log(title = "数据库表管理", operateType = "根据数据库表生成存储过程")
+	public Map<String, Object> genProceduresByTable(String nameConventType, String driver, String tableName,
+			String tableDesc, @RequestParam("params") List<String> params,
+			@RequestParam("paramTypes") List<String> paramTypes, @RequestParam("paramDescs") List<String> paramDescs,
+			@RequestParam("priParamIndex") List<Integer> priParamIndex,
+			@RequestParam(value = "selParamsIndex", required = false) List<Integer> selParamsIndex,
+			@RequestParam(value = "selType", required = false) List<Integer> selType,
+			@RequestParam("insParamIndex") List<Integer> insParamIndex,
+			@RequestParam("updParamIndex") List<Integer> updParamIndex,
+			@RequestParam(value = "orderParamIndex", required = false) List<Integer> orderParamIndex,
+			@RequestParam(value = "orderParamTypes", required = false) List<String> orderParamTypes) {
+		// 获取命名规范
+		NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromCode(nameConventType));
+		// 获取表生成存储过程实现类
+		AbstractTableToProcedure tableToProcedure = AbstractTableToProcedureFactory
+				.getTableToProcedure(DataBaseType.fromTypeName(driver));
+		return BaseUtils.success(tableToProcedure.genProceduresByTable(tableName, tableDesc, params, paramTypes,
+				paramDescs, priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex, orderParamIndex,
+				orderParamTypes, nameConvent, freeMarkerConfigurer.getConfiguration()));
+	}
+
+	/**
+	 * 生成主键id的sql
+	 */
+	@PostMapping("genAutoInsKey")
+	@Log(title = "数据库表管理", operateType = "生成主键id的sql")
+	public Map<String, Object> genAutoInsKey(String tableName, String primaryKey, String driver) {
+		AbstractTableToProcedure tableToProcedure = AbstractTableToProcedureFactory
+				.getTableToProcedure(DataBaseType.fromTypeName(driver));
+		return BaseUtils.success(
+				tableToProcedure.genAutoInsKey(tableName, primaryKey, freeMarkerConfigurer.getConfiguration()));
+	}
+
 }

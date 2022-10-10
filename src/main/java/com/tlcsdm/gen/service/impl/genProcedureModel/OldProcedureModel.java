@@ -15,18 +15,20 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class OldProcedureModel extends AbstractGenProcedureModel {
-    @Override
-    protected String getFtlPackageName() {
-        return "old";
-    }
 
-    @Override
-    protected String getMappingType(String procedureName, NameConventService nameConvent) {
-        return "RequestMapping";
-    }
+	@Override
+	protected String getFtlPackageName() {
+		return "old";
+	}
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        AbstractGenProcedureModelFactory.register(GenProcedureModelType.DEMO, this);
-    }
+	@Override
+	protected String getMappingType(String procedureName, NameConventService nameConvent) {
+		return "RequestMapping";
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		AbstractGenProcedureModelFactory.register(GenProcedureModelType.DEMO, this);
+	}
+
 }

@@ -15,16 +15,18 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since: 1.0
  */
 public class AbstractGenProcedureModelFactory {
-    private static Map<GenProcedureModelType, AbstractGenProcedureModel> strategyMap = new ConcurrentHashMap<>();
 
-    public static AbstractGenProcedureModel getGenProcedureModel(GenProcedureModelType name) {
-        return strategyMap.get(name);
-    }
+	private static Map<GenProcedureModelType, AbstractGenProcedureModel> strategyMap = new ConcurrentHashMap<>();
 
-    public static void register(GenProcedureModelType name, AbstractGenProcedureModel handler) {
-        if (Objects.isNull(name) || null == handler) {
-            return;
-        }
-        strategyMap.put(name, handler);
-    }
+	public static AbstractGenProcedureModel getGenProcedureModel(GenProcedureModelType name) {
+		return strategyMap.get(name);
+	}
+
+	public static void register(GenProcedureModelType name, AbstractGenProcedureModel handler) {
+		if (Objects.isNull(name) || null == handler) {
+			return;
+		}
+		strategyMap.put(name, handler);
+	}
+
 }

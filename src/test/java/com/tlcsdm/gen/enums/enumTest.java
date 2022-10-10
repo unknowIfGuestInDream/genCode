@@ -14,18 +14,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class enumTest {
 
-    @Test
-    public void enum1() {
-        for (DataBaseType dataBaseType : DataBaseType.values()) {
-            System.out.println(dataBaseType.getTypeName());
-            System.out.println(dataBaseType.toString());
-        }
-    }
+	@Test
+	public void enum1() {
+		for (DataBaseType dataBaseType : DataBaseType.values()) {
+			System.out.println(dataBaseType.getTypeName());
+			System.out.println(dataBaseType.toString());
+		}
+	}
 
-    @Test
-    public void enum2() {
-        EngineFileType engineFileType = EngineFileType.valueOf("WORD");
-        System.out.println(engineFileType.getFileSuffix());
-    }
+	@Test
+	public void enum2() {
+		EngineFileType engineFileType = EngineFileType.valueOf("WORD");
+		System.out.println(engineFileType.getFileSuffix());
+	}
 
 }

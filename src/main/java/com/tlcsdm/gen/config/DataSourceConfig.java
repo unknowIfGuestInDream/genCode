@@ -22,17 +22,17 @@ import javax.sql.DataSource;
 @ConditionalOnProperty(name = "gen.isdb", havingValue = "true", matchIfMissing = true)
 public class DataSourceConfig {
 
-    @Primary
-    @Bean(name = "genDataSource")
-    @Qualifier("genDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.druid")
-    public DataSource genDataSource() {
-        return new DruidDataSource();
-    }
+	@Primary
+	@Bean(name = "genDataSource")
+	@Qualifier("genDataSource")
+	@ConfigurationProperties(prefix = "spring.datasource.druid")
+	public DataSource genDataSource() {
+		return new DruidDataSource();
+	}
 
-    @Bean(name = "genJdbcTemplate")
-    public JdbcTemplate genJdbcTemplate(@Qualifier("genDataSource") DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
-    }
+	@Bean(name = "genJdbcTemplate")
+	public JdbcTemplate genJdbcTemplate(@Qualifier("genDataSource") DataSource dataSource) {
+		return new JdbcTemplate(dataSource);
+	}
 
 }

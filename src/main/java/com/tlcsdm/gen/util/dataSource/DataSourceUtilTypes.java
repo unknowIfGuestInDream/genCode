@@ -8,6 +8,9 @@ package com.tlcsdm.gen.util.dataSource;
  * @since: 1.0
  */
 public class DataSourceUtilTypes {
-    public static final int DRUID = 1;
-    public static final int HIKARI = 2;
+
+	public static final int DRUID = 1;
+
+	public static final int HIKARI = 2;
+
 }

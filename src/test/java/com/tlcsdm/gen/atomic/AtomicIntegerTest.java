@@ -17,16 +17,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 @SpringBootTest
 public class AtomicIntegerTest {
 
-    @Test
-    public void test1() {
-        Map<String, AtomicInteger> map = new HashMap<>();
-        for (int i = 0; i < 3; i++) {
-            if (map.get("sss") == null) {
-                map.put("sss", new AtomicInteger(0));
-                continue;
-            }
-            System.out.println(map.get("sss").incrementAndGet());
-        }
-    }
+	@Test
+	public void test1() {
+		Map<String, AtomicInteger> map = new HashMap<>();
+		for (int i = 0; i < 3; i++) {
+			if (map.get("sss") == null) {
+				map.put("sss", new AtomicInteger(0));
+				continue;
+			}
+			System.out.println(map.get("sss").incrementAndGet());
+		}
+	}
 
 }

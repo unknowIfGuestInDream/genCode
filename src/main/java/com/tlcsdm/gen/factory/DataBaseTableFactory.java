@@ -15,16 +15,18 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since: 1.0
  */
 public class DataBaseTableFactory {
-    private static Map<DataBaseType, DataBaseTableService> strategyMap = new ConcurrentHashMap<>();
 
-    public static DataBaseTableService getDataBaseTable(DataBaseType name) {
-        return strategyMap.get(name);
-    }
+	private static Map<DataBaseType, DataBaseTableService> strategyMap = new ConcurrentHashMap<>();
 
-    public static void register(DataBaseType name, DataBaseTableService handler) {
-        if (Objects.isNull(name) || null == handler) {
-            return;
-        }
-        strategyMap.put(name, handler);
-    }
+	public static DataBaseTableService getDataBaseTable(DataBaseType name) {
+		return strategyMap.get(name);
+	}
+
+	public static void register(DataBaseType name, DataBaseTableService handler) {
+		if (Objects.isNull(name) || null == handler) {
+			return;
+		}
+		strategyMap.put(name, handler);
+	}
+
 }

@@ -17,15 +17,15 @@ import java.util.Map;
 @Configuration
 public class FreeMarkerConfig {
 
-    @Bean(name = "freeMarkerConfigurer")
-    public FreeMarkerConfigurer freeMarkerConfigurer() {
-        FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
-        configurer.setDefaultEncoding("UTF-8");
-        configurer.setTemplateLoaderPath("classpath:/ftl");
-        Map<String, Object> variables = new HashMap<>(1 << 1);
-        variables.put("xml_escape", "fmXmlEscape");
-        configurer.setFreemarkerVariables(variables);
-        return configurer;
-    }
+	@Bean(name = "freeMarkerConfigurer")
+	public FreeMarkerConfigurer freeMarkerConfigurer() {
+		FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
+		configurer.setDefaultEncoding("UTF-8");
+		configurer.setTemplateLoaderPath("classpath:/ftl");
+		Map<String, Object> variables = new HashMap<>(1 << 1);
+		variables.put("xml_escape", "fmXmlEscape");
+		configurer.setFreemarkerVariables(variables);
+		return configurer;
+	}
 
 }

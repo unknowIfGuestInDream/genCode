@@ -15,29 +15,34 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SimpleCache {
 
-    public static String DATABASETYPE = "dataBaseType";
-    public static String GENPROCEDUREMODELTYPE = "genProcedureModelType";
-    public static String NAMECONVENTTYPE = "nameConventType";
-    public static String ENGINEFILETYPE = "engineFileType";
-    public static String GENCODEMODELTYPE = "genCodeModelType";
-    public static String JAVACLASS = "javaClass";
+	public static String DATABASETYPE = "dataBaseType";
 
-    private static Map<String, List<Map<String, Object>>> map = new ConcurrentHashMap<>();
+	public static String GENPROCEDUREMODELTYPE = "genProcedureModelType";
 
-    public static List<Map<String, Object>> put(@NonNull String key, @NonNull List<Map<String, Object>> value) {
-        return map.put(key, value);
-    }
+	public static String NAMECONVENTTYPE = "nameConventType";
 
-    public static List<Map<String, Object>> get(@NonNull String key) {
-        return map.get(key);
-    }
+	public static String ENGINEFILETYPE = "engineFileType";
 
-    public static List<Map<String, Object>> remove(@NonNull String key) {
-        return map.remove(key);
-    }
+	public static String GENCODEMODELTYPE = "genCodeModelType";
 
-    public static void removeAll() {
-        map.clear();
-    }
+	public static String JAVACLASS = "javaClass";
+
+	private static Map<String, List<Map<String, Object>>> map = new ConcurrentHashMap<>();
+
+	public static List<Map<String, Object>> put(@NonNull String key, @NonNull List<Map<String, Object>> value) {
+		return map.put(key, value);
+	}
+
+	public static List<Map<String, Object>> get(@NonNull String key) {
+		return map.get(key);
+	}
+
+	public static List<Map<String, Object>> remove(@NonNull String key) {
+		return map.remove(key);
+	}
+
+	public static void removeAll() {
+		map.clear();
+	}
 
 }

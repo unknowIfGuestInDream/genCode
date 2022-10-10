@@ -15,22 +15,24 @@ import static com.tlcsdm.gen.base.CacheManage.CACHE_MAP;
  */
 @Component
 public class ProLifeStyle implements SmartLifecycle {
-    private volatile boolean running;
 
-    @Override
-    public void start() {
-        this.running = true;
-    }
+	private volatile boolean running;
 
-    @Override
-    public void stop() {
-        CACHE_MAP.forEach((s, cache) -> cache.clear());
-        DataSourceUtilFactory.removeAll();
-        this.running = false;
-    }
+	@Override
+	public void start() {
+		this.running = true;
+	}
 
-    @Override
-    public boolean isRunning() {
-        return this.running;
-    }
+	@Override
+	public void stop() {
+		CACHE_MAP.forEach((s, cache) -> cache.clear());
+		DataSourceUtilFactory.removeAll();
+		this.running = false;
+	}
+
+	@Override
+	public boolean isRunning() {
+		return this.running;
+	}
+
 }

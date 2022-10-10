@@ -14,7 +14,8 @@ import org.springframework.context.annotation.Configuration;
  * @since: 1.0
  */
 @Configuration
-@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
+@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class })
 @ConditionalOnProperty(name = "gen.isdb", havingValue = "false")
 public class GenAutoConfig {
+
 }

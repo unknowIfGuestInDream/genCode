@@ -13,12 +13,12 @@ import org.springframework.remoting.rmi.RmiServiceExporter;
  * RMI远程调用配置
  *
  * <p>
- * 客户端代码
- * <blockquote><pre>
- * @Configuration
+ * 客户端代码 <blockquote><pre>
+
+ * &#64;Configuration
  * public class RpcClient {
  *
- *     @Bean
+ *     &#64;Bean
  *     public RmiProxyFactoryBean RmiRpcService() {
  *         RmiProxyFactoryBean rmiProxyFactoryBean = new RmiProxyFactoryBean();
  *         rmiProxyFactoryBean.setServiceUrl("rmi://127.0.0.1:8769/rpcService");
@@ -36,17 +36,18 @@ import org.springframework.remoting.rmi.RmiServiceExporter;
  * }
  *
  *
- * @SpringBootTest
+ * &#64;SpringBootTest
  * public class RpcTest {
- *     @Autowired
+ *     &#64;Autowired
  *     private RpcService rpcService;
- *     @Test
+ *
+@Test
  *     public void excel() throws Exception {
  *         System.out.println(rpcService.getGitInfo());
  *     }
  * }
- * </pre></blockquote></p>
- *
+ * </pre></blockquote>
+ * </p>
  * @author: TangLiang
  * @date: 2021/12/13 13:46
  * @since: 1.0
@@ -55,34 +56,37 @@ import org.springframework.remoting.rmi.RmiServiceExporter;
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "gen.rpc.enabled", havingValue = "true")
 public class RpcConfig {
-    private final RpcService rpcService;
 
-    @Value("${gen.rpc.rmiPort}")
-    private int rmiPort;
-    @Value("${gen.rpc.rmiServiceName}")
-    private String rmiServiceName;
+	private final RpcService rpcService;
 
-    @Bean
-    @ConditionalOnProperty(name = "gen.rpc.rmi", havingValue = "true")
-    public RmiServiceExporter getRmiServiceExporter() {
-        RmiServiceExporter rmiServiceExporter = new RmiServiceExporter();
-        rmiServiceExporter.setServiceName(rmiServiceName);
-        rmiServiceExporter.setService(rpcService);
-        rmiServiceExporter.setServiceInterface(RpcService.class);
-        rmiServiceExporter.setRegistryPort(rmiPort);
-        return rmiServiceExporter;
-    }
+	@Value("${gen.rpc.rmiPort}")
+	private int rmiPort;
 
-    /**
-     * org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping
-     * 它的作用就是把Spring MVC上下文中以“/”开头的Bean进行对外提供服务
-     */
-    @Bean("/invoker")
-    @ConditionalOnProperty(name = "gen.rpc.httpInvoker", havingValue = "true")
-    public HttpInvokerServiceExporter getHttpInvokerServiceExporter() {
-        HttpInvokerServiceExporter httpInvokerServiceExporter = new HttpInvokerServiceExporter();
-        httpInvokerServiceExporter.setService(rpcService);
-        httpInvokerServiceExporter.setServiceInterface(RpcService.class);
-        return httpInvokerServiceExporter;
-    }
+	@Value("${gen.rpc.rmiServiceName}")
+	private String rmiServiceName;
+
+	@Bean
+	@ConditionalOnProperty(name = "gen.rpc.rmi", havingValue = "true")
+	public RmiServiceExporter getRmiServiceExporter() {
+		RmiServiceExporter rmiServiceExporter = new RmiServiceExporter();
+		rmiServiceExporter.setServiceName(rmiServiceName);
+		rmiServiceExporter.setService(rpcService);
+		rmiServiceExporter.setServiceInterface(RpcService.class);
+		rmiServiceExporter.setRegistryPort(rmiPort);
+		return rmiServiceExporter;
+	}
+
+	/**
+	 * org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping 它的作用就是把Spring
+	 * MVC上下文中以“/”开头的Bean进行对外提供服务
+	 */
+	@Bean("/invoker")
+	@ConditionalOnProperty(name = "gen.rpc.httpInvoker", havingValue = "true")
+	public HttpInvokerServiceExporter getHttpInvokerServiceExporter() {
+		HttpInvokerServiceExporter httpInvokerServiceExporter = new HttpInvokerServiceExporter();
+		httpInvokerServiceExporter.setService(rpcService);
+		httpInvokerServiceExporter.setServiceInterface(RpcService.class);
+		return httpInvokerServiceExporter;
+	}
+
 }

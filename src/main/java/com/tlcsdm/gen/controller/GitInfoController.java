@@ -20,15 +20,16 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 public class GitInfoController {
-    private final RpcService rpcService;
 
-    /**
-     * 获取git信息
-     */
-    @GetMapping("getGitInfo")
-    @Log(title = "git信", operateType = "获取git信息")
-    public Map<String, Object> getGitInfo() throws IOException {
-        return BaseUtils.success(rpcService.getGitInfo());
-    }
+	private final RpcService rpcService;
+
+	/**
+	 * 获取git信息
+	 */
+	@GetMapping("getGitInfo")
+	@Log(title = "git信", operateType = "获取git信息")
+	public Map<String, Object> getGitInfo() throws IOException {
+		return BaseUtils.success(rpcService.getGitInfo());
+	}
 
 }

@@ -14,23 +14,24 @@ import java.util.Map;
  */
 public interface RpcService {
 
-    /**
-     * 获取git信息
-     */
-    Map<String, Object> getGitInfo() throws IOException;
+	/**
+	 * 获取git信息
+	 */
+	Map<String, Object> getGitInfo() throws IOException;
 
-    /**
-     * 获取项目自定义配置
-     */
-    String getGenProperty() throws JsonProcessingException;
+	/**
+	 * 获取项目自定义配置
+	 */
+	String getGenProperty() throws JsonProcessingException;
 
-    /**
-     * 开启定时
-     */
-    String startSchedule();
+	/**
+	 * 开启定时
+	 */
+	String startSchedule();
 
-    /**
-     * 关闭定时
-     */
-    String stopSchedule();
+	/**
+	 * 关闭定时
+	 */
+	String stopSchedule();
+
 }

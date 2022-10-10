@@ -15,27 +15,43 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("gen")
 @Data
 public class GenProperty {
-    private Boolean isdb;
-    private String version;
-    private String author;
-    private Boolean schedule;
-    private Boolean async;
-    private GenRpc rpc = new GenRpc();
-    private GenShutDown shutdown = new GenShutDown();
 
-    @Data
-    private static class GenRpc {
-        private Boolean enabled;
-        private Boolean rmi;
-        private int rmiPort;
-        private String rmiServiceName;
-        private Boolean httpInvoker;
-    }
+	private Boolean isdb;
 
-    @Data
-    private static class GenShutDown {
-        private Boolean enabled;
-        private String password;
-    }
+	private String version;
+
+	private String author;
+
+	private Boolean schedule;
+
+	private Boolean async;
+
+	private GenRpc rpc = new GenRpc();
+
+	private GenShutDown shutdown = new GenShutDown();
+
+	@Data
+	private static class GenRpc {
+
+		private Boolean enabled;
+
+		private Boolean rmi;
+
+		private int rmiPort;
+
+		private String rmiServiceName;
+
+		private Boolean httpInvoker;
+
+	}
+
+	@Data
+	private static class GenShutDown {
+
+		private Boolean enabled;
+
+		private String password;
+
+	}
 
 }
