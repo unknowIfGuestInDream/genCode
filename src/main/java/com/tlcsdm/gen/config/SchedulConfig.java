@@ -21,21 +21,24 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 @ConditionalOnProperty(prefix = "schedule", name = "enabled", havingValue = "true")
 public class SchedulConfig {
 
-    @Value("${schedule.poolSize}")//设置核心线程数
-    private int poolSize;
-    @Value("${schedule.removeOnCancelPolicy}") //设置最大线程数
-    private Boolean removeOnCancelPolicy;
-    @Value("${schedule.threadNamePrefix}") //设置队列容量
-    private String threadNamePrefix;
+	@Value("${schedule.poolSize}") // 设置核心线程数
+	private int poolSize;
 
-    @Bean
-    public TaskScheduler taskScheduler() {
-        ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
-        // 定时任务执行线程池核心线程数
-        taskScheduler.setPoolSize(poolSize);
-        taskScheduler.setErrorHandler(new ScheduErrorHandler());
-        taskScheduler.setRemoveOnCancelPolicy(removeOnCancelPolicy);
-        taskScheduler.setThreadNamePrefix(threadNamePrefix);
-        return taskScheduler;
-    }
+	@Value("${schedule.removeOnCancelPolicy}") // 设置最大线程数
+	private Boolean removeOnCancelPolicy;
+
+	@Value("${schedule.threadNamePrefix}") // 设置队列容量
+	private String threadNamePrefix;
+
+	@Bean
+	public TaskScheduler taskScheduler() {
+		ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
+		// 定时任务执行线程池核心线程数
+		taskScheduler.setPoolSize(poolSize);
+		taskScheduler.setErrorHandler(new ScheduErrorHandler());
+		taskScheduler.setRemoveOnCancelPolicy(removeOnCancelPolicy);
+		taskScheduler.setThreadNamePrefix(threadNamePrefix);
+		return taskScheduler;
+	}
+
 }

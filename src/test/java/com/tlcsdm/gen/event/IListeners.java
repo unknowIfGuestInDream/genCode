@@ -6,6 +6,8 @@ package com.tlcsdm.gen.event;
  * @since: 1.0
  */
 public interface IListeners {
-    // 接收消息
-    void receive();
+
+	// 接收消息
+	void receive();
+
 }

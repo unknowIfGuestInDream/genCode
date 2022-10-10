@@ -21,39 +21,40 @@ import java.util.Map;
 @Service
 public class SqlServerTableServiceImpl implements DataBaseTableService {
 
-    @Override
-    public String loadTable(@NonNull String name) {
-        throw new UnSupportedDataSourceException("暂时不支持sqlserver数据库表信息查询");
-    }
+	@Override
+	public String loadTable(@NonNull String name) {
+		throw new UnSupportedDataSourceException("暂时不支持sqlserver数据库表信息查询");
+	}
 
-    @Override
-    public Map<String, Object> loadTable(@NonNull String name, @NonNull DataSourceUtil dataSourceUtil) {
-        throw new UnSupportedDataSourceException("暂时不支持sqlserver数据库表信息查询");
-    }
+	@Override
+	public Map<String, Object> loadTable(@NonNull String name, @NonNull DataSourceUtil dataSourceUtil) {
+		throw new UnSupportedDataSourceException("暂时不支持sqlserver数据库表信息查询");
+	}
 
-    @Override
-    public String selectTables(String name, String schema) {
-        throw new UnSupportedDataSourceException("暂时不支持sqlserver数据库表信息查询");
-    }
+	@Override
+	public String selectTables(String name, String schema) {
+		throw new UnSupportedDataSourceException("暂时不支持sqlserver数据库表信息查询");
+	}
 
-    @Override
-    public List<Map<String, Object>> selectTables(String name, String schema, DataSourceUtil dataSourceUtil) {
-        throw new UnSupportedDataSourceException("暂时不支持sqlserver数据库表信息查询");
-    }
+	@Override
+	public List<Map<String, Object>> selectTables(String name, String schema, DataSourceUtil dataSourceUtil) {
+		throw new UnSupportedDataSourceException("暂时不支持sqlserver数据库表信息查询");
+	}
 
-    @Override
-    public String selectTableInfo(@NonNull String name, String schema) {
-        throw new UnSupportedDataSourceException("暂时不支持sqlserver数据库表信息查询");
-    }
+	@Override
+	public String selectTableInfo(@NonNull String name, String schema) {
+		throw new UnSupportedDataSourceException("暂时不支持sqlserver数据库表信息查询");
+	}
 
-    @Override
-    public List<Map<String, Object>> selectTableInfo(@NonNull String name, String schema, @NonNull DataSourceUtil dataSourceUtil) {
-        throw new UnSupportedDataSourceException("暂时不支持sqlserver数据库表信息查询");
-    }
+	@Override
+	public List<Map<String, Object>> selectTableInfo(@NonNull String name, String schema,
+			@NonNull DataSourceUtil dataSourceUtil) {
+		throw new UnSupportedDataSourceException("暂时不支持sqlserver数据库表信息查询");
+	}
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        DataBaseTableFactory.register(DataBaseType.SQLSERVER, this);
-    }
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		DataBaseTableFactory.register(DataBaseType.SQLSERVER, this);
+	}
 
 }

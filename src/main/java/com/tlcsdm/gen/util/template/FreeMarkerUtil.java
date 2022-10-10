@@ -18,46 +18,48 @@ import java.util.Map;
  */
 public class FreeMarkerUtil {
 
-    private FreeMarkerUtil() {
+	private FreeMarkerUtil() {
 
-    }
+	}
 
-    /**
-     * 获取模版内容
-     *
-     * @param configuration freeMarkerConfigurer.getConfiguration();
-     * @param objectMap     参数
-     * @param name          模版位置
-     */
-    public static String getTemplateContent(Configuration configuration, Map<String, Object> objectMap, String name) {
-        StringWriter stringWriter = new StringWriter();
-        Template template;
-        try {
-            template = configuration.getTemplate(name);
-            template.process(objectMap, stringWriter);
-        } catch (IOException | TemplateException e) {
-            e.printStackTrace();
-        }
-        return stringWriter.toString();
-    }
+	/**
+	 * 获取模版内容
+	 * @param configuration freeMarkerConfigurer.getConfiguration();
+	 * @param objectMap 参数
+	 * @param name 模版位置
+	 */
+	public static String getTemplateContent(Configuration configuration, Map<String, Object> objectMap, String name) {
+		StringWriter stringWriter = new StringWriter();
+		Template template;
+		try {
+			template = configuration.getTemplate(name);
+			template.process(objectMap, stringWriter);
+		}
+		catch (IOException | TemplateException e) {
+			e.printStackTrace();
+		}
+		return stringWriter.toString();
+	}
 
-    /**
-     * 获取模版内容
-     *
-     * @param freeMarkerConfigurer FreeMarkerConfigurer
-     * @param objectMap            参数
-     * @param name                 模版位置
-     */
-    public static String getTemplateContent(FreeMarkerConfigurer freeMarkerConfigurer, Map<String, Object> objectMap, String name) {
-        Configuration configuration = freeMarkerConfigurer.getConfiguration();
-        StringWriter stringWriter = new StringWriter();
-        Template template;
-        try {
-            template = configuration.getTemplate(name);
-            template.process(objectMap, stringWriter);
-        } catch (IOException | TemplateException e) {
-            e.printStackTrace();
-        }
-        return stringWriter.toString();
-    }
+	/**
+	 * 获取模版内容
+	 * @param freeMarkerConfigurer FreeMarkerConfigurer
+	 * @param objectMap 参数
+	 * @param name 模版位置
+	 */
+	public static String getTemplateContent(FreeMarkerConfigurer freeMarkerConfigurer, Map<String, Object> objectMap,
+			String name) {
+		Configuration configuration = freeMarkerConfigurer.getConfiguration();
+		StringWriter stringWriter = new StringWriter();
+		Template template;
+		try {
+			template = configuration.getTemplate(name);
+			template.process(objectMap, stringWriter);
+		}
+		catch (IOException | TemplateException e) {
+			e.printStackTrace();
+		}
+		return stringWriter.toString();
+	}
+
 }

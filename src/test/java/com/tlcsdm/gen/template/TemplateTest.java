@@ -22,27 +22,30 @@ import java.util.Map;
  */
 @SpringBootTest
 public class TemplateTest {
-    @Autowired
-    private TemplateEngine templateEngine;
-    @Autowired
-    private FreeMarkerConfigurer freeMarkerConfigurer;
 
-    @Test
-    public void test1() {
-        Context context = new Context();
-        context.setVariable("code", "Gena");
-        String template = templateEngine.process("/templates/code/BaseUtils.text", context);
-        System.out.println(template);
-    }
+	@Autowired
+	private TemplateEngine templateEngine;
 
-    @Test
-    public void test2() throws IOException, TemplateException {
-        Configuration configuration = freeMarkerConfigurer.getConfiguration();
-        StringWriter stringWriter = new StringWriter();
-        Map<String, Object> objectMap = new HashMap<>();
-        objectMap.put("code", "Gena");
-        Template template = configuration.getTemplate("common/BaseUtils.ftl");
-        template.process(objectMap, stringWriter);
-        System.out.println(stringWriter.toString());
-    }
+	@Autowired
+	private FreeMarkerConfigurer freeMarkerConfigurer;
+
+	@Test
+	public void test1() {
+		Context context = new Context();
+		context.setVariable("code", "Gena");
+		String template = templateEngine.process("/templates/code/BaseUtils.text", context);
+		System.out.println(template);
+	}
+
+	@Test
+	public void test2() throws IOException, TemplateException {
+		Configuration configuration = freeMarkerConfigurer.getConfiguration();
+		StringWriter stringWriter = new StringWriter();
+		Map<String, Object> objectMap = new HashMap<>();
+		objectMap.put("code", "Gena");
+		Template template = configuration.getTemplate("common/BaseUtils.ftl");
+		template.process(objectMap, stringWriter);
+		System.out.println(stringWriter.toString());
+	}
+
 }

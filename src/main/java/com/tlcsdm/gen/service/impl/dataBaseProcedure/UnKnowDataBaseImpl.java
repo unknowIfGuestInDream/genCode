@@ -23,79 +23,81 @@ import java.util.Map;
 @Service
 public class UnKnowDataBaseImpl implements DataBaseProcedureService, DataBaseTableService {
 
-    @Override
-    public String selectProcedures(String name) {
-        throw new UnSupportedDataSourceException("不支持当前数据库代码生成");
-    }
+	@Override
+	public String selectProcedures(String name) {
+		throw new UnSupportedDataSourceException("不支持当前数据库代码生成");
+	}
 
-    @Override
-    public List<Map<String, Object>> selectProcedures(String name, DataSourceUtil dataSourceUtil) {
-        throw new UnSupportedDataSourceException("不支持当前数据库代码生成");
-    }
+	@Override
+	public List<Map<String, Object>> selectProcedures(String name, DataSourceUtil dataSourceUtil) {
+		throw new UnSupportedDataSourceException("不支持当前数据库代码生成");
+	}
 
-    @Override
-    public String loadProcedure(String name) {
-        throw new UnSupportedDataSourceException("不支持当前数据库代码生成");
-    }
+	@Override
+	public String loadProcedure(String name) {
+		throw new UnSupportedDataSourceException("不支持当前数据库代码生成");
+	}
 
-    @Override
-    public String loadProcedure(String name, DataSourceUtil dataSourceUtil) {
-        throw new UnSupportedDataSourceException("不支持当前数据库代码生成");
-    }
+	@Override
+	public String loadProcedure(String name, DataSourceUtil dataSourceUtil) {
+		throw new UnSupportedDataSourceException("不支持当前数据库代码生成");
+	}
 
-    @Override
-    public String selectArguments(String owner, String objectName) {
-        throw new UnSupportedDataSourceException("不支持当前数据库代码生成");
-    }
+	@Override
+	public String selectArguments(String owner, String objectName) {
+		throw new UnSupportedDataSourceException("不支持当前数据库代码生成");
+	}
 
-    @Override
-    public String getJavaClass(String type) {
-        throw new UnSupportedDataSourceException("不支持当前数据库代码生成");
-    }
+	@Override
+	public String getJavaClass(String type) {
+		throw new UnSupportedDataSourceException("不支持当前数据库代码生成");
+	}
 
-    @Override
-    public String getRepositoryOutType(String type) {
-        throw new UnSupportedDataSourceException("不支持当前数据库代码生成");
-    }
+	@Override
+	public String getRepositoryOutType(String type) {
+		throw new UnSupportedDataSourceException("不支持当前数据库代码生成");
+	}
 
-    @Override
-    public String getRepositoryOutTypeCode(String type) {
-        throw new UnSupportedDataSourceException("不支持当前数据库代码生成");
-    }
+	@Override
+	public String getRepositoryOutTypeCode(String type) {
+		throw new UnSupportedDataSourceException("不支持当前数据库代码生成");
+	}
 
-    @Override
-    public String loadTable(@NonNull String name) {
-        throw new UnSupportedDataSourceException("暂时不支持当前数据库表信息查询");
-    }
+	@Override
+	public String loadTable(@NonNull String name) {
+		throw new UnSupportedDataSourceException("暂时不支持当前数据库表信息查询");
+	}
 
-    @Override
-    public Map<String, Object> loadTable(@NonNull String name, @NonNull DataSourceUtil dataSourceUtil) {
-        throw new UnSupportedDataSourceException("暂时不支持当前数据库表信息查询");
-    }
+	@Override
+	public Map<String, Object> loadTable(@NonNull String name, @NonNull DataSourceUtil dataSourceUtil) {
+		throw new UnSupportedDataSourceException("暂时不支持当前数据库表信息查询");
+	}
 
-    @Override
-    public String selectTables(String name, String schema) {
-        throw new UnSupportedDataSourceException("暂时不支持当前数据库表信息查询");
-    }
+	@Override
+	public String selectTables(String name, String schema) {
+		throw new UnSupportedDataSourceException("暂时不支持当前数据库表信息查询");
+	}
 
-    @Override
-    public List<Map<String, Object>> selectTables(String name, String schema, DataSourceUtil dataSourceUtil) {
-        throw new UnSupportedDataSourceException("暂时不支持当前数据库表信息查询");
-    }
+	@Override
+	public List<Map<String, Object>> selectTables(String name, String schema, DataSourceUtil dataSourceUtil) {
+		throw new UnSupportedDataSourceException("暂时不支持当前数据库表信息查询");
+	}
 
-    @Override
-    public String selectTableInfo(@NonNull String name, String schema) {
-        throw new UnSupportedDataSourceException("暂时不支持当前数据库表信息查询");
-    }
+	@Override
+	public String selectTableInfo(@NonNull String name, String schema) {
+		throw new UnSupportedDataSourceException("暂时不支持当前数据库表信息查询");
+	}
 
-    @Override
-    public List<Map<String, Object>> selectTableInfo(@NonNull String name, String schema, @NonNull DataSourceUtil dataSourceUtil) {
-        throw new UnSupportedDataSourceException("暂时不支持当前数据库表信息查询");
-    }
+	@Override
+	public List<Map<String, Object>> selectTableInfo(@NonNull String name, String schema,
+			@NonNull DataSourceUtil dataSourceUtil) {
+		throw new UnSupportedDataSourceException("暂时不支持当前数据库表信息查询");
+	}
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        DataBaseProcedureFactory.register(DataBaseType.UNKNOW, this);
-        DataBaseTableFactory.register(DataBaseType.UNKNOW, this);
-    }
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		DataBaseProcedureFactory.register(DataBaseType.UNKNOW, this);
+		DataBaseTableFactory.register(DataBaseType.UNKNOW, this);
+	}
+
 }

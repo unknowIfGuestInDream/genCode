@@ -22,60 +22,77 @@ import java.util.Map;
 @Service
 public class UnknowTableToProc extends AbstractTableToProcedure {
 
-    @Override
-    protected String getFtlPackageName() {
-        return "unknow";
-    }
+	@Override
+	protected String getFtlPackageName() {
+		return "unknow";
+	}
 
-    @Override
-    protected void dealGetProcedure(String tableName, List<String> primarys, List<String> primaryTypes, List<String> primaryDesc, NameConventService nameConvent, Map<String, Object> objectMap) {
+	@Override
+	protected void dealGetProcedure(String tableName, List<String> primarys, List<String> primaryTypes,
+			List<String> primaryDesc, NameConventService nameConvent, Map<String, Object> objectMap) {
 
-    }
+	}
 
-    @Override
-    protected void dealSelProcedure(String tableName, List<String> selParams, List<String> selParamTypes, List<String> selParamDescs, List<Integer> selType, NameConventService nameConvent, Map<String, Object> objectMap) {
+	@Override
+	protected void dealSelProcedure(String tableName, List<String> selParams, List<String> selParamTypes,
+			List<String> selParamDescs, List<Integer> selType, NameConventService nameConvent,
+			Map<String, Object> objectMap) {
 
-    }
+	}
 
-    @Override
-    protected void dealSelWithPageProcedure(String tableName, List<String> selParams, List<String> selParamTypes, List<String> selParamDescs, List<Integer> selType, NameConventService nameConvent, Map<String, Object> objectMap) {
+	@Override
+	protected void dealSelWithPageProcedure(String tableName, List<String> selParams, List<String> selParamTypes,
+			List<String> selParamDescs, List<Integer> selType, NameConventService nameConvent,
+			Map<String, Object> objectMap) {
 
-    }
+	}
 
-    @Override
-    protected void dealInsProcedure(String tableName, List<String> insParams, List<String> insParamTypes, List<String> insParamDescs, NameConventService nameConvent, Map<String, Object> objectMap) {
+	@Override
+	protected void dealInsProcedure(String tableName, List<String> insParams, List<String> insParamTypes,
+			List<String> insParamDescs, NameConventService nameConvent, Map<String, Object> objectMap) {
 
-    }
+	}
 
-    @Override
-    protected void dealUpdProcedure(String tableName, List<String> primarys, List<String> primaryTypes, List<String> primaryDesc, List<String> updParams, List<String> updParamTypes, List<String> updParamDescs, NameConventService nameConvent, Map<String, Object> objectMap) {
+	@Override
+	protected void dealUpdProcedure(String tableName, List<String> primarys, List<String> primaryTypes,
+			List<String> primaryDesc, List<String> updParams, List<String> updParamTypes, List<String> updParamDescs,
+			NameConventService nameConvent, Map<String, Object> objectMap) {
 
-    }
+	}
 
-    @Override
-    protected void dealSaveProcedure(String tableName, List<String> insParams, List<String> insParamTypes, List<String> insParamDescs, List<String> primarys, List<String> primaryTypes, List<String> primaryDesc, List<String> updParams, List<String> updParamTypes, List<String> updParamDescs, NameConventService nameConvent, Map<String, Object> objectMap) {
+	@Override
+	protected void dealSaveProcedure(String tableName, List<String> insParams, List<String> insParamTypes,
+			List<String> insParamDescs, List<String> primarys, List<String> primaryTypes, List<String> primaryDesc,
+			List<String> updParams, List<String> updParamTypes, List<String> updParamDescs,
+			NameConventService nameConvent, Map<String, Object> objectMap) {
 
-    }
+	}
 
-    @Override
-    protected void dealDelProcedure(String tableName, List<String> primarys, List<String> primaryTypes, List<String> primaryDesc, NameConventService nameConvent, Map<String, Object> objectMap) {
+	@Override
+	protected void dealDelProcedure(String tableName, List<String> primarys, List<String> primaryTypes,
+			List<String> primaryDesc, NameConventService nameConvent, Map<String, Object> objectMap) {
 
-    }
+	}
 
-    @Override
-    public Map<String, Object> genProceduresByTable(String tableName, String tableDesc, List<String> params, List<String> paramTypes, List<String> paramDescs, List<Integer> priParamIndex, List<Integer> selParamsIndex, List<Integer> selType, List<Integer> insParamIndex, List<Integer> updParamIndex, List<Integer> orderParamIndex, List<String> orderParamTypes, NameConventService nameConvent, Configuration configuration) {
-        throw new UnSupportedDataSourceException("未知数据库, 不支持当前数据库生成存储过程");
-    }
+	@Override
+	public Map<String, Object> genProceduresByTable(String tableName, String tableDesc, List<String> params,
+			List<String> paramTypes, List<String> paramDescs, List<Integer> priParamIndex, List<Integer> selParamsIndex,
+			List<Integer> selType, List<Integer> insParamIndex, List<Integer> updParamIndex,
+			List<Integer> orderParamIndex, List<String> orderParamTypes, NameConventService nameConvent,
+			Configuration configuration) {
+		throw new UnSupportedDataSourceException("未知数据库, 不支持当前数据库生成存储过程");
+	}
 
-    @Override
-    public Map<String, Object> genAutoInsKey(String tableName, String primaryKey, Configuration configuration) {
-        Map<String, Object> result = new HashMap<>(4);
-        result.put("autoInsKey", "未知数据库, 不支持当前数据库生成自增主键");
-        return result;
-    }
+	@Override
+	public Map<String, Object> genAutoInsKey(String tableName, String primaryKey, Configuration configuration) {
+		Map<String, Object> result = new HashMap<>(4);
+		result.put("autoInsKey", "未知数据库, 不支持当前数据库生成自增主键");
+		return result;
+	}
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        AbstractTableToProcedureFactory.register(DataBaseType.UNKNOW, this);
-    }
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		AbstractTableToProcedureFactory.register(DataBaseType.UNKNOW, this);
+	}
+
 }

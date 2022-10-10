@@ -15,15 +15,18 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CacheManage {
 
-    //存储过程缓存
-    public static Cache<String, List<Map<String, Object>>> PROCEDURES_CACHE = new Cache<>();
-    //表缓存
-    public static Cache<String, List<Map<String, Object>>> TABLES_CACHE = new Cache<>();
-    //所有缓存存储
-    public static Map<String, Cache> CACHE_MAP = new ConcurrentHashMap() {
-        {
-            put("procedures", PROCEDURES_CACHE);
-            put("tables", TABLES_CACHE);
-        }
-    };
+	// 存储过程缓存
+	public static Cache<String, List<Map<String, Object>>> PROCEDURES_CACHE = new Cache<>();
+
+	// 表缓存
+	public static Cache<String, List<Map<String, Object>>> TABLES_CACHE = new Cache<>();
+
+	// 所有缓存存储
+	public static Map<String, Cache> CACHE_MAP = new ConcurrentHashMap() {
+		{
+			put("procedures", PROCEDURES_CACHE);
+			put("tables", TABLES_CACHE);
+		}
+	};
+
 }

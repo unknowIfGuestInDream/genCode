@@ -13,9 +13,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * 定时清除数据源工厂数据
  * <p>
- * 使用GenProperty获取gen.schedul而非@Value获取
- * 主要是gen.schedul属性可以通过远程调用方式修改
- * 保证定时可以随时开关
+ * 使用GenProperty获取gen.schedul而非@Value获取 主要是gen.schedul属性可以通过远程调用方式修改 保证定时可以随时开关
  *
  * @author: TangLiang
  * @date: 2021/7/6 8:49
@@ -25,13 +23,16 @@ import java.time.format.DateTimeFormatter;
 @Component
 @AllArgsConstructor
 public class ReleaseDataSourceUtilSchedule {
-    private final GenProperty genProperty;
 
-    //每周五23点执行
-    @Scheduled(cron = "0 0 23 ? * FRI")
-    public void dataSourceUtilScheduled() {
-        if (!genProperty.getSchedule()) return;
-        DataSourceUtilFactory.removeAll();
-        log.info("[{}]清除数据源工厂数据", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH时mm分ss秒")));
-    }
+	private final GenProperty genProperty;
+
+	// 每周五23点执行
+	@Scheduled(cron = "0 0 23 ? * FRI")
+	public void dataSourceUtilScheduled() {
+		if (!genProperty.getSchedule())
+			return;
+		DataSourceUtilFactory.removeAll();
+		log.info("[{}]清除数据源工厂数据", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH时mm分ss秒")));
+	}
+
 }

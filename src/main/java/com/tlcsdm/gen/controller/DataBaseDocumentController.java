@@ -31,43 +31,57 @@ import java.util.zip.ZipOutputStream;
 @RestController
 @RequiredArgsConstructor
 public class DataBaseDocumentController {
-    private final DataBaseDocumentService dataBaseDocumentService;
 
-    /**
-     * 数据库文档生成
-     */
-    @GetMapping("/preGenDataBaseDocument")
-    public ModelAndView preGenDataBaseDocument() {
-        return new ModelAndView("pages/dataBaseInfo/preGenDataBaseDocument");
-    }
+	private final DataBaseDocumentService dataBaseDocumentService;
 
-    /**
-     * 生成数据库文档
-     */
-    @GetMapping("genDataBaseDocument")
-    @Log(title = "数据库文档", operateType = "生成数据库文档")
-    public void genDataBaseDocument(String url, String driver, String userName, String password, @RequestParam(required = false, defaultValue = "1.0.0") String version, String description, @RequestParam(required = false, defaultValue = "数据库文档") String fileName, @RequestParam List<String> engineFileTypes, @RequestParam(required = false, defaultValue = "") List<String> tableNames, @RequestParam(required = false, defaultValue = "") List<String> tablePrefixs, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (engineFileTypes.size() == 1) {
-            String file = dataBaseDocumentService.executeFile(url, driver, userName, password, version, description, fileName, engineFileTypes.get(0), tableNames, tablePrefixs);
-            @Cleanup InputStream inputStream = new ByteArrayInputStream(file.getBytes(StandardCharsets.UTF_8));
-            BaseUtils.download(inputStream, fileName + EngineFileType.valueOf(engineFileTypes.get(0)).getFileSuffix(), request, response);
-        } else {
-            response.reset();
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("application/x-msdownload");
-            response.setHeader("Content-Disposition", "attachment;filename=" + BaseUtils.getFormatString(request, fileName + ".zip"));
-            ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
-            for (String engineFileType : engineFileTypes) {
-                String file = dataBaseDocumentService.executeFile(url, driver, userName, password, version, description, fileName, engineFileType, tableNames, tablePrefixs);
-                @Cleanup InputStream inputStream = new ByteArrayInputStream(file.getBytes(StandardCharsets.UTF_8));
-                //将文件写入zip内，即将文件进行打包
-                zos.putNextEntry(new ZipEntry(fileName));
-                inputStream.transferTo(zos);
-                //关闭输入输出流
-                zos.closeEntry();
-            }
-            zos.close();
-        }
-    }
+	/**
+	 * 数据库文档生成
+	 */
+	@GetMapping("/preGenDataBaseDocument")
+	public ModelAndView preGenDataBaseDocument() {
+		return new ModelAndView("pages/dataBaseInfo/preGenDataBaseDocument");
+	}
+
+	/**
+	 * 生成数据库文档
+	 */
+	@GetMapping("genDataBaseDocument")
+	@Log(title = "数据库文档", operateType = "生成数据库文档")
+	public void genDataBaseDocument(String url, String driver, String userName, String password,
+			@RequestParam(required = false, defaultValue = "1.0.0") String version, String description,
+			@RequestParam(required = false, defaultValue = "数据库文档") String fileName,
+			@RequestParam List<String> engineFileTypes,
+			@RequestParam(required = false, defaultValue = "") List<String> tableNames,
+			@RequestParam(required = false, defaultValue = "") List<String> tablePrefixs, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		if (engineFileTypes.size() == 1) {
+			String file = dataBaseDocumentService.executeFile(url, driver, userName, password, version, description,
+					fileName, engineFileTypes.get(0), tableNames, tablePrefixs);
+			@Cleanup
+			InputStream inputStream = new ByteArrayInputStream(file.getBytes(StandardCharsets.UTF_8));
+			BaseUtils.download(inputStream, fileName + EngineFileType.valueOf(engineFileTypes.get(0)).getFileSuffix(),
+					request, response);
+		}
+		else {
+			response.reset();
+			response.setCharacterEncoding("UTF-8");
+			response.setContentType("application/x-msdownload");
+			response.setHeader("Content-Disposition",
+					"attachment;filename=" + BaseUtils.getFormatString(request, fileName + ".zip"));
+			ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
+			for (String engineFileType : engineFileTypes) {
+				String file = dataBaseDocumentService.executeFile(url, driver, userName, password, version, description,
+						fileName, engineFileType, tableNames, tablePrefixs);
+				@Cleanup
+				InputStream inputStream = new ByteArrayInputStream(file.getBytes(StandardCharsets.UTF_8));
+				// 将文件写入zip内，即将文件进行打包
+				zos.putNextEntry(new ZipEntry(fileName));
+				inputStream.transferTo(zos);
+				// 关闭输入输出流
+				zos.closeEntry();
+			}
+			zos.close();
+		}
+	}
 
 }

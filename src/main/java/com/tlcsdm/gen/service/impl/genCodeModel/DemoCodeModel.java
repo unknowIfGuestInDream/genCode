@@ -14,13 +14,15 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class DemoCodeModel extends AbstractGenCodeModel {
-    @Override
-    protected String getFtlPackageName() {
-        return "demo";
-    }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        AbstractGenCodeModelFactory.register(GenCodeModelType.DEMO, this);
-    }
+	@Override
+	protected String getFtlPackageName() {
+		return "demo";
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		AbstractGenCodeModelFactory.register(GenCodeModelType.DEMO, this);
+	}
+
 }

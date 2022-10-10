@@ -25,40 +25,39 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class LogAspect {
 
-    /**
-     * 配置织入点
-     */
-    @Pointcut("@annotation(com.tlcsdm.common.annotation.Log)")
-    public void logPointCut() {
-    }
+	/**
+	 * 配置织入点
+	 */
+	@Pointcut("@annotation(com.tlcsdm.common.annotation.Log)")
+	public void logPointCut() {
+	}
 
-    /**
-     * 拦截异常操作
-     *
-     * @param e 异常
-     */
-    @AfterThrowing(value = "logPointCut()", throwing = "e")
-    public void doAfterThrowing(Exception e) {
-        log.error(e.getMessage());
-        e.printStackTrace();
-    }
+	/**
+	 * 拦截异常操作
+	 * @param e 异常
+	 */
+	@AfterThrowing(value = "logPointCut()", throwing = "e")
+	public void doAfterThrowing(Exception e) {
+		log.error(e.getMessage());
+		e.printStackTrace();
+	}
 
-    /**
-     * 环绕处理
-     *
-     * @param pjd ProceedingJoinPoint
-     * @return Map<String, Object>
-     * @throws Throwable
-     */
-    @Around("logPointCut()")
-    public Map<String, Object> doAround(ProceedingJoinPoint pjd) throws Throwable {
-        Map<String, Object> result;
-        try {
-            result = (Map<String, Object>) pjd.proceed();
-        } catch (Exception e) {
-            return BaseUtils.failed(e.getMessage());
-        }
-        return result;
-    }
+	/**
+	 * 环绕处理
+	 * @param pjd ProceedingJoinPoint
+	 * @return Map<String, Object>
+	 * @throws Throwable
+	 */
+	@Around("logPointCut()")
+	public Map<String, Object> doAround(ProceedingJoinPoint pjd) throws Throwable {
+		Map<String, Object> result;
+		try {
+			result = (Map<String, Object>) pjd.proceed();
+		}
+		catch (Exception e) {
+			return BaseUtils.failed(e.getMessage());
+		}
+		return result;
+	}
 
 }

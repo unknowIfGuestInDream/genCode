@@ -15,21 +15,23 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class RestfulProcedureModel extends AbstractGenProcedureModel {
-    @Override
-    protected String getFtlPackageName() {
-        return "restful";
-    }
 
-    @Override
-    protected String getMappingType(String procedureName, NameConventService nameConvent) {
-        if ("select".equals(nameConvent.getName(procedureName)) || "load".equals(nameConvent.getName(procedureName))) {
-            return "GetMapping";
-        }
-        return "PostMapping";
-    }
+	@Override
+	protected String getFtlPackageName() {
+		return "restful";
+	}
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        AbstractGenProcedureModelFactory.register(GenProcedureModelType.RESTFUL, this);
-    }
+	@Override
+	protected String getMappingType(String procedureName, NameConventService nameConvent) {
+		if ("select".equals(nameConvent.getName(procedureName)) || "load".equals(nameConvent.getName(procedureName))) {
+			return "GetMapping";
+		}
+		return "PostMapping";
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		AbstractGenProcedureModelFactory.register(GenProcedureModelType.RESTFUL, this);
+	}
+
 }

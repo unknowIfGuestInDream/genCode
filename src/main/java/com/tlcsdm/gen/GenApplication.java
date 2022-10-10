@@ -8,12 +8,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @Slf4j
 public class GenApplication {
 
-    private static final String TIPS = "\n\n" +
-            "******************** 代码生成系统启动成功 ********************\n";
+	private static final String TIPS = "\n\n" + "******************** 代码生成系统启动成功 ********************\n";
 
-    public static void main(String[] args) {
-        SpringApplication.run(GenApplication.class, args);
-        log.info(TIPS);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(GenApplication.class, args);
+		log.info(TIPS);
+	}
 
 }

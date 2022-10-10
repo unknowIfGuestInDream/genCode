@@ -12,12 +12,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class EventTest {
 
-    @Test
-    public void enum1() {
-        EventListenerSupport<IListeners> listenersEvent = new EventListenerSupport<>(IListeners.class);
-        // 注册监听
-        listenersEvent.addListener(new Courier("快递员小马"));
-        listenersEvent.addListener(new User("用户小刘"));
-        listenersEvent.fire().receive();
-    }
+	@Test
+	public void enum1() {
+		EventListenerSupport<IListeners> listenersEvent = new EventListenerSupport<>(IListeners.class);
+		// 注册监听
+		listenersEvent.addListener(new Courier("快递员小马"));
+		listenersEvent.addListener(new User("用户小刘"));
+		listenersEvent.fire().receive();
+	}
+
 }
