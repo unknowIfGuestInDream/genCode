@@ -41,6 +41,7 @@ import org.springframework.remoting.rmi.RmiServiceExporter;
  *     &#64;Autowired
  *     private RpcService rpcService;
  *
+
 @Test
  *     public void excel() throws Exception {
  *         System.out.println(rpcService.getGitInfo());
