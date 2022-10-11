@@ -25,7 +25,7 @@ jobs:
         java-version: ${{ matrix.java }}
         distribution: 'temurin'
         cache: maven
-    - name: check spring-javaformat
+    - name: Check spring-javaformat
       run: mvn spring-javaformat:validate  
 
     - name: Build with Maven
