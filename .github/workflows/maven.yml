@@ -6,8 +6,20 @@ name: Java CI with Maven
 on:
   push:
     branches: [ "master" ]
+    paths-ignore:
+      - '.github/**'
+      - 'README.md'
+      - '.gitignore'
+      - '.gitattributes'
+      - 'CHANGELOG.md'
   pull_request:
     branches: [ "master" ]
+    paths-ignore:
+      - '.github/**'
+      - 'README.md'
+      - '.gitignore'
+      - '.gitattributes'
+      - 'CHANGELOG.md'
 
 jobs:
   build:
