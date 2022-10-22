@@ -1,0 +1,18 @@
+enhancement:
+  - any: ['src/main/**', '!src/main/resources/lib']
+
+test:
+  - src/test/**
+
+workflow:
+  - .github/**
+
+documentation:
+  - CHANGELOG.md
+  - LICENSE
+  - README.md
+  - docs/**
+
+dependencies:
+  - pom.xml
+  - src/main/resources/lib
