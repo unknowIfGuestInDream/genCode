@@ -1,6 +1,5 @@
 enhancement:
-  - src/main/**
-  - !src/main/resources/lib
+  - any: ['src/main/**', '!src/main/resources/lib']
 
 test:
   - src/test/**
