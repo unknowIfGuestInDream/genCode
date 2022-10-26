@@ -8,6 +8,7 @@ import cn.smallbun.screw.core.execute.DocumentationExecute;
 import cn.smallbun.screw.core.process.ProcessConfig;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -51,6 +52,7 @@ public class ScrewTest {
 	private static final String DOC_DESCRIPTION = "文档描述";
 
 	@Test
+	@Disabled
 	public void screw1() throws IOException {
 		// 创建 screw 的配置
 		Configuration config = Configuration.builder().version(DOC_VERSION) // 版本

@@ -8,6 +8,7 @@ import com.tlcsdm.gen.factory.DataBaseProcedureFactory;
 import com.tlcsdm.gen.factory.DataSourceUtilFactory;
 import com.tlcsdm.gen.factory.NameConventFactory;
 import com.tlcsdm.gen.service.AbstractGenProcedureModel;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,6 +32,7 @@ public class genProcedureTest {
 	private FreeMarkerConfigurer freeMarkerConfigurer;
 
 	@Test
+	@Disabled
 	public void genProcedureEamNew() {
 		AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory
 				.getGenProcedureModel(GenProcedureModelType.fromCode("4"));
@@ -53,6 +55,7 @@ public class genProcedureTest {
 	}
 
 	@Test
+	@Disabled
 	public void genProcedureEam() {
 		AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory
 				.getGenProcedureModel(GenProcedureModelType.fromCode("3"));
@@ -75,6 +78,7 @@ public class genProcedureTest {
 	}
 
 	@Test
+	@Disabled
 	public void genProcedureOld() {
 		AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory
 				.getGenProcedureModel(GenProcedureModelType.fromCode("2"));
@@ -97,6 +101,7 @@ public class genProcedureTest {
 	}
 
 	@Test
+	@Disabled
 	public void genProcedureRestful() {
 		AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory
 				.getGenProcedureModel(GenProcedureModelType.fromCode("1"));
