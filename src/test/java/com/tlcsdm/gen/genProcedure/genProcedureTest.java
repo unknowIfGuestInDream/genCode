@@ -28,99 +28,99 @@ import java.util.Map;
 @SpringBootTest
 public class genProcedureTest {
 
-	@Autowired
-	private FreeMarkerConfigurer freeMarkerConfigurer;
+    @Autowired
+    private FreeMarkerConfigurer freeMarkerConfigurer;
 
-	@Test
-	@Disabled
-	public void genProcedureEamNew() {
-		AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory
-				.getGenProcedureModel(GenProcedureModelType.fromCode("4"));
-		List<String> procedureNameList = new ArrayList<>();
-		procedureNameList.add("PRO_BASE_DEPT_GET");
-		procedureNameList.add("PRO_BASE_PERSONPOST_GET");
-		Map<String, Object> result = genProcedureModel.genCode("code", "cn.tlcsdm.gen", "budgetuser", procedureNameList,
-				"admin", NameConventFactory.getNameConvent(NameConventType.fromCode("2")),
-				DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")),
-				DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET",
-						"oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"),
-				freeMarkerConfigurer.getConfiguration());
-		System.out.println(result.get("controller"));
-		System.out.println("============================================");
-		System.out.println(result.get("service"));
-		System.out.println("============================================");
-		System.out.println(result.get("serviceImpl"));
-		System.out.println("============================================");
-		System.out.println(result.get("repository"));
-	}
+    @Test
+    @Disabled
+    public void genProcedureEamNew() {
+        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory
+                .getGenProcedureModel(GenProcedureModelType.fromCode("4"));
+        List<String> procedureNameList = new ArrayList<>();
+        procedureNameList.add("PRO_BASE_DEPT_GET");
+        procedureNameList.add("PRO_BASE_PERSONPOST_GET");
+        Map<String, Object> result = genProcedureModel.genCode("code", "cn.tlcsdm.gen", "budgetuser", procedureNameList,
+                "admin", NameConventFactory.getNameConvent(NameConventType.fromCode("2")),
+                DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")),
+                DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET",
+                        "oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"),
+                freeMarkerConfigurer.getConfiguration());
+        System.out.println(result.get("controller"));
+        System.out.println("============================================");
+        System.out.println(result.get("service"));
+        System.out.println("============================================");
+        System.out.println(result.get("serviceImpl"));
+        System.out.println("============================================");
+        System.out.println(result.get("repository"));
+    }
 
-	@Test
-	@Disabled
-	public void genProcedureEam() {
-		AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory
-				.getGenProcedureModel(GenProcedureModelType.fromCode("3"));
-		List<String> procedureNameList = new ArrayList<>();
-		procedureNameList.add("PRO_BASE_DEPT_GET");
-		procedureNameList.add("PRO_BASE_PERSONPOST_GET");
-		Map<String, Object> result = genProcedureModel.genCode("code", "cn.tlcsdm.gen", "budgetuser", procedureNameList,
-				"admin", NameConventFactory.getNameConvent(NameConventType.fromCode("2")),
-				DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")),
-				DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET",
-						"oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"),
-				freeMarkerConfigurer.getConfiguration());
-		System.out.println(result.get("controller"));
-		System.out.println("============================================");
-		System.out.println(result.get("service"));
-		System.out.println("============================================");
-		System.out.println(result.get("serviceImpl"));
-		System.out.println("============================================");
-		System.out.println(result.get("repository"));
-	}
+    @Test
+    @Disabled
+    public void genProcedureEam() {
+        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory
+                .getGenProcedureModel(GenProcedureModelType.fromCode("3"));
+        List<String> procedureNameList = new ArrayList<>();
+        procedureNameList.add("PRO_BASE_DEPT_GET");
+        procedureNameList.add("PRO_BASE_PERSONPOST_GET");
+        Map<String, Object> result = genProcedureModel.genCode("code", "cn.tlcsdm.gen", "budgetuser", procedureNameList,
+                "admin", NameConventFactory.getNameConvent(NameConventType.fromCode("2")),
+                DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")),
+                DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET",
+                        "oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"),
+                freeMarkerConfigurer.getConfiguration());
+        System.out.println(result.get("controller"));
+        System.out.println("============================================");
+        System.out.println(result.get("service"));
+        System.out.println("============================================");
+        System.out.println(result.get("serviceImpl"));
+        System.out.println("============================================");
+        System.out.println(result.get("repository"));
+    }
 
-	@Test
-	@Disabled
-	public void genProcedureOld() {
-		AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory
-				.getGenProcedureModel(GenProcedureModelType.fromCode("2"));
-		List<String> procedureNameList = new ArrayList<>();
-		procedureNameList.add("PRO_BASE_DEPT_GET");
-		procedureNameList.add("PRO_BASE_PERSONPOST_GET");
-		Map<String, Object> result = genProcedureModel.genCode("code", "cn.tlcsdm.gen", "budgetuser", procedureNameList,
-				"admin", NameConventFactory.getNameConvent(NameConventType.fromCode("2")),
-				DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")),
-				DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET",
-						"oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"),
-				freeMarkerConfigurer.getConfiguration());
-		System.out.println(result.get("controller"));
-		System.out.println("============================================");
-		System.out.println(result.get("service"));
-		System.out.println("============================================");
-		System.out.println(result.get("serviceImpl"));
-		System.out.println("============================================");
-		System.out.println(result.get("repository"));
-	}
+    @Test
+    @Disabled
+    public void genProcedureOld() {
+        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory
+                .getGenProcedureModel(GenProcedureModelType.fromCode("2"));
+        List<String> procedureNameList = new ArrayList<>();
+        procedureNameList.add("PRO_BASE_DEPT_GET");
+        procedureNameList.add("PRO_BASE_PERSONPOST_GET");
+        Map<String, Object> result = genProcedureModel.genCode("code", "cn.tlcsdm.gen", "budgetuser", procedureNameList,
+                "admin", NameConventFactory.getNameConvent(NameConventType.fromCode("2")),
+                DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")),
+                DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET",
+                        "oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"),
+                freeMarkerConfigurer.getConfiguration());
+        System.out.println(result.get("controller"));
+        System.out.println("============================================");
+        System.out.println(result.get("service"));
+        System.out.println("============================================");
+        System.out.println(result.get("serviceImpl"));
+        System.out.println("============================================");
+        System.out.println(result.get("repository"));
+    }
 
-	@Test
-	@Disabled
-	public void genProcedureRestful() {
-		AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory
-				.getGenProcedureModel(GenProcedureModelType.fromCode("1"));
-		List<String> procedureNameList = new ArrayList<>();
-		procedureNameList.add("PRO_BASE_DEPT_GET");
-		procedureNameList.add("PRO_BASE_PERSONPOST_GET");
-		Map<String, Object> result = genProcedureModel.genCode("code", "cn.tlcsdm.gen", "budgetuser", procedureNameList,
-				"admin", NameConventFactory.getNameConvent(NameConventType.fromCode("2")),
-				DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")),
-				DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET",
-						"oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"),
-				freeMarkerConfigurer.getConfiguration());
-		System.out.println(result.get("controller"));
-		System.out.println("============================================");
-		System.out.println(result.get("service"));
-		System.out.println("============================================");
-		System.out.println(result.get("serviceImpl"));
-		System.out.println("============================================");
-		System.out.println(result.get("repository"));
-	}
+    @Test
+    @Disabled
+    public void genProcedureRestful() {
+        AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory
+                .getGenProcedureModel(GenProcedureModelType.fromCode("1"));
+        List<String> procedureNameList = new ArrayList<>();
+        procedureNameList.add("PRO_BASE_DEPT_GET");
+        procedureNameList.add("PRO_BASE_PERSONPOST_GET");
+        Map<String, Object> result = genProcedureModel.genCode("code", "cn.tlcsdm.gen", "budgetuser", procedureNameList,
+                "admin", NameConventFactory.getNameConvent(NameConventType.fromCode("2")),
+                DataBaseProcedureFactory.getDataBaseProcedure(DataBaseType.fromTypeName("oracle.jdbc.OracleDriver")),
+                DataSourceUtilFactory.getDataSourceUtil("jdbc:oracle:thin:@10.18.26.86:1521/SE_BUDGET",
+                        "oracle.jdbc.OracleDriver", "budgetuser", "budgetpassword"),
+                freeMarkerConfigurer.getConfiguration());
+        System.out.println(result.get("controller"));
+        System.out.println("============================================");
+        System.out.println(result.get("service"));
+        System.out.println("============================================");
+        System.out.println(result.get("serviceImpl"));
+        System.out.println("============================================");
+        System.out.println(result.get("repository"));
+    }
 
 }
