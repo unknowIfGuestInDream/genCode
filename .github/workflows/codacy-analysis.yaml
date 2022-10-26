@@ -3,8 +3,11 @@ name: Codacy Security Scan
 on:
   push:
     branches: [ "master" ]
+      - 'src/main/resources/static/**'
   pull_request:
     branches: [ "master" ]
+    paths-ignore:
+      - 'src/main/resources/static/**'
 
 jobs:
   codacy-security-scan:
