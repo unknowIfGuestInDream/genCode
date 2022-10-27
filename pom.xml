@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.newangels</groupId>
     <artifactId>genCode</artifactId>
-    <version>4.0.3</version>
+    <version>4.0.4</version>
     <packaging>jar</packaging>
     <name>genCode</name>
     <description>代码生成</description>
