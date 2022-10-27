@@ -86,3 +86,6 @@ jobs:
       uses: github/codeql-action/analyze@v2
       with:
         category: "/language:${{matrix.language}}"
+
+    - name: Upload SARIF results file
+      uses: github/codeql-action/upload-sarif@v2
