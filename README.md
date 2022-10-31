@@ -83,6 +83,13 @@ druid监控账号密码默认都为admin
             <sub style="font-size:14px"><b>梦里不知身是客</b></sub>
         </a>
     </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/deepsourcebot>
+            <img src=https://avatars.githubusercontent.com/u/60907429?v=4 width="100;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px" alt=DeepSource Bot/>
+            <br />
+            <sub style="font-size:14px"><b>DeepSource Bot</b></sub>
+        </a>
+    </td>
 </tr>
 </table>
 
