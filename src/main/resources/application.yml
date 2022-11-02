@@ -55,7 +55,7 @@ spring:
       filters: stat,wall,slf4j
       connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
       useGlobalDataSourceStat: true
-      aop-patterns: com.newangels.gen.service.impl.*
+      aop-patterns: com.tlcsdm.gen.service.impl.*
       # 配置StatFilter
       web-stat-filter:
         #默认为false，设置为true启动
