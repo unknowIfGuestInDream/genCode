@@ -20,5 +20,5 @@ Fixes #
 - [ ] If documentation is needed for this change, has that been included in this pull request
 
 ### Reviewing Maintainer
-- [ ] Label as either `enhancement`, `bug`, `documentation` or `dependencies`
+- [ ] Label as either `enhancement`, `bug`, `documentation`, `style` or `dependencies`
 - [ ] Verify design and implementation 
