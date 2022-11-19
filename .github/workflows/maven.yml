@@ -8,6 +8,16 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+  pull_request_target:
+    types:
+      - labeled
+      - unlabeled
+      - synchronize
+      - opened
+      - edited
+      - ready_for_review
+      - reopened
+      - unlocked
 
 jobs:
   build:
