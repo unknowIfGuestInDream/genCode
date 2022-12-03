@@ -1,0 +1,259 @@
+pull_request_rules:
+  - name: Automatic welcome on new pr
+    conditions:
+      - author!=unknowIfGuestInDream
+      - author!=dependabot[bot]
+      - "-closed"
+    actions:
+      comment:
+        message: |
+          Thanks for opening this pull request! 
+          Please check out the [Contributing Guidelines](https://github.com/unknowIfGuestInDream/javafxTool/blob/master/CONTRIBUTING.md).
+  - name: Assign author
+    conditions:
+      - "-closed"
+      - "#assignee=0"
+    actions:
+      assign: 
+        users:
+          - "{{author}}"
+  - name: Assign Reviewer
+    conditions:
+      - author!=unknowIfGuestInDream
+      - "-draft"
+      - "-closed"
+      - "#review-requested=0"
+    actions:
+      request_reviews:
+        users:
+          - unknowIfGuestInDream
+  - name: Label enhancement
+    conditions:
+      - title~=^feat(\(([\w$.\-*/ ]*)\))?:[ ](.*)$
+    actions:
+      label:
+        add:
+          - enhancement
+  - name: Label bug
+    conditions:
+      - title~=^fix(\(([\w$.\-*/ ]*)\))?:[ ](.*)$
+    actions:
+      label:
+        add:
+          - bug
+  - name: Label documentation
+    conditions:
+      - title~=^docs(\(([\w$.\-*/ ]*)\))?:[ ](.*)$
+    actions:
+      label:
+        add:
+          - documentation
+  - name: Label chore
+    conditions:
+      - title~=^chore(\(([\w$.\-*/ ]*)\))?:[ ](.*)$
+    actions:
+      label:
+        add:
+          - chore
+  - name: Label dependencies
+    conditions:
+      - title~=^(build|ci)\/[a-zA-Z0-9-_\/]+$
+    actions:
+      label:
+        add:
+          - dependencies
+  - name: Label style
+    conditions:
+      - title~=^style(\(([\w$.\-*/ ]*)\))?:[ ](.*)$
+    actions:
+      label:
+        add:
+          - style
+  - name: Label workflow
+    conditions:
+      - title~=^bot\/[a-zA-Z0-9-_\/]+$
+    actions:
+      label:
+        add:
+          - workflow
+  - name: Label test
+    conditions:
+      - title~=^test(\(([\w$.\-*/ ]*)\))?:[ ](.*)$
+    actions:
+      label:
+        add:
+          - test
+  - name: Title Validator comment
+    conditions:
+      - "status-failure=Title Validator"
+      - "-closed"
+      - "-merged"
+    actions:
+      comment:
+        message: |
+          @{{author}}
+          Wrong PR Title: {{title}}
+          Please check [Contributing Guidelines](https://github.com/unknowIfGuestInDream/javafxTool/blob/master/CONTRIBUTING.md) for more information.
+  - name: mergefreeze check comment
+    conditions:
+      - "status-failure=mergefreeze"
+      - author!=dependabot[bot]
+      - author!=imgbot[bot]
+      - "-closed"
+      - "-merged"
+    actions:
+      comment:
+        message: |
+          @{{author}}
+          The current code is frozen, please wait for the unfreeze to merge.
+  - name: GitGuardian check comment
+    conditions:
+      - "status-failure=GitGuardian Security Checks"
+      - author!=dependabot[bot]
+      - author!=imgbot[bot]
+      - "-closed"
+      - "-merged"
+    actions:
+      comment:
+        message: |
+          @{{author}}
+          Your commit has API keys, passwords, certificates, encryption keys and other sensitive data!
+          Please remove this sensitive data.
+  - name: Build check comment
+    conditions:
+      - or:
+          - "status-failure=build (11, macos-latest)"
+          - "status-failure=build (11, ubuntu-latest)"
+          - "status-failure=build (11, windows-latest)"
+          - "status-failure=build (17, macos-latest)"
+          - "status-failure=build (17, ubuntu-latest)"
+          - "status-failure=build (17, windows-latest)"
+      - author!=dependabot[bot]
+      - author!=imgbot[bot]
+      - "-closed"
+      - "-merged"
+    actions:
+      comment:
+        message: |
+          @{{author}}
+          Compile failed in your commit!
+          Please confirm that the compilation is passed before submitting.
+  - name: Dependency-review check comment
+    conditions:
+      - "status-failure=dependency-review"
+      - author!=dependabot[bot]
+      - author!=imgbot[bot]
+      - "-closed"
+      - "-merged"
+    actions:
+      comment:
+        message: |
+          @{{author}}
+          Your commit contains known known-vulnerable versions or GPL-3.0 LICENSE packages, which are not allowed.
+          Please update or remove these packages before submitting.
+  - name: conflict comment
+    conditions:
+      - "-closed"
+      - "-draft"
+      - "-merged"
+      - "conflict"
+    actions:
+      comment:
+        message: |
+          @{{author}}
+          There are some conflicts within your pull request.
+          Could you please fix them?
+  - name: All check pass comment
+    conditions:
+      - status-success=Title Validator
+      - status-success=dependency-review
+      - status-success=build (11, macos-latest)
+      - status-success=build (11, ubuntu-latest)
+      - status-success=build (11, windows-latest)
+      - status-success=build (17, ubuntu-latest)
+      - status-success=build (17, macos-latest)
+      - status-success=build (17, windows-latest)
+      - status-success=GitGuardian Security Checks
+      - "-closed"
+      - "-draft"
+      - "-conflict"
+      - "-merged"
+    actions:
+      comment:
+        message: |
+          All checks passed.
+          Please wait for review.
+  - name: Automatic merge on approval
+    conditions:
+      - author!=unknowIfGuestInDream
+      - author!=dependabot[bot]
+      - "#approved-reviews-by>=1"
+      - status-success=Title Validator
+      - status-success=dependency-review
+      - status-success=build (11, macos-latest)
+      - status-success=build (11, ubuntu-latest)
+      - status-success=build (11, windows-latest)
+      - status-success=build (17, ubuntu-latest)
+      - status-success=build (17, macos-latest)
+      - status-success=build (17, windows-latest)
+      - status-success=GitGuardian Security Checks
+      - status-success=mergefreeze
+      - status-success=WIP
+      - label!=invalid
+      - "-closed"
+      - "-draft"
+      - "-conflict"
+      - "-merged"
+    actions:
+      comment:
+        message: |
+          This pull request has been approved by:
+          {% for name in approved_reviews_by %}
+          @{{name}}
+          {% endfor %}
+          Thank you @{{author}} for your contributions!
+      merge:
+        method: squash
+  #  - name: Automatic merge
+  #    conditions:
+  #      - author=unknowIfGuestInDream
+  #      - status-success=Title Validator
+  #      - status-success=dependency-review
+  #      - status-success=build (17)
+  #      - status-success=GitGuardian Security Checks
+  #      - status-success=mergefreeze
+  #      - status-success=WIP
+  #      - label!=invalid
+  #      - "-closed"
+  #      - "-draft"
+  #      - "-conflict"
+  #      - "-merged"
+  #    actions:
+  #      merge:
+  #        method: squash
+  - name: Automatic merge dependabot[bot]
+    conditions:
+      - author=dependabot[bot]
+      - "#approved-reviews-by>=1"
+      - "-status-failure=Title Validator"
+      - label!=invalid
+      - "-closed"
+      - "-draft"
+      - "-conflict"
+      - "-merged"
+    actions:
+      merge:
+        method: squash
+  - name: automatic merge for ImgBot pull requests
+    conditions:
+      - author=imgbot[bot]
+      - "-status-failure=Title Validator"
+      - "#approved-reviews-by>=1"
+      - label!=invalid
+      - "-closed"
+      - "-draft"
+      - "-conflict"
+      - "-merged"
+    actions:
+      merge:
+        method: squash
