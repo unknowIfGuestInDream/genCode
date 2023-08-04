@@ -9,6 +9,7 @@ on:
   schedule:
     # 北京时间早上八点每天执行一次
     - cron: '0 0 * * *'
+  workflow_dispatch:
     
 jobs:
 
@@ -19,7 +20,7 @@ jobs:
     steps:
     
     - name: Mirror the Github organization repos to Gitee.
-      uses: Yikun/gitee-mirror-action@v1.2
+      uses: Yikun/gitee-mirror-action@v1.3
       with:
         # 必选，需要同步的Github用户（源）
         src: github/unknowIfGuestInDream
