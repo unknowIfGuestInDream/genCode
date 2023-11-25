@@ -19,11 +19,11 @@ public class UriComponentsTest {
 	@Test
 	public void UriComponents1() {
 		UriComponents uriComponents = UriComponentsBuilder.newInstance()
-				.scheme("http")
-				.host("www.github.com")
-				.path("/constructing-uri")
-				.queryParam("name", "tom")
-				.build();
+			.scheme("http")
+			.host("www.github.com")
+			.path("/constructing-uri")
+			.queryParam("name", "tom")
+			.build();
 		System.out.println(uriComponents.toUriString());
 	}
 
@@ -31,11 +31,11 @@ public class UriComponentsTest {
 	@Test
 	public void UriComponents2() {
 		UriComponents uriComponents = UriComponentsBuilder.newInstance()
-				.scheme("http")
-				.host("www.github.com")
-				.path("/constructing uri")
-				.build()
-				.encode();
+			.scheme("http")
+			.host("www.github.com")
+			.path("/constructing uri")
+			.build()
+			.encode();
 		System.out.println(uriComponents.toUriString());
 	}
 
@@ -43,11 +43,11 @@ public class UriComponentsTest {
 	@Test
 	public void UriComponents3() {
 		UriComponents uriComponents = UriComponentsBuilder.newInstance()
-				.scheme("http")
-				.host("www.github.com")
-				.path("/&#123;path-name&#125;")
-				.query("name=&#123;keyword&#125;")
-				.buildAndExpand("constructing-uri", "tomcat");
+			.scheme("http")
+			.host("www.github.com")
+			.path("/&#123;path-name&#125;")
+			.query("name=&#123;keyword&#125;")
+			.buildAndExpand("constructing-uri", "tomcat");
 		System.out.println(uriComponents.toUriString());
 	}
 
@@ -57,7 +57,7 @@ public class UriComponentsTest {
 		// 使用fromUriString()方法，便可以把一个字符串URI转换为UriComponents对象，
 		// 并且可以通过getQueryParams()方法取出参数。
 		UriComponents result = UriComponentsBuilder.fromUriString("https://www.github.com/constructing-uri?name=tomcat")
-				.build();
+			.build();
 		MultiValueMap<String, String> expectedQueryParams = new LinkedMultiValueMap<>(1);
 		expectedQueryParams.add("name", "tomcat");
 		System.out.println(result.getQueryParams());

@@ -31,21 +31,21 @@ public class DataBaseDocumentServiceImpl implements DataBaseDocumentService {
 			String description, String fileName, String engineFileType, List<String> tableNames,
 			List<String> tablePrefixs) {
 		DataSource dataSource = DataSourceUtilFactory
-				.getDataSourceUtil(url, driver, userName, password, DataSourceUtilTypes.HIKARI)
-				.getDataSource();
+			.getDataSourceUtil(url, driver, userName, password, DataSourceUtilTypes.HIKARI)
+			.getDataSource();
 		// 创建 screw 的配置
 		Configuration config = Configuration.builder()
-				// 版本
-				.version(version)
-				// 描述
-				.description(description)
-				// 数据源
-				.dataSource(dataSource)
-				// 引擎配置
-				.engineConfig(buildEngineConfig(EngineFileType.valueOf(engineFileType)))
-				// 处理配置
-				.produceConfig(buildProcessConfig(tableNames, tablePrefixs))
-				.build();
+			// 版本
+			.version(version)
+			// 描述
+			.description(description)
+			// 数据源
+			.dataSource(dataSource)
+			// 引擎配置
+			.engineConfig(buildEngineConfig(EngineFileType.valueOf(engineFileType)))
+			// 处理配置
+			.produceConfig(buildProcessConfig(tableNames, tablePrefixs))
+			.build();
 		return new DocumentationExecute(config).executeFile();
 	}
 
@@ -54,11 +54,11 @@ public class DataBaseDocumentServiceImpl implements DataBaseDocumentService {
 	 */
 	private EngineConfig buildEngineConfig(EngineFileType engineFileType) {
 		return EngineConfig.builder()
-				// 文件类型
-				.fileType(engineFileType)
-				// 文件类型
-				.produceType(EngineTemplateType.freemarker)
-				.build();
+			// 文件类型
+			.fileType(engineFileType)
+			// 文件类型
+			.produceType(EngineTemplateType.freemarker)
+			.build();
 	}
 
 	/**
@@ -66,19 +66,19 @@ public class DataBaseDocumentServiceImpl implements DataBaseDocumentService {
 	 */
 	private ProcessConfig buildProcessConfig(List<String> tableNames, List<String> tablePrefixs) {
 		return ProcessConfig.builder()
-				// 根据名称指定表生成
-				.designatedTableName(tableNames)
-				// 根据表前缀生成
-				.designatedTablePrefix(tablePrefixs)
-				// 根据表后缀生成
-				.designatedTableSuffix(Collections.emptyList())
-				// 忽略表名 可以传空串
-				// .ignoreTableName(Arrays.asList(""))
-				// 忽略表前缀 可以传null
-				// .ignoreTablePrefix(Collections.singletonList(""))
-				// 忽略表后缀 可以传null
-				// .ignoreTableSuffix(Collections.singletonList(""))
-				.build();
+			// 根据名称指定表生成
+			.designatedTableName(tableNames)
+			// 根据表前缀生成
+			.designatedTablePrefix(tablePrefixs)
+			// 根据表后缀生成
+			.designatedTableSuffix(Collections.emptyList())
+			// 忽略表名 可以传空串
+			// .ignoreTableName(Arrays.asList(""))
+			// 忽略表前缀 可以传null
+			// .ignoreTablePrefix(Collections.singletonList(""))
+			// 忽略表后缀 可以传null
+			// .ignoreTableSuffix(Collections.singletonList(""))
+			.build();
 	}
 
 }

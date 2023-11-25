@@ -56,12 +56,12 @@ public class ScrewTest {
 	public void screw1() throws IOException {
 		// 创建 screw 的配置
 		Configuration config = Configuration.builder()
-				.version(DOC_VERSION) // 版本
-				.description(DOC_DESCRIPTION) // 描述
-				.dataSource(buildDataSource()) // 数据源
-				.engineConfig(buildEngineConfig()) // 引擎配置
-				.produceConfig(buildProcessConfig()) // 处理配置
-				.build();
+			.version(DOC_VERSION) // 版本
+			.description(DOC_DESCRIPTION) // 描述
+			.dataSource(buildDataSource()) // 数据源
+			.engineConfig(buildEngineConfig()) // 引擎配置
+			.produceConfig(buildProcessConfig()) // 处理配置
+			.build();
 		String file = new DocumentationExecute(config).executeFile();
 
 		// 执行 screw，生成数据库文档
@@ -105,12 +105,12 @@ public class ScrewTest {
 	 */
 	private static EngineConfig buildEngineConfig() {
 		return EngineConfig.builder()
-				.fileOutputDir(FILE_OUTPUT_DIR) // 生成文件路径
-				.openOutputDir(false) // 打开目录
-				.fileType(FILE_OUTPUT_TYPE) // 文件类型
-				.produceType(EngineTemplateType.freemarker) // 文件类型
-				.fileName(DOC_FILE_NAME) // 自定义文件名称
-				.build();
+			.fileOutputDir(FILE_OUTPUT_DIR) // 生成文件路径
+			.openOutputDir(false) // 打开目录
+			.fileType(FILE_OUTPUT_TYPE) // 文件类型
+			.produceType(EngineTemplateType.freemarker) // 文件类型
+			.fileName(DOC_FILE_NAME) // 自定义文件名称
+			.build();
 	}
 
 	/**
@@ -118,13 +118,13 @@ public class ScrewTest {
 	 */
 	private static ProcessConfig buildProcessConfig() {
 		return ProcessConfig.builder()
-				.designatedTableName(Collections.<String>emptyList()) // 根据名称指定表生成
-				.designatedTablePrefix(Collections.<String>emptyList()) // 根据表前缀生成
-				.designatedTableSuffix(Collections.<String>emptyList()) // 根据表后缀生成
-				.ignoreTableName(Arrays.asList("test_user", "test_group")) // 忽略表名
-				.ignoreTablePrefix(Collections.singletonList("test_")) // 忽略表前缀
-				.ignoreTableSuffix(Collections.singletonList("_test")) // 忽略表后缀
-				.build();
+			.designatedTableName(Collections.<String>emptyList()) // 根据名称指定表生成
+			.designatedTablePrefix(Collections.<String>emptyList()) // 根据表前缀生成
+			.designatedTableSuffix(Collections.<String>emptyList()) // 根据表后缀生成
+			.ignoreTableName(Arrays.asList("test_user", "test_group")) // 忽略表名
+			.ignoreTablePrefix(Collections.singletonList("test_")) // 忽略表前缀
+			.ignoreTableSuffix(Collections.singletonList("_test")) // 忽略表后缀
+			.build();
 	}
 
 }

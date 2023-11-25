@@ -33,9 +33,7 @@ jobs:
         java-version: ${{ matrix.java }}
         distribution: 'temurin'
         cache: maven
-    - if: ${{ matrix.os != ubuntu-latest }}
-      name: Check spring-javaformat
-      run: mvn spring-javaformat:validate  
-
     - name: Build with Maven
       run: mvn -B package --file pom.xml '-Dmaven.test.skip=true'
+    - name: Check spring-javaformat
+      run: mvn spring-javaformat:validate

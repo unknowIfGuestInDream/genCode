@@ -50,7 +50,7 @@ public class DataSourceUtilFactory {
 	public static DataSourceUtil getDataSourceUtil(String url, String driver, String userName, String password,
 			int dataSourceUtilType) {
 		return Optional.ofNullable(DataSourceUtilFactory.getDataSourceUtil(url + userName))
-				.orElseGet(() -> createDataSourceUtil(url, driver, userName, password, dataSourceUtilType));
+			.orElseGet(() -> createDataSourceUtil(url, driver, userName, password, dataSourceUtilType));
 	}
 
 	/**

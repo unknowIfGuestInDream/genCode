@@ -16,6 +16,7 @@
     <description>代码生成</description>
     <properties>
         <java.version>11</java.version>
+        <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
         <log4j2.version>2.17.0</log4j2.version>
         <druid-spring-boot-starter.version>1.2.20</druid-spring-boot-starter.version>
         <mysql-connector-java.version>5.1.49</mysql-connector-java.version>
@@ -25,6 +26,10 @@
         <screw-core.version>1.0.6-SNAPSHOT</screw-core.version>
         <tlcsdm-common.version>1.4.5</tlcsdm-common.version>
         <spring-javaformat.version>0.0.40</spring-javaformat.version>
+        <maven-javadoc-plugin.version>3.6.2</maven-javadoc-plugin.version>
+        <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
+        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
+        <maven-help-plugin.version>3.4.0</maven-help-plugin.version>
     </properties>
     <dependencies>
         <dependency>
@@ -120,22 +125,22 @@
     <build>
         <finalName>genCode</finalName>
         <plugins>
-	   <plugin>
-	       <groupId>io.spring.javaformat</groupId>
-	       <artifactId>spring-javaformat-maven-plugin</artifactId>
-	       <version>${spring-javaformat.version}</version>
+            <plugin>
+                <groupId>io.spring.javaformat</groupId>
+                <artifactId>spring-javaformat-maven-plugin</artifactId>
+                <version>${spring-javaformat.version}</version>
                 <executions>
-		  <execution>
-		      <phase>validate</phase>
-		      <configuration>
-			 <skip>true</skip>
-		      </configuration>
-		      <goals>
-		          <goal>validate</goal>
-		      </goals>
-		  </execution>
-	       </executions>
-	   </plugin>   
+                    <execution>
+                        <phase>validate</phase>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                        <goals>
+                            <goal>validate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -164,7 +169,8 @@
                     <!--是否生成"git.properties"文件;默认值:false;-->
                     <generateGitPropertiesFile>true</generateGitPropertiesFile>
                     <!--指定"git.properties"文件的存放路径(相对于${project.basedir}的一个路径);-->
-                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties
+                    </generateGitPropertiesFilename>
                     <!--".git"文件夹未找到时,构建是否失败;若设置true,则构建失败;若设置false,则跳过执行该目标;默认值:true;-->
                     <failOnNoGitDirectory>true</failOnNoGitDirectory>
                     <format>json</format>
@@ -186,6 +192,66 @@
                         <forceLongFormat>false</forceLongFormat>
                     </gitDescribe>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.version}</version>
+                <configuration>
+                    <show>private</show>
+                    <failOnError>false</failOnError>
+                    <nohelp>true</nohelp>
+                    <charset>UTF-8</charset>
+                    <encoding>UTF-8</encoding>
+                    <docencoding>UTF-8</docencoding>
+                    <additionalJOptions>
+                        <additionalJOption>-Xdoclint:none</additionalJOption>
+                    </additionalJOptions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven-jar-plugin.version}</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Built-By>${user.name}</Built-By>
+                            <Build-Os>${os.name} (${os.version}; (${os.arch})</Build-Os>
+                            <Build-Jdk>${java.vendor} ${java.version}</Build-Jdk>
+                            <Build-Day>${maven.build.timestamp}</Build-Day>
+                        </manifestEntries>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-help-plugin</artifactId>
+                <version>${maven-help-plugin.version}</version>
             </plugin>
         </plugins>
     </build>

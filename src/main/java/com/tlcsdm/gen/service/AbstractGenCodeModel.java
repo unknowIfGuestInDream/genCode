@@ -227,7 +227,7 @@ public abstract class AbstractGenCodeModel extends AbstractFreeMarkerTemplate im
 			}
 			else if (selType == 1) {
 				selBuildParams
-						.add("            sql += \" and " + selParam + " like '%' || :" + selParam + " || '%'\";");
+					.add("            sql += \" and " + selParam + " like '%' || :" + selParam + " || '%'\";");
 			}
 			selBuildParams.add("            paramMap.put(\"" + selParam + "\", " + selParam + ");");
 			selBuildParams.add("        }");
