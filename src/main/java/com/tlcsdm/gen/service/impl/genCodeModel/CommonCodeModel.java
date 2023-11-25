@@ -82,8 +82,8 @@ public class CommonCodeModel extends AbstractGenCodeModel {
 			}
 			else {
 				exportParamUrl
-						.add("'" + (i == 0 ? "" : "&") + selParams.get(i) + "=' + encodeURIComponent(Ext.getCmp(\""
-								+ selParams.get(i) + "\")." + (paramIsDate ? "getSubmitValue()" : "getValue()") + ")");
+					.add("'" + (i == 0 ? "" : "&") + selParams.get(i) + "=' + encodeURIComponent(Ext.getCmp(\""
+							+ selParams.get(i) + "\")." + (paramIsDate ? "getSubmitValue()" : "getValue()") + ")");
 			}
 		}
 		objectMap.put("common_exportParamUrl", exportParamUrl.toString());
@@ -245,12 +245,12 @@ public class CommonCodeModel extends AbstractGenCodeModel {
 			JavaClass javaClass = JavaClass.fromCode(paramJavaClass.get(i));
 			boolean paramIsDate = javaClass == JavaClass.Date;
 			viewForm
-					.add("{\n" + "                xtype: 'displayfield',\n" + "                name: '" + params.get(i)
-							+ "',\n" + "                fieldLabel: '" + paramDescs.get(i) + "'" + (paramIsDate ? "," : "")
-							+ "\n"
-							+ (paramIsDate ? "                renderer: function (value) {\n"
-							+ "                    return value.replace('.0', '');\n" + "                }\n" : "")
-							+ "            }");
+				.add("{\n" + "                xtype: 'displayfield',\n" + "                name: '" + params.get(i)
+						+ "',\n" + "                fieldLabel: '" + paramDescs.get(i) + "'" + (paramIsDate ? "," : "")
+						+ "\n"
+						+ (paramIsDate ? "                renderer: function (value) {\n"
+								+ "                    return value.replace('.0', '');\n" + "                }\n" : "")
+						+ "            }");
 		}
 	}
 

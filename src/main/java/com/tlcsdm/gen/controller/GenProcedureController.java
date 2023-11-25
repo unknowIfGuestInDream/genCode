@@ -70,13 +70,13 @@ public class GenProcedureController {
 	public Map<String, Object> selectProcedures(String url, String driver, String userName, String password,
 			@RequestParam(required = false, defaultValue = "") String name) {
 		List<Map<String, Object>> list = CacheManage.PROCEDURES_CACHE
-				.get(url.replaceAll("/", "") + userName + name + "procedures");
+			.get(url.replaceAll("/", "") + userName + name + "procedures");
 		// 缓存方案 url+用户名+查询条件为主键
 		// 存储过程名称条件为空代表全查询 缓存一天，否则缓存一分钟
 		if (list == null) {
 			DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
 			DataBaseProcedureService dbProcedure = DataBaseProcedureFactory
-					.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
+				.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
 			list = dataSourceUtil.executeQuery(dbProcedure.selectProcedures(name));
 			CacheManage.PROCEDURES_CACHE.put(url.replaceAll("/", "") + userName + name + "procedures", list,
 					StringUtils.isEmpty(name) ? Cache.CACHE_HOLD_FOREVER : Cache.CACHE_HOLD_30MINUTE);
@@ -100,7 +100,7 @@ public class GenProcedureController {
 		DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
 		// 获取数据库过程sql
 		DataBaseProcedureService dbProcedure = DataBaseProcedureFactory
-				.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
+			.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
 		String result = dbProcedure.loadProcedure(name, dataSourceUtil);
 		return BaseUtils.success(result);
 	}
@@ -128,12 +128,12 @@ public class GenProcedureController {
 		DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
 		// 获取生成代码模版
 		AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory
-				.getGenProcedureModel(GenProcedureModelType.fromCode(genProcedureModelType));
+			.getGenProcedureModel(GenProcedureModelType.fromCode(genProcedureModelType));
 		// 获取命名规范
 		NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromCode(nameConventType));
 		// 获取数据库过程sql
 		DataBaseProcedureService dbProcedure = DataBaseProcedureFactory
-				.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
+			.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
 		Map<String, Object> result = genProcedureModel.genCode(moduleName, packageName, userName, procedureNameList,
 				author, nameConvent, dbProcedure, dataSourceUtil, freeMarkerConfigurer.getConfiguration());
 		return BaseUtils.success(result);
@@ -162,13 +162,13 @@ public class GenProcedureController {
 			ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
 			// 获取生成代码模版
 			AbstractGenProcedureModel genProcedureModel = AbstractGenProcedureModelFactory
-					.getGenProcedureModel(GenProcedureModelType.fromCode(genProcedureModelType));
+				.getGenProcedureModel(GenProcedureModelType.fromCode(genProcedureModelType));
 			// 获取命名规范
 			NameConventService nameConvent = NameConventFactory
-					.getNameConvent(NameConventType.fromCode(nameConventType));
+				.getNameConvent(NameConventType.fromCode(nameConventType));
 			// 获取数据库过程sql
 			DataBaseProcedureService dbProcedure = DataBaseProcedureFactory
-					.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
+				.getDataBaseProcedure(DataBaseType.fromTypeName(driver));
 			Map<String, Object> map = genProcedureModel.genCode(moduleName, packageName, userName, procedureNameList,
 					author, nameConvent, dbProcedure, dataSourceUtil, freeMarkerConfigurer.getConfiguration());
 			List<String> list = (List<String>) map.get("list");

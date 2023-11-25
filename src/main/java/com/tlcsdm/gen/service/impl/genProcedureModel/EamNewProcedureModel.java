@@ -35,9 +35,9 @@ public class EamNewProcedureModel extends AbstractGenProcedureModel {
 				nameConvent, dbProcedure, dataSourceUtil, configuration);
 		// ant design pro规范
 		String controllerMethod = result.get("controllerMethod")
-				.toString()
-				.replace("V_PAGESIZE", "pageSize")
-				.replace("V_PAGE", "current");
+			.toString()
+			.replace("V_PAGESIZE", "pageSize")
+			.replace("V_PAGE", "current");
 		result.replace("controllerMethod", controllerMethod);
 		return result;
 	}

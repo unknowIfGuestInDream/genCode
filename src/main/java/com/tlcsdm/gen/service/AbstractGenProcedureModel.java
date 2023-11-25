@@ -186,7 +186,7 @@ public abstract class AbstractGenProcedureModel extends AbstractFreeMarkerTempla
 		for (int i = 0; i < length; i++) {
 			String procedureName = procedureNameList.get(i);
 			List<Map<String, Object>> list = dataSourceUtil
-					.executeQuery(dbProcedure.selectArguments(userName.toUpperCase(), procedureName.toUpperCase()));
+				.executeQuery(dbProcedure.selectArguments(userName.toUpperCase(), procedureName.toUpperCase()));
 			// 方法传参
 			StringJoiner inParams = new StringJoiner(", ");
 			// 入参

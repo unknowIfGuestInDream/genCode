@@ -189,7 +189,7 @@ public class AntdCodeModel extends AbstractGenCodeModel {
 			// 为日期类型且是区间查询
 			if (paramIsDate && selType.get(i) == 2) {
 				selControllerDate
-						.add("        END_" + selParams.get(i) + " = BaseUtils.addOneDay(END_" + selParams.get(i) + ");");
+					.add("        END_" + selParams.get(i) + " = BaseUtils.addOneDay(END_" + selParams.get(i) + ");");
 			}
 		}
 		objectMap.put("antd_selControllerDate", selControllerDate.toString());

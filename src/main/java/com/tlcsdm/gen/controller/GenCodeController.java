@@ -86,7 +86,7 @@ public class GenCodeController {
 		moduleName = BaseUtils.toUpperCase4Index(moduleName);
 		// 获取生成代码模版
 		AbstractGenCodeModel codeModel = AbstractGenCodeModelFactory
-				.getGenCodeModel(GenCodeModelType.fromCode(genCodeModelType));
+			.getGenCodeModel(GenCodeModelType.fromCode(genCodeModelType));
 		Map<String, Object> result = codeModel.genCodeByTable(tableName, tableDesc, moduleName, moduleDesc, packageName,
 				author, hasDelBatch, hasExport, hasView, driver, params, paramDescs, paramJavaClass, priParamIndex,
 				selParamsIndex, selType, insParamIndex, updParamIndex, orderParamIndex, orderParamTypes,
@@ -125,7 +125,7 @@ public class GenCodeController {
 			ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
 			// 获取生成代码模版
 			AbstractGenCodeModel codeModel = AbstractGenCodeModelFactory
-					.getGenCodeModel(GenCodeModelType.fromCode(genCodeModelType));
+				.getGenCodeModel(GenCodeModelType.fromCode(genCodeModelType));
 			Map<String, Object> map = codeModel.genCodeByTable(tableName, tableDesc, moduleName, moduleDesc,
 					packageName, author, hasDelBatch, hasExport, hasView, driver, params, paramDescs, paramJavaClass,
 					priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex, orderParamIndex,

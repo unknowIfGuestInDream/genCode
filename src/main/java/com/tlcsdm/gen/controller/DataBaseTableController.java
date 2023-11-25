@@ -84,13 +84,13 @@ public class DataBaseTableController {
 	public Map<String, Object> selectTables(@RequestParam(required = false, defaultValue = "") String name,
 			String schema, String url, String driver, String userName, String password) {
 		List<Map<String, Object>> list = CacheManage.TABLES_CACHE
-				.get(url.replaceAll("/", "") + userName + name + "tables");
+			.get(url.replaceAll("/", "") + userName + name + "tables");
 		// 缓存方案 url+用户名 + 查询条件为主键
 		// 存储过程名称条件为空代表全查询一直缓存，否则30分钟
 		if (list == null) {
 			DataSourceUtil dataSourceUtil = DataSourceUtilFactory.getDataSourceUtil(url, driver, userName, password);
 			DataBaseTableService dataBaseTable = DataBaseTableFactory
-					.getDataBaseTable(DataBaseType.fromTypeName(driver));
+				.getDataBaseTable(DataBaseType.fromTypeName(driver));
 			list = dataBaseTable.selectTables(name, schema, dataSourceUtil);
 			CacheManage.TABLES_CACHE.put(url.replaceAll("/", "") + userName + name + "tables", list,
 					StringUtils.isEmpty(name) ? Cache.CACHE_HOLD_FOREVER : Cache.CACHE_HOLD_30MINUTE);
@@ -148,7 +148,7 @@ public class DataBaseTableController {
 		NameConventService nameConvent = NameConventFactory.getNameConvent(NameConventType.fromCode(nameConventType));
 		// 获取表生成存储过程实现类
 		AbstractTableToProcedure tableToProcedure = AbstractTableToProcedureFactory
-				.getTableToProcedure(DataBaseType.fromTypeName(driver));
+			.getTableToProcedure(DataBaseType.fromTypeName(driver));
 		return BaseUtils.success(tableToProcedure.genProceduresByTable(tableName, tableDesc, params, paramTypes,
 				paramDescs, priParamIndex, selParamsIndex, selType, insParamIndex, updParamIndex, orderParamIndex,
 				orderParamTypes, nameConvent, freeMarkerConfigurer.getConfiguration()));
@@ -161,9 +161,9 @@ public class DataBaseTableController {
 	@Log(title = "数据库表管理", operateType = "生成主键id的sql")
 	public Map<String, Object> genAutoInsKey(String tableName, String primaryKey, String driver) {
 		AbstractTableToProcedure tableToProcedure = AbstractTableToProcedureFactory
-				.getTableToProcedure(DataBaseType.fromTypeName(driver));
+			.getTableToProcedure(DataBaseType.fromTypeName(driver));
 		return BaseUtils
-				.success(tableToProcedure.genAutoInsKey(tableName, primaryKey, freeMarkerConfigurer.getConfiguration()));
+			.success(tableToProcedure.genAutoInsKey(tableName, primaryKey, freeMarkerConfigurer.getConfiguration()));
 	}
 
 }
