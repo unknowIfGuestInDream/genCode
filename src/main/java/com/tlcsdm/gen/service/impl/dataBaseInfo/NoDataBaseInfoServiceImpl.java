@@ -44,7 +44,8 @@ public class NoDataBaseInfoServiceImpl implements DataBaseInfoService {
 
 	@Override
 	public Map<String, Object> loadDataBaseInfo(String ID) {
-		List<Map<String, Object>> list = DataBaseInfoList.stream().filter(m -> m.get("ID").equals(ID))
+		List<Map<String, Object>> list = DataBaseInfoList.stream()
+				.filter(m -> m.get("ID").equals(ID))
 				.collect(Collectors.toList());
 		return list.size() > 0 ? list.get(0) : new HashMap<>();
 	}

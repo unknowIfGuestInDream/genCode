@@ -31,7 +31,8 @@ public class DataBaseDocumentServiceImpl implements DataBaseDocumentService {
 			String description, String fileName, String engineFileType, List<String> tableNames,
 			List<String> tablePrefixs) {
 		DataSource dataSource = DataSourceUtilFactory
-				.getDataSourceUtil(url, driver, userName, password, DataSourceUtilTypes.HIKARI).getDataSource();
+				.getDataSourceUtil(url, driver, userName, password, DataSourceUtilTypes.HIKARI)
+				.getDataSource();
 		// 创建 screw 的配置
 		Configuration config = Configuration.builder()
 				// 版本
@@ -43,7 +44,8 @@ public class DataBaseDocumentServiceImpl implements DataBaseDocumentService {
 				// 引擎配置
 				.engineConfig(buildEngineConfig(EngineFileType.valueOf(engineFileType)))
 				// 处理配置
-				.produceConfig(buildProcessConfig(tableNames, tablePrefixs)).build();
+				.produceConfig(buildProcessConfig(tableNames, tablePrefixs))
+				.build();
 		return new DocumentationExecute(config).executeFile();
 	}
 
@@ -55,7 +57,8 @@ public class DataBaseDocumentServiceImpl implements DataBaseDocumentService {
 				// 文件类型
 				.fileType(engineFileType)
 				// 文件类型
-				.produceType(EngineTemplateType.freemarker).build();
+				.produceType(EngineTemplateType.freemarker)
+				.build();
 	}
 
 	/**

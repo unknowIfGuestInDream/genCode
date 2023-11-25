@@ -129,8 +129,8 @@ public class OracleTableToProc extends AbstractTableToProcedure {
 		for (int i = 0, length = insParams.size(); i < length; i++) {
 			insField.add(insParams.get(i));
 			insValueParams.add(nameConvent.genProcInParamName(insParams.get(i), insParamTypes.get(i)));
-			insInParams.add(
-					nameConvent.genSelProcInParam(insParams.get(i), insParamTypes.get(i), insParamDescs.get(i), 0));
+			insInParams
+					.add(nameConvent.genSelProcInParam(insParams.get(i), insParamTypes.get(i), insParamDescs.get(i), 0));
 		}
 		// 添加出参字段, 出参类型和出参信息
 		String message = nameConvent.getProcOutParamName("message");
@@ -165,10 +165,10 @@ public class OracleTableToProc extends AbstractTableToProcedure {
 			updInParams.add(nameConvent.genSelProcInParam(primarys.get(i), primaryTypes.get(i), primaryDesc.get(i), 0));
 		}
 		for (int i = 0, length = updParams.size(); i < length; i++) {
-			updSqlParams.add(
-					updParams.get(i) + " = " + nameConvent.genProcInParamName(updParams.get(i), updParamTypes.get(i)));
-			updInParams.add(
-					nameConvent.genSelProcInParam(updParams.get(i), updParamTypes.get(i), updParamDescs.get(i), 0));
+			updSqlParams
+					.add(updParams.get(i) + " = " + nameConvent.genProcInParamName(updParams.get(i), updParamTypes.get(i)));
+			updInParams
+					.add(nameConvent.genSelProcInParam(updParams.get(i), updParamTypes.get(i), updParamDescs.get(i), 0));
 		}
 		// 添加出参字段, 出参类型和出参信息
 		String message = nameConvent.getProcOutParamName("message");
@@ -205,10 +205,10 @@ public class OracleTableToProc extends AbstractTableToProcedure {
 					.add(nameConvent.genSelProcInParam(primarys.get(i), primaryTypes.get(i), primaryDesc.get(i), 0));
 		}
 		for (int i = 0, length = updParams.size(); i < length; i++) {
-			updSqlParams.add(
-					updParams.get(i) + " = " + nameConvent.genProcInParamName(updParams.get(i), updParamTypes.get(i)));
-			saveInParams.add(
-					nameConvent.genSelProcInParam(updParams.get(i), updParamTypes.get(i), updParamDescs.get(i), 0));
+			updSqlParams
+					.add(updParams.get(i) + " = " + nameConvent.genProcInParamName(updParams.get(i), updParamTypes.get(i)));
+			saveInParams
+					.add(nameConvent.genSelProcInParam(updParams.get(i), updParamTypes.get(i), updParamDescs.get(i), 0));
 		}
 		// 新增语句字段
 		StringJoiner insField = new StringJoiner(", ");

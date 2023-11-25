@@ -162,8 +162,8 @@ public class DataBaseTableController {
 	public Map<String, Object> genAutoInsKey(String tableName, String primaryKey, String driver) {
 		AbstractTableToProcedure tableToProcedure = AbstractTableToProcedureFactory
 				.getTableToProcedure(DataBaseType.fromTypeName(driver));
-		return BaseUtils.success(
-				tableToProcedure.genAutoInsKey(tableName, primaryKey, freeMarkerConfigurer.getConfiguration()));
+		return BaseUtils
+				.success(tableToProcedure.genAutoInsKey(tableName, primaryKey, freeMarkerConfigurer.getConfiguration()));
 	}
 
 }

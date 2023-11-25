@@ -18,24 +18,35 @@ public class UriComponentsTest {
 	// 构造一个简单的URI
 	@Test
 	public void UriComponents1() {
-		UriComponents uriComponents = UriComponentsBuilder.newInstance().scheme("http").host("www.github.com")
-				.path("/constructing-uri").queryParam("name", "tom").build();
+		UriComponents uriComponents = UriComponentsBuilder.newInstance()
+				.scheme("http")
+				.host("www.github.com")
+				.path("/constructing-uri")
+				.queryParam("name", "tom")
+				.build();
 		System.out.println(uriComponents.toUriString());
 	}
 
 	// 构造一个编码的URI
 	@Test
 	public void UriComponents2() {
-		UriComponents uriComponents = UriComponentsBuilder.newInstance().scheme("http").host("www.github.com")
-				.path("/constructing uri").build().encode();
+		UriComponents uriComponents = UriComponentsBuilder.newInstance()
+				.scheme("http")
+				.host("www.github.com")
+				.path("/constructing uri")
+				.build()
+				.encode();
 		System.out.println(uriComponents.toUriString());
 	}
 
 	// 通过模板构造URI
 	@Test
 	public void UriComponents3() {
-		UriComponents uriComponents = UriComponentsBuilder.newInstance().scheme("http").host("www.github.com")
-				.path("/&#123;path-name&#125;").query("name=&#123;keyword&#125;")
+		UriComponents uriComponents = UriComponentsBuilder.newInstance()
+				.scheme("http")
+				.host("www.github.com")
+				.path("/&#123;path-name&#125;")
+				.query("name=&#123;keyword&#125;")
 				.buildAndExpand("constructing-uri", "tomcat");
 		System.out.println(uriComponents.toUriString());
 	}
