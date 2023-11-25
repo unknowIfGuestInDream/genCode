@@ -35,6 +35,5 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml '-Dmaven.test.skip=true'
-    - if: ${{ matrix.os != ubuntu-latest }}
-      name: Check spring-javaformat
+    - name: Check spring-javaformat
       run: mvn spring-javaformat:validate
