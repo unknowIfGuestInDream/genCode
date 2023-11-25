@@ -33,7 +33,7 @@ jobs:
         java-version: ${{ matrix.java }}
         distribution: 'temurin'
         cache: maven
-    - if: ${{ matrix.os }} != ubuntu-latest
+    - if: ${{ matrix.os != ubuntu-latest }}
       name: Check spring-javaformat
       run: mvn spring-javaformat:validate  
 
