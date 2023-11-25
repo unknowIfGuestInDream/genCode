@@ -1,6 +1,6 @@
 ## 项目介绍
 
-当前项目基于java11, 1.8版本请查看分支genCode-3.3
+当前项目基于java17, 1.8版本请查看分支genCode-3.3, 11版本请查看分支genCode-4.1
 
 本项目功能：
 
@@ -39,14 +39,14 @@ druid监控账号密码默认都为admin
 运行后访问 [http://localhost:8669/gen/](http://localhost:8669/gen/)
 
 ## 数据库支持
-功能 | oracle | mysql | mariadb | sqlserver
-----|----|----|----|----
-数据源管理| √ | √ | √ | √
-存储过程生成代码| √ | √ | √ | √
-表生成存储过程| √ | - | - | -
-表生成自增主键| √ | √ | √ | -
-生成数据库表文档| √ | √ | √ | √
-表生成代码| √ | √ | - | -
+| 功能       | oracle | mysql | mariadb | sqlserver |
+|----------|--------|-------|---------|-----------|
+| 数据源管理    | √      | √     | √       | √         |
+| 存储过程生成代码 | √      | √     | √       | √         |
+| 表生成存储过程  | √      | -     | -       | -         |
+| 表生成自增主键  | √      | √     | √       | -         |
+| 生成数据库表文档 | √      | √     | √       | √         |
+| 表生成代码    | √      | √     | -       | -         |
 
 ## 项目代码介绍
 * NameConventService 命名规范
@@ -74,7 +74,7 @@ druid监控账号密码默认都为admin
 
 ## 感谢
 
-- <a href="https://jb.gg/OpenSource"><img src="http://static.xkcoding.com/spring-boot-demo/064312.jpg" width="100px" alt="jetbrains">
+- <a href="https://jb.gg/OpenSource"><img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png?_gl=1*98642y*_ga*MTIxMDA5OTM5Ni4xNjgwMzQyNjgy*_ga_9J976DJZ68*MTY4MTIxMDIzMy41LjEuMTY4MTIxMTE1MS4wLjAuMA..&_ga=2.268101710.1369693703.1681210234-1210099396.1680342682" width="100px" alt="jetbrains">
 - **感谢 JetBrains 提供的免费开源 License**</a>
 
 ## 其它
