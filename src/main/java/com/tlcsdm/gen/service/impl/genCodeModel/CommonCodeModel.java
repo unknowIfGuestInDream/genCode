@@ -9,7 +9,11 @@ import com.tlcsdm.gen.util.template.FreeMarkerUtil;
 import freemarker.template.Configuration;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * 大连常用模版
@@ -240,13 +244,12 @@ public class CommonCodeModel extends AbstractGenCodeModel {
 			}
 			JavaClass javaClass = JavaClass.fromCode(paramJavaClass.get(i));
 			boolean paramIsDate = javaClass == JavaClass.Date;
-			viewForm.add(
-					"{\n" + "                xtype: 'displayfield',\n" + "                name: '" + params.get(i)
-							+ "',\n" + "                fieldLabel: '" + paramDescs.get(i) + "'"
-							+ (paramIsDate ? "," : "") + "\n"
+			viewForm
+					.add("{\n" + "                xtype: 'displayfield',\n" + "                name: '" + params.get(i)
+							+ "',\n" + "                fieldLabel: '" + paramDescs.get(i) + "'" + (paramIsDate ? "," : "")
+							+ "\n"
 							+ (paramIsDate ? "                renderer: function (value) {\n"
-									+ "                    return value.replace('.0', '');\n" + "                }\n"
-									: "")
+							+ "                    return value.replace('.0', '');\n" + "                }\n" : "")
 							+ "            }");
 		}
 	}
