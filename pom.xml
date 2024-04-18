@@ -28,7 +28,7 @@
         <spring-javaformat.version>0.0.41</spring-javaformat.version>
         <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
-        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
+        <maven-jar-plugin.version>3.4.0</maven-jar-plugin.version>
         <maven-help-plugin.version>3.4.0</maven-help-plugin.version>
     </properties>
     <dependencies>
