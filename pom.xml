@@ -29,7 +29,7 @@
         <maven-javadoc-plugin.version>3.7.0</maven-javadoc-plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-jar-plugin.version>3.4.1</maven-jar-plugin.version>
-        <maven-help-plugin.version>3.4.0</maven-help-plugin.version>
+        <maven-help-plugin.version>3.4.1</maven-help-plugin.version>
     </properties>
     <dependencies>
         <dependency>
