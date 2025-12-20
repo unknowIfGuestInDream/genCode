@@ -1,13 +1,9 @@
 package com.tlcsdm.gen.config;
 
-import com.tlcsdm.gen.service.RpcService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter;
-import org.springframework.remoting.rmi.RmiServiceExporter;
 
 /**
  * RMI远程调用配置
@@ -54,40 +50,13 @@ import org.springframework.remoting.rmi.RmiServiceExporter;
  * @since: 1.0
  */
 @Configuration
-@RequiredArgsConstructor
+@Slf4j
 @ConditionalOnProperty(name = "gen.rpc.enabled", havingValue = "true")
 public class RpcConfig {
 
-	private final RpcService rpcService;
-
-	@Value("${gen.rpc.rmiPort}")
-	private int rmiPort;
-
-	@Value("${gen.rpc.rmiServiceName}")
-	private String rmiServiceName;
-
-	@Bean
-	@ConditionalOnProperty(name = "gen.rpc.rmi", havingValue = "true")
-	public RmiServiceExporter getRmiServiceExporter() {
-		RmiServiceExporter rmiServiceExporter = new RmiServiceExporter();
-		rmiServiceExporter.setServiceName(rmiServiceName);
-		rmiServiceExporter.setService(rpcService);
-		rmiServiceExporter.setServiceInterface(RpcService.class);
-		rmiServiceExporter.setRegistryPort(rmiPort);
-		return rmiServiceExporter;
-	}
-
-	/**
-	 * org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping 它的作用就是把Spring
-	 * MVC上下文中以“/”开头的Bean进行对外提供服务
-	 */
-	@Bean("/invoker")
-	@ConditionalOnProperty(name = "gen.rpc.httpInvoker", havingValue = "true")
-	public HttpInvokerServiceExporter getHttpInvokerServiceExporter() {
-		HttpInvokerServiceExporter httpInvokerServiceExporter = new HttpInvokerServiceExporter();
-		httpInvokerServiceExporter.setService(rpcService);
-		httpInvokerServiceExporter.setServiceInterface(RpcService.class);
-		return httpInvokerServiceExporter;
+	@PostConstruct
+	public void warnRpcRemoval() {
+		log.warn("RMI/HttpInvoker remoting endpoints are not available with Spring Framework 6; RPC exporters are skipped.");
 	}
 
 }

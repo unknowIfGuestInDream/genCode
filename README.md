@@ -1,6 +1,6 @@
 ## 项目介绍
 
-当前项目基于java17, 1.8版本请查看分支genCode-3.3, 11版本请查看分支genCode-4.1
+当前项目基于java17与Spring Boot 3，1.8版本请查看分支genCode-3.3, 11版本请查看分支genCode-4.1
 
 本项目功能：
 
