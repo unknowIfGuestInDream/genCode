@@ -53,10 +53,10 @@ mvn spring-javaformat:apply
 ### Run Application
 ```bash
 # With database (default)
-java -jar target/genCode-4.1.jar
+java -jar target/genCode-*.jar
 
 # Without database (in-memory mode)
-java -Dgen.isdb=false -jar target/genCode-4.1.jar
+java -Dgen.isdb=false -jar target/genCode-*.jar
 ```
 
 **Default Access:** http://localhost:8669/gen/  
