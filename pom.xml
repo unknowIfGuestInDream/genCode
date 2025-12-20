@@ -54,6 +54,7 @@
                 </exclusion>
 			</exclusions>
 		</dependency>
+		<!-- tlcsdm-common still depends on javax.servlet packages; include runtime API to keep those classes available -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
