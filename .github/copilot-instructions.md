@@ -17,7 +17,7 @@ genCode is a Java-based code generation tool that helps developers automatically
 ## Technology Stack
 
 - **Backend:** Spring Boot 2.7.18
-- **Java Version:** Java 11 (current branch), Java 17 available in master branch
+- **Java Version:** Java 11 (genCode-4.1 branch), Java 17 (master branch), Java 1.8 (genCode-3.3 branch)
 - **Build Tool:** Maven
 - **Connection Pool:** Druid
 - **Template Engine:** FreeMarker
@@ -43,10 +43,10 @@ mvn test
 
 ### Code Style Check
 ```bash
-# Validate Spring Java Format (Java 17+ only)
+# Validate Spring Java Format (requires Java 17+, skip on Java 11)
 mvn spring-javaformat:validate
 
-# Apply Spring Java Format
+# Apply Spring Java Format (requires Java 17+, skip on Java 11)
 mvn spring-javaformat:apply
 ```
 
