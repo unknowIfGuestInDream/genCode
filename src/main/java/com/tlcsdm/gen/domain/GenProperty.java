@@ -26,24 +26,7 @@ public class GenProperty {
 
 	private Boolean async;
 
-	private GenRpc rpc = new GenRpc();
-
 	private GenShutDown shutdown = new GenShutDown();
-
-	@Data
-	private static class GenRpc {
-
-		private Boolean enabled;
-
-		private Boolean rmi;
-
-		private int rmiPort;
-
-		private String rmiServiceName;
-
-		private Boolean httpInvoker;
-
-	}
 
 	@Data
 	private static class GenShutDown {

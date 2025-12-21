@@ -103,23 +103,14 @@ thread:
 ## isdb: 配置项目是否有数据库，默认有数据库，false为内存存储
 ## schedule: 定时任务开关
 ## async: 异步开关
-## rpc: enabled rpc开关
-## rpc: rmi RMI远程调用开关
-## rpc: httpInvoker HttpInvoker开关
 ## shutdown: enabled shutdown接口开关，用于通过请求关闭项目
 ## shutdown: password shutdown接口请求密钥
 gen:
-  isdb: true
+  isdb: false
   schedule: ${schedule.enabled}
   async: ${thread.enabled}
   version: @version@
   author: unknowIfGuestInDream
-  rpc:
-    enabled: true
-    rmi: false
-    rmiPort: 8769
-    rmiServiceName: rpcService
-    httpInvoker: true
   shutdown:
     enabled: true
     password: gen
