@@ -2,16 +2,14 @@ server:
   port: 8669
   servlet:
     context-path: /gen
-  undertow:
+  tomcat:
     accesslog:
-      enabled: true # 是否打开 undertow 日志，默认为 false
-      dir: logs/gen # 设置访问日志所在目录
+      enabled: true
+      directory: logs/gen
     threads:
-      io: 8
-      worker: 256
-    buffer-size: 1024
-    direct-buffers: true
-    allow-encoded-slash: true
+      min-spare: 8
+      max: 256
+    allow-encoded-slashes: true
   shutdown: graceful
 spring:
   application:
@@ -103,23 +101,14 @@ thread:
 ## isdb: 配置项目是否有数据库，默认有数据库，false为内存存储
 ## schedule: 定时任务开关
 ## async: 异步开关
-## rpc: enabled rpc开关
-## rpc: rmi RMI远程调用开关
-## rpc: httpInvoker HttpInvoker开关
 ## shutdown: enabled shutdown接口开关，用于通过请求关闭项目
 ## shutdown: password shutdown接口请求密钥
 gen:
-  isdb: true
+  isdb: false
   schedule: ${schedule.enabled}
   async: ${thread.enabled}
   version: @version@
   author: unknowIfGuestInDream
-  rpc:
-    enabled: true
-    rmi: false
-    rmiPort: 8769
-    rmiServiceName: rpcService
-    httpInvoker: true
   shutdown:
     enabled: true
     password: gen

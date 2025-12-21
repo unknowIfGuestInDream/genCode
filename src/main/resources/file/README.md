@@ -53,7 +53,6 @@ druid监控账号密码默认都为admin
 * AbstractTableToProcedure 表生成过程相关接口
 * AbstractGenCodeModel 表生成代码相关接口
 * DataBaseDocumentService 生成数据库文档
-* RpcService RMI远程调用服务(试验用)
 
 ## 新增规范，模板以及数据库
 * 如需要添加自己的命名规范则新增 NameConventService 的实现类并新增枚举类NameConventType参数,
