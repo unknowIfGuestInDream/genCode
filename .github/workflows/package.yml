@@ -8,21 +8,106 @@ permissions:
 
 jobs:
   package:
-    runs-on: ubuntu-latest
+    name: Package on ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+    runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v6
-    - name: Set up JDK 17
-      uses: actions/setup-java@v5
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: maven
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml '-Dmaven.test.skip=true'
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: genCode
-        path: target/genCode.jar
-        retention-days: 1
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Cache Maven packages
+        uses: actions/cache@v5
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build with Maven
+        shell: bash
+        run: mvn -B clean package --no-transfer-progress -DskipTests
+
+      - name: Resolve version & stage files (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $versionOutput = & mvn -q -DforceStdout 'help:evaluate' -Dexpression='project.version' 2>$null
+          $version = $versionOutput.Trim()
+          if (-not $version) { throw 'Failed to extract version from Maven' }
+          Add-Content -Path $env:GITHUB_ENV -Value "APP_VERSION=$version" -Encoding utf8
+
+          $stagingDir = 'staging'
+          if (-not (Test-Path $stagingDir)) { New-Item -ItemType Directory -Path $stagingDir | Out-Null }
+
+          Copy-Item -Path 'target\genCode.jar' -Destination $stagingDir
+          Copy-Item -Path 'README.md' -Destination $stagingDir
+          Copy-Item -Path 'LICENSE' -Destination $stagingDir
+          Copy-Item -Path 'scripts\win\*' -Destination $stagingDir -Recurse
+
+      - name: Download JRE (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Push-Location staging
+          & ..\scripts\jre.ps1
+          Pop-Location
+
+      - name: Resolve version & stage files (Linux)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          version=$(mvn -q -DforceStdout 'help:evaluate' -Dexpression=project.version 2>/dev/null)
+          version=$(echo "$version" | tr -d '\r')
+          if [ -z "$version" ]; then echo "Failed to extract version from Maven" >&2; exit 1; fi
+          echo "APP_VERSION=$version" >> $GITHUB_ENV
+
+          mkdir -p staging
+          cp target/genCode.jar staging/
+          cp README.md LICENSE staging/
+          cp scripts/linux/* staging/
+
+      - name: Download JRE (Linux)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          cd staging
+          bash ../scripts/jre.sh
+          cd ..
+
+      - name: Resolve version & stage files (macOS)
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          version=$(mvn -q -DforceStdout 'help:evaluate' -Dexpression=project.version 2>/dev/null)
+          version=$(echo "$version" | tr -d '\r')
+          if [ -z "$version" ]; then echo "Failed to extract version from Maven" >&2; exit 1; fi
+          echo "APP_VERSION=$version" >> $GITHUB_ENV
+
+          mkdir -p staging
+          cp target/genCode.jar staging/
+          cp README.md LICENSE staging/
+          cp scripts/mac/* staging/
+
+      - name: Download JRE (macOS)
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          cd staging
+          bash ../scripts/jre_mac.sh
+          cd ..
+
+      - name: Upload packaged artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: genCode-${{ matrix.os }}
+          path: staging/
+          retention-days: 7
