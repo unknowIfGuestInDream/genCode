@@ -36,7 +36,7 @@ public class LogAspect {
 	 */
 	@AfterThrowing(value = "logPointCut()", throwing = "e")
 	public void doAfterThrowing(Exception e) {
-		log.error(e.getMessage(), e);
+		log.error("日志切面拦截到异常", e);
 	}
 
 	/**

@@ -29,14 +29,14 @@ public class Cache<K, V> {
 	// 延迟队列
 	public DelayQueue<DelayedItem<K>> queue = new DelayQueue<>();
 
-	// 缓存30秒
-	public static final long CACHE_HOLD_30SECOND = 30 * 1000 * 1000 * 1000L;
+	// 缓存30秒(纳秒)
+	public static final long CACHE_HOLD_30SECOND = java.util.concurrent.TimeUnit.SECONDS.toNanos(30);
 
-	// 缓存30分钟
-	public static final long CACHE_HOLD_30MINUTE = 30 * 60 * 1000 * 1000 * 1000L;
+	// 缓存30分钟(纳秒)
+	public static final long CACHE_HOLD_30MINUTE = java.util.concurrent.TimeUnit.MINUTES.toNanos(30);
 
-	// 缓存1天
-	public static final long CACHE_HOLD_1DAY = 24L * 60 * 60 * 1000 * 1000 * 1000;
+	// 缓存1天(纳秒)
+	public static final long CACHE_HOLD_1DAY = java.util.concurrent.TimeUnit.DAYS.toNanos(1);
 
 	// 永久保存
 	public static final long CACHE_HOLD_FOREVER = Long.MAX_VALUE;
