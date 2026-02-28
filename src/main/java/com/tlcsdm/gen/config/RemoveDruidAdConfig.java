@@ -1,12 +1,10 @@
 package com.tlcsdm.gen.config;
 
-import com.alibaba.druid.spring.boot3.autoconfigure.DruidDataSourceAutoConfigure;
 import com.alibaba.druid.spring.boot3.autoconfigure.properties.DruidStatProperties;
 import com.alibaba.druid.util.Utils;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,16 +21,14 @@ import java.io.IOException;
  */
 @Configuration
 @ConditionalOnWebApplication
-@AutoConfigureAfter(DruidDataSourceAutoConfigure.class)
-@ConditionalOnProperty(name = { "spring.datasource.druid.stat-view-servlet.enabled", "gen.isdb" }, havingValue = "true",
-		matchIfMissing = true)
+@ConditionalOnProperty(name = { "spring.datasource.druid.stat-view-servlet.enabled", "gen.isdb" }, havingValue = "true")
+@EnableConfigurationProperties(DruidStatProperties.class)
 public class RemoveDruidAdConfig {
 
 	/**
 	 * 方法名: removeDruidAdFilterRegistrationBean 方法描述: 除去页面底部的广告
 	 * @return org.springframework.boot.web.servlet.FilterRegistrationBean
 	 */
-	@ConditionalOnBean(DruidStatProperties.class)
 	@Bean
 	public FilterRegistrationBean removeDruidAdFilterRegistrationBean(DruidStatProperties properties) {
 		// 获取web监控页面的参数
