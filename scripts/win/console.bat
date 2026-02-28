@@ -8,7 +8,7 @@ if "true" == "%check_flag%" (
   java -version
 )
 if not %errorlevel% == 0 (
-  echo Can not run java,check it.
+  echo Cannot run Java. Please check it.
   echo %errorlevel%
   pause
   goto END
