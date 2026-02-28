@@ -15,19 +15,19 @@
 ## 项目启动
 数据库sql文件在 docs/database文件下  
 可以通过配置 gen.isdb来决定数据源是数据库版本还是内存存储
-gen.isdb=true数据源为数据库版本，也是默认配置  
+gen.isdb=false数据源为内存版本，也是默认配置  
 数据源为内存版本无需配置数据库，可以直接启动，数据存储在内存中，不可持久化
 
-启动无数据库命令
-```shell script
-java -Dgen.isdb=false -jar jar包
-```
-
-有数据库版本无需配置参数, 默认为有数据库版本
+启动无数据库命令(默认配置, 无需额外参数)
 ```shell script
 java -jar jar包
 nohup java -jar jar包  >msg.log 2>&1 &  ## 后台启动(有日志)
 nohup java -jar jar包  >/dev/null 2>&1 &  ## 后台启动(无日志)
+```
+
+有数据库版本需配置参数 gen.isdb=true
+```shell script
+java -Dgen.isdb=true -jar jar包
 ```
 
 druid监控账号密码默认都为admin

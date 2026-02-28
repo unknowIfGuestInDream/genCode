@@ -98,7 +98,7 @@ thread:
   keepAliveSeconds: 30 #线程活跃时间（秒）
   threadNamePrefix: genAsync- #默认线程名称
 ## 项目自定义配置
-## isdb: 配置项目是否有数据库，默认有数据库，false为内存存储
+## isdb: 配置项目是否有数据库，默认无数据库(false)为内存存储，true为数据库版本
 ## schedule: 定时任务开关
 ## async: 异步开关
 ## shutdown: enabled shutdown接口开关，用于通过请求关闭项目
