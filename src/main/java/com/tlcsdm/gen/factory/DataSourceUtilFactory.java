@@ -5,6 +5,8 @@ import com.tlcsdm.gen.util.dataSource.DataSourceUtilTypes;
 import com.tlcsdm.gen.util.dataSource.DruidDataSourceUtil;
 import com.tlcsdm.gen.util.dataSource.HikariDataSourceUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +22,8 @@ import java.util.stream.Collectors;
  * @since: 1.0
  */
 public class DataSourceUtilFactory {
+
+	private static final Logger log = LoggerFactory.getLogger(DataSourceUtilFactory.class);
 
 	private static Map<String, DataSourceUtil> strategyMap = new ConcurrentHashMap<>();
 
@@ -72,7 +76,7 @@ public class DataSourceUtilFactory {
 			register(url + userName, dataSourceUtil);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			log.error("创建数据源失败", e);
 			remove(url + userName);
 		}
 		return dataSourceUtil;

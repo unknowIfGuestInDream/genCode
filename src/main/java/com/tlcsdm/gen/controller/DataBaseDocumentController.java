@@ -75,7 +75,7 @@ public class DataBaseDocumentController {
 				@Cleanup
 				InputStream inputStream = new ByteArrayInputStream(file.getBytes(StandardCharsets.UTF_8));
 				// 将文件写入zip内，即将文件进行打包
-				zos.putNextEntry(new ZipEntry(fileName));
+				zos.putNextEntry(new ZipEntry(fileName + EngineFileType.valueOf(engineFileType).getFileSuffix()));
 				inputStream.transferTo(zos);
 				// 关闭输入输出流
 				zos.closeEntry();

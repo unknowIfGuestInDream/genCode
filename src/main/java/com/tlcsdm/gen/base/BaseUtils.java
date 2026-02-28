@@ -15,6 +15,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 常用方法封装
  *
@@ -23,6 +26,8 @@ import java.util.stream.Collectors;
  * @since: 1.0
  */
 public class BaseUtils {
+
+	private static final Logger log = LoggerFactory.getLogger(BaseUtils.class);
 
 	/**
 	 * 类不能实例化
@@ -231,7 +236,7 @@ public class BaseUtils {
 			return InetAddress.getLocalHost().getHostName();
 		}
 		catch (UnknownHostException e) {
-			e.printStackTrace();
+			log.error("获取主机名失败", e);
 		}
 		return "未知";
 	}
@@ -291,7 +296,7 @@ public class BaseUtils {
 		}
 
 		char[] chars = string.toCharArray();
-		chars[0] += 32;
+		chars[0] = Character.toLowerCase(chars[0]);
 		return String.valueOf(chars);
 	}
 
@@ -300,7 +305,7 @@ public class BaseUtils {
 	 */
 	public static String toUpperCase4Index(String string) {
 		char[] chars = string.toCharArray();
-		chars[0] = toUpperCase(chars[0]);
+		chars[0] = Character.toUpperCase(chars[0]);
 		return String.valueOf(chars);
 	}
 
@@ -308,10 +313,7 @@ public class BaseUtils {
 	 * 字符转成大写
 	 */
 	public static char toUpperCase(char chars) {
-		if (97 <= chars && chars <= 122) {
-			chars ^= 32;
-		}
-		return chars;
+		return Character.toUpperCase(chars);
 	}
 
 	/**
@@ -347,10 +349,10 @@ public class BaseUtils {
 	}
 
 	/**
-	 * 深度克隆
+	 * 错误页面回调
 	 */
 	public static void callbackNotFound(HttpServletResponse response, Exception e) {
-		e.printStackTrace();
+		log.error("请求处理失败", e);
 		response.setContentType("text/html;charset=utf-8");
 		@Cleanup
 		PrintWriter out = null;
@@ -365,7 +367,7 @@ public class BaseUtils {
 			out.flush();
 		}
 		catch (IOException ex) {
-			ex.printStackTrace();
+			log.error("写入错误页面失败", ex);
 		}
 	}
 

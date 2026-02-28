@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 数据源工具抽象类
  *
@@ -17,6 +20,8 @@ import java.util.Map;
  * @since: 1.0
  */
 public abstract class DataSourceUtil {
+
+	private static final Logger log = LoggerFactory.getLogger(DataSourceUtil.class);
 
 	protected DataSource dataSource;
 
@@ -73,7 +78,7 @@ public abstract class DataSourceUtil {
 			x = ps.executeUpdate();
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			log.error("执行SQL更新失败", e);
 		}
 		finally {
 			release(conn, ps);
@@ -100,7 +105,7 @@ public abstract class DataSourceUtil {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			log.error("获取数据个数失败", e);
 		}
 		finally {
 			release(conn, ps, rs);
@@ -139,7 +144,7 @@ public abstract class DataSourceUtil {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			log.error("执行SQL查询失败", e);
 		}
 		finally {
 			release(conn, ps, rs);
@@ -156,7 +161,7 @@ public abstract class DataSourceUtil {
 				cs.close();
 			}
 			catch (SQLException e) {
-				e.printStackTrace();
+				log.error("关闭CallableStatement失败", e);
 			}
 		}
 		if (rs != null) {
@@ -164,7 +169,7 @@ public abstract class DataSourceUtil {
 				rs.close();
 			}
 			catch (SQLException e) {
-				e.printStackTrace();
+				log.error("关闭ResultSet失败", e);
 			}
 		}
 		if (ps != null) {
@@ -172,7 +177,7 @@ public abstract class DataSourceUtil {
 				ps.close();
 			}
 			catch (SQLException e) {
-				e.printStackTrace();
+				log.error("关闭PreparedStatement失败", e);
 			}
 		}
 		if (conn != null) {
@@ -180,7 +185,7 @@ public abstract class DataSourceUtil {
 				conn.close();
 			}
 			catch (SQLException e) {
-				e.printStackTrace();
+				log.error("关闭Connection失败", e);
 			}
 		}
 	}

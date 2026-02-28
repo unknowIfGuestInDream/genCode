@@ -3,6 +3,8 @@ package com.tlcsdm.gen.util.template;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import java.io.IOException;
@@ -17,6 +19,8 @@ import java.util.Map;
  * @since: 1.0
  */
 public class FreeMarkerUtil {
+
+	private static final Logger log = LoggerFactory.getLogger(FreeMarkerUtil.class);
 
 	private FreeMarkerUtil() {
 
@@ -36,7 +40,7 @@ public class FreeMarkerUtil {
 			template.process(objectMap, stringWriter);
 		}
 		catch (IOException | TemplateException e) {
-			e.printStackTrace();
+			log.error("获取模版内容失败: {}", name, e);
 		}
 		return stringWriter.toString();
 	}
@@ -57,7 +61,7 @@ public class FreeMarkerUtil {
 			template.process(objectMap, stringWriter);
 		}
 		catch (IOException | TemplateException e) {
-			e.printStackTrace();
+			log.error("获取模版内容失败: {}", name, e);
 		}
 		return stringWriter.toString();
 	}

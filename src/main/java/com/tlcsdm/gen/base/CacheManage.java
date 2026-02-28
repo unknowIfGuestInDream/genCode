@@ -22,7 +22,7 @@ public class CacheManage {
 	public static Cache<String, List<Map<String, Object>>> TABLES_CACHE = new Cache<>();
 
 	// 所有缓存存储
-	public static Map<String, Cache> CACHE_MAP = new ConcurrentHashMap() {
+	public static Map<String, Cache<String, List<Map<String, Object>>>> CACHE_MAP = new ConcurrentHashMap<>() {
 		{
 			put("procedures", PROCEDURES_CACHE);
 			put("tables", TABLES_CACHE);

@@ -42,11 +42,11 @@ public class CacheManageController {
 	@Log(title = "缓存管理", operateType = "查询项目缓存")
 	public Map<String, Object> selectCaches() {
 		List<Map<String, Object>> list = new ArrayList<>();
-		for (Cache cache : CACHE_MAP.values()) {
-			Map<String, Object> map = cache.getMap();
+		for (Cache<String, List<Map<String, Object>>> cache : CACHE_MAP.values()) {
+			Map<String, List<Map<String, Object>>> map = cache.getMap();
 			Map<String, Object> result = new HashMap<>(4);
-			for (Map.Entry entry : map.entrySet()) {
-				String mapKey = (String) entry.getKey();
+			for (Map.Entry<String, List<Map<String, Object>>> entry : map.entrySet()) {
+				String mapKey = entry.getKey();
 				Object mapValue = entry.getValue();
 				result.put("key", mapKey);
 				result.put("value", mapValue);
@@ -81,12 +81,12 @@ public class CacheManageController {
 		List<Object> list = new ArrayList<>();
 
 		if (StringUtils.isEmpty(name)) {
-			for (Cache cache : CACHE_MAP.values()) {
+			for (Cache<String, List<Map<String, Object>>> cache : CACHE_MAP.values()) {
 				list.addAll(cache.keys());
 			}
 		}
 		else {
-			for (Cache cache : CACHE_MAP.values()) {
+			for (Cache<String, List<Map<String, Object>>> cache : CACHE_MAP.values()) {
 				Object o = cache.get(name);
 				if (null != o) {
 					list.add(o);

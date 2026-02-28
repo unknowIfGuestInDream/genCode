@@ -40,7 +40,7 @@ public class DelayedItem<T> implements Delayed {
 
 	@Override
 	public long getDelay(TimeUnit unit) {
-		return unit.convert(removeTime - System.nanoTime(), unit);
+		return unit.convert(removeTime - System.nanoTime(), TimeUnit.NANOSECONDS);
 	}
 
 	public T getT() {

@@ -10,8 +10,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
 /**
  * 日志处理
  *
@@ -38,21 +36,20 @@ public class LogAspect {
 	 */
 	@AfterThrowing(value = "logPointCut()", throwing = "e")
 	public void doAfterThrowing(Exception e) {
-		log.error(e.getMessage());
-		e.printStackTrace();
+		log.error(e.getMessage(), e);
 	}
 
 	/**
 	 * 环绕处理
 	 * @param pjd ProceedingJoinPoint
-	 * @return Map<String, Object>
+	 * @return 方法执行结果
 	 * @throws Throwable
 	 */
 	@Around("logPointCut()")
-	public Map<String, Object> doAround(ProceedingJoinPoint pjd) throws Throwable {
-		Map<String, Object> result;
+	public Object doAround(ProceedingJoinPoint pjd) throws Throwable {
+		Object result;
 		try {
-			result = (Map<String, Object>) pjd.proceed();
+			result = pjd.proceed();
 		}
 		catch (Exception e) {
 			return BaseUtils.failed(e.getMessage());

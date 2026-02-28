@@ -15,17 +15,17 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SimpleCache {
 
-	public static String DATABASETYPE = "dataBaseType";
+	public static final String DATABASETYPE = "dataBaseType";
 
-	public static String GENPROCEDUREMODELTYPE = "genProcedureModelType";
+	public static final String GENPROCEDUREMODELTYPE = "genProcedureModelType";
 
-	public static String NAMECONVENTTYPE = "nameConventType";
+	public static final String NAMECONVENTTYPE = "nameConventType";
 
-	public static String ENGINEFILETYPE = "engineFileType";
+	public static final String ENGINEFILETYPE = "engineFileType";
 
-	public static String GENCODEMODELTYPE = "genCodeModelType";
+	public static final String GENCODEMODELTYPE = "genCodeModelType";
 
-	public static String JAVACLASS = "javaClass";
+	public static final String JAVACLASS = "javaClass";
 
 	private static Map<String, List<Map<String, Object>>> map = new ConcurrentHashMap<>();
 

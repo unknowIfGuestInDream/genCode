@@ -5,6 +5,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.DelayQueue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 具有过期时间的缓存 向缓存添加内容时，给每一个key设定过期时间，系统自动将超过过期时间的key清除。
  * <p>
@@ -17,6 +20,8 @@ import java.util.concurrent.DelayQueue;
  * @since: 1.0
  */
 public class Cache<K, V> {
+
+	private static final Logger log = LoggerFactory.getLogger(Cache.class);
 
 	// 存储缓存
 	public ConcurrentHashMap<K, V> map = new ConcurrentHashMap<>();
@@ -31,7 +36,7 @@ public class Cache<K, V> {
 	public static final long CACHE_HOLD_30MINUTE = 30 * 60 * 1000 * 1000 * 1000L;
 
 	// 缓存1天
-	public static final long CACHE_HOLD_1DAY = 24 * 60 * 60 * 1000 * 1000 * 1000L;
+	public static final long CACHE_HOLD_1DAY = 24L * 60 * 60 * 1000 * 1000 * 1000;
 
 	// 永久保存
 	public static final long CACHE_HOLD_FOREVER = Long.MAX_VALUE;
@@ -63,10 +68,10 @@ public class Cache<K, V> {
 
 	/**
 	 * 取出一个缓存对象
-	 * @param cacheName 缓存名称
+	 * @param key 缓存键
 	 */
-	public V get(String cacheName) {
-		return map.get(cacheName);
+	public V get(K key) {
+		return map.get(key);
 	}
 
 	/**
@@ -104,7 +109,7 @@ public class Cache<K, V> {
 				Thread.sleep(300);
 			}
 			catch (Exception e) {
-				e.printStackTrace();
+				log.error("缓存过期检查异常", e);
 			}
 		}
 	}

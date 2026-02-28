@@ -6,6 +6,7 @@ import com.tlcsdm.gen.factory.DataSourceUtilFactory;
 import com.tlcsdm.gen.service.DataBaseInfoService;
 import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,7 @@ import java.util.Map;
  */
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class DataBaseInfoController {
 
 	private final DataBaseInfoService dataBaseInfoService;
@@ -116,7 +118,7 @@ public class DataBaseInfoController {
 			con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			log.error("数据源连接测试失败", e);
 		}
 		if (con != null) {
 			return BaseUtils.success();
