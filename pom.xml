@@ -17,9 +17,7 @@
     <properties>
 		<java.version>17</java.version>
         <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
-        <log4j2.version>2.17.0</log4j2.version>
         <druid-spring-boot-starter.version>1.2.27</druid-spring-boot-starter.version>
-        <mysql-connector-java.version>5.1.49</mysql-connector-java.version>
         <mariadb-java-client.version>3.5.7</mariadb-java-client.version>
         <ojdbc7.version>12.1.0.2</ojdbc7.version>
         <sqljdbc4.version>4.0</sqljdbc4.version>
@@ -77,9 +75,8 @@
             <systemPath>${project.basedir}/src/main/resources/lib/ojdbc7-12.1.0.2.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql-connector-java.version}</version>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
         </dependency>
         <!--for SqlServer-->
         <dependency>
@@ -156,8 +153,8 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
+                <groupId>io.github.git-commit-id</groupId>
+                <artifactId>git-commit-id-maven-plugin</artifactId>
                 <configuration>
                     <!--日期格式;默认值:dd.MM.yyyy '@' HH:mm:ss z;-->
                     <dateFormat>yyyyMMddHHmmss</dateFormat>
