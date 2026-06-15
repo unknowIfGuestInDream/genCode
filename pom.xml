@@ -18,7 +18,7 @@
 		<java.version>17</java.version>
         <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
         <druid-spring-boot-starter.version>1.2.28</druid-spring-boot-starter.version>
-        <mariadb-java-client.version>3.5.8</mariadb-java-client.version>
+        <mariadb-java-client.version>3.5.9</mariadb-java-client.version>
         <ojdbc7.version>12.1.0.2</ojdbc7.version>
         <sqljdbc4.version>4.0</sqljdbc4.version>
         <screw-core.version>1.0.6-SNAPSHOT</screw-core.version>
