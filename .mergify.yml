@@ -14,9 +14,9 @@ pull_request_rules:
       - "-closed"
       - "#assignee=0"
     actions:
-      assign: 
+      assign:
         users:
-          - "{{author}}"
+          - "{{ author }}"
   - name: Assign Reviewer
     conditions:
       - author!=unknowIfGuestInDream
